@@ -44,6 +44,7 @@ local.properties
 # Build results
 
 [Dd]ebug/
+!/DuelEngine/External/boost/boost/preprocessor/debug/
 [Rr]elease/
 x64/
 build/
