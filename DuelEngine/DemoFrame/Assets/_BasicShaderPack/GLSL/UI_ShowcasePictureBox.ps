@@ -1,0 +1,19 @@
+#version 330
+
+uniform sampler2D		texUnit;
+uniform vec4		 	colorOffset;
+
+in 	Varing
+{
+	vec4	pos;
+	vec2	texcoord;
+} PS_StateInput;
+
+layout(location = 0)		out	vec4	color0;
+
+void main(void)
+{
+	vec4 finalColor = texture(texUnit, PS_StateInput.texcoord);
+	finalColor += vec4(colorOffset.xyz * colorOffset.a, 0.0f);
+	color0 = finalColor;
+}

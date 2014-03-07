@@ -1,0 +1,10 @@
+//  [11/26/2013 OMEGA] created
+
+#ifndef _DUELGUISHOWCASEBUTTON_H_
+#define _DUELGUISHOWCASEBUTTON_H_
+
+
+
+
+
+#endif

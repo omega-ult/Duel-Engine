@@ -1,0 +1,29 @@
+在这里写上经常出现的错误代码及改正方法
+
+
+LINK ERROR C2019:
+ 注意看函数在实现文件里是否带有域名称限定 如 "MyClass::"
+
+LINK ERROR C2001:
+ 静态成员没有在实现文件中显式初始化
+
+COMPILE ERROR error 
+C3867: “Duel::VertexDeclaration::vertexElementLess”: 函数调用缺少参数列表；请使用“&Duel::VertexDeclaration::vertexElementLess”创建指向成员的指针
+这里是由于STL的sort函数是编译时确定的, 因此必须为一个全局函数(static), 将VertexDeclaration::vertexElementLess声明为static即可
+
+在调试结束后，可以通过在包含#include <assert.h>的语句之前插入 #define NDEBUG 来禁用assert调用，
+
+error C2027: 使用了未定义类型“std::basic_ifstream<_Elem,_Traits>
+解决办法......#include <fstream>
+
+enum类型在windows中都是4个byte长度.
+
+"不允许使用不完整类的指针": 把头文件加上
+
+Iterator 的返回, 如果不是const 那么函数就不要写成const的.
+
+出现未定义的外部符号时,看看有没有comment lib, 生成dll时, 记得查看类之前是否有标示dllexport
+
+c2146: 最常见的原因是声明的类型未定义, 注意include
+
+模板导出类必须声明 dllexport, 否则会产生LNK2019

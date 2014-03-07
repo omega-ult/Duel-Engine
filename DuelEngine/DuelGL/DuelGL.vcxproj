@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CD5510F9-5CF7-4D06-AE31-D75B8E376472}</ProjectGuid>
+    <RootNamespace>DuelGL</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>DuelGLCommon.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>DUELGL_EXPORT;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DUEL;$(SolutionDir)\External;$(SolutionDir)\External\boost;$(SolutionDir)\External\glew-1.10.0\include;$(SolutionDir)External\freetype-2.5.0.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm156 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\boost\vc10_x86\lib;$(SolutionDir)\Debug;$(SolutionDir)External\glew-1.10.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(OutDir)$(TargetName).dll $(DUEL_EDITOR_DIR)Win32\Debug\
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>DuelGLCommon.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>DUELGL_EXPORT;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DUEL;$(SolutionDir)\External;$(SolutionDir)\External\boost;$(SolutionDir)\External\glew-1.10.0\include;$(SolutionDir)External\freetype-2.5.0.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm156 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\boost\vc10_x86\lib;$(SolutionDir)\Release;$(SolutionDir)External\glew-1.10.0\lib\Release\Win32</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(OutDir)$(TargetName).dll $(DUEL_EDITOR_DIR)Win32\Release\</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="DuelGLCommon.h" />
+    <ClInclude Include="DuelGLConfig.h" />
+    <ClInclude Include="DuelGLFrameBuffer.h" />
+    <ClInclude Include="DuelGLGpuParameters.h" />
+    <ClInclude Include="DuelGLGpuProgram.h" />
+    <ClInclude Include="DuelGLGpuProgramManager.h" />
+    <ClInclude Include="DuelGLRenderResourceFactory.h" />
+    <ClInclude Include="DuelGLIndexBuffer.h" />
+    <ClInclude Include="DuelGLPixelBuffer.h" />
+    <ClInclude Include="DuelGLPlugin.h" />
+    <ClInclude Include="DuelGLPredeclare.h" />
+    <ClInclude Include="DuelGLRenderLayout.h" />
+    <ClInclude Include="DuelGLRenderState.h" />
+    <ClInclude Include="DuelGLRenderSystem.h" />
+    <ClInclude Include="DuelGLRenderView.h" />
+    <ClInclude Include="DuelGLRenderWindow.h" />
+    <ClInclude Include="DuelGLShaderObject.h" />
+    <ClInclude Include="DuelGLTexture.h" />
+    <ClInclude Include="DuelGLTextureManager.h" />
+    <ClInclude Include="DuelGLTranslator.h" />
+    <ClInclude Include="DuelGLVertexBuffer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DuelGLCommon.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="DuelGLFrameBuffer.cpp" />
+    <ClCompile Include="DuelGLGpuParameters.cpp" />
+    <ClCompile Include="DuelGLGpuProgram.cpp" />
+    <ClCompile Include="DuelGLGpuProgramManager.cpp" />
+    <ClCompile Include="DuelGLRenderLayout.cpp" />
+    <ClCompile Include="DuelGLRenderResourceFactory.cpp" />
+    <ClCompile Include="DuelGLIndexBuffer.cpp" />
+    <ClCompile Include="DuelGLPixelBuffer.cpp" />
+    <ClCompile Include="DuelGLPlugin.cpp" />
+    <ClCompile Include="DuelGLRenderState.cpp" />
+    <ClCompile Include="DuelGLRenderSystem.cpp" />
+    <ClCompile Include="DuelGLRenderView.cpp" />
+    <ClCompile Include="DuelGLRenderWindow.cpp" />
+    <ClCompile Include="DuelGLShaderObject.cpp" />
+    <ClCompile Include="DuelGLTexture.cpp" />
+    <ClCompile Include="DuelGLTextureManager.cpp" />
+    <ClCompile Include="DuelGLTranslator.cpp" />
+    <ClCompile Include="DuelGLVertexBuffer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Duel\Duel.vcxproj">
+      <Project>{72df7c0c-7b8d-4ccd-8a75-9396db2bcf26}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

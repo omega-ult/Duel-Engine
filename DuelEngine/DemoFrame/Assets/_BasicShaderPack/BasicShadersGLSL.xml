@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceParameters type="GpuProgram">
+  <!--BasicShaderPack-->
+  <GpuResourceParameter>
+	  <Name>defer_geo.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <FileName></FileName> <!-- this value can be empty -->
+	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_VERTEX_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>colored_wireframe.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <FileName></FileName> <!-- this value can be empty -->
+	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_VERTEX_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>colored_wireframe.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <FileName></FileName> <!-- this value can be empty -->
+	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_FRAGMENT_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>plain_texture.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <FileName></FileName> <!-- this value can be empty -->
+	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_VERTEX_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>plain_texture.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <FileName></FileName> <!-- this value can be empty -->
+	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_FRAGMENT_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <!-- UI_StdCursor -->
+  <GpuResourceParameter>
+	  <Name>UI_StdCursor.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <FileName></FileName> <!-- this value can be empty -->
+	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_VERTEX_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>UI_StdCursor.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <FileName></FileName> <!-- this value can be empty -->
+	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_FRAGMENT_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <!-- UI_ShowcasePictureBox -->
+  <GpuResourceParameter>
+	  <Name>UI_ShowcasePictureBox.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <FileName></FileName> <!-- this value can be empty -->
+	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_VERTEX_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>UI_ShowcasePictureBox.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <FileName></FileName> <!-- this value can be empty -->
+	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_FRAGMENT_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  
+  <!-- Terrain_Basic-->
+  <GpuResourceParameter>
+	  <Name>Terrain_Basic.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <FileName></FileName> <!-- this value can be empty -->
+	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_VERTEX_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Terrain_Basic.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <FileName></FileName> <!-- this value can be empty -->
+	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_FRAGMENT_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  
+</ResourceParameters>

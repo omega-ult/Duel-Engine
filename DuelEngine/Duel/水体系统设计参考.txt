@@ -1,0 +1,12 @@
+http://blog.csdn.net/soilwork/article/details/1548490
+
+¡¶Deep-Water Animation and Rendering¡·
+¡¶Simulating Ocean Water¡·
+¡¶Animation and Display of Water¡·
+¡¶Effective Water Simulation form Physical Models¡·
+¡¶Using Vertex Texture Displacement for Realistic Water Rendering¡·
+¡¶Animation and Rendering of Underwater God Rays¡·
+¡¶An Efficient Method for Rendering Underwater Optical Effects Using Graphics Hardware¡·
+¡¶Interactive Animation of Ocean Waves¡·
+¡¶Generic Refraction Simulation¡·
+¡¶Water Effect¡·

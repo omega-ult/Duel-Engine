@@ -1,0 +1,107 @@
+这里记录一下我的思路.
+所有实际实现不一定与该文件中描述的相符.
+
+富文本文档通常包括一些通用的元素，例如段落、框架、表格和列表。
+这些在 QTextDocument 类中分别使用 QTextBlock，QTextFrame，QTextTable 和 QTextList 描述。
+不同于文档的其他元素，图片使用一种特殊的文本片段描述，这使得图片可以同普通文本混排。
+
+文档的基本构建单位是 QTextBlock 和 QTextFrame。块本身就包含文本片段（QTextFragment），
+但是这不会直接影响到高层次的文档结构。
+
+能够对其他文档元素分组的是 QTextObject 的子类。这些元素被分为两种类型：
+	对文本块分组的是 QTextBlockGroup 的子类，
+	对文本片段和其他元素分组的是 QTextFrame 的子类。
+
+文本块
+文本块由 QTextBlock 类提供。
+文本块可以将具有不同字符样式的文本分组，用于表示文档段落。
+典型的文本块具有若干个不同样式的文本片段。
+当文本插入文档时，文本块被创建。
+在对文档进行编辑时，会增加更多的文本块。
+在块中，文档通过分割、合并、删除片段，有效地表现不同样式的文本。
+
+QTextFragment：
+最小的同一个格式的text片断，charFormat()得到QTextCharForamt。
+可以看作是QTextBlock的组成元素，通过begin()得到iterator来遍历。也是QTextCursor.selection()所返回的类型。
+
+继承关系:
+
+QObject
+   |<--- QTextDocument
+
+QObject
+   |
+   |<--- QTextObject
+              |
+			  |<--- QTextBlockGroup <--- QTextList
+			  |
+			  |<--- QTextFrame <--- QTextTable
+
+QTextFormat
+   |
+   |<--- QTextCharFormat <---QTextImageFormat
+   |
+   |<--- QTextFrameFormat <--- QTextTableFormat
+   |
+   |<--- QTextBlockFormat
+   |
+   |<--- QTextListFormat
+
+
+Text frames可以由一组块和子frames组成。所有的frame除了root frame，都有父frame。使用QTextFrame::iterator遍历frame的子元素：
+        QDomElement frameElement = ...
+        QTextFrame::iterator it;
+        for (it = frame->begin(); !(it.atEnd()); ++it) {
+            QTextFrame *childFrame = it.currentFrame();
+            QTextBlock childBlock = it.currentBlock();
+            if (childFrame)
+                processFrame(frameElement, childFrame);
+            else if (childBlock.isValid())
+                processBlock(frameElement, childBlock);
+        }
+QTextTable是QTextFrame的子类，所以tables可以像对待QTextFrame一样对待。它每一个单位（cell）的检查可以通过行列号：
+        for (int row = 0; row < table->rows(); ++row) {
+            for (int column = 0; column < table->columns(); ++column) {
+                QTextTableCell tableCell = table->cellAt(row, column);
+                processTableCell(tableCell);
+            }
+        }
+QTextList是QTextBlockGroup的子类，它可以使用索引获得QTextList对象的项。
+        for (int index = 0; index < list->count(); ++index) {
+            QTextBlock listItem = list->item(index);
+            processListItem(listItem);
+        }
+Images在QTextDocument中由text fragment代表，由光标（cursor）接口创建，可以被字符格式修改：
+        if (fragment.isValid()) {
+            QTextImageFormat newImageFormat = fragment.charFormat().toImageFormat();
+            if (newImageFormat.isValid()) {
+                newImageFormat.setName(":/images/newimage.png");
+                QTextCursor helper = cursor;
+                helper.setPosition(fragment.position());
+                helper.setPosition(fragment.position() + fragment.length(), QTextCursor::KeepAnchor);
+                helper.setCharFormat(newImageFormat);
+            }
+        }
+
+文档可以通过QTextCursor提供的接口编辑，
+使用cursor主要是用来插入或修改块中的文本，我们可以在编辑器中使用：
+        QTextEdit *editor = new QTextEdit();
+        QTextCursor cursor(editor->textCursor());
+也可以直接从一个文档中获取。
+        QTextDocument *document = new QTextDocument(editor);
+        QTextCursor cursor(document);
+一系列的编辑操作可以打包到一起去，这样可以使用beginEditBlock(),endEditBlock()实现，下面代码示例：
+        cursor.beginEditBlock();
+        cursor.movePosition(QTextCursor::StartOfWord);
+        cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+        cursor.endEditBlock();
+QTextCursor提供一些插入文档元素的操作：
+    insertBlock()
+    insertFrament()
+    insertImage()
+insertText()
+
+Document Layouts
+每个文档的布局都是子类化的QAbstractTextDocumentLayout类。
+QTextLayout可以帮助开发者呈现渲染文本，它可以用在plain和rich text。
+QTextLine是QTextLayout内的一排文本，可以QTextLayout::createLine()创建。

@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Octree">
+      <UniqueIdentifier>{5252073d-c857-4522-aed5-44f4c13c9cc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Octree\include">
+      <UniqueIdentifier>{11b659b3-0bcf-4738-af2e-357eff3c280f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Octree\src">
+      <UniqueIdentifier>{5271ee94-76f3-4296-96cd-4a4ee96e9d74}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DuelOctreeCommon.h">
+      <Filter>Octree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelOctreeConfig.h">
+      <Filter>Octree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelOctreeSceneManager.h">
+      <Filter>Octree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelOctreeSceneNode.h">
+      <Filter>Octree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelOctree.h">
+      <Filter>Octree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelOctreeQuery.h">
+      <Filter>Octree\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelOctreePlugin.h">
+      <Filter>Octree\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DuelOctreeCommon.cpp">
+      <Filter>Octree\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelOctreeSceneManager.cpp">
+      <Filter>Octree\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelOctreeSceneNode.cpp">
+      <Filter>Octree\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelOctree.cpp">
+      <Filter>Octree\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelOctreeQuery.cpp">
+      <Filter>Octree\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelOctreePlugin.cpp">
+      <Filter>Octree\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

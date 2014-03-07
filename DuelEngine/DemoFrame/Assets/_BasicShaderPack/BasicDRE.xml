@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceParameters type="RenderEffect">
+
+	
+	<!-- UI_Basic.dre-->
+	<RenderEffectResourceParameter>
+		<Name>UI_Basic.dre</Name>
+		<Group>_BasicShaderPack</Group>
+		<FileFormat>dre</FileFormat>
+	</RenderEffectResourceParameter>
+	
+	<!-- UI_Editor.dre-->
+	<RenderEffectResourceParameter>
+		<Name>UI_Editor.dre</Name>
+		<Group>_BasicShaderPack</Group>
+		<FileFormat>dre</FileFormat>
+	</RenderEffectResourceParameter>
+	
+	<!-- UI_Editor.dre-->
+	<RenderEffectResourceParameter>
+		<Name>Terrain_Basic.dre</Name>
+		<Group>_BasicShaderPack</Group>
+		<FileFormat>dre</FileFormat>
+	</RenderEffectResourceParameter>
+	
+</ResourceParameters>

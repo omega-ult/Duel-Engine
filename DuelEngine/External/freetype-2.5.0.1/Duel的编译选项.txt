@@ -1,0 +1,10 @@
+由于使用的是动态链接库外加cpp环境, 这里必须对编译工程做一定修改.
+
+在头文件中的更改:
+\include\freetype\config\ftconfig.h
+517行:
+
+
+我是基于vs2010的编译环境, 因此项目属性修改发生在\builds\win32\vc2010\freetype.vcxproj上, 
+增加预编译命令DLL_EXPORT
+并且将生成的目标改为.dll(windows)

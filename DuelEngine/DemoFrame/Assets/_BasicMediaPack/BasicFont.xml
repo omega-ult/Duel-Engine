@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceParameters type="Font">
+	<!-- ¾ÞÓ²ÑÅºÚ -->
+	<FontResourceParameter>
+		<Name>F_msyh.ttc</Name>
+		<Group>_BasicMediaPack</Group>
+		<GlyphSize>32</GlyphSize>
+		<TextureSize>1024</TextureSize>
+	</FontResourceParameter>
+</ResourceParameters>

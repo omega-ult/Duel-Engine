@@ -1,0 +1,30 @@
+1 RenderSystem				complete
+	|-basic class design	complete
+	
+
+2 UI
+	|-Element design
+	|-class	design
+		|-event class
+		|-object class
+		|-message handler
+
+3 WindowManager		aborted
+	|-xml config
+	|-cooperative design for Input System
+	|-recreate
+
+4 InputSystem
+	|-class design		complete
+	|-implementation	complete
+
+5 ErrorHandler
+	|-exception			complete
+	|-log				complete
+
+6 TerrainSystem
+	|-algorithm			complete
+	|-multi-terrain		designing
+
+7 MaterialSystem
+	|-					processing

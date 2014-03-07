@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Base">
+      <UniqueIdentifier>{33eafc31-d26a-458a-90a4-f6a60d617b18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\include">
+      <UniqueIdentifier>{28156245-0836-42f8-b699-47430476f72f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\src">
+      <UniqueIdentifier>{10bad402-6d97-4d06-9f40-8ff2d94d2575}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShowCase">
+      <UniqueIdentifier>{7aed4658-d2f6-4922-8442-172c3b74819b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShowCase\include">
+      <UniqueIdentifier>{d0f4ecea-5d7a-4aab-99a7-1193296c31f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShowCase\src">
+      <UniqueIdentifier>{7248774d-5359-4b89-aea0-cade5c03d297}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{5e4380a6-7f71-41f9-bddb-74429e1c61dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\include">
+      <UniqueIdentifier>{478c35b4-6a3e-4163-a92f-b2d4b8c2d35d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\src">
+      <UniqueIdentifier>{b9372a6c-435a-457f-9d0f-138b9e5b2c4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text">
+      <UniqueIdentifier>{ab952742-7d18-4ab6-bc6c-bd8dc9e45e1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text\include">
+      <UniqueIdentifier>{58b8bf5a-ead4-49c3-b3d8-6e72ab142d8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text\src">
+      <UniqueIdentifier>{0066b68c-724b-41ed-ad4a-d957bbed5aed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StandardWidgets">
+      <UniqueIdentifier>{da6f3930-1925-44be-a0bb-53091a8258bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StandardWidgets\include">
+      <UniqueIdentifier>{1fa43a0f-16c8-447c-af75-7e4b0e4d0c2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StandardWidgets\src">
+      <UniqueIdentifier>{242ac48a-3c92-4b03-b9bc-7aa7af620067}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DuelGUIBoxLayout.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIHotSpot.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUILayout.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUILayoutEngine.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUILayoutItem.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIManager.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIRenderDelegate.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUISize.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUISizePolicy.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUISystem.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIWidget.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUICommon.h">
+      <Filter>Common\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIConfig.h">
+      <Filter>Common\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUI.h">
+      <Filter>Common\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIPredeclare.h">
+      <Filter>Common\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIMathTool.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIWindow.h">
+      <Filter>StandardWidgets\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIButton.h">
+      <Filter>StandardWidgets\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIGeometry.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUICursor.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIStdCursor.h">
+      <Filter>StandardWidgets\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIStdLabel.h">
+      <Filter>StandardWidgets\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIShowcasePictureBox.h">
+      <Filter>ShowCase\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIAlignment.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIShowcaseButton.h">
+      <Filter>ShowCase\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIShowcaseTextLayer.h">
+      <Filter>ShowCase\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIShowcasePictureLayer.h">
+      <Filter>ShowCase\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIShowcaseLabel.h">
+      <Filter>ShowCase\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIShowcaseTextLayout.h">
+      <Filter>ShowCase\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUITextObject.h">
+      <Filter>Text\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUITextCursor.h">
+      <Filter>Text\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUITextDocument.h">
+      <Filter>Text\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUITextFormat.h">
+      <Filter>Text\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUITextDocumentLayout.h">
+      <Filter>Text\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUITextLayout.h">
+      <Filter>Text\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUITextEngine.h">
+      <Filter>Text\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUISizeAdjustment.h">
+      <Filter>Base\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUITextFragment.h">
+      <Filter>Text\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelGUIStdHotspot.h">
+      <Filter>StandardWidgets\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DuelGUIBoxLayout.cpp">
+      <Filter>Base\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUIHotspot.cpp">
+      <Filter>Base\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUILayout.cpp">
+      <Filter>Base\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUILayoutEngine.cpp">
+      <Filter>Base\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUILayoutItem.cpp">
+      <Filter>Base\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUIManager.cpp">
+      <Filter>Base\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUIRenderDelegate.cpp">
+      <Filter>Base\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUISystem.cpp">
+      <Filter>Base\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUIWidget.cpp">
+      <Filter>Base\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUICommon.cpp">
+      <Filter>Common\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUIMathTool.cpp">
+      <Filter>Base\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUIWindow.cpp">
+      <Filter>StandardWidgets\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUICursor.cpp">
+      <Filter>Base\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUIStdCursor.cpp">
+      <Filter>StandardWidgets\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUIStdLabel.cpp">
+      <Filter>StandardWidgets\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUIShowcasePictureBox.cpp">
+      <Filter>ShowCase\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUIShowcasePictureLayer.cpp">
+      <Filter>ShowCase\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUITextDocument.cpp">
+      <Filter>Text\src</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelGUIStdHotspot.cpp">
+      <Filter>StandardWidgets\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="有关text框架的设计要点.txt">
+      <Filter>Text</Filter>
+    </None>
+    <None Include="类头文件模板.txt" />
+  </ItemGroup>
+</Project>

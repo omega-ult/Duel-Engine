@@ -1,0 +1,507 @@
+2012-----------------------------------------------
+4.27
+
+完成Window的event函数 有以下几个剩余问题
+
+不能确定movedOrResized()是否能正常工作.  创建窗口后没有激活窗口,
+这个应该等待RenderSystem建立以后再继续.
+
+下一步是UI还是INPUT 这是个问题..
+还有XML的引入. 应该尽快解决
+
+
+5.10
+窗口函数基本框架完成, 剩余部分:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+MessagePump!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+一定不要忘了填坑.. 
+根据现在的设计, 应该是在Core中加入,不
+应该给WindowManager更多的控制...吧?
+WindowManager------>Core
+
+应该可以开始INPUT了. UI会尽快.
+
+input是不是可以滞后一些. 现在定义物件比较重要?
+还是建立设备?
+
+5.11 
+尝试建立设备,先建立基本类, 日后会添加对话框选择渲染系统
+
+
+5.17 
+添加了SceneNode和SceneManager类
+
+5.18 
+使用哈希表来管理SceneNode的子节点, 开始加入数学库
+
+5.19 
+写数学库的操作符重载真是苦b.....TAT
+
+5.20
+Angle中度数的取数尚未完成. 下面要把math定为单例并实现sin/cos/tanTable
+
+5.21
+取消math的单例设置, 改用其他方法实现 完成Angle类
+
+5.22
+math第一阶段基本完成, 下面就是matrix之类的了.
+
+
+5.31
+Vector类基本完成.
+
+6.12
+Vector和Quaternion终于完成
+
+7.13
+经过半个月的潜心修炼, 终于对渲染框架有了大概了解(撒花~)
+开始正式着手架构.
+
+7.14 
+异常处理类完成
+
+7.15
+日志类完成
+明日任务:把WindowManager类移除, 将RenderWindow从Window类中继承/copy过去, 交由RenderSystem管理
+
+7.16
+RenderWindow基本完成, 下面是Viewport和Camera类, 完成后添加到RenderWindow中
+
+7.20
+tm终于改成左手坐标系了....
+Matrix类完成, 下面要添加rotator类.
+
+7.21
+一定要找个时间对数学库进行测试!!!!!!!!!!!!!!
+
+7.24
+TODO:添加设备能力填充, 供core查询设备要求, 若不符合则弹出提示
+
+8.4
+老子回来了!
+
+8.6
+基本完成设备和窗口创建, 以后根据需要添加参数, 下阶段为场景管理和为VS/PS添加支持
+
+8.8
+感冒很难受, 脑子转不过来, 也就只能完成一些小事了, 架构先等基础设施
+现在应该完成设备能力类吧?
+
+8.9
+玩了一天 什么都没干= =
+
+8.14
+完成PixelFormat定义, VertexBuffer IndexBuffer PixelBuffer基本接口定义.
+完成Color类
+
+8.15
+完成RenderLayout基类创建. 开始着手texture
+
+8.22
+完成DataStream和FileStream, 为texture做准备.
+
+8.24
+decode. 还是在为texture做准备.
+
+8.26
+decode 正式编码, 设备能力查询/格式支持已经完善.
+
+8.27
+再次完善格式支持, D3DFMT/DXGI可以通过中间格式PF_进行互相交换.
+还在读取dds... 读取完成, 下面是解压.
+
+8.28
+DDS解压暂时先放, 编码/解码问题已经基本搞定.
+解码器tm也是苦得....
+
+8.29
+格式转换改用map实现, 清爽多了.
+
+8.31
+稍微修改了点接口...累死,接口其实是最不能修改的. 一定要深思熟虑啊.!
+
+9.1
+看来有必要实现RTTI了, 这么多的强制转换不是个办法.
+
+9.2
+sharedptr也是个好东西啊. 简单又方便, 有时间就引入好了.
+
+9.7
+终于弄懂gpu参数了. 哥回来了!
+
+9.10
+common 中的 predeclaration 找时间填了. 不难.
+
+9.11
+思考gpu程序的时候发现, 没有完成achive和resource还真是怒!
+
+9.12
+我嚓咧用个boost库真是.. 怒!
+记一下:
+common.h:
+在boost/config/user.hpp里取消了 BOOST_ALL_DYN_LINK 的注释, 以使得boost使用dll的方式链接.
+使用这一点意味着程序需要dll的支持. 将DLL放到debug文件夹里就好.
+
+在项目属性中把
+boost/vc10_x86目录(lib)放在boost/vc10_x64前面, 就可以优先使用x86的库文件, 避免链接出错
+
+完成库制作之后再使用静态链接. 切记
+9.15
+明天记得把RTTI测试一下.
+
+9.16
+预编译头文件: DuelCommon.h
+必须在每个cpp文件中首先包含这个头文件.
+
+RTTI/预编译头  完成!
+
+9.17
+啊... 只做了个ArchiveManager, 填了下FolderArchive的函数, 貌似今天效率不高啊.. 
+
+9.18
+找时间测试FolderArchive的getFile功能.
+
+getFile测试通过.
+
+9.21
+完成StringTool中的parse部分. 配合rapidxml就可以对XML开刀了.
+
+9.23
+ResourceGroupManager里面有大量的异常抛出, 如果需要, 以后可以只在debug里面使用这些
+
+9.26
+ResourceGroupManager/ResourceManager基本接口及通讯完成, 下面开始尝试XML引入.
+
+9.27
+XML引入成功, 记得找时间对GroupManager和ResourceManager的MUTEX进行补充.
+
+9.29
+小补了下GroupManager, 开始着手GpuProgram/Manager的实现, 对于多线程, 等lock-free的
+进度, 感冒了都能有那么成果.=x= 我真是疯了.
+
+10.8
+D3D9HLSLProgram完成! 感冒已经拖了点进度了. 下面是Mesh文件定义了.
+
+10.11
+mesh还没开始, 现在着手处理之前遗留下来的Image问题, Resource的多线程同步已经完成.
+
+10.16
+这几天状态丢失, 终于在今天恢复了, 把PixelFormat重新精简了一遍, 去掉了不必要的格式, 为Image缩放函数做准备.
+
+10.18
+Image2D/3D/Cube 基本框架完成, PixelFormatTool增加的颜色的方法, 还有2天时间完成图像缩放算法.
+
+10.22
+一定要找时间对图像缩放算法进行测试. 剩下bicubic算法先暂时等资料.
+
+10.24
+Texture类中loadFromImageImpl和saveToImage可能会有问题, 记得测试,
+
+10.25
+D3D9Resource接口完成, 仅此而已, 今天全栽在作业上了. 时间来不及啊我去...
+另:要注意休息, 脖子开始警告了
+
+10.26
+qt.hk.fbx库平台搭建完成.riot再开在即
+
+10.29
+Texture/RenderTexture创建完成,等测试
+
+10.30
+D3D9系列硬件资源与其Manager完成, 使用工厂模式实现, 有时间考虑下把Dx9部分单独编译成一个dll.
+
+11.1
+搞懂了骨骼的蒙皮算法, 已经在Mesh和SubMesh中加入了相关的属性, 记住, Mesh中含有骨骼以及每个骨骼的Matrix/InverseMatrix,
+SubMesh 中只含有指向的骨骼序号, 在实际更新中使用SubMesh中的序号取得相应的骨骼序号, 当然每个序号都是与VetexBuffer中的
+position和normal对应的.
+
+11.2
+写了个Node, 还没测试.
+
+11.7
+KeyFrame和Animation完成了一半, Morph的部分还没有开始,切记!
+
+11.8
+忍不住把morph写了....animation告一段落.
+
+11.9
+AABB没写完.
+
+11.11
+把数学课留下的坑都完成, 再者GUI开始建立基类
+
+11.29
+考完试 妹的把项目改名了. 省得碰上麻烦.
+
+12.3
+感冒了. 这几天打游戏成精了, 得扯回线上来... 开始着手SceneManager部分, 开始定义接口.
+
+12.22
+哎都忘了写日志了, 今天完成了材质排序和一些renderable接口的定义. 顺手加了一个INTERNAL标示符. 
+下面就应该针对mesh来看看fbx了.
+
+12.23
+想想mesh的格式怎么做吧.
+
+12.30
+有点眉目了.正在施工中.
+
+12.31
+今年最后1天, Codec的设计出现了比较大的突破, 融入ResourceManager后作用变大了=v=
+
+2013-----------------------------------------------
+1.1
+元旦快乐- - 把DRECodec完成了.. 等测试.
+
+1.2
+修改了RenderTarget的接口和一部分rendersystem的接口, 下面得想想怎么做DefferShading的架构了.
+
+1.3
+更改Matrix部分, 使用column-major(...要好好学基础啊孩子), 完成了Skeleton.
+
+1.4
+尝试使用RenderWorkshop来实现渲染, 里面会分成一个个批次(Batch)并且带有PostEffect的功能.
+
+1.5
+最主要的是完成了sub-mesh的buildBoneMapping函数(大概是叫这个吧), 其余的, 把MovableManager独立出来作为一个
+单例, 使用工厂模式产生物件. 明天主要任务:看shadow map, 暂时不考虑shadow volume.
+
+1.6
+soft shadow 框架已经有思路了, 具体实现从vsm和esm中选取, 考试临近, 进度稍微放缓一点.
+
+1.8
+camera完成, 注意Math::makeViewMatrix, 没有测试, 如果和ogre一样是列主列存储的话..就应该transpose!
+
+1.10
+math库测试, 解决不少bug. matrix quaternion math可用.
+
+1.15
+总觉得工程好乱啊. resource editor已经作为新项目移出.
+
+1.16
+InputSystem完成. - -我在绕圈子?
+
+1.18
+最近几天写的有点多啊. Dx9 渲染系统接近完成, 剩余texture和rendertarget之间的数据传递. octreeManager 开工. 
+
+1.27
+考试+火车晚点!! 晚点5个小时尼玛!
+Octree 完成, 接下来是OctreeManager以及相关配套对象.
+
+2.2
+在看Octree的Query, D3D插件基本完成. 注意测试.
+
+2.8
+疏忽了...vertex declaration原来是有多个source的. vertex data得改.
+
+3.3
+完成资源读入/写入部分, 包括.dm .ds 和 .dre格式.
+
+3.10
+看来需要为GpuParameter做一个大更改了. 现有架构完全不能适应DX今后的发展方向.
+
+3.24
+比赛..我觉得已经结束了. 深感无力, 引擎没有做好充分的准备, 经常花一整天的时间排一个bug, 当然收获颇丰, 一个当然要数DX11渲染插件的完成,和wp8的融合,
+第二个是测出了很多bug, 这个可以有. 最重要的是得到了很多的经验, 这里总结一下:
+RenderPass部分, 建议所有defershading部分使用同一套RenderEffect, 并且将RenderState中的TextureState和SceneBlendState做成队列形式, SceneBlendState
+还要改名成textureBlendState, 另外, TextureState应该改名为SamplerState, 因为现在的Sampler都是可以复用, 应用于不同的Texture上的.
+shader和RenderEffect会变得很多很乱, 没有一个ResourceEditor是相当吃力的事情. SceneManager应该增加一个UpdateAutoGpuParameters的函数,用以
+更新当前的Gpu参数, 具体更新频率待定. 引擎使用的各个类都要以至少一个字母打头, 防止命名冲突. Mesh的骨骼数应该支持多套, 并且移除顶点动画的支持, 今后都
+以骨骼动画的形式来完成, 场景编辑器是一个非常非常重要的部分, 应该提上日程, 没有这个, 基本是开发不了游戏的.
+
+3.27
+Camera的正交投影和裁切需要测试!
+
+4.2
+DRECode_v2_0已经正式可以使用, 改用了全新的BlendState和VS/PSSamplerState
+另外要修改Viewport和Camera和RenderTarget的工作方式, 这个是个很重要的问题.
+
+4.8
+双开REditor和DuelGL的感觉好爽- -
+Duel主项目移到VS2012上, 尽管编译环境仍然是VS2010;
+QT5暂时不予考虑, 所以REditor仍然是在VS2010上开发.
+
+4.11
+将WindowManager Viewport 和RenderWindow的一些东西移除了.
+
+4.12
+完成RenderQueue中RenderTechnique和RenderPass的替换(这是个老bug)
+
+4.13
+DuelResourceEditor加入了SVN
+
+4.14
+明天修改DXT 改为bc系列.
+
+4.21
+GL的部分完成到Texture了. RE部分...还卡在DataModel上....
+
+4.27
+新增了defaultRenderWorkshop项目.
+res和主项目两边进展顺利
+
+5.6
+把所有类的析构函数都设为virtual 防止指针指向父类时子类的析构函数不被调用造成内存泄漏
+
+5.11
+REditor这部分全部使用MVC模式, 新建了EditDelegate群组. 下面开始构思如何实现
+
+5.23
+tm终于考完试了. 下面实现basicshaderpack.
+
+6.28
+因为一些事情停了接近一个月,十分抱歉 这几天完成了demo框架的编写,明天尝试引入gui吧.
+
+7.1
+终究逃不过要创建基类〔°Д°)╭ !!! 
+
+7.6
+一个比较完善的RTTI类已经完成, 全部继承自DObject
+
+7.12
+简单的线程池已经完成.
+
+7.16
+感冒好吃力.. 什么都想不会. gui的部分基础设施如GUIManager GUISystem的接口暂时先这样.
+
+8.3
+好久没做日志. 期间改进了很多地方, 另外决定弃掉cg. 使用纯正的glsl.... 至少3.3吧-v-
+
+8.5
+用glew换掉了glloader, 用glsl换掉了cg, 至此gl的流程基本完成. 当然还有一些函数没写.= -
+
+8.7
+完成DGWidget基本接口, 想明白了gui的定位方式, 下面着手实现layout的排版功能.
+
+8.10
+基本做好排版功能的框架和gui事件流向, 增加RTTI多重继承的机制.
+
+8.13
+今晚尝试改进resource类, 增加manualloader的功能
+
+8.14
+manualloader 没做. 今后的listener统一换成signal. 简洁方便.
+hotspot 功能正常. 修复gl下renderwindow的bug
+
+8.19
+多看看 www.lighthouse3d.com. 完成资源载入的多线程优化.
+
+8.20
+终于要面对 font 问题了. 建立font资源
+
+9.2
+众多Opengl的奇怪特性终于搞得差不多了. 2个星期啊!!!2个星期啊!!!!
+
+10.21
+许久没有记录日志, 这1个半月的时间完成了很多部分, 具体说来有AssetEditor,
+在AssetEditor中完成了基本界面, 工程项的基本导入导出以及undostack的完成, 命令
+模式的创建以及推翻重建(由以前的工程对象管理物件生命周期改成上层应用程序管理,
+导致command模式更改), workbench的加入以及原代码的大幅度修改.
+在DuelEditorCommon中完成了引擎模块的接入, selectionModel
+的定义以及基本接口. 在DuelGUIEditor中, 也就是现在还在进行中的这个项目里,
+完成了QT与引擎的对接, 多渲染目标的实现(甚至修改了渲染插件的部分代码)
+还有编辑器基本运作方式的定义, 其中Communication模块(用于编辑器与资源管理器
+AssetEditor之间的通信)打算等合适的时间再加入.
+回想一下, 其实也完成了好多东西, 不是么.
+还有, 要减肥了- -.. 不过不管我怎么努力, 好像体重还在一直往上走, 而且肌肉变多了...
+节食导致现在好饿
+
+明天看看maya的api.. 先做一个简单的导出工具.. 再没有模型支援我就要死在半路上了.
+
+前几天和'哔~'君商量, 确定了技术博客的事情, 明年就会开始..吧?
+
+10.26
+看来工作时间需要对3d gui部分加快进度了, maya导出之类的东西只能在下班弄. 又要学好多东西啊=x=
+(一个星期都没做完导出插件的怨念和需要重写导出架构的怨念= =..)
+
+10.29
+完善RenderEffect和Shader的关系. 以后统一使用巨型Effect来制作shader集群.
+优化资源载入的过程, 现在只要从ResourceManager里取出ResourceIterator即可一次性全部load.
+优化RenderResourceManager和RenderSystem的结构. 胸中一口恶气已出.
+
+10.30
+RenderWindow 的创建和管理也已经转入 DRenderResourceManager.
+
+11.1
+好吧粗大事了. gui架构重写! 原来的基于窗口左上角的geometry模式不适应3d环境, 因此必须采用新的
+坐标体系, 也即根据GUIManager的Camera来定位元素. 屏幕中心点为3D坐标原点, 使用x-y平面为排版载体
+
+11.5
+基本的元素都改成DReal型了, 看懂一点boxlayout的设计了, 明天开刀LayoutEngine::calculateGeometry
+layout的constrain计算方法也有一点眉目了, 下面就是亲手整合到这个框架内的问题了.
+
+11.7
+boxlayout基本完成. 等测试.
+下面看看windowWidget怎么做. 鼠标怎么做.
+
+11.18
+字体类基本完成, 支持ttf, ttc格式字体文件, 下面继续转回gui的开发路线上, 另外. reveal app 和 spark inspector都是很好的参考. 可以看看别人怎么做的.
+并且改了texture的一个现存bug(读写锁时没有提交到texture上)
+
+11.24
+排除一部分node/matrix/quaternion的bug, 基本完成gui框架, 下班时间思考了下maya导出插件的制作,
+现在有点想法, 记录在mayaExporterLog里.
+
+12.14
+又过了好长时间. 这次的进展在于threadpool. 好像能用了呢?
+还有就是GUI系统的文字排版. 居然tm的是个那么大的坑! 图文混排一点都不好玩啊!(记录在GUI/text里)
+还有就是地形系统和例子系统的构想. 以及maya导出插件的ui设计 貌似这货不进展, 我下面很难办啊....
+
+2014-----------------------------------------------------
+1.8 
+啊....这次的进展在于地形系统的创建, 基本框架的架构. 然后....然后是....chunklod
+还差一点点就完成了. 就是那啥绘制什么的. 太懒....你懂的. 懒得测啊魂淡
+最近看了hardware occlusion query, 然后结合了一下对UE和CE的分析. 嗯. 他们"好像"都是
+使用的8叉树加上hardware occlusion query(chc++)来做的. 是不是我应该加上了?
+
+魂淡maya插件的进展一点都没有!!!!!!!!!
+
+1.11
+maya 插件ui以及命令部分完结撒花...
+下面是mll上的开发了.
+
+2.5
+稍微记录一下, 过年你懂的, 期间只完成了包含defer shading的管线的初步设计, 以及相应的材质系统
+的设计.
+
+2.6
+趁我现在还清晰, 把我今天想到的思路写一下.
+首先是渲染队列的设计, 为了实现defershading, 我觉得light必须在整个renderqueue中, 而不是单独处理每个group,
+每个light使用一个shadowmap pool, 在renderworkshop里, 经过一定时间, 清理一下. 而且对物体使用shadow property
+分别为 dynamic, static 或者是no shadow, 处理不同的做法. 
+每个renderqueue可以挂接一定数量的posteffect, posteffect使用materialsystem来完成参数绑定以及使用类似materialsystem的实现
+这样能够将posteffect抽象成插件.
+gui自己使用一个renderqueue, 把renderworkshop的接口改为 render(renderQueue*), 这样能够实现渲染物体到target上.
+再给物体添加其他的renderproperty吧, 比如 reflactable之类的. 用于水体渲染.
+
+2.8
+出去逛了一圈. 想了很久, 发现最终的问题出在renderqueue的设计上, 在以前的设计中, 每个renderqueue都使用rendertechnique/renderpass
+来作为排序依据, 在现在的渲染架构中, 这是无法使用的, 正确的做法是只对renderable进行排序, 然后在getRenderTechnique中实现对defer/forward之类的支持,
+这样只需要在getRenderTechnique的接口中传入一个renderstage参数即可.
+
+2.12
+完成materialSystem, 完成DMCocec的读取部分.
+
+2.20
+完成mesh的载入工作(仅仅是载入而已啦),包括排除maya导出插件中mesh部分的bug.
+
+2.21
+完成skeleton的载入工作(仅仅是载入而已啦),包括排除maya导出插件中skeleton部分的bug.
+嗯这么说来maya导出插件已经能发布了?(笑)
+
+2.22
+已经决定将MovableFactory从系统中移除, 这货真尼玛浪费子系统开发时间.
+
+2.25
+完成资源载入的异常处理, 全部资源的载入失败处理方式改用异常的形式.
+
+2.27
+完成所有与绘制无关的事情, 包括renderqueue那些七七八八.
+终于可以正式开始和模型渲染做斗争了
+喂.. 为什么原来能画出来的ui现在画不出了?
+
+3.1
+改变了 groupmanager的工作方式以及内部实现, 基本方法不变.
+计划抽象materialInstance中的parameter部分, 用来再实现postEffect
+fxxk 老子再也不想改接口了!

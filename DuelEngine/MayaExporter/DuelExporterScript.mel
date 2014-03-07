@@ -1,0 +1,1211 @@
+global proc DuelExporter_Install()
+{
+	// ===== Create Ogre menu
+	
+	global int $DuelExporter_gClipCount;
+	$DuelExporter_gClipCount = 0;
+	
+	setParent "MayaWindow";
+	if(`menu -exists DuelExporterMenu`)
+	{
+		deleteUI DuelExporterMenu;
+	}
+	menu
+		-label "Duel" 
+		-tearOff false
+	DuelExporterMenu;
+		menuItem -label "Export" -command "DuelExporter_CreateUI()";
+		menuItem -label "Clear Settings" -command "DuelExporter_ClearSettings()";
+}
+
+global proc DuelExporter_Uninstall()
+{
+	// ===== Create Ogre menu
+	
+	global int $DuelExporter_gClipCount;
+	$DuelExporter_gClipCount = 0;
+		
+	if( `window -exists DuelExporterWindow`)
+	{
+		deleteUI DuelExporterWindow;
+	}
+	if(`menu -exists DuelExporterMenu`)
+	{
+		deleteUI DuelExporterMenu;
+	}
+}
+
+global proc DuelExporter_CreateUI()
+{
+	
+	if( `window -exists DuelExporterWindow`)
+	{
+		deleteUI DuelExporterWindow;
+	}
+	
+	
+	global int $DuelExporter_gClipCount;
+	$DuelExporter_gClipCount = 0;
+	window -title "DuelExporter" DuelExporterWindow;
+	
+	
+	string $form = `formLayout -parent DuelExporterWindow`;
+		// main top layout
+		scrollLayout
+			-parent DuelExporterWindow
+			-childResizable true
+		DSettingScrollLayout;
+		
+		// main bottom layout
+		columnLayout 
+			-parent DuelExporterWindow
+			-adjustableColumn true 
+		DExportCommandLayout;
+		
+		
+		// main settings
+		columnLayout	
+			-parent 	DSettingScrollLayout
+			-adjustableColumn true
+		DSettingMainLayout;
+			// --- Common Parameters Frame
+			frameLayout 
+				-parent DSettingMainLayout
+				-label	"Common"
+				-collapsable true
+			DCommonFrame;
+				
+				columnLayout
+					-parent DCommonFrame
+					-adjustableColumn true
+					-columnAttach "left" 20
+				DCommonLayout;
+					
+					rowColumnLayout
+						-parent DCommonLayout
+						-columnWidth 1 100
+						-columnWidth 2 200
+						-columnWidth 3 100
+						-numberOfColumns 3
+					DExportDestinationLayout;
+					
+						text
+							-label	"Output Directory:"
+							-align	"right"
+							-parent DExportDestinationLayout;
+						
+						textField	
+							-width	150
+							-parent DExportDestinationLayout
+						DOutputDirText;
+						
+						button 
+							-label "Browse"
+							-parent DExportDestinationLayout
+							-command "DuelExporter_BrowseOutputDir()"
+						DBrowseOutputDirButton;
+					
+					checkBox 
+						-parent DCommonLayout
+						-value	true
+						-label	"Use Unified File Name"
+						-changeCommand	"DuelExporter_ValidateControllers()"
+					DUnifiedNameCheckBox;
+					
+					rowColumnLayout
+						-parent DCommonLayout
+						-columnWidth 1 100
+						-columnWidth 2 200
+						-numberOfColumns 3
+					DUnifiedNameLayout;
+					
+						text
+							-label	"File Name:"
+							-align	"right"
+							-parent DUnifiedNameLayout;
+						
+						textField	
+							-width	150
+							-changeCommand	"DuelExporter_OnUnifiedNameChanged()"
+							-parent DUnifiedNameLayout
+						DUnifiedNameText;
+						
+						text
+							-label ".dm/.ds"
+							-align	"left"
+							-parent DUnifiedNameLayout;
+						
+					
+					
+					
+					
+					rowColumnLayout
+						-parent DCommonLayout
+						-columnWidth 1 100
+						-columnWidth 2 200
+						-numberOfColumns 2
+					DGeneralOptionsLayout;
+				
+					// Length measurement units
+		 
+					text
+						-label	"Length Units:"
+						-align	"right"
+						-parent DGeneralOptionsLayout;
+
+					optionMenu 
+						-parent DGeneralOptionsLayout 
+						-width	200
+					DLengthUnitsMenu;
+						menuItem -label "from prefs";
+						menuItem -label "millimeter";
+						menuItem -label "centimeter";
+						menuItem -label "meter";
+						menuItem -label "inch";
+						menuItem -label "foot";
+						menuItem -label "yard";
+					optionMenu -edit -select 1 DLengthUnitsMenu;
+					
+				
+					rowColumnLayout 
+						-parent	DCommonLayout
+						-columnWidth 1 100
+						-columnWidth 2 100
+						-numberOfColumns 3
+					DExportTargetLayout;	
+							
+						text
+							-parent	DExportTargetLayout
+							-align	"right"
+							-label	"Export Target:";
+						
+						radioCollection DExportTargetOption;
+								radioButton
+									-select		
+									-label "All"
+								DExportTargetAll;
+								radioButton
+									-label "Selected"
+								DExportTargetSelected;
+					
+					checkBox 
+						-parent DCommonLayout
+						-value	false
+						-label	"Reverse Z-Axis"
+					DReverseZAxisCheckBox;			
+					
+					checkBox
+						-parent DCommonLayout
+						-value	true
+						-label	"Export Mesh"
+						-changeCommand	"DuelExporter_ValidateControllers()"
+					DExportMeshCheckBox;
+					
+					checkBox
+						-parent DCommonLayout
+						-value	true
+						-label	"Export Skeleton"
+						-changeCommand	"DuelExporter_ValidateControllers()"
+					DExportSkeletonCheckBox;
+					
+				
+					
+			// -- Mesh parameters frame	
+			frameLayout 
+				-parent DSettingMainLayout
+				-collapsable true
+				-label "Mesh Options"
+			DMeshFrame;
+				
+				columnLayout
+					-parent DMeshFrame 
+					-adjustableColumn	true
+					-columnAttach "left" 20
+				DMeshLayout;
+					
+					
+					
+					rowColumnLayout
+						-parent DMeshLayout
+						-columnWidth 1 100
+						-columnWidth 2 200
+						-numberOfColumns 3
+					DMeshFileNameLayout;	
+						text
+							-label	"File Name:"
+							-align	"right"
+							-parent DMeshFileNameLayout;
+						textField	
+							-width	150
+							-parent DMeshFileNameLayout
+						DMeshFileNameText;
+						text
+							-label ".dm"
+							-align	"left"
+							-parent DMeshFileNameLayout;
+						
+					
+/*					
+					checkBox
+						-parent DMeshLayout
+						-value	true
+						// -changeCommand "xxxxxxx"
+						-label	"Export Tangent"
+						-changeCommand	"DuelExporter_ValidateControllers()"
+					DExportTangentCheckBox;
+					
+					rowColumnLayout
+						-parent DMeshLayout
+						-columnWidth 1 100
+						-columnWidth 2 200
+						-numberOfColumns 3
+					DTangentOptionsLayout;
+					
+						text
+							-label	"Use UV Set:"
+							-align	"right"
+							-parent DTangentOptionsLayout;
+						
+						textField	
+							-width	150
+							-parent DTangentOptionsLayout
+						DTangentUVSetText;
+*/					
+					rowColumnLayout
+						-parent DMeshLayout
+						-columnWidth 1 100
+						-columnWidth 2 100
+						-columnWidth 3 100
+						-numberOfColumns 4
+					DMeshSkeletonOptionsLayout;
+						
+						text
+							-label	"Skeleton Target:"
+							-align	"right"
+							-parent DMeshSkeletonOptionsLayout;
+					
+						radioCollection DMeshSkeletonTarget;
+							radioButton
+								-label "Use Current"
+								-select		
+							DMeshSkeletonUseCurrent;
+							radioButton
+								-label "Assign Skeleton"
+								-changeCommand	"DuelExporter_ValidateControllers()"
+							DMeshSkeletonUseAssigned;
+							radioButton
+								-label "No Skeleton"
+							DMeshSkeletonNoSkeleton;
+					
+					rowColumnLayout
+						-parent DMeshLayout
+						-columnWidth 1 100
+						-columnWidth 2 200
+						-numberOfColumns 3
+					DMeshSkeletonAssignedFileLayout;	
+						text
+							-label "Assign Skeleton File:"
+							-align	"right"
+							-parent DMeshSkeletonAssignedFileLayout;
+						textField	
+							-width	150
+							-parent DMeshSkeletonAssignedFileLayout
+						DMeshSkeletonAssignedFileText;
+						text
+							-label ".ds"
+							-align	"left"
+							-parent DMeshSkeletonAssignedFileLayout;
+						
+		
+					checkBox
+						-parent DMeshLayout
+						-value	true
+						// -changeCommand "xxxxxxx"
+						-label	"Export Normal"
+					DExportNormalCheckBox;
+					
+					checkBox
+						-parent DMeshLayout
+						-value	false
+						-changeCommand	"DuelExporter_ValidateControllers()"
+						-label	"Export Morph Animation"
+					DExportMorphAnimCheckBox;
+							
+
+			// -- Skeleton parameters frame	
+			frameLayout 
+				-parent DSettingMainLayout
+				-collapsable true
+				-label "Skeleton Options"
+			DSkeletonFrame;
+					
+				columnLayout
+					-parent DSkeletonFrame 
+					-adjustableColumn	true
+					-columnAttach "left" 20
+				DSkeletonLayout;	
+					
+					rowColumnLayout
+						-parent DSkeletonLayout
+						-columnWidth 1 100
+						-columnWidth 2 200
+						-numberOfColumns 3
+					DSkeletonFileNameLayout;	
+						text
+							-label	"File Name:"
+							-align	"right"
+							-parent DSkeletonFileNameLayout;
+						textField	
+							-width	150
+							-parent DSkeletonFileNameLayout
+						DSkeletonFileNameText;
+						text
+							-label ".ds"
+							-align	"left"
+							-parent DSkeletonFileNameLayout;
+				
+					rowColumnLayout 
+						-parent	DSkeletonLayout
+						-columnWidth 1 100
+						-columnWidth 2 100
+						-numberOfColumns 3
+					DSkeletonPoseOptionLayout;	
+							
+						text
+							-parent	DSkeletonPoseOptionLayout
+							-align	"right"
+							-label	"Neutral Pose:";
+						
+						radioCollection DSkeletonNeutralPoseOption;
+								radioButton
+									-select		
+									-label "Skin Bind Pose"
+								DSkeletonNeutralPoseSkinBind;
+								radioButton
+									-label "Current Frame"
+								DSkeletonNeutralPoseUseCurrent;
+					
+					checkBox
+						-parent DSkeletonLayout
+						-value	true
+						-label	"Export Skeleton Animation"
+						-changeCommand	"DuelExporter_ValidateControllers()"
+					DExportSkelAnimCheckBox;
+					
+					
+			// -- Animation parameters frame
+			frameLayout
+				-parent DSettingMainLayout
+				-collapsable true
+				-label	"Animation Options"
+			DAnimFrame;
+			
+				columnLayout
+					-parent DAnimFrame 
+					-adjustableColumn	true
+					-columnAttach "left" 20
+				DAnimLayout;
+
+					
+					rowColumnLayout 
+						-parent DAnimLayout
+						-columnWidth 1 100
+						-columnWidth 2 100
+						-numberOfColumns 3
+					DAnimClipSampleLayout;
+
+						text
+							-label	"Sample By:"
+							-align  "right";
+						
+						radioCollection DAnimSampleOption;
+							radioButton
+								-label "Frame"
+								-changeCommand	"DuelExporter_ValidateControllers()"
+								-select		
+							DAnimFrameSample;
+							radioButton
+								-label "Second"
+								-changeCommand	"DuelExporter_ValidateControllers()"
+							DAnimSecondSample;
+							
+					rowColumnLayout	
+						-parent DAnimLayout
+						-numberOfColumns 3
+						-columnWidth 1 100
+						-columnWidth 2 100
+						-columnWidth 3 100
+					DAnimClipSampleInputLayout;
+						text -label "Sample Rate:" -align "right";
+						intField 
+							-value	1
+							-minValue 1
+							-parent DAnimClipSampleInputLayout
+						DAnimClipFrameSampleInput;
+
+						floatField 
+							-value	0.1
+							-minValue 0.01
+							-parent DAnimClipSampleInputLayout
+						DAnimClipSecondSampleInput;	
+					
+					rowColumnLayout	
+						-parent DAnimLayout
+						-numberOfColumns 3
+						-columnWidth 1 100
+						-columnWidth 2 100
+						-columnWidth 3 100					
+					DAnimClipFpsLayout;	
+						text -label "Fps:" -align "right";
+						intField 
+							-value	24
+							-minValue 1
+							-parent DAnimClipFpsLayout
+						DAnimClipFpsInput;
+				
+				columnLayout
+					-parent DAnimLayout
+					-adjustableColumn	true
+				DAnimClipLayout;
+					
+				rowLayout 
+					-parent DAnimLayout
+					-numberOfColumns	2
+					-columnAttach 1 "left" 20
+				DAnimClipButtonsLayout;
+					
+					button
+						-parent DAnimClipButtonsLayout
+						-label	"Add Clip"
+						-width	60
+						-command "DuelExporter_AddAnimClip()"
+					DAnimClipAddButton;
+					
+					button
+						-parent DAnimClipButtonsLayout
+						-label	"Delete Clip"
+						-width	60
+						-command "DuelExporter_DeleteAnimClip()"
+					DAnimClipDeleteButton;
+			
+			// command area		
+			frameLayout
+				-parent DExportCommandLayout
+				-collapsable true
+				-collapse	true
+				-label	"Generated Command"
+			DCommandFrame;
+				scrollField 
+					-parent	DCommandFrame
+					-height	60
+					-wordWrap true	
+				DExportCommandText;
+			
+			// option layout
+			rowColumnLayout 
+				-parent	DExportCommandLayout
+				-numberOfColumns	2
+			DExportButtonLayout;
+				button
+					-parent DExportButtonLayout
+					-label	"Generate Command"
+					-command "DuelExporter_GenerateCommand()"
+				DGenerateCommandButton;
+				button
+					-parent DExportButtonLayout
+					-label	"Export"
+					-command "DuelExporter_Export()"
+				DExportButton;
+			
+			columnLayout 
+				-parent DExportCommandLayout
+				-adjustableColumn	true
+			DOptionLayout;
+			
+			rowColumnLayout 
+				-parent	DExportCommandLayout
+				-numberOfRows 		1
+			DOptionButtonLayout;
+				button
+					-parent DOptionButtonLayout
+					-label	"Save Settings"
+					-command "DuelExporter_SaveSettings()"
+				DOptionSaveButton;
+								
+				button
+					-parent DOptionButtonLayout
+					-label	"Clear Settings"
+					-command "DuelExporter_ClearSettings()"
+				DOptionLoadDefaultButton;
+				
+	
+	formLayout -edit
+		-attachForm DExportCommandLayout "left" 5
+		-attachForm DExportCommandLayout "right" 5
+		-attachForm DExportCommandLayout "bottom" 5
+	
+		-attachForm DSettingScrollLayout "top" 5
+		-attachForm DSettingScrollLayout "left" 5
+		-attachForm DSettingScrollLayout "right" 5
+		
+		
+		-attachControl DSettingScrollLayout "bottom" 5 DExportCommandLayout
+		
+	$form;
+	
+	// validate controllers;
+	DuelExporter_LoadSavedSettings();
+	
+	showWindow DuelExporterWindow;
+	
+}
+
+global proc DuelExporter_OnUnifiedNameChanged()
+{
+	string $text = `textField -query -text DUnifiedNameText`;
+	textField -edit -text $text DMeshFileNameText;
+	textField -edit -text $text DSkeletonFileNameText;
+}
+
+global proc DuelExporter_AddAnimClip()
+{
+	global int $DuelExporter_gClipCount;
+	$DuelExporter_gClipCount++;
+	
+	frameLayout
+		-parent 		DAnimClipLayout
+		-collapsable	true
+		-label			("Clip " + $DuelExporter_gClipCount)
+	("DAnimClipFrame" + $DuelExporter_gClipCount);
+		
+		string $clipLayout = `columnLayout
+					-adjustableColumn	true
+					-parent ("DAnimClipFrame" + $DuelExporter_gClipCount)`;
+			
+			rowLayout
+				-parent $clipLayout
+				-numberOfColumns 2
+				-columnWidth2 111 200
+			("DAnimClipNameLayout"+$DuelExporter_gClipCount);
+								
+				checkBox
+					-value true
+					-changeCommand "DuelExporter_ValidateControllers()"
+					-label "Clip Name"
+				("DExportClipCheckBox"+$DuelExporter_gClipCount);
+						
+				textField
+					-text ("clip_"+$DuelExporter_gClipCount)
+				("DClipNameText"+$DuelExporter_gClipCount);	
+
+			string $timeLayout = `columnLayout 
+					-parent $clipLayout
+					-adjustableColumn	true
+					("DAnimClipTimeLayout"+$DuelExporter_gClipCount)`;
+			
+			separator 
+				-parent $timeLayout
+				-style "in" 
+				-height 5;
+			text 
+				-parent $timeLayout
+				-label "Time Range"
+				-align "left";
+				
+			rowLayout
+				-parent $timeLayout
+				-numberOfColumns 6
+			("DAnimClipFrameRangeLayout"+$DuelExporter_gClipCount);
+				text
+					-label "Frame:"
+					-width 80
+					-align "right";
+				text
+					-label "From:"
+					-align "right";
+				intField
+					-value 1
+					-minValue 1
+				("DAnimClipFrameRangeFrom"+$DuelExporter_gClipCount);
+				text
+					-label "To:"
+					-align "right";
+				intField
+					-value 1
+					-minValue 1
+				("DAnimClipFrameRangeTo"+$DuelExporter_gClipCount);	
+				
+			rowLayout
+				-parent $timeLayout
+				-numberOfColumns 6
+			("DAnimClipSecondRangeLayout"+$DuelExporter_gClipCount);
+				text
+					-label "Second:"
+					-width 80
+					-align "right";
+				text
+					-label "From:"
+					-align "right";
+				floatField
+					-value 0.00
+					-minValue 0.00
+				("DAnimClipSecondRangeFrom"+$DuelExporter_gClipCount);
+				text
+					-label "To:"
+					-align "right";
+				floatField
+					-value 0.00
+					-minValue 0.00
+				("DAnimClipSecondRangeTo"+$DuelExporter_gClipCount);
+				
+	DuelExporter_ValidateControllers();
+}
+
+global proc DuelExporter_DeleteAnimClip()
+{
+	global int $DuelExporter_gClipCount;
+	if ($DuelExporter_gClipCount > 0)
+	{
+		deleteUI ("DAnimClipFrame" + $DuelExporter_gClipCount);
+		$DuelExporter_gClipCount--;
+	}
+}
+
+global proc DuelExporter_BrowseOutputDir()
+{
+	string $startPath = `textField -query -text DOutputDirText`;
+	string $path[] = `fileDialog2 -startingDirectory $startPath -fileMode 3  -caption "Select Directory" -okCaption "Open"`;
+	if(size($path) == 1)
+	{
+		textField -edit -text $path[0] DOutputDirText;
+	}
+	
+}
+
+global proc DuelExporter_SaveSettings()
+{
+	// save global value to indicate whether we have saved settings.
+	fileInfo "DuelExporter_SavedSettings" "1";
+		
+	// common parameters
+	fileInfo "DuelExporter_OutputDir" `textField -query -text DOutputDirText`;
+	fileInfo "DuelExporter_UseUnifiedName" `checkBox -query -value DUnifiedNameCheckBox`;
+	fileInfo "DuelExporter_UnifiedName" `textField -query -text DUnifiedNameText`;
+	fileInfo "DuelExporter_ReverseZAxis" `checkBox -query -value DReverseZAxisCheckBox`;
+	fileInfo "DuelExporter_LengthUnit" `optionMenu -query -select DLengthUnitsMenu`;
+	fileInfo "DuelExporter_ExportTarget" `radioCollection -query -select DExportTargetOption`;
+	fileInfo "DuelExporter_ExportMesh" `checkBox -query -value DExportMeshCheckBox`;
+	fileInfo "DuelExporter_ExportSkeleton" `checkBox -query -value DExportSkeletonCheckBox`;
+	
+	// mesh parameters
+	fileInfo "DuelExporter_MeshName" `textField -query -text DMeshFileNameText`;
+	fileInfo "DuelExporter_ExportNormal" `checkBox -query -value DExportNormalCheckBox`;
+	//fileInfo "DuelExporter_ExportTangent" `checkBox -query -value DExportTangentCheckBox`;
+	//fileInfo "DuelExporter_TangentUVSet" `textField -query -text DTangentUVSetText`;
+	fileInfo "DuelExporter_SkeletonTarget" `radioCollection -query -select DMeshSkeletonTarget`;
+	fileInfo "DuelExporter_SkeletonFileName" `textField -query -text DMeshSkeletonAssignedFileText`;
+	fileInfo "DuelExporter_ExportMorphAnim" `checkBox -query -value DExportMorphAnimCheckBox`;
+
+	// skeleton parameters
+	fileInfo "DuelExporter_SkeletonName" `textField -query -text DSkeletonFileNameText`;
+	fileInfo "DuelExporter_SkeletonPoseOption" `radioCollection -query -select DSkeletonNeutralPoseOption`;
+	fileInfo "DuelExporter_ExportSkelAnim" `checkBox -query -value DExportSkelAnimCheckBox`;
+	
+	// animation parameters
+	fileInfo "DuelExporter_AnimSampleOption" `radioCollection -query -select DAnimSampleOption`;
+	fileInfo "DuelExporter_AnimFrameSampleRate" `intField -query -value DAnimClipFrameSampleInput`;
+	fileInfo "DuelExporter_AnimSecondSampleRate" `floatField -query -value DAnimClipSecondSampleInput`;
+	fileInfo "DuelExporter_AnimFps" `intField -query -value DAnimClipFpsInput`;
+	
+	// clips
+	global int $DuelExporter_gClipCount;
+	fileInfo "DuelExporter_AnimClipCount" $DuelExporter_gClipCount;
+	int $i;
+	for($i = 1; $i <= $DuelExporter_gClipCount; $i++)
+	{
+		fileInfo ("DuelExporter_ExportAnimClip"+$i) `checkBox -query -value ("DExportClipCheckBox"+$i)`;
+		fileInfo ("DuelExporter_AnimClipName"+$i) `textField -query -text ("DClipNameText"+$i)`;
+		fileInfo ("DuelExporter_AnimClipFrameRangeFrom"+$i) `intField -query -value ("DAnimClipFrameRangeFrom"+$i)`;
+		fileInfo ("DuelExporter_AnimClipFrameRangeTo"+$i) `intField -query -value ("DAnimClipFrameRangeTo"+$i)`;
+		fileInfo ("DuelExporter_AnimClipSecondRangeFrom"+$i) `floatField -query -value ("DAnimClipSecondRangeFrom"+$i)`;
+		fileInfo ("DuelExporter_AnimClipSecondRangeTo"+$i) `floatField -query -value ("DAnimClipSecondRangeTo"+$i)`;		
+	}
+}
+
+global proc DuelExporter_LoadSavedSettings()
+{
+	global int $DuelExporter_gClipCount;
+	string $optionSaved[] = `fileInfo -q "DuelExporter_SavedSettings"`;
+	string $valStr[];
+	int $intVal;
+	float $floatVal;
+	if(`gmatch $optionSaved[0] "1"`)
+	{
+		// common parameters.
+		textField -edit -text `fileInfo -query "DuelExporter_OutputDir"` DOutputDirText;
+		$valStr = `fileInfo -query "DuelExporter_UseUnifiedName"`;
+		checkBox -edit -value `gmatch $valStr[0] "1"` DUnifiedNameCheckBox; 
+		$valStr = `fileInfo -query "DuelExporter_UnifiedName"`;
+		textField -edit -text $valStr[0] DUnifiedNameText;
+		$valStr = `fileInfo -query "DuelExporter_ReverseZAxis"`;
+		checkBox -edit -value `gmatch $valStr[0] "1"` DReverseZAxisCheckBox;
+		$valStr = `fileInfo -query "DuelExporter_LengthUnit"`;
+		$intVal = $valStr[0];
+		optionMenu -edit -select $intVal DLengthUnitsMenu;
+		$valStr = `fileInfo -query "DuelExporter_ExportTarget"`;
+		radioCollection -edit -select $valStr[0] DExportTargetOption;
+		$valStr = `fileInfo -query "DuelExporter_ExportMesh"`;
+		checkBox -edit -value `gmatch $valStr[0] "1"` DExportMeshCheckBox;
+		$valStr = `fileInfo -query "DuelExporter_ExportSkeleton"`;
+		checkBox -edit -value `gmatch $valStr[0] "1"` DExportSkeletonCheckBox;
+		
+		// mesh parameters.
+		$valStr = `fileInfo -query "DuelExporter_MeshName"`;
+		textField -edit -text $valStr[0] DMeshFileNameText;
+		$valStr = `fileInfo -query "DuelExporter_ExportNormal"`;
+		checkBox -edit -value `gmatch $valStr[0] "1"` DExportNormalCheckBox;
+		//$valStr = `fileInfo -query "DuelExporter_ExportTangent"`;
+		//checkBox -edit -value `gmatch $valStr[0] "1"` DExportTangentCheckBox;
+		//$valStr = `fileInfo -query "DuelExporter_TangentUVSet"`;
+		//textField -edit -text $valStr[0] DTangentUVSetText;		
+		$valStr = `fileInfo -query "DuelExporter_SkeletonTarget"`;
+		radioCollection -edit -select $valStr[0] DMeshSkeletonTarget;
+		
+		$valStr = `fileInfo -query "DuelExporter_SkeletonFileName"`;
+		textField -edit -text $valStr[0] DMeshSkeletonAssignedFileText;
+		$valStr = `fileInfo -query "DuelExporter_ExportMorphAnim"`;
+		checkBox -edit -value `gmatch $valStr[0] "1"` DExportMorphAnimCheckBox;
+		
+		// skeleton parameters
+		$valStr = `fileInfo -query "DuelExporter_SkeletonName"`;
+		textField -edit -text $valStr[0] DSkeletonFileNameText;
+		$valStr = `fileInfo -query "DuelExporter_SkeletonPoseOption"`;
+		radioCollection -edit -select $valStr[0] DSkeletonNeutralPoseOption;
+		$valStr = `fileInfo -query "DuelExporter_ExportSkelAnim"`;
+		checkBox -edit -value `gmatch $valStr[0] "1"` DExportSkelAnimCheckBox;
+		
+		// animation parameters
+		$valStr = `fileInfo -query "DuelExporter_AnimSampleOption"`;
+		radioCollection -edit -select $valStr[0] DAnimSampleOption;
+		$valStr = `fileInfo -query "DuelExporter_AnimFrameSampleRate"`;
+		$intVal = $valStr[0];
+		intField -edit -value $intVal DAnimClipFrameSampleInput;
+		$valStr = `fileInfo -query "DuelExporter_AnimSecondSampleRate"`;
+		$floatVal = $valStr[0];
+		floatField -edit -value $floatVal DAnimClipSecondSampleInput;
+		$valStr = `fileInfo -query "DuelExporter_AnimFps"`;
+		$intVal = $valStr[0];
+		intField -edit -value $intVal DAnimClipFpsInput;
+		
+		
+		// clips
+		int $clipCount;
+		$valStr = `fileInfo -query "DuelExporter_AnimClipCount"`;
+		$clipCount = $valStr[0];
+		
+		int $i;
+		for($i = 1; $i <= $clipCount; $i++)
+		{
+			DuelExporter_AddAnimClip();
+			$valStr = `fileInfo -query ("DuelExporter_ExportAnimClip"+$i) `;
+			checkBox -edit -value `gmatch $valStr[0] "1"` ("DExportClipCheckBox"+$i);		
+			$valStr = `fileInfo -query ("DuelExporter_AnimClipName"+$i)`;
+			textField -edit -text $valStr[0] ("DClipNameText"+$i);	
+			$valStr = `fileInfo -query ("DuelExporter_AnimClipFrameRangeFrom"+$i)`;
+			$intVal = $valStr[0];
+			intField -edit -value $intVal ("DAnimClipFrameRangeFrom"+$i);
+			$valStr = `fileInfo -query ("DuelExporter_AnimClipFrameRangeTo"+$i)`;
+			$intVal = $valStr[0];
+			intField -edit -value $intVal ("DAnimClipFrameRangeTo"+$i);
+			$valStr = `fileInfo -query ("DuelExporter_AnimClipSecondRangeFrom"+$i)`;
+			$floatVal = $valStr[0];
+			floatField -edit -value $floatVal ("DAnimClipSecondRangeFrom"+$i);
+			$valStr = `fileInfo -query ("DuelExporter_AnimClipSecondRangeTo"+$i)`;
+			$floatVal = $valStr[0];
+			floatField -edit -value $floatVal ("DAnimClipSecondRangeTo"+$i);
+			
+		}
+		
+		DuelExporter_ValidateControllers();
+		
+	}
+	else
+	{
+		DuelExporter_ResetSettings();
+	}
+}
+
+global proc DuelExporter_ResetSettings()
+{
+	fileInfo "DuelExporter_SavedSettings" "0";
+	global int $DuelExporter_gClipCount;
+	if(`window -exists DuelExporterWindow`)
+	{
+		string $valStr;
+		int $intVal;
+		float $floatVal;
+		// common parameters.
+		$valStr = "";
+		textField -edit -text $valStr DOutputDirText;
+		$valStr = "1";
+		checkBox -edit -value `gmatch $valStr "1"` DUnifiedNameCheckBox; 
+		$valStr = "";
+		textField -edit -text $valStr DUnifiedNameText;
+		$valStr = "0";
+		checkBox -edit -value `gmatch $valStr "1"` DReverseZAxisCheckBox;
+		$valStr = "1";
+		$intVal = $valStr;
+		optionMenu -edit -select $intVal DLengthUnitsMenu;
+		$valStr = "DExportTargetAll";
+		radioCollection -edit -select $valStr DExportTargetOption;
+		$valStr = "1";
+		checkBox -edit -value `gmatch $valStr "1"` DExportMeshCheckBox;
+		$valStr = "1";
+		checkBox -edit -value `gmatch $valStr "1"` DExportSkeletonCheckBox;
+
+		// mesh parameters.
+		$valStr = "";
+		textField -edit -text $valStr DMeshFileNameText;
+		$valStr = "1";
+		checkBox -edit -value `gmatch $valStr "1"` DExportNormalCheckBox;
+		//$valStr = "0";
+		//checkBox -edit -value `gmatch $valStr "1"` DExportTangentCheckBox;
+		//$valStr = "";
+		//textField -edit -text $valStr DTangentUVSetText;		
+		$valStr = "DMeshSkeletonUseCurrent";
+		radioCollection -edit -select $valStr DMeshSkeletonTarget;
+		
+		$valStr = "";
+		textField -edit -text $valStr DMeshSkeletonAssignedFileText;
+		$valStr = "0";
+		checkBox -edit -value `gmatch $valStr "1"` DExportMorphAnimCheckBox;
+		
+		// skeleton parameters
+		$valStr = "";
+		textField -edit -text $valStr DSkeletonFileNameText;
+		$valStr = "DSkeletonNeutralPoseSkinBind";
+		radioCollection -edit -select $valStr DSkeletonNeutralPoseOption;
+		$valStr = "1";
+		checkBox -edit -value `gmatch $valStr "1"` DExportSkelAnimCheckBox;
+		
+		// animation parameters
+		$valStr = "DAnimFrameSample";
+		radioCollection -edit -select $valStr DAnimSampleOption;
+		$valStr = "1";
+		$intVal = $valStr;
+		intField -edit -value $intVal DAnimClipFrameSampleInput;
+		$valStr = "0.1";
+		$floatVal = $valStr;
+		floatField -edit -value $floatVal DAnimClipSecondSampleInput;
+		$valStr = "24";
+		$intVal = $valStr;
+		intField -edit -value $intVal DAnimClipFpsInput;
+		
+		// clear current clips.
+		while($DuelExporter_gClipCount > 0)
+		{
+			DuelExporter_DeleteAnimClip();
+		}
+		DuelExporter_ValidateControllers();
+	}
+	$DuelExporter_gClipCount = 0;
+}
+global proc DuelExporter_ClearSettings()
+{
+
+	$result = `confirmDialog -title "Confirm"
+			-message "All your current settings will be lost, will you continue?"
+			-button "Yes" -button "No" -defaultButton "No"
+			-cancelButton "No" -dismissString "No"`;
+
+	if ($result == "Yes")
+	{
+		DuelExporter_ResetSettings();
+	}
+
+}
+
+global proc DuelExporter_GenerateCommand()
+{
+	// file destination
+	string $command = "";
+	string $outputDir = (`textField -query -text DOutputDirText`);
+	
+	// output dir
+	$command += "-output ";
+	if (!endsWith($outputDir,"\\") && !endsWith($outputDir,"/") && (size($outputDir)>0))	
+	{
+		$outputDir += "/";
+	}
+	$command += "\"" + $outputDir + "\"";
+	
+	// export target.
+	string $valStr = `radioCollection -query -select DExportTargetOption`;
+	if($valStr == "DExportTargetAll")
+	{
+		$command += " -all";
+	}
+	else
+	{
+		$command += " -sel";
+	}
+	
+	// length unit.
+	$command += " -lu";
+	int $lu = `optionMenu -query -select DLengthUnitsMenu`;
+	if($lu == 1)
+	{
+		$command += " pref";
+	}
+	else if($lu == 2)
+	{
+		$command += " mm";
+	}
+	else if($lu == 3)
+	{
+		$command += " cm";
+	}
+	else if($lu == 4)
+	{
+		$command += " m";
+	}
+	else if($lu == 5)
+	{
+		$command += " ft";
+	}
+	else if($lu == 6)
+	{
+		$command += " yd";
+	}
+	else
+	{
+		$command += " pref";	// for default.
+	}
+	
+	// reverse z
+	if(`checkBox -query -value DReverseZAxisCheckBox`)
+	{
+		$command += " -revZ";
+	}
+	
+	// mesh/skeleton file names.
+	string $meshName;
+	string $skeletonName;
+	int $useUnifiedName = `checkBox -query -value DUnifiedNameCheckBox`;
+	if($useUnifiedName == 1)
+	{
+		$meshName = "\"" + `textField -query -text DUnifiedNameText` + ".dm" + "\"";
+		$skeletonName = "\"" + `textField -query -text DUnifiedNameText` + ".ds" + "\"";
+	}
+	else
+	{
+		$meshName =  "\"" + `textField -query -text DMeshFileNameText` + ".dm" + "\"";
+		$skeletonName = "\"" + `textField -query -text DSkeletonFileNameText` + ".ds" + "\"";
+	}
+	
+	// mesh part.
+	if(`checkBox -query -value DExportMeshCheckBox` && $meshName != ".dm")
+	{
+		$command += " -mesh ";
+		$command += $meshName;
+		
+		if(`checkBox -query -value DExportNormalCheckBox`)
+		{
+			$command += " -norm";
+		}
+		/*
+		if(`checkBox -query -value DExportTangentCheckBox`)
+		{
+			if(`textField -query -text DTangentUVSetText` != "")
+			{
+				$command += " -tang " + `textField -query -text DTangentUVSetText`;
+			}
+		}
+		*/
+		
+		$valStr = `radioCollection -query -select DMeshSkeletonTarget`;
+		if($valStr == "DMeshSkeletonUseCurrent")
+		{
+			$command += " -curSkel";
+		}
+		else if($valStr == "DMeshSkeletonUseAssigned")
+		{
+			$command += " -assSkel " + `textField -query -text DMeshSkeletonAssignedFileText` + ".ds";
+		}
+		
+		if(`checkBox -query -value DExportMorphAnimCheckBox`)
+		{
+			$command += " -morphAnim";
+		}
+		
+	}
+	
+	// skeleton part.
+	if(`checkBox -query -value DExportSkeletonCheckBox` && $skeletonName != ".ds")
+	{
+		$command += " -skel ";
+		$command += $skeletonName;
+		
+		$valStr = `radioCollection -query -select DSkeletonNeutralPoseOption`;
+		if($valStr == "DSkeletonNeutralPoseSkinBind")
+		{
+			$command += " -np bindPose";
+		}
+		else
+		{
+			$command += " -np curFrame";
+		}
+		
+		if(`checkBox -query -value DExportSkelAnimCheckBox`)
+		{
+			$command += " -skelAnim";
+		}
+	}
+	
+	global int $DuelExporter_gClipCount;
+	// anim part
+	if(`columnLayout -query -enable DAnimLayout` && ($DuelExporter_gClipCount > 0))
+	{
+		
+		if(`radioCollection -query -select DAnimSampleOption` == "DAnimFrameSample")
+		{
+			$command += " -samp frame";
+			$command += " -sampRate " + `intField -query -value DAnimClipFrameSampleInput`;
+			$command += " -fps " + `intField -query -value DAnimClipFpsInput`;
+		}
+		else
+		{
+			$command += " -samp second";
+			$command += " -sampRate " + `floatField -query -value DAnimClipSecondSampleInput`;
+		}
+		
+		// clips
+		int $i;
+		for($i = 1; $i <= $DuelExporter_gClipCount; $i++)
+		{
+			if(`checkBox -query -value ("DExportClipCheckBox"+$i)`)
+			{
+				$command += " -clip " + "\"" + `textField -query -text ("DClipNameText"+$i)` + "\"";
+				if(`radioCollection -query -select DAnimSampleOption` == "DAnimFrameSample")
+				{
+					$command += " -range " + 
+						`intField -query -value ("DAnimClipFrameRangeFrom"+$i)` + " " +
+						`intField -query -value ("DAnimClipFrameRangeTo"+$i)`;
+				}
+				else
+				{
+					$command += " -range " + 
+						`floatField -query -value ("DAnimClipSecondRangeFrom"+$i)` + " " +
+						`floatField -query -value ("DAnimClipSecondRangeTo"+$i)`;
+				}
+			}
+		}
+	}
+	
+	
+	scrollField -edit -text $command DExportCommandText;
+}
+
+global proc DuelExporter_Export()
+{
+	DuelExporter_SaveSettings();
+	DuelExporter_GenerateCommand();
+	
+	string $cmd = `scrollField -query -text DExportCommandText`;
+	$cmd = "DuelExporter " + $cmd;
+	eval $cmd;
+	
+	if( `window -exists DuelExporterWindow`)
+	{
+		deleteUI DuelExporterWindow;
+	}
+}
+
+global proc DuelExporter_ValidateControllers()
+{
+	global int $DuelExporter_gClipCount;
+	// firstly validate file name input 
+	int $useUnifiedName = `checkBox -query -value DUnifiedNameCheckBox`;
+	int $invUseUnifiedName = !$useUnifiedName;
+	// mesh
+	int $exportMesh = `checkBox -query -value DExportMeshCheckBox`;
+	//int $exportTangent = `checkBox -query -value DExportTangentCheckBox`;
+	int $assignSkeleton = `radioButton -query -select DMeshSkeletonUseAssigned`;
+	// skeleton
+	int $exportSkeleton = `checkBox -query -value DExportSkeletonCheckBox`;
+	
+	// sample type
+	int $sampleByFrame = `radioButton -query -select DAnimFrameSample`;
+	
+	// unified name
+	rowColumnLayout -edit -enable $useUnifiedName DUnifiedNameLayout;
+	
+	// mesh file name
+	rowColumnLayout -edit -enable $invUseUnifiedName DMeshFileNameLayout;
+		
+	// tangent
+	//rowColumnLayout -edit -enable $exportTangent DTangentOptionsLayout;
+	
+	// assign skeleton
+	rowColumnLayout -edit -enable $assignSkeleton DMeshSkeletonAssignedFileLayout;
+	
+	// morph Anim
+	int $exportMorphAnim = `checkBox -query -value DExportMorphAnimCheckBox`;
+	
+	// skeleton file name
+	rowColumnLayout -edit -enable $invUseUnifiedName DSkeletonFileNameLayout;
+	
+	// skeleton animation
+	int $exportSkelAnim = `checkBox -query -value DExportSkelAnimCheckBox`;
+	
+	// anim sample rate.
+	if($sampleByFrame == true)
+	{
+		intField -edit -enable true DAnimClipFrameSampleInput;
+		intField -edit -enable true DAnimClipFpsInput;
+		floatField -edit -enable false DAnimClipSecondSampleInput;
+	}
+	else
+	{
+		intField -edit -enable false DAnimClipFrameSampleInput;
+		intField -edit -enable false DAnimClipFpsInput;
+		floatField -edit -enable true DAnimClipSecondSampleInput;
+	}
+	
+	// mesh layout
+	columnLayout -edit -enable $exportMesh DMeshLayout;
+	// skeleton layout
+	columnLayout -edit -enable $exportSkeleton DSkeletonLayout;
+	
+	// anim layout
+	if(($exportSkeleton && $exportSkelAnim) || ($exportMesh && $exportMorphAnim))
+	{
+		columnLayout -edit -enable true DAnimLayout;
+	}
+	else
+	{
+		columnLayout -edit -enable false DAnimLayout;
+	}
+	
+	// now let's handle clips.
+	int $i;
+	for($i = 1; $i <= $DuelExporter_gClipCount; $i++)
+	{
+		
+		int $clipEnable = `checkBox -query -value ("DExportClipCheckBox"+$i)`;
+		textField -edit -enable $clipEnable ("DClipNameText"+$i);
+		columnLayout -edit -enable $clipEnable ("DAnimClipTimeLayout"+$i);
+		
+		if($sampleByFrame == true)
+		{
+			rowLayout -edit -enable true ("DAnimClipFrameRangeLayout"+$i);
+			rowLayout -edit -enable false ("DAnimClipSecondRangeLayout"+$i);
+		}
+		else
+		{
+			rowLayout -edit -enable false ("DAnimClipFrameRangeLayout"+$i);
+			rowLayout -edit -enable true ("DAnimClipSecondRangeLayout"+$i);
+		}	
+		
+	}
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RenderEffect name="Terrain_Basic"  version="2.0">
+
+	
+	<!--Terrain_Basic-->
+	<Technique name="Terrain_Basic_t0">
+		<Pass name="Terrain_Basic_t0_p0">
+			<RasterizerState>
+				<state name="PolygonMode">Solid</state>
+			</RasterizerState>
+			
+			
+			<BlendState>
+				<RenderTargetBlendState	index = "0">
+					<state name="BlendEnable">true</state>
+					<state name="ColorBlendOpeartion">Add</state>
+					<state name="ColorSrcBlend">SrcAlpha</state>
+					<state name="ColorDestBlend">InvSrcAlpha</state>
+					<state name="AlphaBlendOpeartion">Max</state>
+					<state name="AlphaSrcBlend">One</state>
+					<state name="AlphaDestBlend">One</state>
+				</RenderTargetBlendState>
+			</BlendState>
+			
+			<VertexProgram group="_BasicShaderPack">Terrain_Basic.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">Terrain_Basic.ps</PixelProgram>
+		</Pass>
+	</Technique>
+	
+</RenderEffect>

@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DuelGUISizeAdjustment.h" />
+    <ClInclude Include="DuelGUITextCursor.h" />
+    <ClInclude Include="DuelGUI.h" />
+    <ClInclude Include="DuelGUIAlignment.h" />
+    <ClInclude Include="DuelGUIButton.h" />
+    <ClInclude Include="DuelGUICursor.h" />
+    <ClInclude Include="DuelGUIGeometry.h" />
+    <ClInclude Include="DuelGUIShowcaseButton.h" />
+    <ClInclude Include="DuelGUIShowcasePictureBox.h" />
+    <ClInclude Include="DuelGUIShowcasePictureLayer.h" />
+    <ClInclude Include="DuelGUIShowcaseLabel.h" />
+    <ClInclude Include="DuelGUIShowcaseTextLayer.h" />
+    <ClInclude Include="DuelGUIShowcaseTextLayout.h" />
+    <ClInclude Include="DuelGUIStdLabel.h" />
+    <ClInclude Include="DuelGUIMathTool.h" />
+    <ClInclude Include="DuelGUIBoxLayout.h" />
+    <ClInclude Include="DuelGUICommon.h" />
+    <ClInclude Include="DuelGUIConfig.h" />
+    <ClInclude Include="DuelGUIHotSpot.h" />
+    <ClInclude Include="DuelGUILayout.h" />
+    <ClInclude Include="DuelGUILayoutEngine.h" />
+    <ClInclude Include="DuelGUILayoutItem.h" />
+    <ClInclude Include="DuelGUIManager.h" />
+    <ClInclude Include="DuelGUIPredeclare.h" />
+    <ClInclude Include="DuelGUIRenderDelegate.h" />
+    <ClInclude Include="DuelGUISize.h" />
+    <ClInclude Include="DuelGUISizePolicy.h" />
+    <ClInclude Include="DuelGUIStdHotspot.h" />
+    <ClInclude Include="DuelGUIStdCursor.h" />
+    <ClInclude Include="DuelGUITextDocument.h" />
+    <ClInclude Include="DuelGUITextDocumentLayout.h" />
+    <ClInclude Include="DuelGUITextEngine.h" />
+    <ClInclude Include="DuelGUITextFormat.h" />
+    <ClInclude Include="DuelGUITextFragment.h" />
+    <ClInclude Include="DuelGUITextLayout.h" />
+    <ClInclude Include="DuelGUITextObject.h" />
+    <ClInclude Include="DuelGUIWindow.h" />
+    <ClInclude Include="DuelGUISystem.h" />
+    <ClInclude Include="DuelGUIWidget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DuelGUICursor.cpp" />
+    <ClCompile Include="DuelGUIShowcasePictureBox.cpp" />
+    <ClCompile Include="DuelGUIShowcasePictureLayer.cpp" />
+    <ClCompile Include="DuelGUIStdLabel.cpp" />
+    <ClCompile Include="DuelGUIMathTool.cpp" />
+    <ClCompile Include="DuelGUIBoxLayout.cpp" />
+    <ClCompile Include="DuelGUICommon.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="DuelGUIHotspot.cpp" />
+    <ClCompile Include="DuelGUILayout.cpp" />
+    <ClCompile Include="DuelGUILayoutEngine.cpp" />
+    <ClCompile Include="DuelGUILayoutItem.cpp" />
+    <ClCompile Include="DuelGUIManager.cpp" />
+    <ClCompile Include="DuelGUIRenderDelegate.cpp" />
+    <ClCompile Include="DuelGUIStdHotspot.cpp" />
+    <ClCompile Include="DuelGUIStdCursor.cpp" />
+    <ClCompile Include="DuelGUISystem.cpp" />
+    <ClCompile Include="DuelGUITextDocument.cpp" />
+    <ClCompile Include="DuelGUIWidget.cpp" />
+    <ClCompile Include="DuelGUIWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Duel\Duel.vcxproj">
+      <Project>{72df7c0c-7b8d-4ccd-8a75-9396db2bcf26}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="有关text框架的设计要点.txt" />
+    <None Include="类头文件模板.txt" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{672F23CD-A866-47D8-9D0B-9BFB7337BFA7}</ProjectGuid>
+    <RootNamespace>DuelGUI</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>DuelGUICommon.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DUEL;$(SolutionDir)\External\boost;$(SolutionDir)\External;$(SolutionDir)External\freetype-2.5.0.1\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DUELGUI_EXPORT;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\boost\vc10_x86\lib;$(SolutionDir)External\ois-v1-3\lib</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(ProjectDir)*.h $(DUEL_EDITOR_DIR)External\DuelGUI\include\
+xcopy /y $(ProjectDir)*.cpp $(DUEL_EDITOR_DIR)External\DuelGUI\include\
+xcopy /y $(OutDir)$(TargetName).pdb $(DUEL_EDITOR_DIR)External\DuelGUI\lib\
+xcopy /y $(OutDir)$(TargetName).lib $(DUEL_EDITOR_DIR)External\DuelGUI\lib\
+xcopy /y $(OutDir)$(TargetName).dll $(DUEL_EDITOR_DIR)Win32\Debug\
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>DuelGUICommon.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\DUEL;$(SolutionDir)\External\boost;$(SolutionDir)\External;$(SolutionDir)External\freetype-2.5.0.1\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DUELGUI_EXPORT;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\boost\vc10_x86\lib;$(SolutionDir)External\ois-v1-3\lib</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(ProjectDir)*.h $(DUEL_EDITOR_DIR)External\DuelGUI\include\
+xcopy /y $(ProjectDir)*.cpp $(DUEL_EDITOR_DIR)External\DuelGUI\include\
+xcopy /y $(OutDir)$(TargetName).pdb $(DUEL_EDITOR_DIR)External\DuelGUI\lib\
+xcopy /y $(OutDir)$(TargetName).lib $(DUEL_EDITOR_DIR)External\DuelGUI\lib\
+xcopy /y $(OutDir)$(TargetName).dll $(DUEL_EDITOR_DIR)Win32\Release\
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

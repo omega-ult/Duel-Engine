@@ -1,0 +1,15 @@
+//  [7/9/2013 OMEGA] created
+
+#ifndef _DUELTHREADLIB_H_
+#define _DUELTHREADLIB_H_
+
+
+//////////////////////////////////////////////////////////////////////////
+#include "DuelAtomic.h"
+#include "DuelMutex.h"
+#include "DuelCondition.h"
+#include "DuelThread.h"
+#include "DuelThreadPool.h"
+//////////////////////////////////////////////////////////////////////////
+
+#endif

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceParameters type="Skeleton">
+	<!-- ¾ÞÓ²ÑÅºÚ -->
+	<SkeletonResourceParameter>
+		<Name>a test.ds</Name>
+		<Group>_BasicMediaPack</Group>
+		<FileFormat>ds</FileFormat> 
+	</SkeletonResourceParameter>
+</ResourceParameters>

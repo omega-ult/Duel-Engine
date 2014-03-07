@@ -1,0 +1,1 @@
+bcp.exe bind chrono signals2 thread smart_ptr .\bcpOutput

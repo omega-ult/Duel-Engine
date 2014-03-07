@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RenderEffect name="UI_Basic"  version="2.0">
+	
+	<!--Plain Texture-->
+	<Technique name="plain_texture_t0">
+		<Pass name="plain_texture_t0_p0">
+			<RasterizerState>
+				<state name="PolygonMode">Solid</state>
+				<state name="CullingMode">None</state>
+				<state name="DepthClipEnable">false</state>
+			</RasterizerState>
+			
+			<DepthStencilState>
+				<state name="DepthEnable">false</state>
+			</DepthStencilState>
+			
+			<BlendState>
+				<!--you can rely on this blend mode to blend textures without affecting luminance -->
+				<RenderTargetBlendState	index = "0">
+					<state name="BlendEnable">true</state>
+					<state name="ColorBlendOpeartion">Add</state>
+					<state name="ColorSrcBlend">SrcAlpha</state>
+					<state name="ColorDestBlend">InvSrcAlpha</state>
+					<state name="AlphaBlendOpeartion">Add</state>
+					<state name="AlphaSrcBlend">One</state>
+					<state name="AlphaDestBlend">One</state>
+				</RenderTargetBlendState>
+			</BlendState>
+			
+			<VertexProgram group="_BasicShaderPack">plain_texture.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">plain_texture.ps</PixelProgram>
+		</Pass>
+	</Technique>
+	
+	<Technique name="colored_wireframe_t0">
+		<Pass name="colored_wireframe_t0_p0">
+			<RasterizerState>
+				<state name="PolygonMode">Wireframe</state>
+			</RasterizerState>
+			<DepthStencilState>
+				<state name="DepthEnable">false</state>
+				<state name="DepthWriteEnable">false</state>
+			</DepthStencilState>
+				<VertexProgram group="_BasicShaderPack">colored_wireframe.vs</VertexProgram>
+				<PixelProgram group="_BasicShaderPack">colored_wireframe.ps</PixelProgram>
+		</Pass>
+	</Technique>
+	
+	
+</RenderEffect>

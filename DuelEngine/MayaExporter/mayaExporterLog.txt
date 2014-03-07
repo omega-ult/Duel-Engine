@@ -1,0 +1,94 @@
+这里记录一下我的想法
+先前照做了Klayge的一套, 发现有各种问题, 而且不太适用我现在这套系统. 后来查看了下ogre的做法,
+令人欣喜的是他的代码非常漂亮整洁, 我也决定朝他的方向去努力.
+下面有几个要点:
+
+导出插件是导出命令还是导出Exporter类?
+分析:
+导出命令的方式更加灵活, 而且可以实现自动化操作, 缺点是参数设置需要更高要求.
+导出Exporter类的方式简单, 易懂, 缺点在于必须手动点击.
+折衷的办法是:
+使用导出命令的方式, 另外辅助以加入全局菜单栏的菜单提供选项式导出按钮.
+
+导出插件是否要提供资源组相关操作?
+分析:
+该需求是针对AssetEditor提供的资源编辑功能的,为了减小AssetEditor的操作量, 
+也即在导出mesh的时候同时给AssetEditor写入资源声明,
+处理的办法是:
+取消该功能, 就是这样一个小功能, 需要牵扯到与AssetEditor的通信, 以及导出设置的存取,
+换取的效率增加很小, 我的做法是, 在精力没有宽裕到这种程度的时候, 不要做这样的事.
+
+导出插件的动画导出选项?
+由于引擎使用的动画帧是带有名称指定的, 因此需要在导出的时候给不同的帧分段, 为了减轻美术的压力,
+根据美术的"一套骨骼多处使用"的要求, 决定制作动作帧编辑器.将不同的动作预设保存到fileInfo中, 
+在导出骨骼/顶点动画的时候就选择预设即可. 在导出时根据这个预设填充command参数就好.
+
+唉!
+具体UI还是参照我本子上记录的来吧.
+
+如何让maya在加载插件的时候自动执行某个脚本?
+写上MGlobal::executeCommand()吧.
+
+也就是说, 我们插件的mel需要提供一个函数, 让插件加载的时候给菜单栏加上一个菜单项, 具体做法看ogre吧.(已解决, addmenuitem)
+
+定义一下命令吧.
+到时候记得写进doc
+
+
+	option:				param:				desc:
+
+general options:
+	"-output"			{dir}				assign the output directory, should be end with "/".
+		
+	"-all | -sel"							export target, "-all" will export all objects in the scene using exported
+											scene file name, "-sel" will only export selected object using its object's name.
+
+	"-lu"				{"pref" | "mm"		length unit, "pref" will use current scene's length unit, "mm" = millimete,
+						"cm" | "m" | "in"	"cm" = centimeter, "m" = meter, "in" = inch, "ft" = foot, "yd" = yard.
+						"ft" | "yd"}		
+
+	"-revZ"									whether to reverse z-axis while exporting.
+
+mesh options:
+	"-mesh"				{mesh file name}	the mesh file name.
+
+	"-norm"									export vertex normal(-mesh required).
+
+	"-tang"				{uv set name}		export tangent, using specified uvset(-mesh required).
+
+	"-curSkel"								export skin bind information using current binded skeleton(-mesh required).
+											
+	"-assSkel"			{skeleton file		export skin bind information, but link it with another skeleton file(-mesh required).
+						 name}	
+
+	"-morphAnim"							whether to export morph animation in the .mesh file(-mesh required, clip list required).
+
+skeleton options:
+	"-skel"				{skeleton file		the skeleton file name.
+						name}	
+	
+	"-np"				{"bindPose" |		the neutral pose of the skeleton, "bindPose" will use the original pose of skeleton,
+						"curFrame"}			"curFrame" will use current frame's pose.
+	
+	"-skelAnim"								indicate to export skeleton animation.
+
+animation options:
+	"-samp"				{"frame" |			specify how to sample animation.
+						 "second"}	
+	"-fps"				{[int]}				specify how may frames per second while sampling, "-samp frame" required. if not specified,
+											the default value is 24.
+
+	"-sampRate"			{[int] | [float]}	when "-samp" = "frame", indicate how many frames per step, when "-samp" = "second"
+											indicate how many seconds per step.
+
+	"-clip"				{clip name}			specify a clip, with a unique clip name, repeatable,
+
+	"-range"			{from} {to}			when "-samp" = "frame", indicate the start frame and end frame, when "-samp" = "second"
+											indicate the start time and end time, must follow the "-clip" option.
+
+for example:
+DuelExporter -output C:/targetDir/ -all -lu pref -revZ -mesh goblin.dm -norm -tang default -curSkel -morphAnim -skel goblin.ds -np curFrame -anim -samp frame -sampRate 1 -clip clip_1 -range 1 10 -clip clip_2 -range 10 20
+
+
+麻蛋.
+maya的attribute可以从 面板上的 attributeEditor->help中查询!!!!!!!!

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceParameters type="Texture">
+	<TextureResourceParameter>
+		<Name>T_debug_default.dds</Name>
+		<Group>_BasicMediaPack</Group>
+		<Empty>false</Empty>
+		<CodecFormat>dds</CodecFormat>
+		<MemoryStrategy>DYNAMIC</MemoryStrategy>
+	</TextureResourceParameter>
+	
+	<!-- UI_Pack -->
+	<TextureResourceParameter>
+		<Name>T_Std_Cursor.dds</Name>
+		<Group>_BasicMediaPack</Group>
+		<Empty>false</Empty>
+		<CodecFormat>dds</CodecFormat>
+		<MemoryStrategy>STATIC</MemoryStrategy>
+	</TextureResourceParameter>
+	
+</ResourceParameters>
