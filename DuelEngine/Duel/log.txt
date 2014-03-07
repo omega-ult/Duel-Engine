@@ -505,3 +505,6 @@ gui×Ô¼ºÊ¹ÓÃÒ»¸örenderqueue, °ÑrenderworkshopµÄ½Ó¿Ú¸ÄÎª render(renderQueue*), ÕâÑ
 ¸Ä±äÁË groupmanagerµÄ¹¤×÷·½Ê½ÒÔ¼°ÄÚ²¿ÊµÏÖ, »ù±¾·½·¨²»±ä.
 ¼Æ»®³éÏómaterialInstanceÖĞµÄparameter²¿·Ö, ÓÃÀ´ÔÙÊµÏÖpostEffect
 fxxk ÀÏ×ÓÔÙÒ²²»Ïë¸Ä½Ó¿ÚÁË!
+
+3.7
+³Á¼ÅĞí¾Ã...ÖÕÓÚ°ÑÏîÄ¿´ÓgooglecodeÉÏ×ªµ½githubÁË, Ë³±ã¸øboost×öÁË¸öÊİÉí. ÄÎË¹. ÎÒ¾õµÃÎÒµÄÓÅÊÆºÜ´ó.
