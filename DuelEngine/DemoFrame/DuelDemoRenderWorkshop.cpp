@@ -3,13 +3,89 @@
 #include "pch.h"
 #include "DuelCommon.h"
 #include "DuelRenderWorkshop.h"
+#include "DuelRenderEffect.h"
 #include "DuelDemoRenderWorkshop.h"
 #include "DuelRenderResourceManager.h"
+#include "DuelResourceGroupManager.h"
 
 namespace Duel
 {
 
 	DUEL_IMPLEMENT_RTTI_1(DDemoRenderWorkshop, DRenderWorkshop);
+	DUEL_IMPLEMENT_RTTI_1(DDemoDeferHelper, DObject);
+
+
+	DDemoDeferHelper::DDemoDeferHelper()
+	{
+		DResourceGroupManager* rg = DResourceGroupManager::getSingletonPtr();
+		DRenderResourceManager* re = DRenderResourceManager::getSingletonPtr(); 
+		DResourcePtr renderEffect = rg->getResouceManager("RenderEffect")->getResource("_BasicShaderPack", "Demo_RenderWorkshop.dre");
+		renderEffect->touch();
+		mClearGBufferTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_ClearGBuffer");
+		mCopyTexTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_CopyTexture");
+		mComposeTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_Compose");
+		mRenderLayout = re->createRenderLayout();
+		DVertexDeclaration vd;
+		mRenderLayout->setTopologyType(PT_TriangleList);
+		vd.addElement(0, 0, VET_Float3, VES_Position);
+		vd.addElement(0, sizeof(DReal)*3, VET_Float2, VES_TexCoord);
+		vd.sort();
+		size_t vertSize = vd.getVertexSize(0);
+		DVertexBufferPtr vb = re->createVetexBuffer(vertSize, 4, HBU_Static, false);
+		// a quad.
+		float data[] =
+		{ 
+			/*vert*/ -1.0f, 1.0f, 0.0f, /*uv*/ 0.0f, 0.0f,
+			/*vert*/ 1.0f,  1.0f, 0.0f, /*uv*/ 1.0f, 0.0f,
+			/*vert*/ 1.0f, -1.0f, 0.0f, /*uv*/ 1.0f, 1.0f,
+			/*vert*/ -1.0f,-1.0f, 0.0f, /*uv*/ 0.0f, 1.0f
+		};
+		vb->writeData(0, vb->getSize(), data, true);
+		DIndexBufferPtr vi = re->createIndexBuffer(IT_16Bit, 6, HBU_Static, false);
+		int16 idata[] =
+		{
+			0, 3, 2,  0, 2, 1
+		};
+		vi->writeData(0, vi->getSize(), idata, true);
+		DVertexStreams vs;
+		vs.setStream(0, vb);
+		mRenderLayout->setIndexData(DIndexData(vi));
+		mRenderLayout->setVertexData(DVertexData(vs, vd));
+		mRenderLayout->seal();
+	}
+	DRenderLayout* DDemoDeferHelper::getRenderLayout()
+	{
+		return mRenderLayout.get();
+	}
+
+	DRenderTechnique* DDemoDeferHelper::getRenderTechnique( uint32 stage )
+	{
+		if (stage == RS_ScreenQuadTransfer)
+		{
+			return mCopyTexTech.get();
+		}
+		if (stage == RS_ClearGBuffer)
+		{
+			return mClearGBufferTech.get();
+		}
+		return NULL;
+	}
+
+	void DDemoDeferHelper::updateCustomGpuParameter( DShaderObject* so )
+	{
+		if (so->getPassName() == "DemoRenderWorkshop_ClearGBuffer")
+		{
+
+		}
+		else if (so->getPassName() == "DemoRenderWorkshop_CopyTexture")
+		{
+			so->getVertexProgramParameters()->setValue("targetTexture", mInputTex);
+		}
+		else if (so->getPassName() == "DemoRenderWorkshop_Compose")
+		{
+
+		}
+	}
 
 
 	DDemoRenderWorkshop::DDemoRenderWorkshop()
@@ -20,13 +96,24 @@ namespace Duel
 	DDemoRenderWorkshop::~DDemoRenderWorkshop()
 	{
 		DRenderResourceManager* rm = DRenderResourceManager::getSingletonPtr();
-		GBufferMap::iterator i, iend = mGbufferMap.end();
-		for (i = mGbufferMap.begin(); i != iend; ++i)
+		DeferLayerMap::iterator i, iend = mDeferLayerMap.end();
+		for (i = mDeferLayerMap.begin(); i != iend; ++i)
 		{
-			rm->destroyFrameBuffer(i->second);
+			destryDeferLayer(i->second);
 		}
 	}
 
+
+
+	DDemoRenderWorkshop::DeferLayer DDemoRenderWorkshop::getCurrentDeferlayer()
+	{
+		DeferLayerMap::iterator i = mDeferLayerMap.find(mPresentTarget);
+		if (i == mDeferLayerMap.end())
+		{
+			return DeferLayer();
+		}
+		return i->second;
+	}
 
 
 	void DDemoRenderWorkshop::renderSingleObject( DRenderable* rendObj, DRenderPass* pass )
@@ -51,37 +138,39 @@ namespace Duel
 		{
 			return;
 		}
+		DRenderQueue::RenderGroupIterator ri = queue->getRenderGroupIterator();;
 		// for defer stage.
-		GBufferMap::iterator gi = mGbufferMap.find(mPresentTarget);
-		if (gi == mGbufferMap.end())
+		DeferLayerMap::iterator gi = mDeferLayerMap.find(mPresentTarget);
+		if (gi != mDeferLayerMap.end())
 		{
-			return;
-		}
-		DFrameBuffer* gbuf = gi->second;
-		mRenderSystem->bindFrameBuffer(gbuf);
+			// we can render defer stage.
+			DeferLayer deferlayer = gi->second;
+			// 		mRenderSystem->bindFrameBuffer(deferlayer);
 
-		DRenderQueue::RenderGroupIterator ri = queue->getRenderGroupIterator();
-		while (ri.hasMoreElements())
-		{
-			DRenderGroup* rgrp = ri.getNext();
-			populateRenderables(rgrp, RS_Defer_GBuffer);
-			if (!mRenderList.empty())
-			{
-				signalGroupStartRender(queue, rgrp);
-				RenderElementList::iterator i, iend = mRenderList.end();
-				for (i = mRenderList.begin(); i != iend; ++i)
-				{
-					RenderElement& e = *i;
-					renderSingleObject(e.renderable, e.renderPass);
-				}
-				signalGroupFinishRender(queue, rgrp);
-			}
-			// now go for light accumulation.
-			DRenderQueue::LightIterator li = queue->getLightIterator();
-			while (li.hasMoreElements())
-			{
-				DLightSource* l = li.getNext();
-			}
+			//		ri = queue->getRenderGroupIterator();
+			// 		while (ri.hasMoreElements())
+			// 		{
+			// 			DRenderGroup* rgrp = ri.getNext();
+			// 			populateRenderables(rgrp, RS_Defer_GBuffer);
+			// 			if (!mRenderList.empty())
+			// 			{
+			// 				signalGroupStartRender(queue, rgrp);
+			// 				RenderElementList::iterator i, iend = mRenderList.end();
+			// 				for (i = mRenderList.begin(); i != iend; ++i)
+			// 				{
+			// 					RenderElement& e = *i;
+			// 					renderSingleObject(e.renderable, e.renderPass);
+			// 				}
+			// 				signalGroupFinishRender(queue, rgrp);
+			// 			}
+			// 			// now go for light accumulation.
+			// 			DRenderQueue::LightIterator li = queue->getLightIterator();
+			// 			while (li.hasMoreElements())
+			// 			{
+			// 				DLightSource* l = li.getNext();
+			// 			}
+			// 		}
+
 		}
 
 		// forward stage now;
@@ -111,14 +200,23 @@ namespace Duel
 		{
 			return;
 		}
-		if (mGbufferMap.find(target) == mGbufferMap.end())
+		// check whether this target is in our defer layer, if so,
+		// dont't create another defer layer for it.
+		DeferLayerMap::iterator i, iend = mDeferLayerMap.end();
+		bool isNewTarget = true;
+		for (i = mDeferLayerMap.begin(); i != iend; ++i)
 		{
-			DFrameBuffer* gbuffer = DRenderResourceManager::getSingleton().createFrameBuffer(target->getWidth(), target->getHeight(), 32);
-			gbuffer->enableElement(EA_Color0, PF_A8R8G8B8);
-			gbuffer->enableElement(EA_Color1, PF_A8R8G8B8);
-			gbuffer->enableElement(EA_Color2, PF_A8R8G8B8);
-			gbuffer->enableElement(EA_Color3, PF_R32_Float);
-			mGbufferMap[target] = gbuffer;
+			DeferLayer ly = i->second;
+			if (ly.GBuffer == target || 
+				ly.LightAccum == target)
+			{
+				isNewTarget = false;
+				break;
+			}
+		}
+		if (isNewTarget)
+		{
+			mDeferLayerMap[target] = createDeferLayer(target);
 		}
 		DRenderWorkshop::setPresentTarget(target);
 	}
@@ -148,6 +246,26 @@ namespace Duel
 					}
 				}
 			}
+		}
+	}
+
+	DDemoRenderWorkshop::DeferLayer DDemoRenderWorkshop::createDeferLayer( DFrameBuffer* target )
+	{
+		DeferLayer ret;
+		ret.GBuffer = DRenderResourceManager::getSingleton().createFrameBuffer(target->getWidth(), target->getHeight(), 32);
+		ret.GBuffer->enableElement(EA_Color0, PF_A8R8G8B8);
+		ret.GBuffer->enableElement(EA_Color1, PF_A8R8G8B8);
+		ret.GBuffer->enableElement(EA_Color2, PF_A8R8G8B8);
+		ret.GBuffer->enableElement(EA_Color3, PF_R32_Float);
+		return ret;
+	}
+
+	void DDemoRenderWorkshop::destryDeferLayer( DeferLayer lay )
+	{
+		if (lay.GBuffer != NULL)
+		{
+			DRenderResourceManager::getSingleton().destroyFrameBuffer(lay.GBuffer);
+			lay.GBuffer = NULL;
 		}
 	}
 

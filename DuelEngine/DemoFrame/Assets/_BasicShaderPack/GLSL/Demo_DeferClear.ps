@@ -1,10 +1,9 @@
 #version 330
 
-uniform sampler2D texUnit;
+uniform sampler2D targetTexture;
 
 in 	Varing
 {
-	vec4	pos;
 	vec2	texcoord;
 } PS_StateInput;
 
@@ -12,5 +11,5 @@ layout(location = 0)		out	vec4	color0;
 
 void main(void)
 {
-	color0 = texture(texUnit, PS_StateInput.texcoord);
+	color0 = texture(targetTexture, PS_StateInput.texcoord);
 }

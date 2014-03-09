@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RenderEffect name="Demo_MaterialBank"  version="2.0">
+
+	<!----------------------------------------------->
+	<!--MaterialBank--->
+	<!----------------------------------------------->
+	<!--Lambert-->
+	<Technique name="Lambert_Defer">
+		<Pass name="Lambert_Defer_GBuffer">
+			<VertexProgram group="_BasicShaderPack">Demo_DeferGBuffer.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">Demo_DeferGBuffer.ps</PixelProgram>
+		</Pass>
+	</Technique>
+	
+	
+</RenderEffect>

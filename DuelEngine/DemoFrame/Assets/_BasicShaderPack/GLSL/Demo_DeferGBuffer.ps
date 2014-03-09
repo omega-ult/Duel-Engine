@@ -1,0 +1,24 @@
+#version 330
+
+uniform sampler2D	targetTexture;
+uniform sampler2D	diffuseTexture;
+uniform sampler2D	normalTexture;
+uniform sampler2D	specularTexture;
+
+in 	Varing
+{	
+	vec4	hpos;	// homogeneous space(device space)
+	vec2	texcoord;
+	vec3	vnormal;
+	vec2	depth;	// hpos.zw
+} PS_StateInput;
+
+layout(location = 0)	out	vec4	vnormal;
+layout(location = 1)	out vec4	diffuse;
+layout(location = 2)	out vec4	specular;
+layout(location = 3)	out vec4	depth;
+
+void main(void)
+{
+	vnormal = texture(targetTexture, PS_StateInput.texcoord);
+}

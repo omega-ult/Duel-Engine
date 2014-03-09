@@ -24,22 +24,6 @@ namespace Duel
 
 	}
 
-
-	DRasterizerState& DRasterizerState::operator=( const DRasterizerState& rs )
-	{
-		// TODO : can we do memcpy?
-		polygonMode = rs.polygonMode;
-		shadeMode	= rs.shadeMode;
-		cullingMode	= rs.cullingMode;
-		polygonOffsetFactor = rs.polygonOffsetFactor;
-		polygonOffsetUnit	= rs.polygonOffsetUnit;
-		depthClipEnable		= rs.depthClipEnable;
-		scissorEnable		= rs.scissorEnable;
-		multisampleEnable	= rs.multisampleEnable;
-//		memcpy(this, &rs, sizeof(DRasterizerState));
-		return *this;
-	}
-
 	bool DRasterizerState::operator==( const DRasterizerState& rs )
 	{
 		return (rs.cullingMode == cullingMode &&
@@ -202,25 +186,6 @@ namespace Duel
 
 	}
 
-	DTextureSamplerState& DTextureSamplerState::operator=( const DTextureSamplerState& tss )
-	{
-		// TODO : can we do memcpy?
-		addressU	= tss.addressU;
-		addressV	= tss.addressV;
-		addressW	= tss.addressW;
-		minFilter	= tss.minFilter;
-		magFilter	= tss.magFilter;
-		mipFilter	= tss.mipFilter;
-		samplerComparison	= tss.samplerComparison;
-		borderColor	= tss.borderColor;
-		minLod		= tss.minLod;
-		maxLod		= tss.maxLod;
-		maxAnisotropy	= tss.maxAnisotropy;
-		mipLodBias	= tss.mipLodBias;
-//		memcpy(this, &tss, sizeof(DTextureSamplerState));
-		return *this;
-	}
-
 	bool DTextureSamplerState::operator==( const DTextureSamplerState& tss )
 	{
 		return (addressU == tss.addressU &&
@@ -277,20 +242,6 @@ namespace Duel
 
 	}
 
-	DRenderTargetBlendState& DRenderTargetBlendState::operator=( const DRenderTargetBlendState& sbs )
-	{
-		blendEnable				= sbs.blendEnable;
-		colorBlendOpeartion		= sbs.colorBlendOpeartion;
-		colorSrcBlend			= sbs.colorSrcBlend;
-		colorDestBlend			= sbs.colorDestBlend;
-
-		alphaBlendOpeartion		= sbs.alphaBlendOpeartion;
-		alphaSrcBlend			= sbs.alphaSrcBlend;
-		alphaDestBlend			= sbs.alphaDestBlend;
-
-		colorWriteMask			= sbs.colorWriteMask;
-		return *this;
-	}
 
 	bool DRenderTargetBlendState::operator==( const DRenderTargetBlendState& sbs )
 	{

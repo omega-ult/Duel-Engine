@@ -89,7 +89,7 @@ namespace Duel
 				vs->getGroupName() + "/" + vs->getName());
 
 #ifdef DUEL_DEBUG
-			std::cout << vs->getCompilationError() + "\n";
+			std::cout << vs->getName() << ":\n" << vs->getCompilationError() + "\n";
 #endif // DUEL_DEBUG
 
 		}
@@ -115,7 +115,7 @@ namespace Duel
 				ps->getGroupName() + "/" + ps->getName());
 
 #ifdef DUEL_DEBUG
-			std::cout << ps->getCompilationError() + "\n";
+			std::cout << ps->getName() << ":\n" << ps->getCompilationError() + "\n";
 #endif // DUEL_DEBUG
 
 		}

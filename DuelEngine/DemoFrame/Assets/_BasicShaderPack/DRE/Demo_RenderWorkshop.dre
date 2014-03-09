@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RenderEffect name="Demo_RenderWorkshop"  version="2.0">
+
+	<!--ClearTarget-->
+	<Technique name="DemoRenderWorkshop_ClearGBuffer">
+		<Pass name="DemoRenderWorkshop_ClearGBuffer">
+			<VertexProgram group="_BasicShaderPack">Demo_DeferClear.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">Demo_DeferClear.ps</PixelProgram>
+		</Pass>
+	</Technique>
+	
+	<!--CopyTexture-->
+	<Technique name="DemoRenderWorkshop_CopyTexture">
+		<Pass name="DemoRenderWorkshop_CopyTexture">
+			<VertexProgram group="_BasicShaderPack">Demo_ScreenQuadTransfer.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">Demo_ScreenQuadTransfer.ps</PixelProgram>
+		</Pass>
+	</Technique>
+	
+	<!--Compose-->
+	<Technique name="DemoRenderWorkshop_Compose">
+		<Pass name="DemoRenderWorkshop_Compose">
+			<VertexProgram group="_BasicShaderPack">Demo_DeferCompose.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">Demo_DeferCompose.ps</PixelProgram>
+		</Pass>
+	</Technique>
+	
+	
+	
+</RenderEffect>

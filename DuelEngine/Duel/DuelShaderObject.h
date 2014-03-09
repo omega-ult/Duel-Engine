@@ -21,6 +21,7 @@ namespace Duel
 		DShaderObject();
 		virtual ~DShaderObject() {}
 
+		const DString&	getPassName() const;
 		virtual	void	build(DRenderPass* pass);
 		
 		bool			isValid()
@@ -38,9 +39,10 @@ namespace Duel
 		virtual	DGpuParameters*	getPixelProgramParameters() = 0;
 
 	protected:
-		void		onGpuProgramUnload(DResource* program);
+		void			onGpuProgramUnload(DResource* program);
 		DGpuProgram*	mVSProgram;
 		DGpuProgram*	mPSProgram;
+		DString			mPassName;
 	};
 
 }

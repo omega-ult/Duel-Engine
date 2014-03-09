@@ -128,7 +128,6 @@ namespace Duel
 		// default values are set in constructor-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		DRasterizerState();
 		DRasterizerState(const DRasterizerState& rs) { operator = (rs); }
-		DRasterizerState& operator = (const DRasterizerState& rs);
 		bool			operator == (const DRasterizerState& rs);
 		bool			operator != (const DRasterizerState& rs) { return !operator == (rs);}
 		// DRasterizerState-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -205,7 +204,6 @@ namespace Duel
 		// default values are set in constructor-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		DRenderTargetBlendState();
 		DRenderTargetBlendState(const DRenderTargetBlendState& sbs) { operator=(sbs); }
-		DRenderTargetBlendState&		operator = (const DRenderTargetBlendState& sbs);
 		bool							operator ==(const DRenderTargetBlendState& sbs);
 		bool							operator != (const DRenderTargetBlendState& sbs) { return !operator==(sbs); }
 		// blend enable=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -255,7 +253,6 @@ namespace Duel
 		// default values are set in constructor-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		DTextureSamplerState();
 		DTextureSamplerState(const DTextureSamplerState& tss) { operator=(tss); }
-		DTextureSamplerState&	operator = (const DTextureSamplerState& tss);
 		bool					operator == (const DTextureSamplerState& tss);
 		bool					operator != (const DTextureSamplerState& tss) { return !operator==(tss); }
 		// addresing mode for specified coordinate-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -16,11 +16,27 @@
 		<FileFormat>dre</FileFormat>
 	</RenderEffectResourceParameter>
 	
-	<!-- UI_Editor.dre-->
+	<!-- Terrain_Basic.dre-->
 	<RenderEffectResourceParameter>
 		<Name>Terrain_Basic.dre</Name>
 		<Group>_BasicShaderPack</Group>
 		<FileFormat>dre</FileFormat>
 	</RenderEffectResourceParameter>
+	
+	 
+	<!-- Demo_RenderWorkshop.dre-->
+	<RenderEffectResourceParameter>
+		<Name>Demo_RenderWorkshop.dre</Name>
+		<Group>_BasicShaderPack</Group>
+		<FileFormat>dre</FileFormat>
+	</RenderEffectResourceParameter>
+	
+	<!-- Demo_MaterialBank.dre-->
+	<RenderEffectResourceParameter>
+		<Name>Demo_MaterialBank.dre</Name>
+		<Group>_BasicShaderPack</Group>
+		<FileFormat>dre</FileFormat>
+	</RenderEffectResourceParameter>
+	
 	
 </ResourceParameters>

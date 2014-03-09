@@ -274,7 +274,7 @@ namespace Duel
 					DGSize((DReal)mTargetWindow->getWidth(), (DReal)mTargetWindow->getHeight()));
 				mCurrentCursor->setPoint(pos);
 				// debug.
-				std::cout<<pos. x << "," <<pos.y << std::endl;
+				//std::cout<<pos. x << "," <<pos.y << std::endl;
 			}
 		}
 	}

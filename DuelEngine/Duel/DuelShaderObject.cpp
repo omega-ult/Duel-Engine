@@ -15,8 +15,19 @@ namespace Duel
 
 	}
 
+	const DString& DShaderObject::getPassName() const
+	{
+		return mPassName;
+	}
+
+
 	void DShaderObject::build( DRenderPass* pass )
 	{
+		if (pass == NULL)
+		{
+			return;
+		}
+		mPassName = pass->getName();
 		DGpuProgram* vs = pass->getVertexProgram()->getAs<DGpuProgram>(false);
 		DGpuProgram* ps = pass->getPixelProgram()->getAs<DGpuProgram>(false);
 		if (vs != NULL && vs->isLoaded() &&
@@ -51,6 +62,5 @@ namespace Duel
 				DBind(&DShaderObject::onGpuProgramUnload, this, _1));
 		}
 	}
-
 
 }

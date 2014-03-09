@@ -1,56 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ResourceParameters type="GpuProgram">
-  <!--BasicShaderPack-->
-  <GpuResourceParameter>
-	  <Name>defer_geo.vs</Name>
-	  <Group>_BasicShaderPack</Group>
-	  <FileName></FileName> <!-- this value can be empty -->
-	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
-	  <Entry>main</Entry>
-	  <Profile>GL_VERTEX_SHADER</Profile>	
-	  <Language>glsl</Language>
-	  <Compiled>false</Compiled>
-  </GpuResourceParameter>
-  <GpuResourceParameter>
-	  <Name>colored_wireframe.vs</Name>
-	  <Group>_BasicShaderPack</Group>
-	  <FileName></FileName> <!-- this value can be empty -->
-	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
-	  <Entry>main</Entry>
-	  <Profile>GL_VERTEX_SHADER</Profile>	
-	  <Language>glsl</Language>
-	  <Compiled>false</Compiled>
-  </GpuResourceParameter>
-  <GpuResourceParameter>
-	  <Name>colored_wireframe.ps</Name>
-	  <Group>_BasicShaderPack</Group>
-	  <FileName></FileName> <!-- this value can be empty -->
-	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
-	  <Entry>main</Entry>
-	  <Profile>GL_FRAGMENT_SHADER</Profile>	
-	  <Language>glsl</Language>
-	  <Compiled>false</Compiled>
-  </GpuResourceParameter>
-  <GpuResourceParameter>
-	  <Name>plain_texture.vs</Name>
-	  <Group>_BasicShaderPack</Group>
-	  <FileName></FileName> <!-- this value can be empty -->
-	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
-	  <Entry>main</Entry>
-	  <Profile>GL_VERTEX_SHADER</Profile>	
-	  <Language>glsl</Language>
-	  <Compiled>false</Compiled>
-  </GpuResourceParameter>
-  <GpuResourceParameter>
-	  <Name>plain_texture.ps</Name>
-	  <Group>_BasicShaderPack</Group>
-	  <FileName></FileName> <!-- this value can be empty -->
-	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
-	  <Entry>main</Entry>
-	  <Profile>GL_FRAGMENT_SHADER</Profile>	
-	  <Language>glsl</Language>
-	  <Compiled>false</Compiled>
-  </GpuResourceParameter>
+
   <!-- UI_StdCursor -->
   <GpuResourceParameter>
 	  <Name>UI_StdCursor.vs</Name>
@@ -110,6 +60,74 @@
 	  <Group>_BasicShaderPack</Group>
 	  <FileName></FileName> <!-- this value can be empty -->
 	  <MatrixPacking>column_major</MatrixPacking> <!-- one of "row_major" and "column_major" -->
+	  <Entry>main</Entry>
+	  <Profile>GL_FRAGMENT_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  
+  <!-- Demo_RenderWorkshop-->
+  <GpuResourceParameter>
+	  <Name>Demo_DeferClear.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>GL_VERTEX_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Demo_DeferClear.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>GL_FRAGMENT_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Demo_DeferCompose.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>GL_VERTEX_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Demo_DeferCompose.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>GL_FRAGMENT_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Demo_ScreenQuadTransfer.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>GL_VERTEX_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Demo_ScreenQuadTransfer.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>GL_FRAGMENT_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  
+  <!-- Demo_MaterialBank-->
+  <GpuResourceParameter>
+	  <Name>Demo_DeferGBuffer.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>GL_VERTEX_SHADER</Profile>	
+	  <Language>glsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Demo_DeferGBuffer.ps</Name>
+	  <Group>_BasicShaderPack</Group>
 	  <Entry>main</Entry>
 	  <Profile>GL_FRAGMENT_SHADER</Profile>	
 	  <Language>glsl</Language>
