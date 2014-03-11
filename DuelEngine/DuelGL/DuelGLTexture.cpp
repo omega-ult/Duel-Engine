@@ -13,7 +13,8 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(GLTexture, DTexture);
 	GLTexture::GLTexture( DResourceManager* fathermanager, const DString& name, const DString& groupName ) :
 		DTexture(fathermanager, name, groupName),
-		mGpuConstant(this)
+		mTextureID(0),
+		mGpuConstant(0, 0)
 	{
 
 	}
@@ -183,12 +184,14 @@ namespace Duel
 		createSufaceList();
 		// Get final internal format
 		mFormat = getBuffer((CubeFace)0,0)->getFormat();
+		mGpuConstant = GLGpuTextureConstant(getGLTextureTarget(), getTextureID());
 	}
 
 	void GLTexture::releaseHardwareResource()
 	{
 		mSurfaceList.clear();
 		glDeleteTextures( 1, &mTextureID );
+		mGpuConstant = GLGpuTextureConstant(0, 0);
 	}
 
 

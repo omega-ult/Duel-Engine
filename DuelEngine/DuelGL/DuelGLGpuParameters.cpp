@@ -11,80 +11,13 @@ namespace Duel
 {
 	DUEL_IMPLEMENT_RTTI_1(GLGpuTextureConstant, DGpuTextureConstant);
 
-
-	GLGpuTextureConstant::GLGpuTextureConstant( GLRenderView* parent ) :
-		mViewParent(parent),
-		mTextureParent(NULL)
+	GLGpuTextureConstant::GLGpuTextureConstant( GLenum gltexTarget, GLuint gltexID ) :
+		mTexTarget(gltexTarget),
+		mTexID(gltexID)
 	{
 
 	}
 
-	GLGpuTextureConstant::GLGpuTextureConstant( GLTexture* parent ) :
-		mTextureParent(parent),
-		mViewParent(NULL)
-	{
-
-	}
-
-	Duel::uint32 GLGpuTextureConstant::getWidth()
-	{
-		if (mViewParent)
-		{
-			return mViewParent->getWidth();
-		}
-		else
-		{
-			return mTextureParent->getWidth();
-		}
-	}
-
-	Duel::uint32 GLGpuTextureConstant::getHeight()
-	{
-		if (mViewParent)
-		{
-			return mViewParent->getHeight();
-		}
-		else
-		{
-			return mTextureParent->getHeight();
-		}
-	}
-
-	Duel::DPixelFormat GLGpuTextureConstant::getColorFormat()
-	{
-		if (mViewParent)
-		{
-			return mViewParent->getFormat();
-		}
-		else
-		{
-			return mTextureParent->getFormat();
-		}
-	}
-
-	GLuint GLGpuTextureConstant::getTextureID()
-	{
-		if (mViewParent)
-		{
-			return mViewParent->getTextureID();
-		}
-		else
-		{
-			return mTextureParent->getTextureID();
-		}
-	}
-
-	GLenum GLGpuTextureConstant::getGLTextureTarget()
-	{
-		if (mViewParent)
-		{
-			return GL_TEXTURE_2D;
-		}
-		else
-		{
-			return mTextureParent->getGLTextureTarget();
-		}
-	}
 
 	void GLGpuTextureConstant::setSamplerState( const DTextureSamplerState& val )
 	{
@@ -153,6 +86,16 @@ namespace Duel
 		glTexParameterf(texType, GL_TEXTURE_LOD_BIAS, val.mipLodBias);
 		// unbind.
 		glBindTexture(texType, 0);
+	}
+
+	GLuint GLGpuTextureConstant::getTextureID()
+	{
+		return mTexID;
+	}
+
+	GLenum GLGpuTextureConstant::getGLTextureTarget()
+	{
+		return mTexTarget;
 	}
 
 }

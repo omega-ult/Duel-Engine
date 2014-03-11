@@ -18,7 +18,7 @@ out	Varing
 {
 	vec4	pos;
 	vec2	texcoord;
-} VS_StateOutput;
+} VS_StageOutput;
 
 // modification to the vertices.
 uniform mat4 vertTransform;
@@ -30,6 +30,6 @@ void main(void)
 	vec4 outPos = vertTransform * vec4(attrib_position, 1.0f);
 	vec3 outUV = uvTransform * vec3(attrib_texcoord, 1.0f);
 	gl_Position = outPos;
-	VS_StateOutput.pos = outPos;
-	VS_StateOutput.texcoord = outUV;
+	VS_StageOutput.pos = outPos;
+	VS_StageOutput.texcoord = outUV;
 }

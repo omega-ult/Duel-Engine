@@ -15,6 +15,7 @@ layout(location = VES_TEXCOORD)	in vec2 attrib_texcoord;
 
 // auto parameter.
 uniform mat4 Auto_WorldViewProjMatrix;
+uniform mat4 Auto_WorldViewMatrix;
 
 out	Varing
 {
@@ -22,12 +23,15 @@ out	Varing
 	vec2	texcoord;
 	vec3	vnormal;
 	vec2	depth;	// hpos.zw
-} VS_StateOutput;
+} VS_StageOutput;
 
 
 void main(void)
 {
 	vec4 pos = vec4(attrib_position, 1.0f);
-	gl_Position = pos;
-	VS_StateOutput.texcoord = attrib_texcoord;
+	VS_StageOutput.hpos = Auto_WorldViewProjMatrix * pos;
+	gl_Position = VS_StageOutput.hpos;
+	VS_StageOutput.texcoord = attrib_texcoord;
+	VS_StageOutput.vnormal = Auto_WorldViewMatrix * pos;
+	VS_StageOutput.depth = VS_StageOutput.hpos.zw;
 }

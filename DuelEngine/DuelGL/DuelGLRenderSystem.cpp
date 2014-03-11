@@ -625,7 +625,7 @@ namespace Duel
 			GLenum targetList[8];
 			for (uint32 i = 0; i < 8; ++i)
 			{
-				DRenderView* v = mCurFrameBuffer->getRenderView((ElementAttachment)(EA_Color0 + i));
+				DRenderColorView* v = mCurFrameBuffer->getRenderColorView((ElementAttachment)(EA_Color0 + i));
 				if (v != NULL)
 				{
 					maxTargetCount = i;

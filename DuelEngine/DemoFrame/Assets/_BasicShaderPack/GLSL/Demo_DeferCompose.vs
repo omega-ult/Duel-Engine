@@ -18,13 +18,13 @@ out	Varing
 {
 	vec4	pos;
 	vec2	texcoord;
-} VS_StateOutput;
+} VS_StageOutput;
 
 
 void main(void)
 {
 	vec4 pos = vec4(attrib_position, 1.0f);
 	gl_Position = pos;
-	VS_StateOutput.pos = pos;
-	VS_StateOutput.texcoord = attrib_texcoord;
+	VS_StageOutput.pos = pos;
+	VS_StageOutput.texcoord = attrib_texcoord;
 }

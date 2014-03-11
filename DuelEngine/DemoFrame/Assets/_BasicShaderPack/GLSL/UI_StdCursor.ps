@@ -6,11 +6,11 @@ in 	Varing
 {
 	vec4	pos;
 	vec2	texcoord;
-} PS_StateInput;
+} PS_StageInput;
 
 layout(location = 0)		out	vec4	color0;
 
 void main(void)
 {
-	color0 = texture(texUnit, PS_StateInput.texcoord);
+	color0 = texture(texUnit, PS_StageInput.texcoord);
 }

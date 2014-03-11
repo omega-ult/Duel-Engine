@@ -7,13 +7,22 @@
 namespace Duel
 {
 
-	DUEL_IMPLEMENT_RTTI_1(DRenderView, DObject);
+	DUEL_IMPLEMENT_RTTI_1(DRenderColorView, DObject);
+	DUEL_IMPLEMENT_RTTI_1(DRenderDepthView, DObject);
 
 
-	DRenderView::DRenderView( DFrameBuffer* parent, ElementAttachment att ) :
+	DRenderColorView::DRenderColorView( DFrameBuffer* parent, ElementAttachment att ) :
 		mParent(parent),
 		mAttachPoint(att),
 		mbEnable(true)
+	{
+		mWidth = mParent->getWidth();
+		mHeight = mParent->getHeight();
+	}
+
+
+	DRenderDepthView::DRenderDepthView( DFrameBuffer* parent ) :
+		mParent(parent)
 	{
 		mWidth = mParent->getWidth();
 		mHeight = mParent->getHeight();

@@ -9,17 +9,17 @@
 
 namespace Duel
 {
-	class DUELGL_API GLRenderView : public DRenderView
+	class DUELGL_API GLRenderColorView : public DRenderColorView
 	{
-	DUEL_DECLARE_RTTI(GLRenderView)
+	DUEL_DECLARE_RTTI(GLRenderColorView)
 	public:
-		GLRenderView(DFrameBuffer* parent, ElementAttachment att, DPixelFormat fmt);
-		virtual ~GLRenderView();
+		GLRenderColorView(DFrameBuffer* parent, ElementAttachment att, DPixelFormat fmt);
+		virtual ~GLRenderColorView();
 
 
 		// provided for GLFramBuffer.
-		void	resize(uint32 w, uint32 h);
-		GLuint	getTextureID() { return mTextureID; }
+		virtual void	resize(uint32 w, uint32 h);
+		GLuint			getTextureID() { return mTextureID; }
 
 		// override : DRenderView--------------------------
 		DGpuTextureConstant*	getGpuTexutureConstant() { return &mGpuConstant; }
@@ -30,7 +30,22 @@ namespace Duel
 		GLGpuTextureConstant	mGpuConstant;
 
 	};
+	
+	class DUELGL_API GLRenderDepthView : public DRenderDepthView
+	{
+		DUEL_DECLARE_RTTI(GLRenderDepthView)
+	public:
+		GLRenderDepthView(DFrameBuffer* parent);
+		virtual void	resize(uint32 w, uint32 h);
+		GLuint	getTextureID() { return mTextureID; }
+		// override : DRenderView--------------------------
+		DGpuTextureConstant*	getGpuTexutureConstant() { return &mGpuConstant; }
 
+	protected:
+		GLuint	mTextureID;
+		GLGpuTextureConstant	mGpuConstant;
+
+	};
 
 }
 

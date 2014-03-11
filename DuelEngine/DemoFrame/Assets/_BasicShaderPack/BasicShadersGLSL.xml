@@ -68,22 +68,6 @@
   
   <!-- Demo_RenderWorkshop-->
   <GpuResourceParameter>
-	  <Name>Demo_DeferClear.vs</Name>
-	  <Group>_BasicShaderPack</Group>
-	  <Entry>main</Entry>
-	  <Profile>GL_VERTEX_SHADER</Profile>	
-	  <Language>glsl</Language>
-	  <Compiled>false</Compiled>
-  </GpuResourceParameter>
-  <GpuResourceParameter>
-	  <Name>Demo_DeferClear.ps</Name>
-	  <Group>_BasicShaderPack</Group>
-	  <Entry>main</Entry>
-	  <Profile>GL_FRAGMENT_SHADER</Profile>	
-	  <Language>glsl</Language>
-	  <Compiled>false</Compiled>
-  </GpuResourceParameter>
-  <GpuResourceParameter>
 	  <Name>Demo_DeferCompose.vs</Name>
 	  <Group>_BasicShaderPack</Group>
 	  <Entry>main</Entry>

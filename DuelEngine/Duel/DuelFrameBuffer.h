@@ -47,7 +47,10 @@ namespace Duel
 		// diable specified element.
 		virtual	void		disableElement(ElementAttachment elem) = 0;
 		// if a specified render view does not exist, it return NULL
-		virtual	DRenderView*	getRenderView(ElementAttachment elem) = 0;
+		virtual	DRenderColorView*	getRenderColorView(ElementAttachment elem) = 0;
+
+		// get the DepthView
+		virtual	DRenderDepthView*	getRenderDepthView() = 0;
 
 		// set/get the properties of the render target.
 		virtual	void		resize(uint32 width, uint32 height) { mWidth = width; mHeight = height; }

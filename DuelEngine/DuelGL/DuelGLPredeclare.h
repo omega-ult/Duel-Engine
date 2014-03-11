@@ -11,7 +11,8 @@ namespace Duel
 	class GLGpuProgramManger;
 	class GLRenderResourceFactory;
 	class GLFrameBuffer;
-	class GLRenderView;
+	class GLRenderColorView;
+	class GLRenderDepthView;
 	class GLTexture;
 	class GLTextureManager;
 	class GLVertexDeclaration;

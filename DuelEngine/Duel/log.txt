@@ -508,3 +508,6 @@ fxxk 老子再也不想改接口了!
 
 3.7
 沉寂许久...终于把项目从googlecode上转到github了, 顺便给boost做了个瘦身. 奈斯. 我觉得我的优势很大.
+
+3.11
+改了framebuffer的接口, depthview直接可以取出, 一般都是d24s8的格式, 上层取出r就可以了.

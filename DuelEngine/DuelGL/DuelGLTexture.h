@@ -36,9 +36,9 @@ namespace Duel
 
 	protected:
 		// override : DTexture-----------------------------
-		virtual void createHardwareResource();
+		virtual void	createHardwareResource();
 		// override : DTexture-----------------------------
-		virtual void releaseHardwareResource();
+		virtual void	releaseHardwareResource();
 		// inner method used to create surface list
 		virtual void	createSufaceList();
 		GLuint			mTextureID;

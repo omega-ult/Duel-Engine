@@ -99,9 +99,6 @@ namespace Duel
 	{
 		DUEL_DECLARE_RTTI(DGpuTextureConstant)
 	public:
-		virtual	uint32			getWidth() = 0;
-		virtual uint32			getHeight() = 0;
-		virtual	DPixelFormat	getColorFormat() = 0;
 		virtual void			setSamplerState(const DTextureSamplerState& state) = 0;
 	};
 

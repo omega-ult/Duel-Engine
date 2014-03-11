@@ -13,22 +13,15 @@ namespace Duel
 	{
 		DUEL_DECLARE_RTTI(GLGpuTextureConstant)
 	public:
-		GLGpuTextureConstant(GLRenderView* parent);
-		GLGpuTextureConstant(GLTexture* parent);
-		uint32			getWidth();
-		uint32			getHeight();
-		DPixelFormat	getColorFormat();
-
+		GLGpuTextureConstant(GLenum gltexTarget, GLuint gltexID);
 		GLenum			getGLTextureTarget();
 		GLuint			getTextureID();
 
 		virtual void	setSamplerState( const DTextureSamplerState& state );
 
-
-
 	protected:
-		GLRenderView*	mViewParent;
-		GLTexture*		mTextureParent;
+		GLenum			mTexTarget;
+		GLuint			mTexID;
 	};
 
 
