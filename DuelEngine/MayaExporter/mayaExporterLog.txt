@@ -54,7 +54,7 @@ mesh options:
 
 	"-norm"									export vertex normal(-mesh required).
 
-	"-tang"				{uv set name}		export tangent, using specified uvset(-mesh required).
+	"-tang"									export tangent, using object's first uv set(if exist).
 
 	"-curSkel"								export skin bind information using current binded skeleton(-mesh required).
 											

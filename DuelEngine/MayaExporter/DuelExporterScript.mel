@@ -16,6 +16,8 @@ global proc DuelExporter_Install()
 	DuelExporterMenu;
 		menuItem -label "Export" -command "DuelExporter_CreateUI()";
 		menuItem -label "Clear Settings" -command "DuelExporter_ClearSettings()";
+		menuItem -divider 1;
+		menuItem -label "Help" -command "DuelExporter_Help()";
 }
 
 global proc DuelExporter_Uninstall()
@@ -245,32 +247,6 @@ global proc DuelExporter_CreateUI()
 							-parent DMeshFileNameLayout;
 						
 					
-/*					
-					checkBox
-						-parent DMeshLayout
-						-value	true
-						// -changeCommand "xxxxxxx"
-						-label	"Export Tangent"
-						-changeCommand	"DuelExporter_ValidateControllers()"
-					DExportTangentCheckBox;
-					
-					rowColumnLayout
-						-parent DMeshLayout
-						-columnWidth 1 100
-						-columnWidth 2 200
-						-numberOfColumns 3
-					DTangentOptionsLayout;
-					
-						text
-							-label	"Use UV Set:"
-							-align	"right"
-							-parent DTangentOptionsLayout;
-						
-						textField	
-							-width	150
-							-parent DTangentOptionsLayout
-						DTangentUVSetText;
-*/					
 					rowColumnLayout
 						-parent DMeshLayout
 						-columnWidth 1 100
@@ -324,6 +300,31 @@ global proc DuelExporter_CreateUI()
 						-label	"Export Normal"
 					DExportNormalCheckBox;
 					
+					checkBox
+						-parent DMeshLayout
+						-value	true
+						-label	"Export Tangent"
+						-changeCommand	"DuelExporter_ValidateControllers()"
+					DExportTangentCheckBox;
+/*						
+					rowColumnLayout
+						-parent DMeshLayout
+						-columnWidth 1 100
+						-columnWidth 2 200
+						-numberOfColumns 3
+					DTangentOptionsLayout;
+					
+						text
+							-label	"Use UV Set:"
+							-align	"right"
+							-parent DTangentOptionsLayout;
+						
+						textField	
+							-width	150
+							-parent DTangentOptionsLayout
+						DTangentUVSetText;
+*/					
+
 					checkBox
 						-parent DMeshLayout
 						-value	false
@@ -700,7 +701,7 @@ global proc DuelExporter_SaveSettings()
 	// mesh parameters
 	fileInfo "DuelExporter_MeshName" `textField -query -text DMeshFileNameText`;
 	fileInfo "DuelExporter_ExportNormal" `checkBox -query -value DExportNormalCheckBox`;
-	//fileInfo "DuelExporter_ExportTangent" `checkBox -query -value DExportTangentCheckBox`;
+	fileInfo "DuelExporter_ExportTangent" `checkBox -query -value DExportTangentCheckBox`;
 	//fileInfo "DuelExporter_TangentUVSet" `textField -query -text DTangentUVSetText`;
 	fileInfo "DuelExporter_SkeletonTarget" `radioCollection -query -select DMeshSkeletonTarget`;
 	fileInfo "DuelExporter_SkeletonFileName" `textField -query -text DMeshSkeletonAssignedFileText`;
@@ -764,8 +765,8 @@ global proc DuelExporter_LoadSavedSettings()
 		textField -edit -text $valStr[0] DMeshFileNameText;
 		$valStr = `fileInfo -query "DuelExporter_ExportNormal"`;
 		checkBox -edit -value `gmatch $valStr[0] "1"` DExportNormalCheckBox;
-		//$valStr = `fileInfo -query "DuelExporter_ExportTangent"`;
-		//checkBox -edit -value `gmatch $valStr[0] "1"` DExportTangentCheckBox;
+		$valStr = `fileInfo -query "DuelExporter_ExportTangent"`;
+		checkBox -edit -value `gmatch $valStr[0] "1"` DExportTangentCheckBox;
 		//$valStr = `fileInfo -query "DuelExporter_TangentUVSet"`;
 		//textField -edit -text $valStr[0] DTangentUVSetText;		
 		$valStr = `fileInfo -query "DuelExporter_SkeletonTarget"`;
@@ -868,8 +869,8 @@ global proc DuelExporter_ResetSettings()
 		textField -edit -text $valStr DMeshFileNameText;
 		$valStr = "1";
 		checkBox -edit -value `gmatch $valStr "1"` DExportNormalCheckBox;
-		//$valStr = "0";
-		//checkBox -edit -value `gmatch $valStr "1"` DExportTangentCheckBox;
+		$valStr = "1";
+		checkBox -edit -value `gmatch $valStr "1"` DExportTangentCheckBox;
 		//$valStr = "";
 		//textField -edit -text $valStr DTangentUVSetText;		
 		$valStr = "DMeshSkeletonUseCurrent";
@@ -1013,15 +1014,18 @@ global proc DuelExporter_GenerateCommand()
 		{
 			$command += " -norm";
 		}
-		/*
+		
 		if(`checkBox -query -value DExportTangentCheckBox`)
 		{
+			/*
 			if(`textField -query -text DTangentUVSetText` != "")
 			{
 				$command += " -tang " + `textField -query -text DTangentUVSetText`;
 			}
+			*/
+			$command += " -tang";
 		}
-		*/
+		
 		
 		$valStr = `radioCollection -query -select DMeshSkeletonTarget`;
 		if($valStr == "DMeshSkeletonUseCurrent")
@@ -1129,7 +1133,7 @@ global proc DuelExporter_ValidateControllers()
 	int $invUseUnifiedName = !$useUnifiedName;
 	// mesh
 	int $exportMesh = `checkBox -query -value DExportMeshCheckBox`;
-	//int $exportTangent = `checkBox -query -value DExportTangentCheckBox`;
+	int $exportTangent = `checkBox -query -value DExportTangentCheckBox`;
 	int $assignSkeleton = `radioButton -query -select DMeshSkeletonUseAssigned`;
 	// skeleton
 	int $exportSkeleton = `checkBox -query -value DExportSkeletonCheckBox`;
@@ -1208,4 +1212,134 @@ global proc DuelExporter_ValidateControllers()
 		}	
 		
 	}
+}
+
+global proc DuelExporter_Help()
+{
+	string $helpInfo =	"Command parameter description:\n\
+\n\
+Command:			Parameter:				Description:\n\
+general options:\n\
+	-output			{dir}					assign the output directory, should be end with /.\n\
+		\n\
+	-all | -sel								export target, -all will export all objects in the scene using exported\n\
+											scene file name, -sel will only export selected object using its object's name.\n\
+\n\
+	-lu				{pref | mm				length unit, pref will use current scene's length unit, mm = millimete,\n\
+					cm | m | in				cm = centimeter, m = meter, in = inch, ft = foot, yd = yard.\n\
+					ft | yd}		\n\
+\n\
+	-revZ									whether to reverse z-axis while exporting.\n\
+\n\
+mesh options:\n\
+	-mesh			{mesh file name}		the mesh file name.\n\
+\n\
+	-norm									export vertex normal(-mesh required).\n\
+\n\
+	-tang									export tangent, using object's first uv set(if exist).\n\
+\n\
+	-curSkel								export skin bind information using current binded skeleton(-mesh required).\n\
+											\n\
+	-assSkel		{skeleton file			export skin bind information, but link it with another skeleton file(-mesh required).\n\
+					name}	\n\
+\n\
+	-morphAnim								whether to export morph animation in the .mesh file(-mesh required, clip list required).\n\
+\n\
+skeleton options:\n\
+	-skel			{skeleton file			the skeleton file name.\n\
+					name}	\n\
+	\n\
+	-np				{bindPose |				the neutral pose of the skeleton, bindPose will use the original pose of skeleton,\n\
+					curFrame}				curFrame will use current frame's pose.\n\
+	\n\
+	-skelAnim								indicate to export skeleton animation.\n\
+\n\
+animation options:\n\
+	-samp			{frame |				specify how to sample animation.\n\
+					 second}	\n\
+	-fps			{[int]}					specify how may frames per second while sampling, -samp frame required. if not specified,\n\
+											the default value is 24.\n\
+\n\
+	-sampRate		{[int] | [float]}		when -samp = frame, indicate how many frames per step, when -samp = second\n\
+											indicate how many seconds per step.\n\
+\n\
+	-clip			{clip name}				specify a clip, with a unique clip name, repeatable,\n\
+\n\
+	-range			{from} {to}				when -samp = frame, indicate the start frame and end frame, when -samp = second\n\
+											indicate the start time and end time, must follow the -clip option.\n\
+\n\
+for example:\n\
+DuelExporter -output C:/exampleDir/ -all -lu pref -revZ -mesh cube.dm -norm -tang default -curSkel -morphAnim -skel cube.ds -np curFrame -anim -samp frame -sampRate 1 -clip clip_1 -range 1 10 -clip clip_2 -range 10 20\n\
+\n\
+About data layout:\n\
+This Exporter use the following data layout in mesh data:\n\
+	src0: position\n\
+	src1: normal\n\
+	src2: tangent\n\
+	src3: tex_0-tex_n\n\
+	src4: blendIndex(4 indices per vertex)\n\
+	src5: blendWeight(4 indices per vertex)\n\
+";
+	
+	if( `window -exists DuelExporterHelpWindow`)
+	{
+		deleteUI DuelExporterHelpWindow;
+	}
+	window -title "DuelExporterHelp"
+		-width 720
+		DuelExporterHelpWindow;
+		
+	string $form = `formLayout -parent DuelExporterHelpWindow`;
+	
+		// title layout
+		columnLayout
+			-parent DuelExporterHelpWindow
+			-adjustableColumn	true
+		DHelpTitleLayout;
+		
+		
+		// confirm layout
+		columnLayout
+			-parent DuelExporterHelpWindow
+			-adjustableColumn	true
+		DHelpConfirmLayout;
+		
+		// title
+		text
+			-parent DHelpTitleLayout
+			-align "left" 
+			-label "Duel Exporter Specification:";
+		
+		// help info
+		scrollField 
+			-parent	$form
+			-text 	$helpInfo
+			-wordWrap true	
+		DHelpInfoText;
+	
+		// confirm button
+		button
+			-parent DHelpConfirmLayout
+			-label "OK"
+			-command "deleteUI DuelExporterHelpWindow"
+		DHelpConfirmBtn;
+		
+	formLayout -edit
+		-attachForm DHelpTitleLayout "top" 5
+		-attachPosition DHelpTitleLayout "left" 20 0
+		-attachPosition DHelpTitleLayout "right" 20 0
+	
+		-attachPosition DHelpInfoText "left" 20 0
+		-attachPosition DHelpInfoText "right" 20 100
+		
+		-attachPosition DHelpConfirmLayout "left" 20 0
+		-attachPosition DHelpConfirmLayout "right" 20 100
+		-attachForm DHelpConfirmLayout "bottom" 5
+		
+		-attachControl DHelpInfoText "top" 5 DHelpTitleLayout
+		-attachControl DHelpInfoText "bottom" 5 DHelpConfirmLayout
+		
+	$form;	
+	
+	showWindow DuelExporterHelpWindow;
 }

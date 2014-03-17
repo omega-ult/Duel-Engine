@@ -511,3 +511,10 @@ fxxk 老子再也不想改接口了!
 
 3.11
 改了framebuffer的接口, depthview直接可以取出, 一般都是d24s8的格式, 上层取出r就可以了.
+
+3.12
+normal mapping 的制作出了点问题, mesh格式需要更改, 只支持一个uvset就好了, 这样就可以直接用maya计算tangent了.
+
+3.17
+好久没更新,
+这次给maya导出插件增加了导出tangent的功能(其实是我自己懒得写啦).

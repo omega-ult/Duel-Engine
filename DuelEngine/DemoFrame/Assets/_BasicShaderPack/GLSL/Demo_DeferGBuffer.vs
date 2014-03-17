@@ -22,8 +22,6 @@ out	Varing
 	vec4	hpos;	// homogeneous space(device space)
 	vec2	texcoord;
 	vec3	vnormal;
-	vec2	depth;	// hpos.zw
-} VS_StageOutput;
 
 
 void main(void)
@@ -33,5 +31,4 @@ void main(void)
 	gl_Position = VS_StageOutput.hpos;
 	VS_StageOutput.texcoord = attrib_texcoord;
 	VS_StageOutput.vnormal = Auto_WorldViewMatrix * pos;
-	VS_StageOutput.depth = VS_StageOutput.hpos.zw;
 }

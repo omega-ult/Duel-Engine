@@ -29,6 +29,7 @@ bool DMPExporter::isUndoable() const
 MStatus DMPExporter::doIt( const MArgList& args )
 {
 	MStatus status;
+	mParams = DMPParameters();	// reset parameters.
 	status = mParams.parseArgs(args);
 	if (status != MStatus::kSuccess)
 	{

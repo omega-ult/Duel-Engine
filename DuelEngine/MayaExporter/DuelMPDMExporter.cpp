@@ -8,6 +8,16 @@
 
 using namespace std;
 
+struct DMHeader
+{
+	uint32_t id;
+	uint32_t length;
+};
+void writeHeader(DMHeader header, fstream& fs)
+{
+	fs.write((const char*)(&header.id),sizeof(uint32_t));
+	fs.write((const char*)(&header.length),sizeof(uint32_t));
+}
 bool DMPDMExporter::createFile( const string& fullPath )
 {
 	mFstream.open(fullPath, ios_base::out | ios_base::binary);
@@ -185,9 +195,18 @@ void DMPDMExporter::fillSubMesh(DMPParameters* param, const MDagPath& subMeshDag
 		hasTexCoords = true;
 	}
 	// build uv set maps and texture maps.
+	MFloatVectorArray	tangent;
+	subMesh.bHasTangent = false;
 	fnMesh.getUVSetNames(uvSetNames);
 	if (uvSetNames.length() > 0)
 	{
+		subMesh.bHasTangent = true;
+		MString tangentUVName = uvSetNames[0];
+		status = fnMesh.getTangents(tangent, space, &tangentUVName);
+		if(status != MStatus::kSuccess)
+		{
+			subMesh.bHasTangent = false;
+		}
 		for (unsigned int i = 0; i < uvSetNames.length(); ++i)
 		{
 			uvSetName = &uvSetNames[i];
@@ -364,6 +383,10 @@ void DMPDMExporter::fillSubMesh(DMPParameters* param, const MDagPath& subMeshDag
 		std::cout << "Fail to traverse polygons." << std::endl;
 		return;
 	}
+	if (param->bExportMeshTangent && !subMesh.bHasTangent)
+	{
+		MGlobal::executeCommand("print \"warning: failed to export tangent for " + MString(subMesh.name.c_str()) + "\\n\"");
+	}
 	for (; !polyIter.isDone(); polyIter.next())
 	{
 		int triangleCount; 
@@ -406,6 +429,13 @@ void DMPDMExporter::fillSubMesh(DMPParameters* param, const MDagPath& subMeshDag
 					// normal
 					MFloatVector norm = normals[vertexIndex];
 					curVtx.normal = DMPMeshData::Point3(3, norm.x, norm.y, norm.z);
+
+					// tangent
+					if (subMesh.bHasTangent && param->bExportMeshTangent)
+					{
+						MFloatVector tang = tangent[vertexIndex];
+						curVtx.tangent = DMPMeshData::Point3(3, tang.x, tang.y, tang.z);
+					}
 
 					// weight and joints.
 					MFloatArray vWeights = weights[vertexIndex];
@@ -542,16 +572,6 @@ void DMPDMExporter::exportMesh( DMPParameters* param )
 	}
 }
 
-struct DMHeader
-{
-	uint32_t id;
-	uint32_t length;
-};
-void writeHeader(DMHeader& header, fstream& fs)
-{
-	fs.write((const char*)(&header.id),sizeof(uint32_t));
-	fs.write((const char*)(&header.length),sizeof(uint32_t));
-}
 void DMPDMExporter::writeToFile()
 {
 	if (!mFstream.is_open())
@@ -615,10 +635,12 @@ void DMPDMExporter::writeToFile()
 			// construct vd, for pos/normal/blendId/blendWeight/texcoord_n/
 			// here we use the following format:
 			/*
-				src0: pos/normal
-				src1: tex0 - tex n;
-				src2: blendId;
-				src3: blendWeight
+			src0: position
+			src1: normal
+			src2: tangent
+			src3: tex_0-tex_n
+			src4: blendIndex
+			src5: blendWeight
 			*/
 			// pos:
 			uint16_t src = 0;
@@ -634,8 +656,8 @@ void DMPDMExporter::writeToFile()
 				mFstream.write((const char*)&vSemantic, sizeof(vSemantic));
 				mFstream.write((const char*)&vIdx, sizeof(vIdx));
 			// normal:
-			src = 0;
-			offset = sizeof(float) * 3;
+			src = 1;
+			offset = 0;
 			vType = VET_Float3;
 			vSemantic = VES_Normal;
 			vIdx = 0;
@@ -645,12 +667,27 @@ void DMPDMExporter::writeToFile()
 				mFstream.write((const char*)&vType, sizeof(vType));
 				mFstream.write((const char*)&vSemantic, sizeof(vSemantic));
 				mFstream.write((const char*)&vIdx, sizeof(vIdx));
+			if (subMesh.bHasTangent)
+			{
+				// tangent:
+				src = 2;
+				offset = 0;
+				vType = VET_Float3;
+				vSemantic = VES_Tangent;
+				vIdx = 0;
+				writeHeader(vdHeader, mFstream);
+					mFstream.write((const char*)&src, sizeof(src));
+					mFstream.write((const char*)&offset, sizeof(offset));
+					mFstream.write((const char*)&vType, sizeof(vType));
+					mFstream.write((const char*)&vSemantic, sizeof(vSemantic));
+					mFstream.write((const char*)&vIdx, sizeof(vIdx));
+			}
 			// tex:
 			for (unsigned int j = 0; j < subMesh.UVSets.size(); ++j)
 			{
 				if (j < 8)	// we can only export max to 8 texcoords
 				{
-					src = 1;
+					src = 3;
 					offset = sizeof(float) * 2 * j;
 					vType = VET_Float2;
 					vSemantic = VES_TexCoord + j;
@@ -666,7 +703,7 @@ void DMPDMExporter::writeToFile()
 			if (subMesh.targetSubSkeleton != "")
 			{
 				// blend weight/blend index.
-				uint16_t src = 2;
+				uint16_t src = 4;
 				uint32_t offset = 0;
 				uint32_t vType = VET_Short4;
 				uint32_t vSemantic = VES_BlendIndices;
@@ -677,7 +714,7 @@ void DMPDMExporter::writeToFile()
 					mFstream.write((const char*)&vType, sizeof(vType));
 					mFstream.write((const char*)&vSemantic, sizeof(vSemantic));
 					mFstream.write((const char*)&vIdx, sizeof(vIdx));
-				src = 3;
+				src = 5;
 				offset = 0;
 				vType = VET_Float4;
 				vSemantic = VES_BlendWeight;
@@ -696,9 +733,9 @@ void DMPDMExporter::writeToFile()
 			vHeader.id = DM_Vertex;
 			DMHeader vbHeader;
 			vbHeader.id = DM_VertexBuffer;
-			// for pos+normal.
+			// for pos.
 			uint16_t vSrc = 0;
-			uint32_t vSize = sizeof(float) * 3 + sizeof(float) * 3;	// pos+normal.
+			uint32_t vSize = sizeof(float) * 3;
 			uint32_t vCount = subMesh.vertices.size(); 
 			vHeader.length = sizeof(vSrc) + sizeof(vSize) + sizeof(vCount);
 			writeHeader(vHeader, mFstream);
@@ -711,20 +748,53 @@ void DMPDMExporter::writeToFile()
 				{
 					DMPMeshData::VertexStruct& vtx = subMesh.vertices[k];
 					float pos[3];
-					float norm[3];
 					pos[0] = (float)vtx.position[0];
 					pos[1] = (float)vtx.position[1];
 					pos[2] = (float)vtx.position[2];
-					norm[0] = (float)vtx.normal[0];
-					norm[1] = (float)vtx.normal[1];
-					norm[2] = (float)vtx.normal[2];
 					mFstream.write((const char*)pos, sizeof(float) * 3);
-					mFstream.write((const char*)norm, sizeof(float) * 3);
 				}
+			// for normal
+			vSrc = 1;
+			writeHeader(vHeader, mFstream);
+			mFstream.write((const char*)&vSrc, sizeof(vSrc));
+			mFstream.write((const char*)&vSize, sizeof(vSize));
+			mFstream.write((const char*)&vCount, sizeof(vCount));
+			vbHeader.length = vSize * vCount;
+			writeHeader(vbHeader, mFstream);
+			for (unsigned int k = 0 ; k < subMesh.vertices.size(); ++k)
+			{
+				DMPMeshData::VertexStruct& vtx = subMesh.vertices[k];
+				float norm[3];
+				norm[0] = (float)vtx.normal[0];
+				norm[1] = (float)vtx.normal[1];
+				norm[2] = (float)vtx.normal[2];
+				mFstream.write((const char*)norm, sizeof(float) * 3);
+			}
+			// for tangent
+			if (subMesh.bHasTangent)
+			{
+				vSrc = 2;
+				writeHeader(vHeader, mFstream);
+				mFstream.write((const char*)&vSrc, sizeof(vSrc));
+				mFstream.write((const char*)&vSize, sizeof(vSize));
+				mFstream.write((const char*)&vCount, sizeof(vCount));
+				vbHeader.length = vSize * vCount;
+				writeHeader(vbHeader, mFstream);
+				for (unsigned int k = 0 ; k < subMesh.vertices.size(); ++k)
+				{
+					DMPMeshData::VertexStruct& vtx = subMesh.vertices[k];
+					float tang[3];
+					tang[0] = (float)vtx.tangent[0];
+					tang[1] = (float)vtx.tangent[1];
+					tang[2] = (float)vtx.tangent[2];
+					mFstream.write((const char*)tang, sizeof(float) * 3);
+				}
+
+			}
 			// for texcoord.
 			if (subMesh.UVSets.size() > 0)
 			{
-				vSrc = 1;
+				vSrc = 3;
 				vSize = sizeof(float) * 2 * (std::min<unsigned int>(8, subMesh.UVSets.size()));
 				vCount = subMesh.vertices.size(); 
 				writeHeader(vHeader, mFstream);
@@ -760,7 +830,7 @@ void DMPDMExporter::writeToFile()
 			if (subMesh.targetSubSkeleton != "")
 			{
 				// for blend index:
-				vSrc = 2;
+				vSrc = 4;
 				vSize = sizeof(unsigned short) * 4;
 				vCount = subMesh.vertices.size();
 				writeHeader(vHeader, mFstream);
@@ -791,7 +861,7 @@ void DMPDMExporter::writeToFile()
 					mFstream.write((const char*)bId, sizeof(uint16_t) * 4);
 				}
 				// for blend weight:
-				vSrc = 3;
+				vSrc = 5;
 				vSize = sizeof(float) * 4;
 				vCount = subMesh.vertices.size();
 				writeHeader(vHeader, mFstream);

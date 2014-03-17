@@ -59,6 +59,7 @@ public:
 
 	MString	meshFileName;
 	bool	bExportMeshNormal;
+	bool	bExportMeshTangent;
 	SkeletonTarget	skeletonTarget;
 	MString	assignSkeleton;
 	bool	bExportMorphAnimation;

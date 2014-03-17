@@ -10,15 +10,13 @@ in 	Varing
 	vec4	hpos;	// homogeneous space(device space)
 	vec2	texcoord;
 	vec3	vnormal;
-	vec2	depth;	// hpos.zw
 } PS_StageInput;
 
-layout(location = 0)	out	vec4	vnormal;
-layout(location = 1)	out vec4	diffuse;
-layout(location = 2)	out vec4	specular;
-layout(location = 3)	out vec4	depth;
+layout(location = 0) out vec4	albedo;
+layout(location = 1) out vec4	vnormal;
 
 void main(void)
 {
-	vnormal = texture(targetTexture, PS_StageInput.texcoord);
+	// [-1, 1] to [0, 1]
+	vnormal = PS_StageInput.vnormal * 0.5f + 0.5f; 
 }
