@@ -34,61 +34,13 @@
 定义一下命令吧.
 到时候记得写进doc
 
-
-	option:				param:				desc:
-
-general options:
-	"-output"			{dir}				assign the output directory, should be end with "/".
-		
-	"-all | -sel"							export target, "-all" will export all objects in the scene using exported
-											scene file name, "-sel" will only export selected object using its object's name.
-
-	"-lu"				{"pref" | "mm"		length unit, "pref" will use current scene's length unit, "mm" = millimete,
-						"cm" | "m" | "in"	"cm" = centimeter, "m" = meter, "in" = inch, "ft" = foot, "yd" = yard.
-						"ft" | "yd"}		
-
-	"-revZ"									whether to reverse z-axis while exporting.
-
-mesh options:
-	"-mesh"				{mesh file name}	the mesh file name.
-
-	"-norm"									export vertex normal(-mesh required).
-
-	"-tang"									export tangent, using object's first uv set(if exist).
-
-	"-curSkel"								export skin bind information using current binded skeleton(-mesh required).
-											
-	"-assSkel"			{skeleton file		export skin bind information, but link it with another skeleton file(-mesh required).
-						 name}	
-
-	"-morphAnim"							whether to export morph animation in the .mesh file(-mesh required, clip list required).
-
-skeleton options:
-	"-skel"				{skeleton file		the skeleton file name.
-						name}	
-	
-	"-np"				{"bindPose" |		the neutral pose of the skeleton, "bindPose" will use the original pose of skeleton,
-						"curFrame"}			"curFrame" will use current frame's pose.
-	
-	"-skelAnim"								indicate to export skeleton animation.
-
-animation options:
-	"-samp"				{"frame" |			specify how to sample animation.
-						 "second"}	
-	"-fps"				{[int]}				specify how may frames per second while sampling, "-samp frame" required. if not specified,
-											the default value is 24.
-
-	"-sampRate"			{[int] | [float]}	when "-samp" = "frame", indicate how many frames per step, when "-samp" = "second"
-											indicate how many seconds per step.
-
-	"-clip"				{clip name}			specify a clip, with a unique clip name, repeatable,
-
-	"-range"			{from} {to}			when "-samp" = "frame", indicate the start frame and end frame, when "-samp" = "second"
-											indicate the start time and end time, must follow the "-clip" option.
-
-for example:
-DuelExporter -output C:/targetDir/ -all -lu pref -revZ -mesh goblin.dm -norm -tang default -curSkel -morphAnim -skel goblin.ds -np curFrame -anim -samp frame -sampRate 1 -clip clip_1 -range 1 10 -clip clip_2 -range 10 20
+// 命令已经移植doc中.
 
 
 麻蛋.
 maya的attribute可以从 面板上的 attributeEditor->help中查询!!!!!!!!
+
+3.17 增加tangent导出的功能
+3.19 移除tangent导出的功能
+- -!!!!!!!!
+I DONT KNOW WHY

@@ -299,14 +299,14 @@ global proc DuelExporter_CreateUI()
 						// -changeCommand "xxxxxxx"
 						-label	"Export Normal"
 					DExportNormalCheckBox;
-					
+/*											
 					checkBox
 						-parent DMeshLayout
 						-value	true
 						-label	"Export Tangent"
 						-changeCommand	"DuelExporter_ValidateControllers()"
 					DExportTangentCheckBox;
-/*						
+
 					rowColumnLayout
 						-parent DMeshLayout
 						-columnWidth 1 100
@@ -701,7 +701,7 @@ global proc DuelExporter_SaveSettings()
 	// mesh parameters
 	fileInfo "DuelExporter_MeshName" `textField -query -text DMeshFileNameText`;
 	fileInfo "DuelExporter_ExportNormal" `checkBox -query -value DExportNormalCheckBox`;
-	fileInfo "DuelExporter_ExportTangent" `checkBox -query -value DExportTangentCheckBox`;
+	//fileInfo "DuelExporter_ExportTangent" `checkBox -query -value DExportTangentCheckBox`;
 	//fileInfo "DuelExporter_TangentUVSet" `textField -query -text DTangentUVSetText`;
 	fileInfo "DuelExporter_SkeletonTarget" `radioCollection -query -select DMeshSkeletonTarget`;
 	fileInfo "DuelExporter_SkeletonFileName" `textField -query -text DMeshSkeletonAssignedFileText`;
@@ -765,8 +765,8 @@ global proc DuelExporter_LoadSavedSettings()
 		textField -edit -text $valStr[0] DMeshFileNameText;
 		$valStr = `fileInfo -query "DuelExporter_ExportNormal"`;
 		checkBox -edit -value `gmatch $valStr[0] "1"` DExportNormalCheckBox;
-		$valStr = `fileInfo -query "DuelExporter_ExportTangent"`;
-		checkBox -edit -value `gmatch $valStr[0] "1"` DExportTangentCheckBox;
+		//$valStr = `fileInfo -query "DuelExporter_ExportTangent"`;
+		//checkBox -edit -value `gmatch $valStr[0] "1"` DExportTangentCheckBox;
 		//$valStr = `fileInfo -query "DuelExporter_TangentUVSet"`;
 		//textField -edit -text $valStr[0] DTangentUVSetText;		
 		$valStr = `fileInfo -query "DuelExporter_SkeletonTarget"`;
@@ -869,8 +869,8 @@ global proc DuelExporter_ResetSettings()
 		textField -edit -text $valStr DMeshFileNameText;
 		$valStr = "1";
 		checkBox -edit -value `gmatch $valStr "1"` DExportNormalCheckBox;
-		$valStr = "1";
-		checkBox -edit -value `gmatch $valStr "1"` DExportTangentCheckBox;
+		//$valStr = "1";
+		//checkBox -edit -value `gmatch $valStr "1"` DExportTangentCheckBox;
 		//$valStr = "";
 		//textField -edit -text $valStr DTangentUVSetText;		
 		$valStr = "DMeshSkeletonUseCurrent";
@@ -1014,18 +1014,18 @@ global proc DuelExporter_GenerateCommand()
 		{
 			$command += " -norm";
 		}
-		
+
+/*		
 		if(`checkBox -query -value DExportTangentCheckBox`)
 		{
-			/*
 			if(`textField -query -text DTangentUVSetText` != "")
 			{
 				$command += " -tang " + `textField -query -text DTangentUVSetText`;
 			}
-			*/
 			$command += " -tang";
 		}
 		
+*/
 		
 		$valStr = `radioCollection -query -select DMeshSkeletonTarget`;
 		if($valStr == "DMeshSkeletonUseCurrent")
@@ -1133,7 +1133,7 @@ global proc DuelExporter_ValidateControllers()
 	int $invUseUnifiedName = !$useUnifiedName;
 	// mesh
 	int $exportMesh = `checkBox -query -value DExportMeshCheckBox`;
-	int $exportTangent = `checkBox -query -value DExportTangentCheckBox`;
+	//int $exportTangent = `checkBox -query -value DExportTangentCheckBox`;
 	int $assignSkeleton = `radioButton -query -select DMeshSkeletonUseAssigned`;
 	// skeleton
 	int $exportSkeleton = `checkBox -query -value DExportSkeletonCheckBox`;
@@ -1236,8 +1236,6 @@ mesh options:\n\
 \n\
 	-norm									export vertex normal(-mesh required).\n\
 \n\
-	-tang									export tangent, using object's first uv set(if exist).\n\
-\n\
 	-curSkel								export skin bind information using current binded skeleton(-mesh required).\n\
 											\n\
 	-assSkel		{skeleton file			export skin bind information, but link it with another skeleton file(-mesh required).\n\
@@ -1275,10 +1273,9 @@ About data layout:\n\
 This Exporter use the following data layout in mesh data:\n\
 	src0: position\n\
 	src1: normal\n\
-	src2: tangent\n\
-	src3: tex_0-tex_n\n\
-	src4: blendIndex(4 indices per vertex)\n\
-	src5: blendWeight(4 indices per vertex)\n\
+	src2: tex_0-tex_n\n\
+	src3: blendIndex(4 indices per vertex)\n\
+	src4: blendWeight(4 indices per vertex)\n\
 ";
 	
 	if( `window -exists DuelExporterHelpWindow`)

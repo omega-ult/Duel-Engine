@@ -11,7 +11,6 @@ DMPParameters::DMPParameters() :
 	bExportSkeleton(false),
 	bExportSkelAnimation(false),
 	bExportMeshNormal(false),
-	bExportMeshTangent(false),
 	bExportMorphAnimation(false),
 	samplerRate(1.0f),
 	skeletonTarget(ST_NoSkeleton),
@@ -36,7 +35,6 @@ MStatus DMPParameters::parseArgs( const MArgList& args )
 	MString revZ = "-revZ";
 	MString mesh = "-mesh";
 	MString norm = "-norm";
-	MString tang = "-tang";
 	MString curSkel = "-curSkel";
 	MString assSkel = "-assSkel";
 	MString morphAnim = "-morphAnim";
@@ -139,10 +137,6 @@ MStatus DMPParameters::parseArgs( const MArgList& args )
 		else if (norm == curArg && (MS::kSuccess == stat))
 		{
 			bExportMeshNormal = true;
-		}
-		else if (tang == curArg && (MS::kSuccess == stat))
-		{
-			bExportMeshTangent = true;
 		}
 		else if (assSkel == curArg && (MS::kSuccess == stat))
 		{

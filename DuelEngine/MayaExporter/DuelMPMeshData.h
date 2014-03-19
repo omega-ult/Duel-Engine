@@ -55,7 +55,6 @@ public:
 	{
 		Point3	position;
 		Point3	normal;
-		Point3	tangent;
 
 		// uvset index : texcoord.
 		map<int, TexCoord> texcoords;
@@ -80,7 +79,6 @@ public:
 		string targetSubSkeleton;
 		vector<VertexStruct> vertices;
 		vector<TriangleStruct> triangles;
-		bool	bHasTangent;
 		typedef map<string, unsigned int>	UVSetMap;
 		typedef map<string, vector<string>>	TextureMap;
 		UVSetMap		UVSets;
