@@ -10,10 +10,19 @@
 	</Technique>
 	
 	<!--Compose-->
-	<Technique name="DemoRenderWorkshop_Compose">
-		<Pass name="DemoRenderWorkshop_Compose">
+	<Technique name="DemoRenderWorkshop_DeferCompose">
+		<Pass name="DemoRenderWorkshop_DeferCompose">
 			<VertexProgram group="_BasicShaderPack">Demo_DeferCompose.vs</VertexProgram>
 			<PixelProgram group="_BasicShaderPack">Demo_DeferCompose.ps</PixelProgram>
+		</Pass>
+	</Technique>
+	
+	
+	<!--GBuffer-->
+	<Technique name="DemoRenderWorkshop_DeferGBuffer">
+		<Pass name="DemoRenderWorkshop_DeferGBuffer">
+			<VertexProgram group="_BasicShaderPack">Demo_DeferGBuffer.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">Demo_DeferGBuffer.ps</PixelProgram>
 		</Pass>
 	</Technique>
 	

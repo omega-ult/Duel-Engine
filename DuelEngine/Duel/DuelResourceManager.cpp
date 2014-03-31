@@ -25,7 +25,10 @@ namespace Duel
 
 	DResourcePtr DResourceManager::create( DResourceDescription* createParam )
 	{
-		assert(createParam != NULL);
+		if (createParam == NULL || createParam->getGroupName() == DStringTool::BLANK || createParam->getName() == DStringTool::BLANK)
+		{
+			return DResourcePtr();
+		}
 		if (isExisted(createParam->getName(),createParam->getGroupName()))
 		{
 			return getResource(createParam->getGroupName(), createParam->getName());
@@ -57,9 +60,13 @@ namespace Duel
 		return true;
 	}
 
-	Duel::DResourcePtr DResourceManager::getResource( const DString& groupName, const DString& name )
+	DResourcePtr DResourceManager::getResource( const DString& groupName, const DString& name )
 	{
 		DResourcePtr ret;
+		if (groupName == DStringTool::BLANK && name == DStringTool::BLANK)
+		{
+			return ret;
+		}
 		GroupMap::iterator gi;
 		DUEL_LOCK_AUTO_MUTEX
 		if (groupName == "")

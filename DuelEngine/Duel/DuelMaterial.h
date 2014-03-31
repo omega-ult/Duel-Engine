@@ -90,8 +90,8 @@ namespace Duel
 
 		// for now, texture parameter only accept 1 element, meaning the arraySize will be automatically set to 1.
 		// for non-texture parameter, the arraySize must be non-zero, otherwise it will be ignored.
-		void	addParameter(const DString& name, MaterialParameterType type, const DString& gpuParam, const DString& gpuProgram,
-			uint32 arraySize = 1, bool openToUser = false);
+		void	addParameter(const DString& name, const DString& gpuProgram, const DString& gpuParam,
+			MaterialParameterType type,	uint32 arraySize = 1, bool openToUser = false);
 		void	removeParameter(const DString& name);
 		void	removeAllParameters();
 
@@ -134,12 +134,17 @@ namespace Duel
 
 		// TextureConstant, use <groupName, resourcName> as pair.
 		typedef std::pair<DString, DString>	TextureConstant;
+		typedef std::pair<TextureConstant, DGpuTextureConstant*>	TextureConstantCache;
 		// aserious of function overloading for setting values.
 		void	setValue(const DString& paramName, TextureConstant tex);
 
 		float*	getFloatValuePtr(uint32 physicalIndex);
 		int32*	getIntValuePtr(uint32 physicalIndex);
-		TextureConstant	getTextureValue(const DString& paramName);
+		// the constant cache allow you to speed up texture binding, 
+		// when setting the texture value, this instance will query the resource manager
+		// whether the resource is loaded, if so, the current loaded texture
+		// will be cached, and the final texture used in shader will be that cached constant.
+		TextureConstantCache	getTextureValue(const DString& paramName);
 
 		DRenderTechnique*	getRenderTechnique(uint32 stage); 
 		// use this function to map parameters into the gpu parameter.
@@ -154,10 +159,10 @@ namespace Duel
 		ParameterMap	mParamMap;
 		typedef	std::vector<float>	FloatConstantList;
 		typedef	std::vector<int32>	IntConstantList;
-		typedef std::map<DString, TextureConstant>	TextureConstantMap;
+		typedef std::map<DString, TextureConstantCache>	TextureConstantCacheMap;
 		FloatConstantList	mFloatConstants;
 		IntConstantList		mIntConstants;
-		TextureConstantMap	mTextureMap;
+		TextureConstantCacheMap	mTextureMap;
 
 	};   
 	// 其实吧.. 在我这里看来, 材质系统就是对应一个shader文件, 然后指定使用的参数列表以及渲染状态,

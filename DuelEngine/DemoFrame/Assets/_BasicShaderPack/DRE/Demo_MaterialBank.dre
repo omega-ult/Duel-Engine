@@ -5,7 +5,7 @@
 	<!--MaterialBank--->
 	<!----------------------------------------------->
 	<!--Lambert-->
-	<Technique name="Lambert_Defer">
+	<Technique name="Lambert_Defer_GBuffer">
 		<Pass name="Lambert_Defer_GBuffer">
 			<VertexProgram group="_BasicShaderPack">Demo_DeferGBuffer.vs</VertexProgram>
 			<PixelProgram group="_BasicShaderPack">Demo_DeferGBuffer.ps</PixelProgram>

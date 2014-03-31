@@ -3,7 +3,13 @@
 	<TextureResourceParameter>
 		<Name>T_debug_default.dds</Name>
 		<Group>_BasicMediaPack</Group>
-		<Empty>false</Empty>
+		<CodecFormat>dds</CodecFormat>
+		<MemoryStrategy>DYNAMIC</MemoryStrategy>
+	</TextureResourceParameter>
+	
+	<TextureResourceParameter>
+		<Name>T_Test_Normal.dds</Name>
+		<Group>_BasicMediaPack</Group>
 		<CodecFormat>dds</CodecFormat>
 		<MemoryStrategy>DYNAMIC</MemoryStrategy>
 	</TextureResourceParameter>
@@ -12,7 +18,6 @@
 	<TextureResourceParameter>
 		<Name>T_Std_Cursor.dds</Name>
 		<Group>_BasicMediaPack</Group>
-		<Empty>false</Empty>
 		<CodecFormat>dds</CodecFormat>
 		<MemoryStrategy>STATIC</MemoryStrategy>
 	</TextureResourceParameter>

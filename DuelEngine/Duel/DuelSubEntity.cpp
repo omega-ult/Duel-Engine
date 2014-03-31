@@ -197,6 +197,11 @@ namespace Duel
 		}
 	}
 
+	Duel::DMaterialInstancePtr DSubEntity::getMaterialInstance()
+	{
+		return mMtlInst;
+	}
+
 
 
 }

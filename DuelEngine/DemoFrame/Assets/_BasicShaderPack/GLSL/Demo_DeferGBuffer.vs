@@ -9,9 +9,9 @@
 #define	VES_BINORMAL		14
 #define	VES_TANGENT			15
 
-layout(location = VES_POSITION)	in vec3 attrib_position;  
-layout(location = VES_NORMAL)	in vec3	attrib_normal;
-layout(location = VES_TEXCOORD)	in vec2 attrib_texcoord;  
+layout(location = VES_POSITION)	in vec3 inPosition;  
+layout(location = VES_NORMAL)	in vec3	inNormal;
+layout(location = VES_TEXCOORD)	in vec2 inTexcoord;  
 
 // auto parameter.
 uniform mat4 Auto_WorldViewProjMatrix;
@@ -19,16 +19,17 @@ uniform mat4 Auto_WorldViewMatrix;
 
 out	Varing
 {
-	vec4	hpos;	// homogeneous space(device space)
+	vec4	vpos;	// view space
 	vec2	texcoord;
 	vec3	vnormal;
-
+} VS_StageOutput;
 
 void main(void)
 {
-	vec4 pos = vec4(attrib_position, 1.0f);
-	VS_StageOutput.hpos = Auto_WorldViewProjMatrix * pos;
-	gl_Position = VS_StageOutput.hpos;
-	VS_StageOutput.texcoord = attrib_texcoord;
-	VS_StageOutput.vnormal = Auto_WorldViewMatrix * pos;
+	vec4 pos = vec4(inPosition, 1.0f);
+	gl_Position = Auto_WorldViewProjMatrix * pos;
+	
+	VS_StageOutput.vpos = Auto_WorldViewMatrix * pos;
+	VS_StageOutput.texcoord = inTexcoord;
+	VS_StageOutput.vnormal = (Auto_WorldViewMatrix * vec4(inNormal, 1.0f)).xyz;
 }

@@ -518,3 +518,11 @@ normal mapping 的制作出了点问题, mesh格式需要更改, 只支持一个uvset就好了, 这样就
 3.17
 好久没更新,
 这次给maya导出插件增加了导出tangent的功能(其实是我自己懒得写啦).
+
+3.31
+感冒了- -泥煤
+啊总之是颓废了很多天.
+终于回来了. 今天把gui的渲染bug修复了(在rendersingleObject的时候没写上renderable的preRender()和postRender()导致相机参数错误)
+但是还是看不到defer渲染的结果, (今天顺便把material的参数绑定的各种bug修复了一遍)
+不过倒是有眉目了(绑定autoparameter的时候使用的是NullDelegate, 也就是说没有使用场景管理器的autoParameter)
+明天再想办法咯.

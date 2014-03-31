@@ -107,8 +107,6 @@
 #include "DuelSceneNode.h"
 #include "DuelSceneQuery.h"
 
-#include "DuelWindowManager.h"
-
 #include "DuelInputComponent.h"
 #include "DuelInputEventQueue.h"
 #include "DuelInputManager.h"

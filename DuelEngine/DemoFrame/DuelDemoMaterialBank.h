@@ -20,7 +20,8 @@ namespace Duel
 		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
 
 	protected:
-		DRenderTechniquePtr	mDeferStageTech;
+		DRenderTechniquePtr	mDeferGBufferTech;
+		
 	};
 
 

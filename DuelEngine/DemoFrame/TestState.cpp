@@ -12,6 +12,7 @@
 #include "DuelSceneInstance.h"
 #include "DuelTerrainPage.h"
 #include "DuelImage2D.h"
+#include "DuelMaterial.h"
 #include "TestState.h"
 
 #include "DuelGUIShowcasePictureBox.h"
@@ -82,6 +83,9 @@ namespace DemoKit
 			getResouceManager("Texture")->getResource("_ShowcasePack", "reimu.dds");
 		reimuTex->touch();
 
+		Duel::DResourcePtr testNormal = Duel::DResourceGroupManager::getSingleton().
+			getResouceManager("Texture")->getResource("_BasicMediaPack", "T_Test_Normal.dds");
+		testNormal->touch();
 
 		Duel::DTerrainPageData data;
 		data.pageScale = 1.0f;
@@ -128,9 +132,26 @@ namespace DemoKit
 		mGManager->addWidget(mTestBox);
 
 
+
+		Duel::DMesh::SubMeshIterator sbi = aTestMesh->getAs<Duel::DMesh>()->getSubMeshIterator();
+		while (sbi.hasMoreElements())
+		{
+			Duel::DSubMeshPtr sb = sbi.getNext();
+			Duel::DMaterialInstancePtr mtl = Duel::DMaterialManager::getSingleton().createMaterialInstance("Lambert");
+			sb->setMaterialInstance(mtl);
+		}
 		mSceneInstance->initialize(Duel::DAxisAlignedBox(-10.0f, -10.0f, -10.0f, 10.0f, 10.0f, 10.0f), 5.0f);
 		mTestEntity = new Duel::DEntity("yooooooo");
 		mTestEntity->loadFromMesh(aTestMesh);
+		Duel::DEntity::SubEntityIterator ei = mTestEntity->getSubEntityIterator();
+		while (ei.hasMoreElements())
+		{
+			Duel::DSubEntityPtr se = ei.getNext();
+			Duel::DMaterialInstance::TextureConstant texConst;
+			texConst.first = testNormal->getGroupName();
+			texConst.second = testNormal->getName();
+			se->getMaterialInstance()->setValue("NormalTexture", texConst);
+		}
 		Duel::DSceneNode* anode = mSceneInstance->getSceneManager()->createSceneNode("yoooooNode");
 		anode->attachMovable(mTestEntity);
 	}

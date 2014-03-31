@@ -21,9 +21,9 @@ namespace Duel
 		DRenderResourceManager* re = DRenderResourceManager::getSingletonPtr(); 
 		DResourcePtr renderEffect = rg->getResouceManager("RenderEffect")->getResource("_BasicShaderPack", "Demo_RenderWorkshop.dre");
 		renderEffect->touch();
-		mClearGBufferTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_ClearGBuffer");
 		mCopyTexTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_CopyTexture");
-		mComposeTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_Compose");
+		mComposeTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_DeferCompose");
+		mGBufferTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_DeferGBuffer");
 		mRenderLayout = re->createRenderLayout();
 		DVertexDeclaration vd;
 		mRenderLayout->setTopologyType(PT_TriangleList);
@@ -63,10 +63,6 @@ namespace Duel
 		if (stage == RS_ScreenQuadTransfer)
 		{
 			return mCopyTexTech.get();
-		}
-		if (stage == RS_ClearGBuffer)
-		{
-			return mClearGBufferTech.get();
 		}
 		return NULL;
 	}
@@ -121,6 +117,7 @@ namespace Duel
 		DShaderObject* so = pass->getShaderObject().get();
 		if (so != NULL && so->isValid())
 		{
+			rendObj->preRender();
 			rendObj->updateAutoGpuParameter(so);
 			rendObj->updateCustomGpuParameter(so);
 			mRenderSystem->setDepthStencilState(pass->getDepthStencilStateObject().get());
@@ -128,6 +125,7 @@ namespace Duel
 			mRenderSystem->setBlendState(pass->getBlendStateStateObject().get(), DColor::WHITE);
 			mRenderSystem->bindShaderObject(so);
 			mRenderSystem->render(rendObj->getRenderLayout());
+			rendObj->postRender();
 		}
 
 	}
@@ -145,31 +143,32 @@ namespace Duel
 		{
 			// we can render defer stage.
 			DeferLayer deferlayer = gi->second;
-			// 		mRenderSystem->bindFrameBuffer(deferlayer);
-
-			//		ri = queue->getRenderGroupIterator();
-			// 		while (ri.hasMoreElements())
-			// 		{
-			// 			DRenderGroup* rgrp = ri.getNext();
-			// 			populateRenderables(rgrp, RS_Defer_GBuffer);
-			// 			if (!mRenderList.empty())
-			// 			{
-			// 				signalGroupStartRender(queue, rgrp);
-			// 				RenderElementList::iterator i, iend = mRenderList.end();
-			// 				for (i = mRenderList.begin(); i != iend; ++i)
-			// 				{
-			// 					RenderElement& e = *i;
-			// 					renderSingleObject(e.renderable, e.renderPass);
-			// 				}
-			// 				signalGroupFinishRender(queue, rgrp);
-			// 			}
-			// 			// now go for light accumulation.
-			// 			DRenderQueue::LightIterator li = queue->getLightIterator();
-			// 			while (li.hasMoreElements())
-			// 			{
-			// 				DLightSource* l = li.getNext();
-			// 			}
-			// 		}
+			mRenderSystem->bindFrameBuffer(deferlayer.GBuffer);
+			// debug;
+			mRenderSystem->bindFrameBuffer(mPresentTarget);
+			ri = queue->getRenderGroupIterator();
+			while (ri.hasMoreElements())
+			{
+			 	DRenderGroup* rgrp = ri.getNext();
+			 	populateRenderables(rgrp, RS_Defer_GBuffer);
+			 	if (!mRenderList.empty())
+			 	{
+			 		signalGroupStartRender(queue, rgrp);
+			 		RenderElementList::iterator i, iend = mRenderList.end();
+			 		for (i = mRenderList.begin(); i != iend; ++i)
+			 		{
+			 			RenderElement& e = *i;
+			 			renderSingleObject(e.renderable, e.renderPass);
+			 		}
+			 		signalGroupFinishRender(queue, rgrp);
+			 	}
+			 	// now go for light accumulation.
+			 	DRenderQueue::LightIterator li = queue->getLightIterator();
+			 	while (li.hasMoreElements())
+			 	{
+			 		DLightSource* l = li.getNext();
+			 	}
+			}
 
 		}
 
@@ -203,18 +202,18 @@ namespace Duel
 		// check whether this target is in our defer layer, if so,
 		// dont't create another defer layer for it.
 		DeferLayerMap::iterator i, iend = mDeferLayerMap.end();
-		bool isNewTarget = true;
+		bool isInDeferLayer = false;
 		for (i = mDeferLayerMap.begin(); i != iend; ++i)
 		{
 			DeferLayer ly = i->second;
 			if (ly.GBuffer == target || 
 				ly.LightAccum == target)
 			{
-				isNewTarget = false;
+				isInDeferLayer = true;
 				break;
 			}
 		}
-		if (isNewTarget)
+		if (!isInDeferLayer && mDeferLayerMap.find(target) == mDeferLayerMap.end())
 		{
 			mDeferLayerMap[target] = createDeferLayer(target);
 		}
@@ -255,8 +254,6 @@ namespace Duel
 		ret.GBuffer = DRenderResourceManager::getSingleton().createFrameBuffer(target->getWidth(), target->getHeight(), 32);
 		ret.GBuffer->enableElement(EA_Color0, PF_A8R8G8B8);
 		ret.GBuffer->enableElement(EA_Color1, PF_A8R8G8B8);
-		ret.GBuffer->enableElement(EA_Color2, PF_A8R8G8B8);
-		ret.GBuffer->enableElement(EA_Color3, PF_R32_Float);
 		return ret;
 	}
 

@@ -1,22 +1,67 @@
 #version 330
 
-uniform sampler2D	targetTexture;
 uniform sampler2D	diffuseTexture;
 uniform sampler2D	normalTexture;
 uniform sampler2D	specularTexture;
 
 in 	Varing
 {	
-	vec4	hpos;	// homogeneous space(device space)
+	vec4	vpos;	// view space
 	vec2	texcoord;
 	vec3	vnormal;
 } PS_StageInput;
 
-layout(location = 0) out vec4	albedo;
-layout(location = 1) out vec4	vnormal;
+layout(location = 0) out vec4	vnormal;
+layout(location = 1) out vec4	albedo;
+
+// http://www.thetenthplanet.de/archives/1180
+mat3 cotangent_frame(vec3 N, vec3 p, vec2 uv)
+{
+    // get edge vectors of the pixel triangle
+    vec3 dp1 = dFdx( p );
+    vec3 dp2 = dFdy( p );
+    vec2 duv1 = dFdx( uv );
+    vec2 duv2 = dFdy( uv );
+ 
+    // solve the linear system
+    vec3 dp2perp = cross( dp2, N );
+    vec3 dp1perp = cross( N, dp1 );
+    vec3 T = dp2perp * duv1.x + dp1perp * duv2.x;
+    vec3 B = dp2perp * duv1.y + dp1perp * duv2.y;
+ 
+    // construct a scale-invariant frame 
+    float invmax = inversesqrt( max( dot(T,T), dot(B,B) ) );
+    return mat3( T * invmax, B * invmax, N );
+}
+
+// encode a normal value to rgb color
+vec3 encodeNormal(vec3 norm)
+{
+	return (norm * 127.0f + 128.0f)*0.00392156; // 1/255.0f;
+}
+
+// decode a normal value from rgb color
+vec3 decodeNormal(vec3 color)
+{
+	return (color * 255.0f - 128.0f)*0.00787401; // 1/127.0f;
+}
 
 void main(void)
 {
-	// [-1, 1] to [0, 1]
-	vnormal = PS_StageInput.vnormal * 0.5f + 0.5f; 
+	// for normal in the view space.
+	vec3 N = normalize(PS_StageInput.vnormal);
+	vec3 vP = normalize(PS_StageInput.vpos.xyz);
+	mat3 TBN = cotangent_frame(N, vP, PS_StageInput.texcoord);
+	
+	vec3 normColor = texture(normalTexture, PS_StageInput.texcoord).xyz;
+	// decode the normal 
+	vec3 norm = decodeNormal(normColor);
+	
+	// debug
+	vnormal = vec4(normColor, 1.0f);
+	
+	//vnormal = vec4(encodeNormal(normalize(TBN * norm)), 1.0f);
+	
+	// for albedo.
+	
 }

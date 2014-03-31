@@ -151,6 +151,10 @@ namespace Duel
 
 	const DResourceGroup* DResourceGroupManager::createGroup( const DString& name )
 	{
+		if (name == DStringTool::BLANK)
+		{
+			return NULL;
+		}
 		ResourceGroupMap::iterator i;
 		i = mGroupMap.find(name);
 		if (i != mGroupMap.end())
@@ -267,7 +271,7 @@ namespace Duel
 
 	void DResourceGroupManager::declareResource( DResourceDescriptionPtr param )
 	{
-		if (param == NULL)
+		if (param == NULL || param->getGroupName() == DStringTool::BLANK || param->getName() == DStringTool::BLANK)
 		{
 			return;
 		}

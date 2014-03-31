@@ -189,8 +189,8 @@ namespace Duel
 
 
 
-	void DMaterialInstance::addParameter( const DString& name, MaterialParameterType type, const DString& gpuParam, const DString& gpuProgram,
-		uint32 arraySize /*= 1*/, bool openToUser /*= false*/ )
+	void DMaterialInstance::addParameter( const DString& name, const DString& gpuProgram, const DString& gpuParam, 
+		MaterialParameterType type,	uint32 arraySize /*= 1*/, bool openToUser /*= false*/ )
 	{
 		DMaterialParameter param;
 		param.paramType = type;
@@ -265,10 +265,20 @@ namespace Duel
 
 	void DMaterialInstance::setValue( const DString& paramName, TextureConstant tex )
 	{
+		TextureConstantCache texCache;
+		texCache.second = NULL;
 		ParameterMap::iterator i = mParamMap.find(paramName);
 		if (i != mParamMap.end())
 		{
-			mTextureMap[paramName] = tex;
+			DGpuTextureConstant* c = NULL;
+			DResourcePtr texRes = DResourceGroupManager::getSingleton().getResouceManager("Texture")->getResource(tex.first, tex.second);
+			if (texRes != NULL && texRes->isLoaded())
+			{
+				c = texRes->getAs<DTexture>()->getGpuTexutureConstant();	
+				texCache.second = c;
+			}
+			texCache.first = tex;
+			mTextureMap[paramName] = texCache;
 		}
 	}
 
@@ -405,14 +415,16 @@ namespace Duel
 		setValue(name, tmp, 12);
 	}
 	
-	DMaterialInstance::TextureConstant DMaterialInstance::getTextureValue( const DString& paramName )
+	DMaterialInstance::TextureConstantCache DMaterialInstance::getTextureValue( const DString& paramName )
 	{
-		TextureConstantMap::iterator i = mTextureMap.find(paramName);
+		TextureConstantCacheMap::iterator i = mTextureMap.find(paramName);
 		if (i != mTextureMap.end())
 		{
 			return i->second;
 		}
-		return TextureConstant();
+		TextureConstantCache ret;
+		ret.second = NULL;
+		return ret;
 	}
 
 
@@ -427,12 +439,12 @@ namespace Duel
 	DMaterial::DMaterial( const DString& name) :
 		mMtlName(name)
 	{
-
+		mPersistInstance = new DMaterialInstance(this);
 	}
 
 	DMaterial::~DMaterial()
 	{
-
+		delete mPersistInstance;
 	}
 
 	const DString& DMaterial::getMaterialName()
@@ -454,18 +466,18 @@ namespace Duel
 			return;
 		}
 		// first build the param list, for vs and ps.
-		typedef std::vector<DMaterialParameter*>	ParamerterList;
+		typedef std::vector<DMaterialParameter>	ParamerterList;
 		ParamerterList vsParams;
 		ParamerterList psParams;
 		DMaterialInstance::ParameterIterator pI = inst->getParameterIterator();
 		while (pI.hasMoreElements())
 		{
-			DMaterialParameter* param = &(pI.getNext());
-			if (param->targetGpuProgram == so->getVertexProgram()->getName())
+			DMaterialParameter& param = pI.getNext();
+			if (param.targetGpuProgram == so->getVertexProgram()->getName())
 			{
 				vsParams.push_back(param);
 			}
-			else if (param->targetGpuProgram == so->getVertexProgram()->getName())
+			else if (param.targetGpuProgram == so->getPixelProgram()->getName())
 			{
 				psParams.push_back(param);
 			}
@@ -476,25 +488,22 @@ namespace Duel
 		ParamerterList::iterator i, iend = vsParams.end();
 		for (i = vsParams.begin(); i != iend; ++i)
 		{
-			DMaterialParameter* p = *i;
-			if (p->isFloat())
+			DMaterialParameter p = *i;
+			if (p.isFloat())
 			{
-				gpuParam->setValue(p->targetGpuParam, inst->getFloatValuePtr(p->physicalIndex), p->elemSize * p->arraySize);
+				gpuParam->setValue(p.targetGpuParam, inst->getFloatValuePtr(p.physicalIndex), p.elemSize * p.arraySize);
 			}
-			else if (p->isInt())
+			else if (p.isInt())
 			{
-				gpuParam->setValue(p->targetGpuParam, inst->getIntValuePtr(p->physicalIndex), p->elemSize * p->arraySize);
+				gpuParam->setValue(p.targetGpuParam, inst->getIntValuePtr(p.physicalIndex), p.elemSize * p.arraySize);
 			}
-			else if (p->isTexture())
+			else if (p.isTexture())
 			{
-				DGpuTextureConstant* c = NULL;
-				DMaterialInstance::TextureConstant tex = inst->getTextureValue(p->paramName);
-				DResourcePtr texRes = DResourceGroupManager::getSingleton().getResouceManager("Texture")->getResource(tex.first, tex.second);
-				if (texRes != NULL && texRes->isLoaded())
+				DMaterialInstance::TextureConstantCache c = inst->getTextureValue(p.paramName);
+				if (c.second != NULL)
 				{
-					c = texRes->getAs<DTexture>()->getGpuTexutureConstant();
+					gpuParam->setValue(p.targetGpuParam, c.second);
 				}
-				gpuParam->setValue(p->targetGpuParam, c);
 			}
 		}
 
@@ -503,25 +512,22 @@ namespace Duel
 		iend = psParams.end();
 		for (i = psParams.begin(); i != iend; ++i)
 		{
-			DMaterialParameter* p = *i;
-			if (p->isFloat())
+			DMaterialParameter p = *i;
+			if (p.isFloat())
 			{
-				gpuParam->setValue(p->targetGpuParam, inst->getFloatValuePtr(p->physicalIndex), p->elemSize * p->arraySize);
+				gpuParam->setValue(p.targetGpuParam, inst->getFloatValuePtr(p.physicalIndex), p.elemSize * p.arraySize);
 			}
-			else if (p->isInt())
+			else if (p.isInt())
 			{
-				gpuParam->setValue(p->targetGpuParam, inst->getIntValuePtr(p->physicalIndex), p->elemSize * p->arraySize);
+				gpuParam->setValue(p.targetGpuParam, inst->getIntValuePtr(p.physicalIndex), p.elemSize * p.arraySize);
 			}
-			else if (p->isTexture())
+			else if (p.isTexture())
 			{
-				DGpuTextureConstant* c = NULL;
-				DMaterialInstance::TextureConstant tex = inst->getTextureValue(p->paramName);
-				DResourcePtr texRes = DResourceGroupManager::getSingleton().getResouceManager("Texture")->getResource(tex.first, tex.second);
-				if (texRes != NULL && texRes->isLoaded())
+				DMaterialInstance::TextureConstantCache c = inst->getTextureValue(p.paramName);
+				if (c.second != NULL)
 				{
-					c = texRes->getAs<DTexture>()->getGpuTexutureConstant();
+					gpuParam->setValue(p.targetGpuParam, c.second);
 				}
-				gpuParam->setValue(p->targetGpuParam, c);
 			}
 		}
 	}

@@ -283,8 +283,9 @@ namespace Duel
 				}
 				else if (param.isTexture())
 				{
-					DMaterialInstance::TextureConstant tex = mtl->getTextureValue(param.paramName);
-					paramVal = tex.first + "/" + tex.second;
+					DMaterialInstance::TextureConstantCache tex = mtl->getTextureValue(param.paramName);
+					DMaterialInstance::TextureConstant texConst = tex.first;
+					paramVal = texConst.first + "/" + texConst.second;
 				}
 				paramResult.push_back(paramVal);
 				ret.push_back(paramResult);

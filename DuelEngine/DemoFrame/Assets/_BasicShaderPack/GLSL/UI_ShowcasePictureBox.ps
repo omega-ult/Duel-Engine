@@ -14,6 +14,6 @@ layout(location = 0)		out	vec4	color0;
 void main(void)
 {
 	vec4 finalColor = texture(texUnit, PS_StageInput.texcoord);
-	finalColor += vec4(colorOffset.xyz * colorOffset.a, 0.0f);
+	//finalColor += vec4(colorOffset.xyz * colorOffset.a, 0.0f);
 	color0 = finalColor;
 }

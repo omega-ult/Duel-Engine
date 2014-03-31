@@ -36,6 +36,8 @@ namespace Duel
 
 		DAxisAlignedBox		getBoundingBox() const;
 
+		DMaterialInstancePtr	getMaterialInstance();
+
 		// override : DRenderable-----------------------------
 		virtual DRenderLayout* getRenderLayout();
 		// override : DRenderable-----------------------------

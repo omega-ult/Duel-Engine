@@ -18,7 +18,6 @@ namespace Duel
 	public:
 		enum 
 		{
-			RS_ClearGBuffer			= 0xc100,
 			RS_Compose				= 0xc200,
 			RS_ScreenQuadTransfer	= 0xc300
 		};
@@ -38,9 +37,9 @@ namespace Duel
 
 	protected:
 		DGpuTextureConstant*	mInputTex;
-
+		
 		DRenderTechniquePtr	mCopyTexTech;
-		DRenderTechniquePtr	mClearGBufferTech;
+		DRenderTechniquePtr	mGBufferTech;	
 		DRenderTechniquePtr	mComposeTech;
 		DVertexData			mVData;
 		DIndexData			mIData;
