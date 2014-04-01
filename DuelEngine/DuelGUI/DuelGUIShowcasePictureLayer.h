@@ -13,14 +13,14 @@ namespace Duel
 	{
 		DUEL_DECLARE_RTTI(DGSPictureLayer)
 	public:
-		DGSPictureLayer();
+		DGSPictureLayer(DGRenderDelegate* parent);
 		// override : DRenderable-----------------
 		virtual DRenderLayout*	getRenderLayout();
 		virtual DRenderTechnique*	getRenderTechnique(uint32 stage);
 		virtual void	updateCustomGpuParameter(DShaderObject* so);
 		virtual	void	getWorldTransform(DMatrix4& outMat);
 		virtual void	preRender(); // calculate matrix;
-
+		virtual void	postRender();
 
 		void			setRenderSize(const DGSize& size);
 		void			setClipping(DReal clipL, DReal clipR, DReal clipT, DReal clipB);
@@ -37,6 +37,7 @@ namespace Duel
 
 	protected:
 		void			markDirty();
+		DGRenderDelegate*		mParent;
 		// renderable's required data.
 		DRenderLayoutPtr		mRenderLayout;
 		DVertexStreams			mVStream;

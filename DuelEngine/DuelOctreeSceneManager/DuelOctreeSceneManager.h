@@ -19,7 +19,7 @@ namespace Duel
 		~OctreeSceneManager();
 
 		// override : DSceneManger------------------------------
-		void			initialize(DAxisAlignedBox region, DReal granularity);
+		void			initialize(DSceneInstance* owner, DAxisAlignedBox region, DReal granularity);
 		// resize the quadtree
 		virtual void	resize(DAxisAlignedBox region);
 
@@ -80,10 +80,6 @@ namespace Duel
 		// root octree.
 		Octant*			mOctree;
 		// the box containts all the scene.
-		DAxisAlignedBox	mSceneBox;
-		// 
-		DReal			mGranularity;
-		// the maximun depth of octree.
 		uint32			mMaxDepth;
 		// name generater.
 		DNameGenerator	mNameGen;

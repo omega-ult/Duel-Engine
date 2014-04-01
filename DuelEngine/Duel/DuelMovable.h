@@ -41,9 +41,9 @@ namespace Duel
 		// set a new parent for this object. you'd better not call this method directly,
 		// because the parent node may own a pointer to this object, and it still work,
 		// use parent node's method to handle that instead.
-		INTERNAL virtual void	attachToNode(DNode* parent);
+		INTERNAL virtual void	attachToNode(DSceneNode* parent);
 		// movable object is moved through DNode, 
-		virtual	DNode*			getAttachedNode() const { return mAttachedNode; }
+		virtual	DSceneNode*		getAttachedNode() const { return mAttachedNode; }
 
 		virtual	void			setVisible(bool visible) { mbVisible = visible; }
 		virtual	bool			isVisible() const { return mbVisible; }
@@ -71,7 +71,7 @@ namespace Duel
 		// name of the object
 		DString					mName;
 		// the target node this object attached to
-		DNode*					mAttachedNode;
+		DSceneNode*				mAttachedNode;
 
 		// whether the object is visible
 		bool					mbVisible;

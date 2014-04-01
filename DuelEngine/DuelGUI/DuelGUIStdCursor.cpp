@@ -7,12 +7,13 @@
 
 namespace Duel
 {
+	DUEL_IMPLEMENT_RTTI_1(DGStdCursorPictureLayer, DRenderable);
 	DUEL_IMPLEMENT_RTTI_1(DGStdCursorRD, DGRenderDelegate);
 	DUEL_IMPLEMENT_RTTI_1(DGStdCursor, DGCursor);
 
 
-	DGStdCursorRD::DGStdCursorRD( DGCursor* hostCursor ) :
-		mHostCursor(hostCursor)
+	DGStdCursorPictureLayer::DGStdCursorPictureLayer( DGStdCursorRD* parent ) :
+		mParent(parent)
 	{
 
 		mRenderEffect = DResourceGroupManager::getSingleton().
@@ -51,22 +52,27 @@ namespace Duel
 		mRenderLayout->setIndexData(DIndexData(mIndices));
 		mRenderLayout->setVertexData(DVertexData(mVStream, mVDecl));
 		mRenderLayout->seal();
+
 	}
 
-	void DGStdCursorRD::applyToRenderQueue( DRenderQueue* queue, uint32 groupID )
+	DRenderTechnique* DGStdCursorPictureLayer::getRenderTechnique( uint32 stage )
 	{
-		if (mRenderEffect->isLoaded())
-		{
-			queue->addRenderale(groupID, this);
-		}
+		 if ( stage == RS_Forward)
+		 {
+			 if (mRenderEffect->isLoaded())
+			 {
+				 return mRenderEffect->getAs<DRenderEffect>()->getTechnique("UI_StdCursor_t0").get();
+			 }
+		 }
+		 return NULL;
 	}
 
-	DRenderLayout* DGStdCursorRD::getRenderLayout()
+	DRenderLayout* DGStdCursorPictureLayer::getRenderLayout()
 	{
 		return mRenderLayout.get();
 	}
 	
-	void DGStdCursorRD::updateCustomGpuParameter(DShaderObject* so)
+	void DGStdCursorPictureLayer::updateCustomGpuParameter(DShaderObject* so)
 	{
 		if (!so->isValid())
 		{
@@ -77,10 +83,10 @@ namespace Duel
 		DMatrix3 uvTransform = DMatrix3::IDENTITY;
 		DGCursor::CursorAction action;
 		DVector2 posOffset(0.0f, 0.0f);
-		DReal cw = mHostCursor->getSize().getWidth() * 0.5f;
-		DReal ch = mHostCursor->getSize().getHeight() * 0.5f;
+		DReal cw = mParent->getHostCursor()->getSize().getWidth() * 0.5f;
+		DReal ch = mParent->getHostCursor()->getSize().getHeight() * 0.5f;
 		bool makeOffset = false;
-		switch (mHostCursor->getCursorAction())
+		switch (mParent->getHostCursor()->getCursorAction())
 		{
 		case Duel::DGCursor::CA_Idle:
 			action = DGCursor::CA_Idle;
@@ -134,11 +140,11 @@ namespace Duel
 			posOffset.y -= ch;
 		}
 		// 因为标准ui的HotPoint根据不同的动作会有不同的坐标, 因此需要重新计算.
-		DVector2 pos = mHostCursor->getPointInScreen();
+		DVector2 pos = mParent->getHostCursor()->getPointInScreen();
 		pos += posOffset;
-		DGSize winSize((DReal)mHostCursor->getHostWindow()->getWidth(),
-			(DReal)mHostCursor->getHostWindow()->getHeight());
-		vertTransform = DGGUIMathTool::getScreenSpaceTransform(pos, mHostCursor->getSize(), winSize);
+		DGSize winSize((DReal)mParent->getHostCursor()->getHostWindow()->getWidth(),
+			(DReal)mParent->getHostCursor()->getHostWindow()->getHeight());
+		vertTransform = DGGUIMathTool::getScreenSpaceTransform(pos, mParent->getHostCursor()->getSize(), winSize);
 		so->getVertexProgramParameters()->setValue("vertTransform", vertTransform);
 
 		// 处理UV, 反正标准Cursor图里只有12个图标. 直接计算.
@@ -154,21 +160,35 @@ namespace Duel
 
 	}
 
+	void DGStdCursorPictureLayer::preRender()
+	{
+		mParent->preRender();
+	}
+
+	void DGStdCursorPictureLayer::postRender()
+	{
+		mParent->postRender();
+	}
+
+	DGStdCursorRD::DGStdCursorRD( DGCursor* hostCursor ) :
+		mHostCursor(hostCursor)
+	{
+		mPicLayer = new DGStdCursorPictureLayer(this);
+	}
+
+	DGStdCursorRD::~DGStdCursorRD()
+	{
+		delete mPicLayer;
+	}
+
+	void DGStdCursorRD::applyToRenderQueue( DRenderQueue* queue, uint32 groupID )
+	{
+		queue->addRenderale(groupID, mPicLayer);
+	}
+
 	DGWidget* DGStdCursorRD::getParent()
 	{
 		return NULL;
-	}
-
-	DRenderTechnique* DGStdCursorRD::getRenderTechnique( uint32 stage )
-	{
-		 if ( stage == RS_Forward)
-		 {
-			 if (mRenderEffect->isLoaded())
-			 {
-				 return mRenderEffect->getAs<DRenderEffect>()->getTechnique("UI_StdCursor_t0").get();
-			 }
-		 }
-		 return NULL;
 	}
 
 	DGStdCursor::DGStdCursor()
@@ -181,5 +201,6 @@ namespace Duel
 	{
 		delete mStdRenderDelegate;
 	}
+
 
 }

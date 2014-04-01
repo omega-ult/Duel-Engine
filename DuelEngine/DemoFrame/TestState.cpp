@@ -141,6 +141,7 @@ namespace DemoKit
 			sb->setMaterialInstance(mtl);
 		}
 		mSceneInstance->initialize(Duel::DAxisAlignedBox(-10.0f, -10.0f, -10.0f, 10.0f, 10.0f, 10.0f), 5.0f);
+		mSceneInstance->getSceneCamera()->setEyePosition(0.0f,0.0f, -10.0f);
 		mTestEntity = new Duel::DEntity("yooooooo");
 		mTestEntity->loadFromMesh(aTestMesh);
 		Duel::DEntity::SubEntityIterator ei = mTestEntity->getSubEntityIterator();

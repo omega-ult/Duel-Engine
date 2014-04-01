@@ -1,6 +1,7 @@
 //  [12/22/2012 OMEGA] created
 
 #include "DuelCommon.h"
+#include "DuelEntity.h"
 #include "DuelSubEntity.h"
 #include "DuelSubMesh.h"
 #include "DuelSkeleton.h"
@@ -200,6 +201,16 @@ namespace Duel
 	Duel::DMaterialInstancePtr DSubEntity::getMaterialInstance()
 	{
 		return mMtlInst;
+	}
+
+	void DSubEntity::preRender()
+	{
+		mParent->preRender();
+	}
+
+	void DSubEntity::postRender()
+	{
+		mParent->postRender();
 	}
 
 

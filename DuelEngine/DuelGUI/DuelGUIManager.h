@@ -84,17 +84,12 @@ namespace Duel
 		virtual DCamera*		getGUICamera();
 
 		// override : DAutoGpuParameterDelegate---------------------
-		virtual const DMatrix4&	getViewMatrix();
-		virtual const DMatrix4&	getProjectionMatrix();
+		virtual DMatrix4		getViewMatrix();
+		virtual DMatrix4		getProjectionMatrix();
 
 	protected:	
 		// internal method used to fill render queue.
 		virtual void			applyToRenderQueue();
-
-		// thess two function work will be invoked before renderwork shop render the gui group,
-		// this will make sure the renderwork shop using correct render options on the gui layer.
-		INTERNAL virtual void	onStartRenderGUI(DRenderQueue* queue, DRenderGroup* group);
-		INTERNAL virtual void	onFinishRenderGUI(DRenderQueue* queue, DRenderGroup* group);
 
 		DString				mManagerName;
 
@@ -105,8 +100,6 @@ namespace Duel
 		DInputEventQueue*	mCacheEventQueue;
 
 
-		// render options for rendering gui.
-		DRenderWorkshop::RenderOption mRenderOption;
 		// sort widget with z-index ascending, meaning that widget with lower z has
 		// less priority.
 		typedef std::list<DGWidget*>	WidgetList;

@@ -33,7 +33,7 @@ namespace Duel
 		mGlobalHotspot(NULL)
 	{
 
-
+		mRenderQueue = new DRenderQueue();
 		mGUICamera.setPorjectionType(PT_Perspective);
 		mGUICamera.setFOV(DMath::HALF_PI/2);
 		mGUICamera.setNearClipDistance(0.01f);
@@ -45,17 +45,6 @@ namespace Duel
 		mGUICamera.lookAt(0.0f, 0.0f, 0.0f);
 
 		mCacheEventQueue = new DInputEventQueue();
-
-		DRenderWorkshop* workshop = DCore::getSingleton().getRenderWorkshop();
-		if (workshop)
-		{
-			mRenderQueue = workshop->createRenderQueue();
-			workshop->signalGroupStartRender.connect(
-				DBind(&DGUIManager::onStartRenderGUI, this, _1, _2));
-
-			workshop->signalGroupFinishRender.connect(
-				DBind(&DGUIManager::onFinishRenderGUI, this, _1, _2));
-		}
 
 		// TODO: 增加load基本gui资源的函数.
 		DResourcePtr resT = DResourceGroupManager::getSingleton().
@@ -81,20 +70,10 @@ namespace Duel
 		{
 			(*i)->setManager(NULL);
 		}
-
-		DRenderWorkshop* workshop = DCore::getSingleton().getRenderWorkshop();
-		if (workshop)
+		if (mRenderQueue)
 		{
-			workshop->destroyRenderQueue(mRenderQueue);
-			mRenderQueue = NULL;
-
-			workshop->signalGroupStartRender.disconnect(
-				DBind(&DGUIManager::onStartRenderGUI, this, _1, _2));
-
-			workshop->signalGroupFinishRender.disconnect(
-				DBind(&DGUIManager::onFinishRenderGUI, this, _1, _2));
+			delete mRenderQueue;
 		}
-
 		if (mDefaultCursor)
 		{
 			delete mDefaultCursor;
@@ -323,6 +302,7 @@ namespace Duel
 
 	void DGUIManager::applyToRenderQueue()
 	{
+		mRenderQueue->clear();
 		// first we set depth for all widgets.
 		WidgetList::reverse_iterator i, iend = mWidgetList.rend();
 
@@ -337,40 +317,6 @@ namespace Duel
 		}
 	}
 
-	INTERNAL void DGUIManager::onStartRenderGUI(DRenderQueue* queue, DRenderGroup* group)
-	{
-		// todo : set the options for rendering 
-		if (queue != mRenderQueue || group->getGroupID() != RG_GuiFront)
-		{		
-			return;
-		}
-		// set the parameter delegate.
-		mCacheGpuParamDele = DAutoGpuParameter::getSingleton().getCurrentParameterDelegate();
-		DAutoGpuParameter::getSingleton().setParameterDelegate(this);
-
-		// rendering order should not be sort by the camera distance.
-		group->setCameraSortingOrder(CDS_NoSort);
-		group->sort(&mGUICamera);
-		//DCamera* cam
-		DRenderWorkshop* ws = DCore::getSingleton().getRenderWorkshop();
-		ws->pushOption(mRenderOption);
-	}
-
-	INTERNAL void DGUIManager::onFinishRenderGUI(DRenderQueue* queue, DRenderGroup* group)
-	{
-		// todo : set the options for rendering 
-		if (queue != mRenderQueue || group->getGroupID() != RG_GuiFront)
-		{		
-			return;
-		}
-		// pop the options we just pushed.
-		DRenderWorkshop* ws = DCore::getSingleton().getRenderWorkshop();
-		ws->popOption();
-		group->clear();
-		DAutoGpuParameter::getSingleton().setParameterDelegate(mCacheGpuParamDele);
-
-	}
-	
 	void DGUIManager::setInputEventQueue( DInputEventQueue* eventQueue )
 	{
 		mEventQueue = eventQueue;
@@ -526,12 +472,12 @@ namespace Duel
 		mCursorAct = act;
 	}
 
-	const DMatrix4& DGUIManager::getViewMatrix()
+	DMatrix4 DGUIManager::getViewMatrix()
 	{
 		return mGUICamera.getViewMatrix();
 	}
 
-	const DMatrix4& DGUIManager::getProjectionMatrix()
+	DMatrix4 DGUIManager::getProjectionMatrix()
 	{
 		return mGUICamera.getProjectionMatrix();
 	}

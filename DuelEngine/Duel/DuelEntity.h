@@ -38,6 +38,9 @@ namespace Duel
 		void				setRenderGroup(uint32 grp);
 		uint32				getRenderGroup();
 
+		// called by sub-entities, do auto gpu parameter binding.
+		virtual void		preRender();
+		virtual void		postRender();
 		// override : DMovable--------------------------
 		virtual DString		getTypeName() const;
 		// override : DMovable--------------------------
@@ -48,6 +51,7 @@ namespace Duel
 		uint32				mRenderGroupID;
 		// record the mesh data, used for loading animations.
 		DResourcePtr		mMeshTarget;
+
 	};
 
 }

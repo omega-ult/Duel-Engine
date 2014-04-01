@@ -83,6 +83,7 @@ namespace Duel
 					return;
 				}
 			}
+			obj->attachToNode(this);
 			mMovableList.push_back(obj);
 
 		}

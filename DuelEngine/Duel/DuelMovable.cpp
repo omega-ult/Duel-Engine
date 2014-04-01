@@ -10,27 +10,28 @@ namespace Duel
 
 
 	DMovable::DMovable(const DString& name ) :
-		mName(name)
+		mName(name),
+		mAttachedNode(NULL)
 	{
 
 	}
 
 	DMovable::~DMovable()
 	{
-		if (mAttachedNode && DUEL_IS_KIND(DSceneNode, mAttachedNode))
+		if (mAttachedNode)
 		{
-			static_cast<DSceneNode*>(mAttachedNode)->detachMovable(this);
+			mAttachedNode->detachMovable(this);
 			signalDetached(this);
 		}
 		signalDestroyed(this);
 	}
 
-	void DMovable::attachToNode( DNode* parent )
+	void DMovable::attachToNode( DSceneNode* parent )
 	{
 		if (parent == NULL)
 		{
 			signalDetached(this);
-			mAttachedNode = parent;
+			mAttachedNode = NULL;
 		}
 		else if (parent != mAttachedNode)
 		{

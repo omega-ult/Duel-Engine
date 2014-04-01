@@ -56,6 +56,8 @@ namespace Duel
 	//////////////////////////////////////////////////////////////////////////
 	// standard widgets
 	class	DGStdCursor;
+	class	DGStdCursorRD;
+	class	DGStdCursorPictureLayer;
 
 	class	DGStdHotspot;
 	class	DGStdLabel;

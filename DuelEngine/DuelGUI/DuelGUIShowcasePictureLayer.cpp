@@ -5,6 +5,7 @@
 #include "DuelGUISize.h"
 #include "DuelGUIAlignment.h"
 #include "DuelGUIMathTool.h"
+#include "DuelGUIRenderDelegate.h"
 #include "DuelGUIShowcasePictureLayer.h"
 
 namespace Duel
@@ -13,7 +14,8 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(DGSPictureLayer, DRenderable);
 
 
-	DGSPictureLayer::DGSPictureLayer() :
+	DGSPictureLayer::DGSPictureLayer(DGRenderDelegate* parent) :
+		mParent(parent),
 		mRenderSize(0.0f, 0.0f),
 		mClipLeft(0.0f),
 		mClipRight(0.0f),
@@ -143,6 +145,10 @@ namespace Duel
 
 	void DGSPictureLayer::preRender()
 	{
+		if (mParent)
+		{
+			mParent->preRender();
+		}
 		if (!mbDirty)
 		{
 			return;
@@ -213,6 +219,15 @@ namespace Duel
 		}
 	}
 
+	void DGSPictureLayer::postRender()
+	{
+		if (mParent)
+		{
+			mParent->postRender();
+		}
+	}
+
+
 	void DGSPictureLayer::setRenderSize( const DGSize& size )
 	{
 		if (mRenderSize == size)
@@ -256,6 +271,5 @@ namespace Duel
 	{
 		mbDirty = true;
 	}
-
 
 }

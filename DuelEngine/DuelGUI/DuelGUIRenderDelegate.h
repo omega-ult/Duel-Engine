@@ -10,7 +10,7 @@
 namespace Duel
 {
 	// used in renderting gui.
-	class DUELGUI_API DGRenderDelegate
+	class DUELGUI_API DGRenderDelegate : DObject
 	{
 	DUEL_DECLARE_RTTI(DGRenderDelegate)
 	public:
@@ -19,6 +19,8 @@ namespace Duel
 
 		virtual DGWidget*		getParent() = 0;
 
+		virtual void	preRender();
+		virtual void	postRender();
 		// interface for update content.
 		virtual	void	update() {}
 		// used to add renderables.

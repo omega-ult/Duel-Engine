@@ -33,7 +33,7 @@ namespace Duel
 	{
 		if (mSceneMgr)
 		{
-			mSceneMgr->initialize(region, granularity);
+			mSceneMgr->initialize(this, region, granularity);
 		}
 	}
 

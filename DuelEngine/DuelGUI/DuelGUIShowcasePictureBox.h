@@ -39,6 +39,7 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DGSPictureBoxRD)
 	public:
 		DGSPictureBoxRD(DGSPictureBox* targetBox);
+		~DGSPictureBoxRD();
 		// override : DGRenderDelegate------------------
 		virtual void	applyToRenderQueue( DRenderQueue* queue, uint32 groupID );
 		void			update();

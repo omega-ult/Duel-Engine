@@ -11,7 +11,7 @@
 #include "DuelRenderQueue.h"
 #include "DuelSceneQuery.h"
 #include "DuelRenderWorkshop.h"
-
+#include "DuelAutoGpuParameter.h"
 
 namespace Duel
 {
@@ -45,7 +45,7 @@ namespace Duel
 		dependent on the DCamera, which will always call back the DSceneManager
 		which created it to render the scene. 
      */
-	class DUEL_API DSceneManager : public DObject
+	class DUEL_API DSceneManager : public DAutoGpuParameterDelegate
 	{
 	DUEL_DECLARE_RTTI(DSceneManager)
 	public:		
@@ -56,9 +56,9 @@ namespace Duel
 		// the smallest size of an area that can be handled. the granularity affect 
 		// computation cost by the scene manager, a porper value should be tested by the 
 		// client program.
-		virtual void		initialize(DAxisAlignedBox region, DReal granularity) {}
+		virtual void		initialize(DSceneInstance* owner, DAxisAlignedBox region, DReal granularity);
 		// change the size of the scene manager, this method takes affect after initialization;
-		virtual	void		ResizePalette(DAxisAlignedBox region) {}
+		virtual	void		resize(DAxisAlignedBox region) {}
 
 		const DString&		getType() const {  return mType; }
 		const DString&		getName() const { return mName; }
@@ -105,11 +105,7 @@ namespace Duel
 
 		// apply current scene to the render queue.
 		virtual	void		applyToRenderQueue(DRenderQueue* queue, DCamera* cam) { /* leave to sub-class */ }
-
-		// use this method to provide auto gpu parameters for renderables.
-		// such as world matrix for current scene.
-		virtual	void		updateAutoGpuParameterMaps();
-
+		
 		// create/destroy scene queries.
 		virtual	RayQuery*				createRayQuery() = 0;
 		virtual	AxisAlignedBoxQuery*	createAABBQuery() = 0;
@@ -121,6 +117,10 @@ namespace Duel
 		virtual	void		destroyQuery(IntersectionQuery* query) = 0;
 
 
+		// override : DAutoGpuParameterDelegate--------------
+		virtual DMatrix4	getViewMatrix();
+		// override : DAutoGpuParameterDelegate--------------
+		virtual DMatrix4	getProjectionMatrix();
 
 	protected:
 		// sub-class implement these methods
@@ -129,12 +129,20 @@ namespace Duel
 
 		virtual	void		destroySceneNodeImpl(DSceneNode* node) = 0;
 
+
 		// creator of this sceneManager.
 		DSceneManagerFactory*	mCreator;
+		// the owner of this sceneManager;
+		DSceneInstance*		mOwner;
 		// the type of the manager.
 		DString				mType;
 		// name for the ScneneManager.
 		DString				mName;
+
+		// the box containts all the scene.
+		DAxisAlignedBox		mSceneBox;
+		// 
+		DReal				mGranularity;
 
 		// scene node storage
 		SceneNodeMap		mSceneNodeMap;

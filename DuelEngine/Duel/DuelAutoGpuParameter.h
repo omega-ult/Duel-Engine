@@ -40,8 +40,8 @@ namespace Duel
 		DAutoGpuParameterDelegate() {}
 		virtual ~DAutoGpuParameterDelegate() {}
 
-		virtual const DMatrix4&	getViewMatrix() = 0;
-		virtual const DMatrix4&	getProjectionMatrix() = 0;
+		virtual DMatrix4	getViewMatrix() = 0;
+		virtual DMatrix4	getProjectionMatrix() = 0;
 
 	private:
 
@@ -54,8 +54,8 @@ namespace Duel
 		DNullAutoGpuParameterDelegate();
 		virtual ~DNullAutoGpuParameterDelegate();
 
-		const DMatrix4&	getViewMatrix();
-		const DMatrix4&	getProjectionMatrix();
+		DMatrix4	getViewMatrix();
+		DMatrix4	getProjectionMatrix();
 
 	private:
 		DCamera*	mCamera;
@@ -80,8 +80,8 @@ namespace Duel
 		// if specified delegate is NULL, then this object will use mNullDelegate as its delegate.
 		void	setParameterDelegate(DAutoGpuParameterDelegate* dele);
 		DAutoGpuParameterDelegate*	getCurrentParameterDelegate();
-		const DMatrix4&	getViewMatrix();
-		const DMatrix4&	getProjectionMatrix();
+		DMatrix4	getViewMatrix();
+		DMatrix4	getProjectionMatrix();
 
 	protected:
 		DAutoGpuParameterDelegate*		mCurDelegate;

@@ -100,8 +100,14 @@ namespace Duel
 		mTargetBox(targetBox),
 		mbClipped(false)
 	{
-		mPicLayer = new DGSPictureLayer();
+		mPicLayer = new DGSPictureLayer(this);
 	}
+
+	DGSPictureBoxRD::~DGSPictureBoxRD()
+	{
+		delete mPicLayer;
+	}
+
 
 	void DGSPictureBoxRD::applyToRenderQueue( DRenderQueue* queue, uint32 groupID )
 	{
@@ -173,7 +179,6 @@ namespace Duel
 	{
 		return mTargetBox;
 	}
-
 
 	DGSPictureBox::DGSPictureBox( DGWidget* parent ) :
 		DGWidget(parent),

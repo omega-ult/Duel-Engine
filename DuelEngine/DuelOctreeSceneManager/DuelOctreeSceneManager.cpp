@@ -15,8 +15,7 @@ namespace Duel
 	OctreeSceneManager::OctreeSceneManager( DSceneManagerFactory* creator,  const DString& name ) :
 		DSceneManager(creator, "OctreeSceneManager", name),
 		mNameGen("OctreeNode_"),
-		mOctree(NULL),
-		mGranularity(1000.0f)
+		mOctree(NULL)
 	{
 	}
 
@@ -68,8 +67,9 @@ namespace Duel
 		}
 	}
 
-	void OctreeSceneManager::initialize( DAxisAlignedBox region, DReal granularity )
+	void OctreeSceneManager::initialize( DSceneInstance* owner, DAxisAlignedBox region, DReal granularity )
 	{
+		DSceneManager::initialize(owner, region, granularity);
 		if (region.isNull() || region.isInfinite())
 		{
 			return;
@@ -115,7 +115,7 @@ namespace Duel
 			i.moveNext();
 		}
 		shutdownOctree(mOctree);
-		initialize(region, mGranularity);
+		initialize(mOwner, region, mGranularity);
 		std::list<OctreeSceneNode*>::iterator li, iend = tempList.end();
 		for(li = tempList.begin(); li != iend; ++li )
 		{
@@ -126,7 +126,7 @@ namespace Duel
 
 	void OctreeSceneManager::clearScene()
 	{
-		initialize(mSceneBox, mGranularity);
+		initialize(mOwner, mSceneBox, mGranularity);
 	}
 
 	void OctreeSceneManager::updateSceneNode( DSceneNode* node )

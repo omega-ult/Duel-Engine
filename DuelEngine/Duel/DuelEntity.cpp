@@ -2,8 +2,11 @@
 
 #include "DuelCommon.h"
 #include "DuelEntity.h"
+#include "DuelSceneNode.h"
 #include "DuelRenderQueue.h"
 #include "DuelSubEntity.h"
+#include "DuelSceneManager.h"
+#include "DuelAutoGpuParameter.h"
 
 namespace Duel
 {
@@ -98,6 +101,22 @@ namespace Duel
 	void DEntity::removeAllSubEntities()
 	{
 		mSubEntities.clear();
+	}
+
+	void DEntity::preRender()
+	{
+		if (mAttachedNode != NULL)
+		{
+			DAutoGpuParameter::getSingleton().setParameterDelegate(mAttachedNode->getCreator());
+		}
+	}
+
+	void DEntity::postRender()
+	{
+		if (mAttachedNode != NULL)
+		{
+			DAutoGpuParameter::getSingleton().setParameterDelegate(NULL);
+		}
 	}
 
 }

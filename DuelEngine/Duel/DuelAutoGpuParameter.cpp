@@ -9,7 +9,7 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(DAutoGpuParameterDelegate, DObject);
 	DUEL_IMPLEMENT_RTTI_1(DNullAutoGpuParameterDelegate, DAutoGpuParameterDelegate);
 
-	const DMatrix4& DAutoGpuParameter::getViewMatrix()
+	DMatrix4 DAutoGpuParameter::getViewMatrix()
 	{
 		if (mCurDelegate == NULL)
 		{
@@ -18,7 +18,7 @@ namespace Duel
 		return mCurDelegate->getViewMatrix();
 	}
 
-	const DMatrix4& DAutoGpuParameter::getProjectionMatrix() 
+	DMatrix4 DAutoGpuParameter::getProjectionMatrix() 
 	{
 		if (mCurDelegate == NULL)
 		{
@@ -48,12 +48,12 @@ namespace Duel
 		delete mCamera;
 	}
 
-	const DMatrix4& DNullAutoGpuParameterDelegate::getViewMatrix()
+	DMatrix4 DNullAutoGpuParameterDelegate::getViewMatrix()
 	{
 		return mCamera->getViewMatrix();
 	}
 
-	const DMatrix4& DNullAutoGpuParameterDelegate::getProjectionMatrix()
+	DMatrix4 DNullAutoGpuParameterDelegate::getProjectionMatrix()
 	{
 		return mCamera->getProjectionMatrix();
 	}

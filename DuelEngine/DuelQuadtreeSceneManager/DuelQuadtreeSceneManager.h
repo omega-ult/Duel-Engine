@@ -19,7 +19,7 @@ namespace Duel
 		~QuadtreeSceneManager();
 
 		// override : DSceneManger------------------------------
-		void			initialize(DAxisAlignedBox region, DReal granularity);
+		void			initialize(DSceneInstance* owner, DAxisAlignedBox region, DReal granularity);
 		// resize the quadtree
 		virtual void	resize(DAxisAlignedBox region);
 		// get the quadtree
@@ -78,10 +78,6 @@ namespace Duel
 
 		// root quadtree.
 		Quadrant*		mQuadtree;
-		// the box containts all the scene.
-		DAxisAlignedBox	mSceneBox;
-		// 
-		DReal			mGranularity;
 		// the maximun depth of quadtree.
 		uint32			mMaxDepth;
 		// name generater.

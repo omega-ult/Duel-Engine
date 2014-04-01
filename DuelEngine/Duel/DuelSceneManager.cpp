@@ -4,19 +4,21 @@
 #include "DuelAnimation.h"
 #include "DuelCamera.h"
 #include "DuelSceneManager.h"
+#include "DuelSceneInstance.h"
 #include "DuelLightSource.h"
 
 namespace Duel 
 {
-	DUEL_IMPLEMENT_RTTI_1(DSceneManager, DObject);
+	DUEL_IMPLEMENT_RTTI_1(DSceneManager, DAutoGpuParameterDelegate);
 
 	
 	DSceneManager::DSceneManager( DSceneManagerFactory* creator, const DString& type, const DString& name ) :
 		mCreator(creator),
+		mOwner(NULL),
 		mType(type),
-		mName(name)
-// 		,
-// 		mSceneCamera(NULL)
+		mName(name),
+		mSceneBox(BBE_Null),
+		mGranularity(1000.0f)
 	{
 		
 	}
@@ -24,79 +26,15 @@ namespace Duel
 	DSceneManager::~DSceneManager()
 	{
 		clearScene();
-// 		destroyAllCameras();
-// 		destroyAllAnimations();
 	}
-// 
-// 	DCamera* DSceneManager::createCamera( const DString& name )
-// 	{
-// 		CameraMap::iterator i = mCameraMap.find(name);
-// 		DCamera* cam;
-// 		if (i != mCameraMap.end())
-// 		{
-// 			return i->second;
-// 		}
-// 		else
-// 		{
-// 			cam = new DCamera(this, name);
-// 			mSceneCamera = cam;
-// 			mCameraMap[name] = cam;
-// 		}
-// 		return cam;
-// 	}
-// 
-// 	DCamera* DSceneManager::getCamera( const DString& name ) const
-// 	{
-// 		CameraMap::const_iterator i = mCameraMap.find(name);
-// 		if (i != mCameraMap.end())
-// 		{
-// 			return i->second;
-// 		}
-// 		return NULL;
-// 	}
-// 
-// 	bool DSceneManager::hasCamera( const DString& name ) const
-// 	{
-// 		CameraMap::const_iterator i = mCameraMap.find(name);
-// 		if (i != mCameraMap.end())
-// 		{
-// 			return true;
-// 		}
-// 		return false;
-// 	}
-// 
-// 	void DSceneManager::destroyCamera( DCamera* cam )
-// 	{
-// 		if (cam->getCreator() == this)
-// 		{
-// 			CameraMap::iterator i = mCameraMap.find(cam->getName());
-// 			if (i != mCameraMap.end())
-// 			{
-// 				delete i->second;
-// 				mCameraMap.erase(i);
-// 			}
-// 		}
-// 	}
-// 
-// 	void DSceneManager::destroyCamera( const DString& name )
-// 	{
-// 		CameraMap::iterator i = mCameraMap.find(name);
-// 		if (i != mCameraMap.end())
-// 		{
-// 			delete i->second;
-// 			mCameraMap.erase(i);
-// 		}
-// 	}
-// 
-// 	void DSceneManager::destroyAllCameras()
-// 	{
-// 		CameraMap::iterator i, iend = mCameraMap.end();
-// 		for (i = mCameraMap.begin(); i != iend; ++i)
-// 		{
-// 			delete i->second;
-// 		}
-// 		mCameraMap.clear();
-// 	}
+	void DSceneManager::initialize( DSceneInstance* owner, DAxisAlignedBox region, DReal granularity )
+	{
+		assert(owner != NULL);
+		mOwner = owner;
+		mSceneBox = region;
+		mGranularity = granularity;
+	}
+
 
 	DSceneNode* DSceneManager::createSceneNode()
 	{
@@ -137,11 +75,6 @@ namespace Duel
 		}
 		return NULL;
 	}
-// 
-// 	DSceneNode* DSceneManager::getRootSceneNode()
-// 	{
-// 		return NULL;
-// 	}
 
 	bool DSceneManager::hasSceneNode(const DString& name)
 	{
@@ -181,57 +114,6 @@ namespace Duel
 	{
 		// leave to sub-class
 	}
-// 
-// 	DAnimation* DSceneManager::createAnimation( const DString& name )
-// 	{
-// 		AnimationMap::iterator i = mAnimationMap.find(name);
-// 		if (i != mAnimationMap.end())
-// 		{
-// 			return i->second;
-// 		}
-// 		DAnimation* newAnim = new DAnimation(name);
-// 		mAnimationMap[name] = newAnim;
-// 		return newAnim;
-// 	}
-// 
-// 	DAnimation* DSceneManager::getAnimation( const DString& name )
-// 	{
-// 		AnimationMap::iterator i = mAnimationMap.find(name);
-// 		if (i != mAnimationMap.end())
-// 		{
-// 			return i->second;
-// 		}
-// 		return NULL;
-// 	}
-// 
-// 	bool DSceneManager::hasAnimation( const DString& name )
-// 	{
-// 		AnimationMap::iterator i = mAnimationMap.find(name);
-// 		if (i != mAnimationMap.end())
-// 		{
-// 			return true;
-// 		}
-// 		return false;
-// 	}
-// 
-// 	void DSceneManager::destroyAnimation( const DString& name )
-// 	{
-// 		AnimationMap::iterator i = mAnimationMap.find(name);
-// 		if (i != mAnimationMap.end())
-// 		{
-// 			delete i->second;
-// 		}
-// 	}
-// 
-// 	void DSceneManager::destroyAllAnimations()
-// 	{
-// 		AnimationMap::iterator i, iend = mAnimationMap.end();
-// 		for(i = mAnimationMap.begin(); i != iend; ++i)
-// 		{
-// 			delete i->second;
-// 		}
-// 		mAnimationMap.clear();
-// 	}
 
 	DLightSource* DSceneManager::createLight( const DString& name )
 	{
@@ -305,41 +187,7 @@ namespace Duel
 			queue->addLight(i->second);
 		}
 	}
-// 
-// 	void DSceneManager::populateLights( LightMap& outMap )
-// 	{
-// 
-// 	}
 
-// 	Viewport* DSceneManager::getCurrentViewport()
-// 	{
-// 		return NULL;
-// 	}
-
-// 	void DSceneManager::applyToRenderQueue( RenderQueue* queue )
-// 	{
-// 
-// 	}
-
-// 	DSceneNode* DSceneManager::createSceneNodeImpl()
-// 	{
-// 		return NULL;
-// 	}
-// 
-// 	DSceneNode* DSceneManager::createSceneNodeImpl( const DString& name )
-// 	{
-// 		return NULL;
-// 	}
-// 
-// 	void DSceneManager::destroySceneNodeImpl( DSceneNode* node )
-// 	{
-// 		// leave to sub-class.
-// 	}
-
-	void DSceneManager::updateAutoGpuParameterMaps()
-	{
-		// TODO:
-	}
 
 	void DSceneManager::clearScene()
 	{
@@ -358,14 +206,23 @@ namespace Duel
 		}
 	}
 
-// 	void DSceneManager::setViewMatrix( const Matrix4& m )
-// 	{
-// 
-// 	}
-// 
-// 	void DSceneManager::bindGpuProgram( GpuProgram* prog )
-// 	{
-// 
-// 	}
+	DMatrix4 DSceneManager::getViewMatrix()
+	{
+		if (mOwner != NULL && mOwner->getSceneCamera() != NULL)
+		{
+			return mOwner->getSceneCamera()->getViewMatrix();
+		}
+		return DMatrix4::IDENTITY;
+	}
+
+	DMatrix4 DSceneManager::getProjectionMatrix()
+	{
+		if (mOwner != NULL && mOwner->getSceneCamera() != NULL)
+		{
+			return mOwner->getSceneCamera()->getProjectionMatrix();
+		}
+		return DMatrix4::IDENTITY;
+	}
+
 
 }

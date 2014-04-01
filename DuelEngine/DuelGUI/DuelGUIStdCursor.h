@@ -8,26 +8,21 @@
 
 namespace Duel
 {
-
-	// 特化的东西 - - .
-	class DUELGUI_API DGStdCursorRD : public DGRenderDelegate, public DRenderable
+	class DUELGUI_API DGStdCursorPictureLayer : public DRenderable
 	{
-		DUEL_DECLARE_RTTI(DGStdCursorRD)
+		DUEL_DECLARE_RTTI(DGStdCursorPictureLayer)
 	public:
-		DGStdCursorRD(DGCursor* hostCursor);
-		 
-		// override : DGRenderDelegate------------------
-		virtual void	applyToRenderQueue( DRenderQueue* queue, uint32 groupID );
+		DGStdCursorPictureLayer(DGStdCursorRD* parent);
 
 		// override : DRenderable-----------------
+		virtual void	preRender();
 		virtual DRenderLayout*	getRenderLayout();
 		virtual DRenderTechnique*	getRenderTechnique(uint32 stage);
 		virtual void	updateCustomGpuParameter(DShaderObject* so);
-
-		virtual DGWidget* getParent();
+		virtual void	postRender();
 
 	protected:
-		DGCursor*		mHostCursor;
+		DGStdCursorRD*			mParent;
 		// renderable's required data.
 		DRenderLayoutPtr		mRenderLayout;
 		DVertexStreams			mVStream;
@@ -37,7 +32,23 @@ namespace Duel
 		// trans form data used in rendering.
 		DMatrix4				mTransform;
 		DResourcePtr			mTexture;
+	};
+	// 特化的东西 - - .
+	class DUELGUI_API DGStdCursorRD : public DGRenderDelegate
+	{
+		DUEL_DECLARE_RTTI(DGStdCursorRD)
+	public:
+		DGStdCursorRD(DGCursor* hostCursor);
+		~DGStdCursorRD();
+		DGCursor*		getHostCursor() { return mHostCursor; }
+		// override : DGRenderDelegate------------------
+		virtual void	applyToRenderQueue( DRenderQueue* queue, uint32 groupID );
 
+		virtual DGWidget* getParent();
+
+	protected:
+		DGCursor*		mHostCursor;
+		DGStdCursorPictureLayer* mPicLayer;
 	};
 
 	class DUELGUI_API DGStdCursor : public DGCursor

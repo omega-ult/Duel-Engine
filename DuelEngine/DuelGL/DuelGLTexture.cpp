@@ -188,10 +188,10 @@ namespace Duel
 
 	void GLTexture::releaseHardwareResource()
 	{
+		mGpuConstant.reset();
 		mSurfaceList.clear();
 		glDeleteTextures( 1, &mTextureID );
 		mGpuConstant->getAs<GLGpuTextureConstant>()->discard();
-		mGpuConstant.reset();
 	}
 
 

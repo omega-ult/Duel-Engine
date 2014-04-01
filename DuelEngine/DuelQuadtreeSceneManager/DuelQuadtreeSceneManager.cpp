@@ -16,8 +16,7 @@ namespace Duel
 	QuadtreeSceneManager::QuadtreeSceneManager( DSceneManagerFactory* creator,  const DString& name ) :
 		DSceneManager(creator, "QuadtreeSceneManager", name),
 		mNameGen("QuadtreeNode_"),
-		mQuadtree(NULL),
-		mGranularity(1000.0f)
+		mQuadtree(NULL)
 	{
 		assert(DUEL_IS_EXACT_KIND(QuadtreeSceneManagerFactory, creator));
 	}
@@ -70,8 +69,9 @@ namespace Duel
 		}
 	}
 
-	void QuadtreeSceneManager::initialize( DAxisAlignedBox region, DReal granularity )
+	void QuadtreeSceneManager::initialize(DSceneInstance* owner,  DAxisAlignedBox region, DReal granularity )
 	{
+		DSceneManager::initialize(owner, region, granularity);
 		if (region.isNull() || region.isInfinite())
 		{
 			return;
@@ -130,7 +130,7 @@ namespace Duel
 			i.moveNext();
 		}
 		shutdownQuadtree(mQuadtree);
-		initialize(region, mGranularity);
+		initialize(mOwner, region, mGranularity);
 		std::list<QuadtreeSceneNode*>::iterator li, iend = tempList.end();
 		for(li = tempList.begin(); li != iend; ++li )
 		{
@@ -141,7 +141,7 @@ namespace Duel
 
 	void QuadtreeSceneManager::clearScene()
 	{
-		initialize(mSceneBox, mGranularity);
+		initialize(mOwner, mSceneBox, mGranularity);
 	}
 
 	void QuadtreeSceneManager::updateSceneNode( DSceneNode* node )
