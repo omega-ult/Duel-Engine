@@ -99,12 +99,13 @@ namespace Duel
 
 		// TextureConstant, use <groupName, resourcName> as pair.
 		typedef std::pair<DString, DString>	TextureConstant;
+		typedef std::pair<TextureConstant, DGpuTextureConstantPtr>	TextureConstantCache;
 		// aserious of function overloading for setting values.
 		void	setValue(const DString& paramName, TextureConstant tex);
 
 		float*	getFloatValuePtr(uint32 physicalIndex);
 		int32*	getIntValuePtr(uint32 physicalIndex);
-		TextureConstant	getTextureValue(const DString& paramName);
+		TextureConstantCache	getTextureValue(const DString& paramName);
 		
 		// copy the parameter definitions and the values to another instance.
 		// also the postEffect parent will be reset to the current one.
@@ -115,7 +116,7 @@ namespace Duel
 		ParameterMap		mParamMap;
 		typedef	std::vector<float>	FloatConstantList;
 		typedef	std::vector<int32>	IntConstantList;
-		typedef std::map<DString, TextureConstant>	TextureConstantMap;
+		typedef std::map<DString, TextureConstantCache>	TextureConstantMap;
 		FloatConstantList	mFloatConstants;
 		IntConstantList		mIntConstants;
 		TextureConstantMap	mTextureMap;

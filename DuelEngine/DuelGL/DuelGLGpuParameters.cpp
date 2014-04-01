@@ -13,15 +13,25 @@ namespace Duel
 
 	GLGpuTextureConstant::GLGpuTextureConstant( GLenum gltexTarget, GLuint gltexID ) :
 		mTexTarget(gltexTarget),
-		mTexID(gltexID)
+		mTexID(gltexID),
+		mbValid(false)
 	{
-
+		if (mTexID != 0 && (gltexTarget == GL_TEXTURE_1D
+			|| gltexTarget == GL_TEXTURE_2D
+			|| gltexTarget == GL_TEXTURE_3D
+			|| gltexTarget == GL_TEXTURE_CUBE_MAP))
+		{
+			mbValid = true;
+		}
 	}
 
 
 	void GLGpuTextureConstant::setSamplerState( const DTextureSamplerState& val )
 	{
-
+		if (!isValid())
+		{
+			return;
+		}
 		GLenum	addrModeU = GLTranslator::getGLTextureAddressMode(val.addressU);
 		GLenum	addrModeV = GLTranslator::getGLTextureAddressMode(val.addressV);
 		GLenum	addrModeW = GLTranslator::getGLTextureAddressMode(val.addressW);
@@ -96,6 +106,13 @@ namespace Duel
 	GLenum GLGpuTextureConstant::getGLTextureTarget()
 	{
 		return mTexTarget;
+	}
+
+	void GLGpuTextureConstant::discard()
+	{
+		mTexID = 0;
+		mTexTarget = 0;
+		mbValid = false;
 	}
 
 }

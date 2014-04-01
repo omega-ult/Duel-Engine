@@ -134,7 +134,7 @@ namespace Duel
 
 		// TextureConstant, use <groupName, resourcName> as pair.
 		typedef std::pair<DString, DString>	TextureConstant;
-		typedef std::pair<TextureConstant, DGpuTextureConstant*>	TextureConstantCache;
+		typedef std::pair<TextureConstant, DGpuTextureConstantPtr>	TextureConstantCache;
 		// aserious of function overloading for setting values.
 		void	setValue(const DString& paramName, TextureConstant tex);
 

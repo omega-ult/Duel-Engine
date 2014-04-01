@@ -16,10 +16,12 @@ namespace Duel
 		GLGpuTextureConstant(GLenum gltexTarget, GLuint gltexID);
 		GLenum			getGLTextureTarget();
 		GLuint			getTextureID();
-
+		void			discard();
+		virtual	bool	isValid() { return mbValid; }
 		virtual void	setSamplerState( const DTextureSamplerState& state );
 
 	protected:
+		bool			mbValid;
 		GLenum			mTexTarget;
 		GLuint			mTexID;
 	};

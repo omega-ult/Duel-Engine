@@ -179,6 +179,8 @@ namespace Duel
 
 	class	DShaderObject;
 	typedef	SharedPtr<DShaderObject>		DShaderObjectPtr;
+	class	DGpuTextureConstant;
+	typedef	SharedPtr<DGpuTextureConstant>	DGpuTextureConstantPtr;
 	class	DGpuProgram;
 	typedef	SharedPtr<DGpuProgram>			DGpuProgramPtr;
 	class	DRenderEffect;

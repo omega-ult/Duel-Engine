@@ -322,7 +322,7 @@ namespace Duel
 		}
 	}
 
-	void DGpuParameters::setValue( const DString& name, DGpuTextureConstant* val )
+	void DGpuParameters::setValue( const DString& name, DGpuTextureConstantPtr val )
 	{
 		TextureConstantMap::iterator i = mTexConstants.find(name);
 		if (i != mTexConstants.end())
@@ -437,12 +437,12 @@ namespace Duel
 		mAutoParamMask = mask;
 	}
 
-	DGpuTextureConstant* DGpuParameters::getTextureConstant( const DString& name )
+	DGpuTextureConstantPtr DGpuParameters::getTextureConstant( const DString& name )
 	{
 		TextureConstantMap::iterator i = mTexConstants.find(name);
 		if (i == mTexConstants.end())
 		{
-			return NULL;
+			return DGpuTextureConstantPtr();
 		}
 		return i->second;
 	}

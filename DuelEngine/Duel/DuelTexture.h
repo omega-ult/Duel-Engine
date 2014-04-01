@@ -112,7 +112,7 @@ namespace Duel
 
 		// this method is implemented by sub class, used in bingding texture 
 		// resource to the gpu pipeline.
-		virtual DGpuTextureConstant*	getGpuTexutureConstant() = 0;
+		virtual DGpuTextureConstantPtr	getGpuTexutureConstant() = 0;
 
 	protected:
 		// override:DResource------------------------

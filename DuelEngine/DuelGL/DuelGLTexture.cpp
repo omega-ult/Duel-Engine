@@ -13,8 +13,7 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(GLTexture, DTexture);
 	GLTexture::GLTexture( DResourceManager* fathermanager, const DString& name, const DString& groupName ) :
 		DTexture(fathermanager, name, groupName),
-		mTextureID(0),
-		mGpuConstant(0, 0)
+		mTextureID(0)
 	{
 
 	}
@@ -184,14 +183,15 @@ namespace Duel
 		createSufaceList();
 		// Get final internal format
 		mFormat = getBuffer((CubeFace)0,0)->getFormat();
-		mGpuConstant = GLGpuTextureConstant(getGLTextureTarget(), getTextureID());
+		mGpuConstant = DGpuTextureConstantPtr(new GLGpuTextureConstant(getGLTextureTarget(), getTextureID()));
 	}
 
 	void GLTexture::releaseHardwareResource()
 	{
 		mSurfaceList.clear();
 		glDeleteTextures( 1, &mTextureID );
-		mGpuConstant = GLGpuTextureConstant(0, 0);
+		mGpuConstant->getAs<GLGpuTextureConstant>()->discard();
+		mGpuConstant.reset();
 	}
 
 
@@ -221,95 +221,4 @@ namespace Duel
 			}
 		}
 	}
-	/*
-	void GLTexture::setSamplerState( const DTextureSamplerState& val )
-	{
-		GLenum	addrModeU = GLTranslator::getGLTextureAddressMode(val.addressU);
-		GLenum	addrModeV = GLTranslator::getGLTextureAddressMode(val.addressV);
-		GLenum	addrModeW = GLTranslator::getGLTextureAddressMode(val.addressW);
-		GLenum	GLMinFilter;
-		GLenum	GLMagFilter;
-
-		if (val.mipFilter == FO_Linear)
-		{
-			if (val.minFilter == FO_Linear)
-			{
-				GLMinFilter = GL_LINEAR_MIPMAP_LINEAR;
-			}
-			else // min point
-			{
-				GLMinFilter = GL_NEAREST_MIPMAP_LINEAR;
-			}
-		}
-		else // mip point
-		{
-			if (val.minFilter == FO_Linear)
-			{
-				GLMinFilter = GL_LINEAR_MIPMAP_NEAREST;
-			}
-			else // min point
-			{
-				GLMinFilter = GL_NEAREST_MIPMAP_NEAREST;
-			}
-		}
-		if (val.magFilter == FO_Point)
-		{
-			GLMagFilter = GL_NEAREST;
-		}
-		else
-		{
-			GLMagFilter = GL_LINEAR;
-		}
-		// 各向异性过滤..啊.... 假设有一个开了 咱就都算了吧.
-		bool bAnistropic = false;
-		if (val.minFilter == FO_Anistropic || val.magFilter == FO_Anistropic || val.mipFilter == FO_Anistropic)
-		{
-			GLMagFilter = GL_LINEAR;
-			GLMinFilter = GL_LINEAR_MIPMAP_LINEAR;
-			bAnistropic = true;
-		}
-
-		GLuint	texID = getTextureID();
-		GLenum	texType = getGLTextureTarget();
-
-
-		glBindTexture(texType, texID);
-		glTexParameteri(texType, GL_TEXTURE_WRAP_S, addrModeU);
-		glTexParameteri(texType, GL_TEXTURE_WRAP_T, addrModeV);
-		glTexParameteri(texType, GL_TEXTURE_WRAP_R, addrModeW);
-
-		glTexParameterfv(texType, GL_TEXTURE_BORDER_COLOR, val.borderColor.ptr());
-
-		glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GLMagFilter);
-		glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GLMinFilter);
-
-		if (bAnistropic)
-		{
-			glTexParameteri(texType, GL_TEXTURE_MAX_ANISOTROPY_EXT, val.maxAnisotropy);
-		}
-		else
-		{
-			glTexParameteri(texType, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
-		}
-// 		if (glloader_GL_EXT_texture_filter_anisotropic())
-// 		{
-// 	
-		glTexParameterf(texType, GL_TEXTURE_MIN_LOD, val.minLod);
-		glTexParameterf(texType, GL_TEXTURE_MAX_LOD, val.maxLod);
-
-		if (val.samplerComparison != CF_AlwaysFail)
-		{
-			glTexParameteri(texType, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-		}
-		else
-		{
-			glTexParameteri(texType, GL_TEXTURE_COMPARE_MODE, GL_NONE);
-		}
-		glTexParameteri(texType, GL_TEXTURE_COMPARE_FUNC, GLTranslator::getGLCompareFunction(val.samplerComparison));
-		// TODO: MIPMAP_BIAS.
-
-		// unbind.
-		glBindTexture(texType, 0);
-	}
-	*/
 }

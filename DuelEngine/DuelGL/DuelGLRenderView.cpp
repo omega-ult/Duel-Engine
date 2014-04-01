@@ -12,8 +12,7 @@ namespace Duel
 
 	GLRenderColorView::GLRenderColorView( DFrameBuffer* parent, ElementAttachment att, DPixelFormat fmt ) :
 		DRenderColorView(parent, att),
-		mTextureID(0),
-		mGpuConstant(0, 0)
+		mTextureID(0)
 	{
 		mFormat = fmt;
 		// we wouldn't do resize here, parent frame buffer will call resize directly.
@@ -24,6 +23,10 @@ namespace Duel
 		if (mTextureID != 0)
 		{
 			glDeleteTextures(1,&mTextureID);
+		}
+		if (mGpuConstant != NULL)
+		{
+			mGpuConstant->getAs<GLGpuTextureConstant>()->discard();
 		}
 	}
 
@@ -50,18 +53,32 @@ namespace Duel
 		GLFormatGroup fg = GLTranslator::getGLFormat(mFormat);
 		glTexImage2D(GL_TEXTURE_2D, 0, fg.internalFormat, mWidth, mHeight, 0, fg.glFormat, fg.glFormatType, 0);
 		glBindTexture(GL_TEXTURE_2D, 0);
-
-		mGpuConstant = GLGpuTextureConstant(GL_TEXTURE_2D, mTextureID);
+		if (mGpuConstant != NULL)
+		{
+			mGpuConstant->getAs<GLGpuTextureConstant>()->discard();
+		}
+		mGpuConstant = DGpuTextureConstantPtr(new GLGpuTextureConstant(GL_TEXTURE_2D, mTextureID));
 
 	}
-
 
 	GLRenderDepthView::GLRenderDepthView( DFrameBuffer* parent ) :
 		DRenderDepthView(parent),
-		mTextureID(0),
-		mGpuConstant(0, 0)
+		mTextureID(0)
 	{
 	}
+
+	GLRenderDepthView::~GLRenderDepthView()
+	{
+		if (mTextureID != 0)
+		{
+			glDeleteTextures(1,&mTextureID);
+		}
+		if (mGpuConstant != NULL)
+		{
+			mGpuConstant->getAs<GLGpuTextureConstant>()->discard();
+		}
+	}
+
 
 	void GLRenderDepthView::resize( uint32 w, uint32 h )
 	{
@@ -86,8 +103,11 @@ namespace Duel
 		
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, mWidth, mHeight, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, 0);
 		glBindTexture(GL_TEXTURE_2D, 0);
-
-		mGpuConstant = GLGpuTextureConstant(GL_TEXTURE_2D, mTextureID);
+		if (mGpuConstant != NULL)
+		{
+			mGpuConstant->getAs<GLGpuTextureConstant>()->discard();
+		}
+		mGpuConstant = DGpuTextureConstantPtr(new GLGpuTextureConstant(GL_TEXTURE_2D, mTextureID));
 	}
 
 }

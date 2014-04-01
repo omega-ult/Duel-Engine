@@ -24,7 +24,7 @@ namespace Duel
 		DDemoDeferHelper();
 
 		// used in RS_ScreenQuadTransfer
-		void	setInputTexture(DGpuTextureConstant* tex);
+		void	setInputTexture(DGpuTextureConstantPtr tex);
 
 		// override : DRenderable--------------------------
 		virtual DRenderLayout* getRenderLayout();
@@ -36,7 +36,7 @@ namespace Duel
 		void	updateCustomGpuParameter(DShaderObject* so);
 
 	protected:
-		DGpuTextureConstant*	mInputTex;
+		DGpuTextureConstantPtr	mInputTex;
 		
 		DRenderTechniquePtr	mCopyTexTech;
 		DRenderTechniquePtr	mGBufferTech;	

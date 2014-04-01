@@ -14,7 +14,7 @@ namespace Duel
 	DUEL_DECLARE_RTTI(GLRenderColorView)
 	public:
 		GLRenderColorView(DFrameBuffer* parent, ElementAttachment att, DPixelFormat fmt);
-		virtual ~GLRenderColorView();
+		~GLRenderColorView();
 
 
 		// provided for GLFramBuffer.
@@ -22,12 +22,12 @@ namespace Duel
 		GLuint			getTextureID() { return mTextureID; }
 
 		// override : DRenderView--------------------------
-		DGpuTextureConstant*	getGpuTexutureConstant() { return &mGpuConstant; }
+		DGpuTextureConstantPtr	getGpuTexutureConstant() { return mGpuConstant; }
 
 	protected:
 		GLuint	mTextureID;
 
-		GLGpuTextureConstant	mGpuConstant;
+		DGpuTextureConstantPtr	mGpuConstant;
 
 	};
 	
@@ -36,14 +36,15 @@ namespace Duel
 		DUEL_DECLARE_RTTI(GLRenderDepthView)
 	public:
 		GLRenderDepthView(DFrameBuffer* parent);
+		~GLRenderDepthView();
 		virtual void	resize(uint32 w, uint32 h);
 		GLuint	getTextureID() { return mTextureID; }
 		// override : DRenderView--------------------------
-		DGpuTextureConstant*	getGpuTexutureConstant() { return &mGpuConstant; }
+		DGpuTextureConstantPtr	getGpuTexutureConstant() { return mGpuConstant; }
 
 	protected:
 		GLuint	mTextureID;
-		GLGpuTextureConstant	mGpuConstant;
+		DGpuTextureConstantPtr	mGpuConstant;
 
 	};
 

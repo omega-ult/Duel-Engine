@@ -27,7 +27,7 @@ namespace Duel
 		
 
 		// override : DTexture-----------------------------
-		DGpuTextureConstant*	getGpuTexutureConstant() { return &mGpuConstant; }
+		DGpuTextureConstantPtr	getGpuTexutureConstant() { return mGpuConstant; }
 
 //		void			setSamplerState(const DTextureSamplerState& state);
 		INTERNAL GLenum getGLTextureTarget() const;
@@ -43,7 +43,7 @@ namespace Duel
 		virtual void	createSufaceList();
 		GLuint			mTextureID;
 
-		GLGpuTextureConstant	mGpuConstant;
+		DGpuTextureConstantPtr	mGpuConstant;
 
 		// store surfaces 
 		typedef	std::vector<DPixelBufferPtr>	SurfaceList;

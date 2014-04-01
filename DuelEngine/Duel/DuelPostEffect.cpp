@@ -257,10 +257,19 @@ namespace Duel
 
 	void DPostEffectInstance::setValue( const DString& paramName, TextureConstant tex )
 	{
+		TextureConstantCache texCache;
 		ParameterMap::iterator i = mParamMap.find(paramName);
 		if (i != mParamMap.end())
 		{
-			mTextureMap[paramName] = tex;
+			DGpuTextureConstantPtr c;
+			DResourcePtr texRes = DResourceGroupManager::getSingleton().getResouceManager("Texture")->getResource(tex.first, tex.second);
+			if (texRes != NULL && texRes->isLoaded())
+			{
+				c = texRes->getAs<DTexture>()->getGpuTexutureConstant();	
+				texCache.second = c;
+			}
+			texCache.first = tex;
+			mTextureMap[paramName] = texCache;
 		}
 	}
 
@@ -274,14 +283,14 @@ namespace Duel
 		return &mIntConstants[physicalIndex];
 	}
 
-	DPostEffectInstance::TextureConstant DPostEffectInstance::getTextureValue( const DString& paramName )
+	DPostEffectInstance::TextureConstantCache DPostEffectInstance::getTextureValue( const DString& paramName )
 	{
 		TextureConstantMap::iterator i = mTextureMap.find(paramName);
 		if (i != mTextureMap.end())
 		{
 			return i->second;
 		}
-		return TextureConstant();
+		return TextureConstantCache();
 	}
 
 	void DPostEffectInstance::copyTo( DPostEffectInstance* inst )
@@ -358,18 +367,18 @@ namespace Duel
 			return;
 		}
 		// first build the param list, for vs and ps.
-		typedef std::vector<DPostEffectParameter*>	ParamerterList;
+		typedef std::vector<DPostEffectParameter>	ParamerterList;
 		ParamerterList vsParams;
 		ParamerterList psParams;
 		DPostEffectInstance::ParameterIterator pI = inst->getParameterIterator();
 		while (pI.hasMoreElements())
 		{
-			DPostEffectParameter* param = &(pI.getNext());
-			if (param->targetGpuProgram == so->getVertexProgram()->getName())
+			DPostEffectParameter& param = pI.getNext();
+			if (param.targetGpuProgram == so->getVertexProgram()->getName())
 			{
 				vsParams.push_back(param);
 			}
-			else if (param->targetGpuProgram == so->getVertexProgram()->getName())
+			else if (param.targetGpuProgram == so->getVertexProgram()->getName())
 			{
 				psParams.push_back(param);
 			}
@@ -380,25 +389,19 @@ namespace Duel
 		ParamerterList::iterator i, iend = vsParams.end();
 		for (i = vsParams.begin(); i != iend; ++i)
 		{
-			DPostEffectParameter* p = *i;
-			if (p->isFloat())
+			DPostEffectParameter p = *i;
+			if (p.isFloat())
 			{
-				gpuParam->setValue(p->targetGpuParam, inst->getFloatValuePtr(p->physicalIndex), p->elemSize);
+				gpuParam->setValue(p.targetGpuParam, inst->getFloatValuePtr(p.physicalIndex), p.elemSize);
 			}
-			else if (p->isInt())
+			else if (p.isInt())
 			{
-				gpuParam->setValue(p->targetGpuParam, inst->getIntValuePtr(p->physicalIndex), p->elemSize);
+				gpuParam->setValue(p.targetGpuParam, inst->getIntValuePtr(p.physicalIndex), p.elemSize);
 			}
-			else if (p->isTexture())
+			else if (p.isTexture())
 			{
-				DGpuTextureConstant* c = NULL;
-				DPostEffectInstance::TextureConstant tex = inst->getTextureValue(p->paramName);
-				DResourcePtr texRes = DResourceGroupManager::getSingleton().getResouceManager("Texture")->getResource(tex.first, tex.second);
-				if (texRes != NULL && texRes->isLoaded())
-				{
-					c = texRes->getAs<DTexture>()->getGpuTexutureConstant();
-				}
-				gpuParam->setValue(p->targetGpuParam, c);
+				DPostEffectInstance::TextureConstantCache c = inst->getTextureValue(p.paramName);
+				gpuParam->setValue(p.targetGpuParam, c.second);
 			}
 		}
 
@@ -407,25 +410,19 @@ namespace Duel
 		iend = psParams.end();
 		for (i = psParams.begin(); i != iend; ++i)
 		{
-			DPostEffectParameter* p = *i;
-			if (p->isFloat())
+			DPostEffectParameter p = *i;
+			if (p.isFloat())
 			{
-				gpuParam->setValue(p->targetGpuParam, inst->getFloatValuePtr(p->physicalIndex), p->elemSize);
+				gpuParam->setValue(p.targetGpuParam, inst->getFloatValuePtr(p.physicalIndex), p.elemSize);
 			}
-			else if (p->isInt())
+			else if (p.isInt())
 			{
-				gpuParam->setValue(p->targetGpuParam, inst->getIntValuePtr(p->physicalIndex), p->elemSize);
+				gpuParam->setValue(p.targetGpuParam, inst->getIntValuePtr(p.physicalIndex), p.elemSize);
 			}
-			else if (p->isTexture())
+			else if (p.isTexture())
 			{
-				DGpuTextureConstant* c = NULL;
-				DPostEffectInstance::TextureConstant tex = inst->getTextureValue(p->paramName);
-				DResourcePtr texRes = DResourceGroupManager::getSingleton().getResouceManager("Texture")->getResource(tex.first, tex.second);
-				if (texRes != NULL && texRes->isLoaded())
-				{
-					c = texRes->getAs<DTexture>()->getGpuTexutureConstant();
-				}
-				gpuParam->setValue(p->targetGpuParam, c);
+				DPostEffectInstance::TextureConstantCache c = inst->getTextureValue(p.paramName);
+				gpuParam->setValue(p.targetGpuParam, c.second);
 			}
 		}
 	}

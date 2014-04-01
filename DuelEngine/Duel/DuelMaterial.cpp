@@ -266,11 +266,10 @@ namespace Duel
 	void DMaterialInstance::setValue( const DString& paramName, TextureConstant tex )
 	{
 		TextureConstantCache texCache;
-		texCache.second = NULL;
 		ParameterMap::iterator i = mParamMap.find(paramName);
 		if (i != mParamMap.end())
 		{
-			DGpuTextureConstant* c = NULL;
+			DGpuTextureConstantPtr c;
 			DResourcePtr texRes = DResourceGroupManager::getSingleton().getResouceManager("Texture")->getResource(tex.first, tex.second);
 			if (texRes != NULL && texRes->isLoaded())
 			{
@@ -423,7 +422,6 @@ namespace Duel
 			return i->second;
 		}
 		TextureConstantCache ret;
-		ret.second = NULL;
 		return ret;
 	}
 
@@ -500,10 +498,7 @@ namespace Duel
 			else if (p.isTexture())
 			{
 				DMaterialInstance::TextureConstantCache c = inst->getTextureValue(p.paramName);
-				if (c.second != NULL)
-				{
-					gpuParam->setValue(p.targetGpuParam, c.second);
-				}
+				gpuParam->setValue(p.targetGpuParam, c.second);
 			}
 		}
 
@@ -524,10 +519,7 @@ namespace Duel
 			else if (p.isTexture())
 			{
 				DMaterialInstance::TextureConstantCache c = inst->getTextureValue(p.paramName);
-				if (c.second != NULL)
-				{
-					gpuParam->setValue(p.targetGpuParam, c.second);
-				}
+				gpuParam->setValue(p.targetGpuParam, c.second);
 			}
 		}
 	}

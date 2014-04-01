@@ -95,11 +95,15 @@ namespace Duel
 
 	// as we know RenderTargets and Textures are all available set as gpu texture constant,
 	// so they must override this function to provide hardware-related value.
+	// because Texture and other component like RenderView can be released, the constant
+	// they provided may be no longer available, so check the availability before you use 
+	// it.
 	class DUEL_API DGpuTextureConstant : public DObject
 	{
 		DUEL_DECLARE_RTTI(DGpuTextureConstant)
 	public:
-		virtual void			setSamplerState(const DTextureSamplerState& state) = 0;
+		virtual	bool	isValid() = 0;
+		virtual void	setSamplerState(const DTextureSamplerState& state) = 0;
 	};
 
 
@@ -180,7 +184,7 @@ namespace Duel
 		// set a color value constant to the program.
 		virtual void	setValue(const DString& name, const DColor& val);
 		// set a texture value to the program.
-		virtual	void	setValue(const DString& name, DGpuTextureConstant*	val);
+		virtual	void	setValue(const DString& name, DGpuTextureConstantPtr val);
 		// set a sampler value.
 		virtual	void	setValue(const DString& name, const DTextureSamplerState& val);
 
@@ -191,10 +195,10 @@ namespace Duel
 		virtual float*	getFloatValuePtr(uint32 physicalIndex);
 		// get the int value pointer using specified index, used in binding constants in graphic card.
 		virtual int*	getIntValuePtr(uint32 physicalIndex);
-		typedef	std::map<DString, DGpuTextureConstant*>	TextureConstantMap;
+		typedef	std::map<DString, DGpuTextureConstantPtr>	TextureConstantMap;
 		typedef	MapIterator<TextureConstantMap>	TextureConstantIterator;
 		TextureConstantIterator	getTextureConstantIterator() { return TextureConstantIterator(mTexConstants.begin(), mTexConstants.end()); }
-		DGpuTextureConstant*	getTextureConstant(const DString& name);
+		DGpuTextureConstantPtr	getTextureConstant(const DString& name);
 		typedef	std::map<DString, DTextureSamplerState>	SamplerConstantMap;
 		typedef	MapIterator<SamplerConstantMap>	SamplerConstantIterator;
 		SamplerConstantIterator	getSamplerConstantIterator() { return SamplerConstantIterator(mSampConstants.begin(), mSampConstants.end()); }

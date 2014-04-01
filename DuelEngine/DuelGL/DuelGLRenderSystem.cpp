@@ -38,7 +38,7 @@ namespace Duel
 			GLint loc = pi.current()->second.logicalIndex;
 			if (loc != -1)
 			{
-				DGpuTextureConstant* tex;
+				DGpuTextureConstantPtr tex;
 				const GpuConstantDefinition& def = pi.current()->second;
 				switch (def.constType)
 				{
@@ -59,7 +59,7 @@ namespace Duel
 				case GCT_Texture3D:
 				case GCT_TextureCube:
 					tex = params->getTextureConstant(pi.current()->first);
-					if (tex != NULL)
+					if (tex != NULL && tex->isValid())
 					{
 						glActiveTexture(GL_TEXTURE0 + texUnit);
 						texUnit++;
@@ -67,6 +67,10 @@ namespace Duel
 						glTexPtr->setSamplerState(params->getSamplerConstant(pi.current()->first));
 						glBindTexture(glTexPtr->getGLTextureTarget(), glTexPtr->getTextureID());
 						glProgramUniform1ui(glProg, loc, glTexPtr->getTextureID());
+					}
+					else
+					{
+						glProgramUniform1ui(glProg, loc, 0);
 					}
 					break;
 				case GCT_Int1:
@@ -121,7 +125,7 @@ namespace Duel
 			GLint loc = pi.current()->second.logicalIndex;
 			if (loc != -1)
 			{
-				DGpuTextureConstant* tex;
+				DGpuTextureConstantPtr tex;
 				const GpuConstantDefinition& def = pi.current()->second;
 				switch (def.constType)
 				{
@@ -142,7 +146,7 @@ namespace Duel
 				case GCT_Texture3D:
 				case GCT_TextureCube:
 					tex = params->getTextureConstant(pi.current()->first);
-					if (tex != NULL)
+					if (tex != NULL && tex->isValid())
 					{
 						glActiveTexture(GL_TEXTURE0 + texUnit);
 						texUnit++;
@@ -150,6 +154,10 @@ namespace Duel
 						glTexPtr->setSamplerState(params->getSamplerConstant(pi.current()->first));
 						glBindTexture(glTexPtr->getGLTextureTarget(), glTexPtr->getTextureID());
 						glProgramUniform1ui(glProg, loc, glTexPtr->getTextureID());
+					}
+					else
+					{
+						glProgramUniform1ui(glProg, loc, 0);
 					}
 					break;
 				case GCT_Int1:
