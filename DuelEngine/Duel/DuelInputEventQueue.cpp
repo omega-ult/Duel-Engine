@@ -130,6 +130,29 @@ namespace Duel
 		return false;
 	}
 
+	bool DInputEventQueue::popEvent( EventInfo& info, DKeyEvent& ke, DMouseEvent& me, DJoyStickEvent& je )
+	{
+		if (popEventInfo(info))
+		{
+			switch (info.eventType)
+			{
+			case IDT_Mouse:
+				popEvent(me);
+				break;
+			case IDT_Keyboard:
+				popEvent(ke);
+				break;
+			case IDT_JoyStick:
+				popEvent(je);
+				break;
+			default:
+				break;
+			}
+			return true;
+		}
+		return false;
+	}
+
 	void DInputEventQueue::clearEvents()
 	{
 		while (!mEventInforQueue.empty())

@@ -18,7 +18,7 @@ namespace Duel
 		DLambertMaterial();
 
 		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
-
+		void	reload();
 	protected:
 		DRenderTechniquePtr	mDeferGBufferTech;
 		
@@ -31,6 +31,8 @@ namespace Duel
 		DDemoMaterialBank();
 		void	init(DDemoRenderWorkshop* rw);
 		void	shutdown();
+		// provide for debug;
+		void	debugReload();
 	protected:
 		DMaterialPtr	mLambertMtl;
 	};

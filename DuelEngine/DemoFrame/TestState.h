@@ -32,9 +32,12 @@ namespace DemoKit
 		virtual bool	stateChangingFrom( Duel::DAStateBase* preState );
 
 	private:
+		DSignal<void(void)>	signalGKeyPressed;
+		bool	mbTrackCamera;
 		// 时间参数.
 		Duel::uint64	mStartTime;
 		Duel::uint64	mCurTime;
+		Duel::uint64	mLastFrameTime;
 		Duel::DTimer*	mTimer;
 
 		Duel::DRenderWindow*	mRenderWindow;

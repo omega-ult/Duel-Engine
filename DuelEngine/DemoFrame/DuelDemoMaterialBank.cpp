@@ -22,7 +22,6 @@ namespace Duel
 		DMaterial("Lambert")
 	{
 		DResourceGroupManager* rg = DResourceGroupManager::getSingletonPtr();
-		DRenderResourceManager* re = DRenderResourceManager::getSingletonPtr(); 
 		DResourcePtr renderEffect = rg->getResouceManager("RenderEffect")->getResource("_BasicShaderPack", "Demo_MaterialBank.dre");
 		renderEffect->touch();
 		mDeferGBufferTech = renderEffect->getAs<DRenderEffect>()->getTechnique("Lambert_Defer_GBuffer");
@@ -31,6 +30,21 @@ namespace Duel
 		mPersistInstance->addParameter("NormalTexture", "Demo_DeferGBuffer.ps", "normalTexture", MPT_Texture, 1, true);
 		mPersistInstance->addParameter("SpecularTexture", "Demo_DeferGBuffer.ps", "specularTexture", MPT_Texture, 1, true);
 
+	}
+
+	void DLambertMaterial::reload()
+	{
+		DResourceGroupManager* rg = DResourceGroupManager::getSingletonPtr();
+		DResourcePtr renderEffect = rg->getResouceManager("RenderEffect")->getResource("_BasicShaderPack", "Demo_MaterialBank.dre");
+		DRenderTechnique::RenderPassIterator ri = mDeferGBufferTech->getRenderPassIterator();
+		while (ri.hasMoreElements())
+		{
+			DRenderPassPtr p = ri.getNext();
+			p->getVertexProgram()->reload();
+			p->getPixelProgram()->reload();
+		}
+		renderEffect->reload();
+		mDeferGBufferTech = renderEffect->getAs<DRenderEffect>()->getTechnique("Lambert_Defer_GBuffer");
 	}
 
 
@@ -54,6 +68,11 @@ namespace Duel
 			DMaterialManager::getSingleton().unregisterMaterial("Lambert");
 			mLambertMtl.reset();
 		}
+	}
+
+	void DDemoMaterialBank::debugReload()
+	{
+		mLambertMtl->getAs<DLambertMaterial>()->reload();
 	}
 
 }

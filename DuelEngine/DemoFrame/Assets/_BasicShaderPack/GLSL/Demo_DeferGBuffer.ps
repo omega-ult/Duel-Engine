@@ -58,9 +58,9 @@ void main(void)
 	vec3 norm = decodeNormal(normColor);
 	
 	// debug
-	//vnormal = vec4(normColor, 1.0f);
+	vnormal = vec4(norm, 1.0f);
 	
-	vnormal = vec4(encodeNormal(normalize(TBN * norm)), 1.0f);
+	//vnormal = vec4(encodeNormal(normalize(TBN * norm)), 1.0f);
 	
 	// for albedo.
 	

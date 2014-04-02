@@ -47,6 +47,10 @@ namespace Duel
 			uint64			timeStamp;
 		};
 
+		// use this function to reduce codes:
+		// pop an event, if success, this method will return true, at that time, parameter 'info'
+		// and corresponding event with specified type will be filled with correct data.
+		bool		popEvent(EventInfo& info, DKeyEvent& ke, DMouseEvent& me, DJoyStickEvent& je);
 		// pop a event info, use it as a key to retrieve different event.
 		// if the stack is empty, a false will be returned.
 		bool		popEventInfo(EventInfo& info);

@@ -18,7 +18,6 @@ namespace Duel
 		friend class		DRECodec_v1_0;
 		DRenderEffect(DResourceManager* fathermanager, const DString& name, const DString& groupName);
 		const DString&		getName() const { return mName; }
-		void				setName(const DString& name) { mName = name; }
 		
 		// 有很多很多technique
 		typedef	std::vector<DRenderTechniquePtr>		RenderTechniques;

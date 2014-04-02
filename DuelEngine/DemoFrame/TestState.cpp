@@ -14,6 +14,7 @@
 #include "DuelImage2D.h"
 #include "DuelMaterial.h"
 #include "TestState.h"
+#include "DuelDemoMaterialBank.h"
 
 #include "DuelGUIShowcasePictureBox.h"
 #include "DuelGUIAlignment.h"
@@ -29,7 +30,8 @@ namespace DemoKit
 	DUEL_IMPLEMENT_RTTI_1(TestState, DAStateBase);
 
 	TestState::TestState() :
-		Duel::DAStateBase("TestState")
+		Duel::DAStateBase("TestState"),
+		mbTrackCamera(false)
 	{
 		mTimer = new Duel::DTimer();
 		mSceneInstance = new Duel::DSceneInstance("yooooo");
@@ -45,6 +47,8 @@ namespace DemoKit
 	void TestState::initialize()
 	{
 		mTimer->reset();
+		mStartTime = mTimer->getMilliseconds();
+		mLastFrameTime = mStartTime;
 		mRenderWindow = DApplication::getSingleton().getMainWindow();
 		mGManager = DGUISystem::getSingleton().createGUIManager(mRenderWindow);
 		mGManager->setInputEventQueue(DInputManager::getSingleton().registerWindow(mRenderWindow, false));
@@ -117,7 +121,8 @@ namespace DemoKit
 		delete heightImg;
 
 		mTestBox = new Duel::DGSPictureBox(NULL);
-		mTestBox->resize(600.0f,200.0f);
+		mTestBox->resize(600.0f,100.0f);
+		mTestBox->move(-200.0f, 250.0f);
 // 		mTestBox->setTexture(reimuTex);
 //		mTestBox->setVerticalAlignement(Duel::AF_Top);
 		//mTestBox->move(50.0f, 50.0f);
@@ -131,7 +136,7 @@ namespace DemoKit
 		///mTestBox->move(-99.0f, 0.0f);
 		mGManager->addWidget(mTestBox);
 
-
+		
 
 		Duel::DMesh::SubMeshIterator sbi = aTestMesh->getAs<Duel::DMesh>()->getSubMeshIterator();
 		while (sbi.hasMoreElements())
@@ -141,7 +146,9 @@ namespace DemoKit
 			sb->setMaterialInstance(mtl);
 		}
 		mSceneInstance->initialize(Duel::DAxisAlignedBox(-10.0f, -10.0f, -10.0f, 10.0f, 10.0f, 10.0f), 5.0f);
-		mSceneInstance->getSceneCamera()->setEyePosition(0.0f,0.0f, -10.0f);
+		mSceneInstance->getSceneCamera()->setEyePosition(0.0f,5.0f, -10.0f);
+		mSceneInstance->getSceneCamera()->lookAt(0.0f,0.0f, 0.0f);
+
 		mTestEntity = new Duel::DEntity("yooooooo");
 		mTestEntity->loadFromMesh(aTestMesh);
 		Duel::DEntity::SubEntityIterator ei = mTestEntity->getSubEntityIterator();
@@ -155,10 +162,15 @@ namespace DemoKit
 		}
 		Duel::DSceneNode* anode = mSceneInstance->getSceneManager()->createSceneNode("yoooooNode");
 		anode->attachMovable(mTestEntity);
+
+		// debug
+		signalGKeyPressed.connect(DBind(&Duel::DDemoMaterialBank::debugReload, Duel::DDemoMaterialBank::getSingletonPtr()));
 	}
 
 	void TestState::release()
 	{
+		signalGKeyPressed.disconnect(DBind(&Duel::DDemoMaterialBank::debugReload, Duel::DDemoMaterialBank::getSingletonPtr()));
+
 		mSceneInstance->getSceneManager()->clearScene();
 		delete mTestEntity;
 		DGUISystem::getSingleton().destroyGUIManager(mRenderWindow);
@@ -174,6 +186,68 @@ namespace DemoKit
 		mGManager->processInputEvent();
 		// now there is no logic layer. pop all events.
 		Duel::DInputEventQueue* eq = Duel::DInputManager::getSingleton().getEventQueue(mRenderWindow);
+		Duel::DInputEventQueue::EventInfo info;
+		Duel::DMouseEvent me;
+		Duel::DJoyStickEvent je;
+		Duel::DKeyEvent ke;
+		while (eq->popEvent(info, ke, me, je))
+		{
+			if(info.eventType == Duel::IDT_Keyboard)
+			{
+				if (ke.action == Duel::IEA_Pressed)
+				{
+					if (ke.key == Duel::KC_W)
+					{
+						mSceneInstance->getSceneCamera()->moveRelative(Duel::DVector3(0.0f, 0.0f, 0.5f));
+					}
+					if (ke.key == Duel::KC_S)
+					{
+						mSceneInstance->getSceneCamera()->moveRelative(Duel::DVector3(0.0f, 0.0f, -0.5f));
+					}
+					if (ke.key == Duel::KC_A)
+					{
+						mSceneInstance->getSceneCamera()->moveRelative(Duel::DVector3(-0.5f, 0.0f, 0.0f));
+					}
+					if (ke.key == Duel::KC_D)
+					{
+						mSceneInstance->getSceneCamera()->moveRelative(Duel::DVector3(0.5f, 0.0f, 0.0f));
+					}
+					if (ke.key == Duel::KC_Q)
+					{
+						mSceneInstance->getSceneCamera()->moveRelative(Duel::DVector3(0.0f, 0.5f, 0.0f));
+					}
+					if (ke.key == Duel::KC_Z)
+					{
+						mSceneInstance->getSceneCamera()->moveRelative(Duel::DVector3(0.0f, -0.5f, 0.0f));
+					}
+					if (ke.key == Duel::KC_G)
+					{
+						signalGKeyPressed();
+					}
+				}
+			}
+			if (info.eventType == Duel::IDT_Mouse)
+			{
+				if (me.buttonID == Duel::MBID_Right)
+				{
+					if (me.action == Duel::IEA_Pressed)
+					{
+						mbTrackCamera = true;
+					}
+					if (me.action == Duel::IEA_Released)
+					{
+						mbTrackCamera = false;
+					}
+				}
+				if (me.action == Duel::IEA_Moved && mbTrackCamera )
+				{
+					Duel::DReal yawVal = me.state.X.rel * 0.01f;
+					Duel::DReal pitchVal = me.state.Y.rel * 0.01f;
+					mSceneInstance->getSceneCamera()->yaw(yawVal);
+					mSceneInstance->getSceneCamera()->pitch(pitchVal);
+				}
+			}
+		}
 		eq->clearEvents();
 	}
 
@@ -182,19 +256,24 @@ namespace DemoKit
 		mSceneInstance->update(mRenderWindow->getViewport());
 
 		mGManager->update();
+		mCurTime = mTimer->getMilliseconds();
 	}
 
 	void TestState::render()
 	{
-		mRenderWindow->clear(Duel::CBM_Stencil|Duel::CBM_Color|Duel::CBM_Depth, 
-			Duel::DColor(1.0f, 0.5f, 0.0f, 1.0f), 1.0f, 0);
+		if ((mCurTime - mLastFrameTime) > 13 )
+		{
+			mLastFrameTime = mCurTime;
+			mRenderWindow->clear(Duel::CBM_Stencil|Duel::CBM_Color|Duel::CBM_Depth, 
+				Duel::DColor(1.0f, 0.5f, 0.0f, 1.0f), 1.0f, 0);
 		
-		Duel::DRenderWorkshop* ws = Duel::DCore::getSingleton().getRenderWorkshop();
+			Duel::DRenderWorkshop* ws = Duel::DCore::getSingleton().getRenderWorkshop();
 
-		// just write to final window.
-		ws->setPresentTarget(mRenderWindow);
-		ws->render(mSceneInstance->getRenderQueue());
-		ws->render(mGManager->getRenderQueue());
+			// just write to final window.
+			ws->setPresentTarget(mRenderWindow);
+			ws->render(mSceneInstance->getRenderQueue());
+			ws->render(mGManager->getRenderQueue());
+		}
 		
 	}
 

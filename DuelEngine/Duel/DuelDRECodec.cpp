@@ -845,11 +845,6 @@ namespace Duel
 #endif
 				return;
 		}
-		DXMLAttribute*	effectName = effectNode->first_attribute("name");
-		if (effectName)
-		{
-			targetEffect->setName(DXMLTool::readValue(effectName));
-		}
 		DXMLAttribute*	effectAtt = effectNode->first_attribute("version");
 		if (effectAtt == NULL)
 		{

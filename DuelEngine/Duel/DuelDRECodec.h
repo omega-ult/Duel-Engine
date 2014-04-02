@@ -14,7 +14,7 @@ namespace Duel
 	// .dre = duel render effect
 	// the file format is like:
 	// values are case-sensitive
-	//	<RenderEffect name="lalala" version="2.0">
+	//	<RenderEffect version="2.0">
 	//		<Technique name="lalala">
 	//			<Pass name="lalala">
 	//				<RasterizerState>

@@ -43,7 +43,7 @@ namespace Duel
 
 	bool DInputReceiver::keyReleased( const OIS::KeyEvent &arg )
 	{
-		mTargetQueue->pushEvent(DKeyEvent(arg, IEA_Pressed));
+		mTargetQueue->pushEvent(DKeyEvent(arg, IEA_Released));
 // 		if( arg.key == KC_ESCAPE || arg.key == KC_Q )
 // 			appRunning = false;
 // 		std::cout << "KeyReleased {" << ((Keyboard*)(arg.device))->getAsString(arg.key) << "}\n";
