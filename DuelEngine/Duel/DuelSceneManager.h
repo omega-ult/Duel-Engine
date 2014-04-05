@@ -85,23 +85,8 @@ namespace Duel
 		// clear all scene node/lights attached to this manager.
 		virtual	void		clearScene();
 
-		// the only interface for creating/destroying lights. 
-		typedef	std::map<DString, DLightSource*>	LightMap;
-		typedef	MapIterator<LightMap>		LightIterator;
-		LightIterator		getLightIterator() { return LightIterator(mLightMap.begin(), mLightMap.end()); }
-		virtual	DLightSource*		createLight(const DString& name);
-		virtual	DLightSource*		getLight(const DString& name);
-		virtual	size_t		getLightCount() const { return mLightMap.size(); }
-		virtual	bool		hasLight(const DString& name);
-		virtual	void		destroyLight(const DString& name);
-		virtual	void		destroyLight(DLightSource* light);
-		virtual	void		destroyAllLights();
-
 		// populate lights which are affecting current camera's frustum to the render group..
 		virtual void		populateLights(DRenderQueue* queue, DCamera* cam);
-		// populate lights to a target lightmap, whicha are affecting current camera's frustum.
-		INTERNAL virtual void	populateLights(LightMap& outMap, DCamera* cam) { /* leave to sub-class */ }
-
 
 		// apply current scene to the render queue.
 		virtual	void		applyToRenderQueue(DRenderQueue* queue, DCamera* cam) { /* leave to sub-class */ }
@@ -123,6 +108,7 @@ namespace Duel
 		virtual DMatrix4	getProjectionMatrix();
 
 	protected:
+		virtual bool		isAffectedByLight(DLightSource* light, DCamera* cam);
 		// sub-class implement these methods
 		virtual	DSceneNode*	createSceneNodeImpl() = 0;
 		virtual	DSceneNode*	createSceneNodeImpl(const DString& name) = 0;
@@ -146,8 +132,6 @@ namespace Duel
 
 		// scene node storage
 		SceneNodeMap		mSceneNodeMap;
-
-		LightMap			mLightMap;
 
 
 	};

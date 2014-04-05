@@ -20,7 +20,9 @@ namespace Duel
 		mOrientation(DQuaternion::IDENTITY),
 		mEyePosition(DVector3::ZERO),
 		mProjType(PT_Perspective),
-		mFocalLength(0)
+		mFocalLength(1.0f),
+		mOrthoWidth(10.0f),
+		mOrthoHeight(10.0f/1.333333333f)
 	{
 		setFixedYawAxis(true);
 		mFrustumPlanes.reserve(6);
@@ -421,9 +423,9 @@ namespace Duel
 				//	| 	0,		0,	1/(f-n), -n/(f-n) |
 				//	|	0,		0,		0,		1 |
 				// but we are using column-major storage, so traspose it.
-				mProjMatrix[0][0] = 2/mOrthoWidth; mProjMatrix[1][0] = 0.0f; mProjMatrix[2][0] = 0.0f; mProjMatrix[3][0] = 0.0f;
-				mProjMatrix[0][1] = 0.0f; mProjMatrix[1][1] = 2/mOrthoHeight; mProjMatrix[2][1] = 0.0f; mProjMatrix[3][1] = 0.0f;
-				mProjMatrix[0][2] = 0.0f; mProjMatrix[1][2] = 0.0f; mProjMatrix[2][2] = 1/(mFar- mNear); mProjMatrix[3][2] = -mNear/(mFar-mNear);
+				mProjMatrix[0][0] = 2.0f/mOrthoWidth; mProjMatrix[1][0] = 0.0f; mProjMatrix[2][0] = 0.0f; mProjMatrix[3][0] = 0.0f;
+				mProjMatrix[0][1] = 0.0f; mProjMatrix[1][1] = 2.0f/mOrthoHeight; mProjMatrix[2][1] = 0.0f; mProjMatrix[3][1] = 0.0f;
+				mProjMatrix[0][2] = 0.0f; mProjMatrix[1][2] = 0.0f; mProjMatrix[2][2] = 1.0f/(mFar- mNear); mProjMatrix[3][2] = -mNear/(mFar-mNear);
 				mProjMatrix[0][3] = 0.0f; mProjMatrix[1][3] = 0.0f; mProjMatrix[2][3] = 0.0f; mProjMatrix[3][3] = 1.0f;
 
 			}

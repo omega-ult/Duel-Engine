@@ -329,8 +329,94 @@ namespace Duel
 	};
 
 
+	template <typename T, typename IteratorType>
+	class SetIteratorWrapper : public IteratorWrapper<T, IteratorType, typename T::value_type>
+	{
+	public:
+		typedef typename IteratorWrapper<T, IteratorType, typename  T::value_type>::ValueType ValueType ; 
+		typedef typename IteratorWrapper<T, IteratorType, typename  T::value_type>::PointerType PointerType ;
+
+		
+
+		/**
+		* \brief c'tor
+		* 
+		* Constructor that provide a start and end iterator to initialise.
+		* 
+		* @param start start iterator 
+		* @param end end iterator 
+		*/
+		SetIteratorWrapper ( IteratorType start, IteratorType last )
+			: IteratorWrapper<T, IteratorType, typename T::value_type>( start, last ) 
+		{
+		}
 
 
+		/** Returns the next(=current) element in the collection, without advancing to the next. */
+		ValueType peekNext (  ) const
+		{
+			return *(this->mCurrent);
+		}
+
+		/** Returns a pointer to the next(=current) element in the collection, without advancing to the next afterwards. */
+		PointerType peekNextPtr (  )  const
+		{
+			return &(*(this->mCurrent) );
+		}
+
+		/** Returns the next(=current) value element in the collection, and advances to the next. */
+		ValueType getNext (  ) 
+		{
+			return *(this->mCurrent++);
+		}	
+
+	};
+
+	template <typename T>
+	class SetIterator : public SetIteratorWrapper<T,  typename T::iterator>
+	{
+	public:
+		/** Constructor.
+		@remarks
+		Provide a start and end iterator to initialise.
+		*/	
+		SetIterator( typename T::iterator start, typename T::iterator last )
+			: SetIteratorWrapper<T,  typename T::iterator>(start , last )
+		{
+		}
+
+		/** Constructor.
+		@remarks
+		Provide a container to initialise.
+		*/
+		explicit SetIterator( T& c )
+			: SetIteratorWrapper<T,  typename T::iterator> ( c.begin(), c.end() )
+		{
+		}
+	};
+	
+	template <typename T>
+	class ConstSetIterator : public SetIteratorWrapper<T,  typename T::const_iterator>
+	{
+	public:
+		/** Constructor.
+		@remarks
+		Provide a start and end iterator to initialise.
+		*/	
+		ConstSetIterator( typename T::const_iterator start, typename T::const_iterator last )
+			: SetIteratorWrapper<T,  typename T::const_iterator>(start , last )
+		{
+		}
+
+		/** Constructor.
+		@remarks
+		Provide a container to initialise.
+		*/
+		explicit ConstSetIterator( T& c )
+			: SetIteratorWrapper<T,  typename T::const_iterator> ( c.begin(), c.end() )
+		{
+		}
+	};
 
 	/** 
 	* 

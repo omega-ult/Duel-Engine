@@ -49,6 +49,19 @@ namespace Duel
 		void		destroyCamera(const DString& name);
 		void		destroyAllCameras();
 		 
+		// the only interface for creating/destroying lights. 
+		typedef	std::map<DString, DLightSource*>	LightMap;
+		typedef	MapIterator<LightMap>				LightIterator;
+		LightIterator		getLightIterator() { return LightIterator(mLightMap); }
+		DLightSource*		createLight(const DString& name);
+		DLightSource*		getLight(const DString& name);
+		uint32		getLightCount() const { return mLightMap.size(); }
+		bool		hasLight(const DString& name);
+		void		destroyLight(const DString& name);
+		void		destroyLight(DLightSource* light);
+		void		destroyAllLights();
+
+
 		// set a camera for current scene graph, which is used to update render queue and light.
 		void		setSceneCamera(DCamera* cam) { mSceneCamera = cam; }
 		DCamera*		getSceneCamera() const { return mSceneCamera; }
@@ -64,6 +77,7 @@ namespace Duel
 		DSceneManager*	mSceneMgr;
 
 		CameraMap		mCameraMap;
+		LightMap		mLightMap;
 		DCamera*		mSceneCamera;
 
 		DRenderQueue*	mRenderQueue;

@@ -17,6 +17,17 @@ namespace Duel
 		RS_LightMapGeneration,
 		RS_Forward
 	};
+
+	// flag that indicate which type of shadow this renderable prefer using
+	// dynamic shadow will be affected by dynamic light, so does the static shadow,
+	// otherwise using SP_None to disable shadow rendering.
+	enum ShadowProperty
+	{
+		SP_Dynamic,
+		SP_Static,
+		SP_None
+	};
+
 // 
 // 	// defer shading techniques used in defer shading
 // 	enum DeferRenderStage
@@ -45,7 +56,7 @@ namespace Duel
 	{
 	DUEL_DECLARE_RTTI(DRenderable)
 	public:
-		DRenderable() {}
+		DRenderable();
 		virtual ~DRenderable() {}
 
 		// get the render layout of this renderable object.
@@ -83,6 +94,7 @@ namespace Duel
 	protected:
 		const DCamera*			mCacheCamera;
 		DReal					mCacheDepth;
+		ShadowProperty			mShadowProperty;
 	};
 
 }

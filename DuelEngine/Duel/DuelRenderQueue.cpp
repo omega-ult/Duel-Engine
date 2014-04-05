@@ -94,13 +94,13 @@ namespace Duel
 
 	void DRenderQueue::addLight( DLightSource* light )
 	{
-		mLights.push_back(light);
+		mLightSet.insert(light);
 	}
 
 
 	void DRenderQueue::clearAllLights()
 	{
-		mLights.clear();
+		mLightSet.clear();
 	}
 
 	void DRenderQueue::addPostEffect( DPostEffectInstancePtr pe )

@@ -526,3 +526,6 @@ normal mapping 的制作出了点问题, mesh格式需要更改, 只支持一个uvset就好了, 这样就
 但是还是看不到defer渲染的结果, (今天顺便把material的参数绑定的各种bug修复了一遍)
 不过倒是有眉目了(绑定autoparameter的时候使用的是NullDelegate, 也就是说没有使用场景管理器的autoParameter)
 明天再想办法咯.
+
+4.3
+完成viewspace normal的计算.

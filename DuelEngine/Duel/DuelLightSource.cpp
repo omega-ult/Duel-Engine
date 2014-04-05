@@ -12,14 +12,17 @@ namespace Duel
 	DLightSource::DLightSource( const DString& name ) :
 		DMovable(name),
 		mType(LT_Point),
+		mShadowProperty(SP_None),
 		mPos(DVector3::ZERO),
 		mDiffuse(DColor::WHITE),
 		mSpecular(DColor::BLACK),
 		mDirection(DVector3::UNIT_Z),
+		mDirectionalDist(100.0f),
+		mDirectionalRadius(100.0f),
 		mSpotOuter(DDegree(40.0f)),
 		mSpotInner(DDegree(30.0f)),
 		mSpotFalloff(1.0f),
-		mAttenuationRange(100000),
+		mAttenuationRange(100000.0f),
 		mAttenuationConst(1.0f),
 		mAttenuationLinear(0.0f),
 		mAttenuationQuad(0.0f),
@@ -174,6 +177,46 @@ namespace Duel
 	Duel::DString DLightSource::getTypeName() const
 	{
 		return "LightSource";
+	}
+
+	Duel::DReal DLightSource::getDirectionalRadius() const
+	{
+		return mDirectionalRadius;
+	}
+
+	Duel::DReal DLightSource::getDirectionalDistance() const
+	{
+		return mDirectionalDist;
+	}
+
+	void DLightSource::setDirectionalRadius( DReal r )
+	{
+		mDirectionalRadius = r;
+	}
+
+	void DLightSource::setDirectionalDistance( DReal dist )
+	{
+		mDirectionalDist = dist;
+	}
+
+	Duel::ShadowProperty DLightSource::getShadowProperty() const
+	{
+		return mShadowProperty;
+	}
+
+	void DLightSource::setShadowProperty( ShadowProperty sp )
+	{
+		mShadowProperty = sp;
+	}
+
+	Duel::LightType DLightSource::getLightType() const
+	{
+		return mType;
+	}
+
+	void DLightSource::setLightType( LightType type )
+	{
+		mType = type;
 	}
 
 }

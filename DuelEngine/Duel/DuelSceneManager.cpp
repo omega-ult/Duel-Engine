@@ -114,77 +114,20 @@ namespace Duel
 	{
 		// leave to sub-class
 	}
-
-	DLightSource* DSceneManager::createLight( const DString& name )
-	{
-		LightMap::iterator i = mLightMap.find(name);
-		if (i != mLightMap.end())
-		{
-			return i->second;
-		}
-		DLightSource* ret = new DLightSource(name);
-		mLightMap[name] = ret;
-		return ret;
-	}
-
-	DLightSource* DSceneManager::getLight( const DString& name )
-	{
-		LightMap::iterator i = mLightMap.find(name);
-		if (i != mLightMap.end())
-		{
-			return i->second;
-		}
-		return NULL;
-	}
-
-	bool DSceneManager::hasLight( const DString& name )
-	{
-		LightMap::iterator i = mLightMap.find(name);
-		if (i != mLightMap.end())
-		{
-			return true;
-		}
-		return false;
-	}
-
-	void DSceneManager::destroyLight( const DString& name )
-	{
-		LightMap::iterator i = mLightMap.find(name);
-		if (i != mLightMap.end())
-		{
-			delete i->second;
-			mLightMap.erase(i);
-		}
-	}
-
-	void DSceneManager::destroyLight( DLightSource* light )
-	{
-		LightMap::iterator i = mLightMap.find(light->getName());
-		if (i != mLightMap.end())
-		{
-			delete i->second;
-			mLightMap.erase(i);
-		}
-	}
-
-	void DSceneManager::destroyAllLights()
-	{
-		LightMap::iterator i, iend = mLightMap.end();
-		for(i = mLightMap.begin(); i != iend; ++i)
-		{
-			delete i->second;
-		}
-		mLightMap.clear();
-	}
-
+	
 	void DSceneManager::populateLights( DRenderQueue* queue, DCamera* cam )
 	{
-		LightMap tempMap;
-		populateLights(tempMap, cam);
-		LightMap::iterator i, iend = tempMap.end();
-		for (i = tempMap.begin(); i != iend; ++i)
+		if (mOwner != NULL)
 		{
-			queue->addLight(i->second);
+			DSceneInstance::LightIterator li = mOwner->getLightIterator();
+			while (li.hasMoreElements())
+			{
+				DLightSource* l = li.getNext();
+				if (isAffectedByLight(l, cam))
+				{
+					queue->addLight(l);
+				}
+			}
 		}
 	}
 
@@ -192,7 +135,6 @@ namespace Duel
 	void DSceneManager::clearScene()
 	{
 		destroyAllSceneNodes();
-		destroyAllLights();
 	}
 
 	void DSceneManager::updateScene()
@@ -222,6 +164,70 @@ namespace Duel
 			return mOwner->getSceneCamera()->getProjectionMatrix();
 		}
 		return DMatrix4::IDENTITY;
+	}
+
+	bool DSceneManager::isAffectedByLight( DLightSource* light, DCamera* cam )
+	{
+		LightType t = light->getLightType();
+		if (t == LT_Directional || t == LT_Ambient) 
+		{
+			return true;
+		}
+		else if (t == LT_Point)
+		{
+			DReal outRange;
+			light->getAttenuation(&outRange, NULL, NULL, NULL);
+			DSphere lightSphere(light->getPosition(), outRange);
+
+			if (cam->isInside(lightSphere) != DCamera::FTS_Out)
+			{
+				return true;
+			}
+		}
+		else if (t == LT_Spotlight)
+		{
+			// TODO: calculate visiblity.
+			// using common perpendicular line to calcu late intersection between camera
+			// view cone and spot light cone.
+			DReal cpLength;
+			DRay camRay(cam->getEyePosition(), cam->getDirection());
+			DRay spotRay(light->getPosition(), light->getDirection());
+			DRay comPerp = camRay.getCommonPerpendicularTo(spotRay, &cpLength);
+
+			// ensure it is a valid result.
+			if (comPerp.getDirection() != DVector3::ZERO)
+			{
+				// ignore the light if it was in the back side of the camera.
+				DVector3 comPerpToCam = (comPerp.getOrigin() - camRay.getOrigin());
+				DReal coef = comPerpToCam.dotProduct(cam->getDirection());
+				if (coef < 0)
+				{
+					// check whether the camera's origin is in the spotlight's lighting region
+					DVector3 camToSpot = cam->getEyePosition() - spotRay.getOrigin();
+
+					DRadian r = DMath::arcCos(
+						camToSpot.dotProduct(spotRay.getDirection()) / 
+						(camToSpot.length() * spotRay.getDirection().length()));
+					if (r < light->getSpotlightOuterAngle()/2)
+					{
+						return true;
+					}
+				}
+				else
+				{
+					// calculate intersection between two cone
+					DReal camDist = (comPerp.getOrigin()-cam->getEyePosition()).length() * DMath::Tan(cam->getFOV()/2);
+					DReal spotDist = ((comPerp.getOrigin()+comPerp.getDirection()*cpLength)
+						- spotRay.getOrigin()).length() * DMath::Tan(light->getSpotlightOuterAngle()/2);
+					if (camDist + spotDist > cpLength)
+					{
+						return true;
+					}
+				}
+
+			}
+		}
+		return false;
 	}
 
 

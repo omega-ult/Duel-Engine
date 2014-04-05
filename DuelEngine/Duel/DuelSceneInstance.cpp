@@ -2,6 +2,7 @@
 
 #include "DuelCommon.h"
 #include "DuelCore.h"
+#include "DuelLightSource.h"
 #include "DuelSceneInstance.h"
 #include "DuelRenderWorkshop.h"
 #include "DuelTerrainPage.h"
@@ -13,18 +14,22 @@ namespace Duel
 
 	DSceneInstance::DSceneInstance(const DString& name) :
 		mName(name),
-		mSceneCamera(NULL)
+		mSceneCamera(NULL),
+		mRenderQueue(NULL),
+		mTerrain(NULL)
 	{
 		// debug
 		mSceneMgr = DSceneManagerEnumerator::getSingletonPtr()->createSceneManager("QuadtreeSceneManager", mName);
-		mRenderQueue = DCore::getSingleton().getRenderWorkshop()->createRenderQueue();
+		mRenderQueue = new DRenderQueue();
 		mTerrain = new DTerrainPage();
 		mSceneCamera = createCamera(mName + " DefaultCamera");
 	}
 
 	DSceneInstance::~DSceneInstance()
 	{
-		DCore::getSingleton().getRenderWorkshop()->destroyRenderQueue(mRenderQueue);
+		destroyAllLights();
+		destroyAllCameras();
+		delete mRenderQueue;
 		DSceneManagerEnumerator::getSingletonPtr()->destroySceneManager(mSceneMgr);
 		delete mTerrain;
 	}
@@ -55,6 +60,7 @@ namespace Duel
 		mSceneMgr->updateScene();
 		if (mRenderQueue)
 		{
+			mRenderQueue->clearAllLights();
 			applyToRenderQueue(mRenderQueue, vp);
 		}
 	}
@@ -68,7 +74,7 @@ namespace Duel
 		if (mSceneMgr && mSceneCamera)
 		{
 			mSceneMgr->applyToRenderQueue(queue, mSceneCamera);
-			mSceneMgr->populateLights(mRenderQueue, mSceneCamera);
+			mSceneMgr->populateLights(queue, mSceneCamera);
 		}
 	}
 
@@ -159,6 +165,63 @@ namespace Duel
 	DRenderQueue* DSceneInstance::getRenderQueue()
 	{
 		return mRenderQueue;
+	}
+
+	DLightSource* DSceneInstance::createLight( const DString& name )
+	{
+		LightMap::iterator i = mLightMap.find(name);
+		if (i != mLightMap.end())
+		{
+			return i->second;
+		}
+		DLightSource* ret = new DLightSource(name);
+		mLightMap[name] = ret;
+		return ret;
+	}
+
+	DLightSource* DSceneInstance::getLight( const DString& name )
+	{
+		LightMap::iterator i = mLightMap.find(name);
+		if (i != mLightMap.end())
+		{
+			return i->second;
+		}
+		return NULL;
+	}
+
+	bool DSceneInstance::hasLight( const DString& name )
+	{
+		LightMap::iterator i = mLightMap.find(name);
+		if (i != mLightMap.end())
+		{
+			return true;
+		}
+		return false;
+	}
+
+	void DSceneInstance::destroyLight( const DString& name )
+	{
+		LightMap::iterator i = mLightMap.find(name);
+		if (i != mLightMap.end())
+		{
+			delete i->second;
+			mLightMap.erase(i);
+		}
+	}
+
+	void DSceneInstance::destroyLight( DLightSource* light )
+	{
+		LightMap::iterator i, iend = mLightMap.end();
+		for(i = mLightMap.begin(); i != iend; ++i)
+		{
+			delete i->second;
+		}
+		mLightMap.clear();
+	}
+
+	void DSceneInstance::destroyAllLights()
+	{
+
 	}
 
 }

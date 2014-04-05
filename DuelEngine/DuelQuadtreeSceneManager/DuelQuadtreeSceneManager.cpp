@@ -264,74 +264,6 @@ namespace Duel
 		}
 	}
 
-	void QuadtreeSceneManager::populateLights( LightMap& outMap, DCamera* cam )
-	{
-		cam->update();
-		// if the light is directional light or point light, populate it
-		LightMap::iterator i, iend = mLightMap.end();
-		for(i = mLightMap.begin(); i != iend; ++i)
-		{
-			LightType t = i->second->getType();
-			if (t == LT_Directional) 
-			{
-				outMap.insert(std::make_pair(i->first, i->second));
-			}
-			else if (t == LT_Point)
-			{
-				DReal outRange;
-				i->second->getAttenuation(&outRange, NULL, NULL, NULL);
-				DSphere lightSphere(i->second->getPosition(), outRange);
-
-				if (cam->isInside(lightSphere) != DCamera::FTS_Out)
-				{
-					outMap.insert(std::make_pair(i->first, i->second));
-				}
-			}
-			else{
-				// TODO: calculate visiblity.
-				// using common perpendicular line to calcu late intersection between camera
-				// view cone and spot light cone.
-				DReal cpLength;
-				DRay camRay(cam->getEyePosition(), cam->getDirection());
-				DRay spotRay(i->second->getPosition(), i->second->getDirection());
-				DRay comPerp = camRay.getCommonPerpendicularTo(spotRay, &cpLength);
-
-				// ensure it is a valid result.
-				if (comPerp.getDirection() != DVector3::ZERO)
-				{
-					// ignore the light if it was in the back side of the camera.
-					DVector3 comPerpToCam = (comPerp.getOrigin() - camRay.getOrigin());
-					DReal coef = comPerpToCam.dotProduct(cam->getDirection());
-					if (coef < 0)
-					{
-						// check whether the camera's origin is in the spotlight's lighting region
-						DVector3 camToSpot = cam->getEyePosition() - spotRay.getOrigin();
-
-						DRadian r = DMath::arcCos(
-							camToSpot.dotProduct(spotRay.getDirection()) / 
-							(camToSpot.length() * spotRay.getDirection().length()));
-						if (r < i->second->getSpotlightOuterAngle()/2)
-						{
-							outMap.insert(std::make_pair(i->first, i->second));
-						}
-					}
-					else
-					{
-						// calculate intersection between two cone
-						DReal camDist = (comPerp.getOrigin()-cam->getEyePosition()).length() * DMath::Tan(cam->getFOV()/2);
-						DReal spotDist = ((comPerp.getOrigin()+comPerp.getDirection()*cpLength)
-							- spotRay.getOrigin()).length() * DMath::Tan(i->second->getSpotlightOuterAngle()/2);
-						if (camDist + spotDist > cpLength)
-						{
-							outMap.insert(std::make_pair(i->first, i->second));
-						}
-					}
-
-				}
-			}
-		}
-	}
-
 	void QuadtreeSceneManager::applyToRenderQueue( DRenderQueue* queue, DCamera* cam )
 	{
 		cam->update();
@@ -388,7 +320,6 @@ namespace Duel
 		quadrant->removeQuadrant(1, 0);
 		quadrant->removeQuadrant(1, 1);
 	}
-
 	QuadtreeSceneManagerFactory::QuadtreeSceneManagerFactory() :
 		DSceneManagerFactory("QuadtreeSceneManager")
 	{

@@ -45,6 +45,26 @@ namespace Duel
 		DIndexData			mIData;
 		DRenderLayoutPtr	mRenderLayout;
 	};
+	// helper class to render ambient light to light accumulation map.
+	class DDemoAmbientLightHelper
+	{
+
+	};
+	// helper class to render point light to light accumulation map.
+	class DDemoPointLightHelper// : public DRenderable
+	{
+
+	};
+	// helper class to render directional light to light accumulation map.
+	class DDemoDirectionalLightHelper
+	{
+
+	};
+	// helper class to render spot light to light accumulation map.
+	class DDemoSpotLightHelper
+	{
+
+	};
 
 	class DDemoRenderWorkshop : public DRenderWorkshop
 	{
@@ -63,7 +83,7 @@ namespace Duel
 		DeferLayer		getCurrentDeferlayer();
 
 		// override : DRenderWorkshop---------------------
-		void			renderSingleObject(DRenderable* rendObj, DRenderPass* pass);
+		void			renderSingleObject(DFrameBuffer* target, DRenderable* rendObj, DRenderPass* pass);
 
 		// override : DRenderWorkshop-----------------------
 		// if you bind a framebuffer which is in one of our DeferLayer, this is generally

@@ -112,11 +112,15 @@ namespace Duel
 	}
 
 
-	void DDemoRenderWorkshop::renderSingleObject( DRenderable* rendObj, DRenderPass* pass )
+	void DDemoRenderWorkshop::renderSingleObject( DFrameBuffer* target, DRenderable* rendObj, DRenderPass* pass )
 	{
 		DShaderObject* so = pass->getShaderObject().get();
-		if (so != NULL && so->isValid())
+		if (target != NULL && so != NULL && so->isValid())
 		{
+			if(mRenderSystem->getCurrentFrameBuffer() != target)
+			{
+				mRenderSystem->bindFrameBuffer(target);
+			}
 			rendObj->preRender();
 			rendObj->updateAutoGpuParameter(so);
 			rendObj->updateCustomGpuParameter(so);
@@ -143,9 +147,7 @@ namespace Duel
 		{
 			// we can render defer stage.
 			DeferLayer deferlayer = gi->second;
-			mRenderSystem->bindFrameBuffer(deferlayer.GBuffer);
-			// debug;
-			mRenderSystem->bindFrameBuffer(mPresentTarget);
+
 			ri = queue->getRenderGroupIterator();
 			while (ri.hasMoreElements())
 			{
@@ -158,7 +160,7 @@ namespace Duel
 			 		for (i = mRenderList.begin(); i != iend; ++i)
 			 		{
 			 			RenderElement& e = *i;
-			 			renderSingleObject(e.renderable, e.renderPass);
+			 			renderSingleObject(mPresentTarget, e.renderable, e.renderPass);
 			 		}
 			 		signalGroupFinishRender(queue, rgrp);
 			 	}
@@ -186,7 +188,7 @@ namespace Duel
 				for (i = mRenderList.begin(); i != iend; ++i)
 				{
 					RenderElement& e = *i;
-					renderSingleObject(e.renderable, e.renderPass);
+					renderSingleObject(mPresentTarget, e.renderable, e.renderPass);
 				}
 				signalGroupFinishRender(queue, rgrp);
 			}

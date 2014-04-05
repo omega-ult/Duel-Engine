@@ -259,4 +259,12 @@ namespace Duel
 		return mCacheDepth;
 	}
 
+	DRenderable::DRenderable() : 
+		mCacheCamera(NULL), 
+		mCacheDepth(0.0f), 
+		mShadowProperty(SP_None)
+	{
+
+	}
+
 }

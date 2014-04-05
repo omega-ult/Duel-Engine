@@ -31,5 +31,5 @@ void main(void)
 	
 	VS_StageOutput.vpos = Auto_WorldViewMatrix * pos;
 	VS_StageOutput.texcoord = inTexcoord;
-	VS_StageOutput.vnormal = (Auto_WorldViewMatrix * vec4(inNormal, 1.0f)).xyz;
+	VS_StageOutput.vnormal = (Auto_WorldViewMatrix * vec4(inNormal, 0.0f)).xyz;
 }

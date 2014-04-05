@@ -43,9 +43,9 @@ namespace Duel
 		RenderGroupIterator		getRenderGroupIterator() { return RenderGroupIterator(mGroupMap.begin(), mGroupMap.end()); }
 
 		// used to traverse all lights.
-		typedef	std::vector<DLightSource*>		Lights;
-		typedef	VectorIterator<Lights>	LightIterator;
-		LightIterator	getLightIterator() { return LightIterator(mLights.begin(), mLights.end()); }
+		typedef std::set<DLightSource*>			LightSet;
+		typedef SetIterator<LightSet>			LightIterator;
+		LightIterator	getLightIterator() { return LightIterator(mLightSet); }
 		// register a light for rendering current group, only used when shadow is enabled.
 		// dont add duplicated light, it will slow down the speed of rendering.
 		void			addLight(DLightSource* light);
@@ -54,7 +54,6 @@ namespace Duel
 
 		// if specified groupID does not exist, the queue will create one.
 		void			addRenderale(uint32 groupID, DRenderable* rend);
-//		void					addRenderale(uint32 groupID, DRenderable* rend, DRenderTechnique* tech);
 		// create a new render group with specified id, if there was an existed group, it will be returned.
 		DRenderGroup*	createRenderGroup(uint32 groupID);
 		// get the group by ID, a NULL pointer will be returned if specified
@@ -80,10 +79,10 @@ namespace Duel
 	protected:
 		// we rely on std::map because in its inner implement, the sorting is
 		// based on std::less method, and we can only rely on its ascending sorting.
-		RenderGroupMap			mGroupMap;
+		RenderGroupMap		mGroupMap;
 		// DLight storage.
-		Lights			mLights;
-		PostEffectList	mPostEffectList;
+		LightSet			mLightSet;
+		PostEffectList		mPostEffectList;
 	};
 
 }

@@ -5,12 +5,14 @@
 
 #include "DuelCommon.h"
 #include "DuelColor.h"
+#include "DuelRenderable.h"
 #include "DuelMovable.h"
 
 namespace Duel
 {
 	enum LightType
 	{
+		LT_Ambient,
 		LT_Point,
 		LT_Directional,
 		LT_Spotlight
@@ -23,8 +25,11 @@ namespace Duel
 		DLightSource(const DString& name);
 
 		// set/get the light type
-		void			setType(LightType type) { mType = type; }
-		LightType		getType() const { return mType; }
+		void			setLightType(LightType type);
+		LightType		getLightType() const;
+
+		void			setShadowProperty(ShadowProperty sp);
+		ShadowProperty	getShadowProperty() const;
 
 		// set/get position of the light
 		void			setPosition(DReal x, DReal y, DReal z);
@@ -35,7 +40,7 @@ namespace Duel
 		void			setDirection(DReal x, DReal y, DReal z);
 		void			setDirection(const DVector3& dir);
 		const DVector3&	getDirection() const;
-
+		
 		// set/get the color properties of the light.
 		void			setDiffuseColor(DReal red, DReal green, DReal blue);
 		void			setDiffuseColor(const DColor& color);
@@ -44,6 +49,14 @@ namespace Duel
 		void			setSpecularColor(const DColor& color);
 		const DColor&	getSpecularColor() const;
 		
+		// directional light affecting area is a cylinder, the dist of 
+		// the cylinder ranges from the center to the top(or buttom),
+		// the radius is the radius of the top(or bottom) circle.
+		void			setDirectionalDistance(DReal dist);
+		void			setDirectionalRadius(DReal r);
+		DReal			getDirectionalDistance() const;
+		DReal			getDirectionalRadius() const;
+
 		// set/get the attenuation property of the light
 		void			setAttenuation(DReal range, DReal constant, DReal linear, DReal quadratic);
 		// pass a pointer to get specified property, if param is not NULL
@@ -63,19 +76,21 @@ namespace Duel
 		void			setPowerScale(DReal pow);
 		DReal			getPowerScale() const;
 
-		const Planes&	getClipPlanes();
-
 		virtual DString getTypeName() const;
 
 
 	protected:
 		LightType		mType;
+		ShadowProperty	mShadowProperty;
 		bool			mbVisible;
-		DVector3			mPos;
-		DVector3			mDirection;
+		DVector3		mPos;
+		DVector3		mDirection;
 
 		DColor			mDiffuse;
 		DColor			mSpecular;
+
+		DReal			mDirectionalDist;
+		DReal			mDirectionalRadius;
 
 		DReal			mAttenuationRange;
 		DReal			mAttenuationConst;
@@ -86,8 +101,6 @@ namespace Duel
 		DRadian			mSpotOuter;
 		DReal			mSpotFalloff;
 		DReal			mPowerScale;
-
-		Planes			mClipPlanes;
 
 	};
 

@@ -27,3 +27,6 @@ Iterator 的返回, 如果不是const 那么函数就不要写成const的.
 c2146: 最常见的原因是声明的类型未定义, 注意include
 
 模板导出类必须声明 dllexport, 否则会产生LNK2019
+
+画不出东西的时候, 先检查参数有没有绑定好(特别是AutoParameter, 没有绑定相应delegate的情况特别多)
+或者是检查有没有被覆盖掉.

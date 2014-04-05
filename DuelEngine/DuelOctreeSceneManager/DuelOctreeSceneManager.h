@@ -55,9 +55,7 @@ namespace Duel
 		void			destroyQuery(SphereQuery* query);
 		// override : DSceneManager--------------------------
 		void			destroyQuery(IntersectionQuery* query);
-		
-		// override : DSceneManager--------------------------
-		void			populateLights(LightMap& outMap, DCamera* cam);
+	
 		// override : DSceneManager--------------------------
 		void			applyToRenderQueue(DRenderQueue* queue, DCamera* cam);
 
