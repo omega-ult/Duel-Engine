@@ -7,19 +7,35 @@
 
 namespace Duel
 {
-	//------------------------------------
-// 	template<> ArchiveManager* Singleton<ArchiveManager>::msInstance = 0;
-// 	ArchiveManager& ArchiveManager::getSingleton(){
-// 		return *msInstance;
-// 	}
-// 	ArchiveManager* ArchiveManager::getSingletonPtr(){
-// 		return msInstance;
-// 	}
-	//-------------------------------------
-	
-	DArchiveManager::DArchiveManager()
+	DUEL_IMPLEMENT_RTTI_1(DArchiveFactory, DObject);
+	DUEL_IMPLEMENT_RTTI_1(DFolderArchiveFactory, DArchiveFactory);
+		
+	const DString& DArchiveFactory::getArchiveType()
+	{
+		return mArchType;
+	}
+
+	DArchiveFactory::DArchiveFactory( const DString& archType ) : mArchType(archType)
 	{
 
+	}
+
+	DFolderArchiveFactory::DFolderArchiveFactory() :
+		DArchiveFactory("folder")
+	{
+
+	}
+
+	Duel::DArchivePtr DFolderArchiveFactory::getArchive( const DString& name )
+	{
+		return DArchivePtr(new DFolderArchive(name));
+	}
+
+
+	DArchiveManager::DArchiveManager()
+	{
+		mFolderFactory = new DFolderArchiveFactory();
+		registerArchiveFactory(mFolderFactory);
 	}
 
 	DArchiveManager::DArchiveManager( const DString& configFileName )
@@ -27,51 +43,35 @@ namespace Duel
 		registerFromXML(configFileName);
 	}
 
+
 	DArchiveManager::~DArchiveManager()
 	{
-
+		unregisterArchiveFactory(mFolderFactory);
+		delete mFolderFactory;
 	}
-
-
 
 	DArchivePtr DArchiveManager::getArchive( const DString& name )
 	{
 		ArchiveMap::iterator i = mArchives.find(name);
-
+		DArchivePtr ret;
 		if (i == mArchives.end())
 		{
-			DUEL_EXCEPT(DException::ET_ItemNotFound,
-				"Specified archive cannot be found: " + name,
-				"Specified archive cannot be found, check input name, or maybe it does not register yet",
-				"Duel::ArchiveManager::load")
+			return ret;
 		}
-
-		DArchive* retA;
-		switch(i->second)
+		ArchiveFactoryMap::iterator fi = mArchFactoryMap.find(i->second);
+		if (fi != mArchFactoryMap.end())
 		{
-		case AT_Folder:
-			retA = new DFolderArchive(name, AT_Folder);
-			break;
-		case AT_Zip:
-			// lalalalalal~~
-			retA = NULL;
-			break;
-		case AT_WP8AppFolder:
-			retA = new DFolderArchive(name, AT_WP8AppFolder);
-			break;
-		default:
-			DUEL_EXCEPT(DException::ET_ItemNotFound,
-				"DArchive type not match",
-				"Check whether a wrong archive type has been registered",
-				"Duel::ArchiveManager::load")
+			ret = fi->second->getArchive(name);
 		}
-
-		retA->load();
-		return DArchivePtr(retA);
+		if (ret != NULL)
+		{
+			ret->load();
+		}
+		return ret;
 	}
 
 
-	void DArchiveManager::registerArchive( const DString& name, ArchiveType type )
+	void DArchiveManager::registerArchive( const DString& name, const DString& type)
 	{
 		mArchives.insert(std::make_pair(name, type));
 	}
@@ -151,31 +151,36 @@ namespace Duel
 			contentNode = contentNode->next_sibling("Type");
 			type = DXMLTool::readValue(contentNode);
 			DStringTool::toLowerCase(type);
-			if ( type == "folder" )
-			{
-				registerArchive(name, AT_Folder);
-			}
-			else if ( type == "zip" )
-			{
-				// not complete yet.
-			}
-			else if ( type == "appfolder_wp8")
-			{
-				registerArchive(name, AT_WP8AppFolder);
-			}
-			else
-			{
-				// meet an unknown type, 
-#ifdef DUEL_DEBUG
-				DUEL_EXCEPT(DException::ET_ItemNotFound,
-					"Error in parsing XML",
-					"Error in parsing XML, unknown type of " + type,
-					"Duel::ArchiveManager::registerFromXML")
-#endif				
-			}
+			registerArchive(name, type);
 
 			recordNode = recordNode->next_sibling("Archive");
 		}
 	}
+
+	void DArchiveManager::registerArchiveFactory( DArchiveFactory* af )
+	{
+		if ( af == NULL)
+		{
+			return;
+		}
+		if (mArchFactoryMap.find(af->getArchiveType()) == mArchFactoryMap.end())
+		{
+			mArchFactoryMap[af->getArchiveType()] = af;
+		}
+	}
+
+	void DArchiveManager::unregisterArchiveFactory( DArchiveFactory* af )
+	{
+		if ( af == NULL)
+		{
+			return;
+		}
+		ArchiveFactoryMap::iterator i = mArchFactoryMap.find(af->getArchiveType());
+		if (i != mArchFactoryMap.end())
+		{
+			mArchFactoryMap.erase(i);
+		}
+	}
+
 
 }

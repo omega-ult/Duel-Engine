@@ -85,10 +85,6 @@ namespace Duel
 		}
 	}
 
-	DRenderLayout* DGSPictureLayer::getRenderLayout()
-	{
-		return mRenderLayout.get();
-	}
 
 	DRenderTechnique* DGSPictureLayer::getRenderTechnique(uint32 stage)
 	{

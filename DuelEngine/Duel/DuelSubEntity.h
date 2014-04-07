@@ -41,8 +41,6 @@ namespace Duel
 		// override : DRenderable-----------------------------
 		virtual void		preRender();
 		// override : DRenderable-----------------------------
-		virtual DRenderLayout* getRenderLayout();
-		// override : DRenderable-----------------------------
 		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
 		// override : DRenderable-----------------------------
 		virtual void		updateCustomGpuParameter(DShaderObject* so);
@@ -63,7 +61,6 @@ namespace Duel
 
 		DVertexData			mVData;
 		DIndexData			mIData;
-		DRenderLayoutPtr	mRenderLayout;
 	};
 
 }

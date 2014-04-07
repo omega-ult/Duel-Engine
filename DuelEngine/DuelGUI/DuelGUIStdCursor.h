@@ -16,7 +16,6 @@ namespace Duel
 
 		// override : DRenderable-----------------
 		virtual void	preRender();
-		virtual DRenderLayout*	getRenderLayout();
 		virtual DRenderTechnique*	getRenderTechnique(uint32 stage);
 		virtual void	updateCustomGpuParameter(DShaderObject* so);
 		virtual void	postRender();
@@ -24,7 +23,6 @@ namespace Duel
 	protected:
 		DGStdCursorRD*			mParent;
 		// renderable's required data.
-		DRenderLayoutPtr		mRenderLayout;
 		DVertexStreams			mVStream;
 		DIndexBufferPtr			mIndices;
 		DVertexDeclaration		mVDecl;

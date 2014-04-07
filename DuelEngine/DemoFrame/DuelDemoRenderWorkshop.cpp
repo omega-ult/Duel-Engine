@@ -12,77 +12,6 @@ namespace Duel
 {
 
 	DUEL_IMPLEMENT_RTTI_1(DDemoRenderWorkshop, DRenderWorkshop);
-	DUEL_IMPLEMENT_RTTI_1(DDemoDeferHelper, DObject);
-
-
-	DDemoDeferHelper::DDemoDeferHelper()
-	{
-		DResourceGroupManager* rg = DResourceGroupManager::getSingletonPtr();
-		DRenderResourceManager* re = DRenderResourceManager::getSingletonPtr(); 
-		DResourcePtr renderEffect = rg->getResouceManager("RenderEffect")->getResource("_BasicShaderPack", "Demo_RenderWorkshop.dre");
-		renderEffect->touch();
-		mCopyTexTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_CopyTexture");
-		mComposeTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_DeferCompose");
-		mGBufferTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_DeferGBuffer");
-		mRenderLayout = re->createRenderLayout();
-		DVertexDeclaration vd;
-		mRenderLayout->setTopologyType(PT_TriangleList);
-		vd.addElement(0, 0, VET_Float3, VES_Position);
-		vd.addElement(0, sizeof(DReal)*3, VET_Float2, VES_TexCoord);
-		vd.sort();
-		size_t vertSize = vd.getVertexSize(0);
-		DVertexBufferPtr vb = re->createVetexBuffer(vertSize, 4, HBU_Static, false);
-		// a quad.
-		float data[] =
-		{ 
-			/*vert*/ -1.0f, 1.0f, 0.0f, /*uv*/ 0.0f, 0.0f,
-			/*vert*/ 1.0f,  1.0f, 0.0f, /*uv*/ 1.0f, 0.0f,
-			/*vert*/ 1.0f, -1.0f, 0.0f, /*uv*/ 1.0f, 1.0f,
-			/*vert*/ -1.0f,-1.0f, 0.0f, /*uv*/ 0.0f, 1.0f
-		};
-		vb->writeData(0, vb->getSize(), data, true);
-		DIndexBufferPtr vi = re->createIndexBuffer(IT_16Bit, 6, HBU_Static, false);
-		int16 idata[] =
-		{
-			0, 3, 2,  0, 2, 1
-		};
-		vi->writeData(0, vi->getSize(), idata, true);
-		DVertexStreams vs;
-		vs.setStream(0, vb);
-		mRenderLayout->setIndexData(DIndexData(vi));
-		mRenderLayout->setVertexData(DVertexData(vs, vd));
-		mRenderLayout->seal();
-	}
-	DRenderLayout* DDemoDeferHelper::getRenderLayout()
-	{
-		return mRenderLayout.get();
-	}
-
-	DRenderTechnique* DDemoDeferHelper::getRenderTechnique( uint32 stage )
-	{
-		if (stage == RS_ScreenQuadTransfer)
-		{
-			return mCopyTexTech.get();
-		}
-		return NULL;
-	}
-
-	void DDemoDeferHelper::updateCustomGpuParameter( DShaderObject* so )
-	{
-		if (so->getPassName() == "DemoRenderWorkshop_ClearGBuffer")
-		{
-
-		}
-		else if (so->getPassName() == "DemoRenderWorkshop_CopyTexture")
-		{
-			so->getVertexProgramParameters()->setValue("targetTexture", mInputTex);
-		}
-		else if (so->getPassName() == "DemoRenderWorkshop_Compose")
-		{
-
-		}
-	}
-
 
 	DDemoRenderWorkshop::DDemoRenderWorkshop()
 	{
@@ -267,5 +196,7 @@ namespace Duel
 			lay.GBuffer = NULL;
 		}
 	}
+
+
 
 }

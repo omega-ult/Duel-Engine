@@ -62,6 +62,9 @@
     <ClCompile Include="DuelStateMachine.cpp">
       <Filter>ApplicationLayer\States\src</Filter>
     </ClCompile>
+    <ClCompile Include="DuelDemoDeferRenderHelper.cpp">
+      <Filter>RenderPlugin\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DuelApplication.h">
@@ -81,6 +84,9 @@
     </ClInclude>
     <ClInclude Include="DuelStateMachine.h">
       <Filter>ApplicationLayer\States\include</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelDemoDeferRenderHelper.h">
+      <Filter>RenderPlugin\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

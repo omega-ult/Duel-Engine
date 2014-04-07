@@ -44,8 +44,10 @@ namespace Duel
 	// resources
 	class	DArchive;
 	typedef	SharedPtr<DArchive>				DArchivePtr;
+	class	DArchiveManager;
+	class	DArchiveFactory;
 	class	DFolderArchive;
-	typedef	SharedPtr<DFolderArchive>		DFolderArchivePtr;
+	class	DFolderArchiveFactory;
 
 	class	DResource;
 	typedef	SharedPtr<DResource>			DResourcePtr;

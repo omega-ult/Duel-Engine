@@ -134,16 +134,12 @@ namespace Duel
 		virtual DPostEffectInstancePtr	createInstance();
 
 		void	updateGpuParameter(DPostEffectInstance* inst, DShaderObject* so);
-		// override : DRenderable----------------------
-		// the default method will create a screen-size quad.
-		virtual DRenderLayout*	getRenderLayout();
 
 		// virtual DRenderTechnique* getRenderTechnique() // leave it to sub class.
 
 	protected:
 		DString				mName;
 		DPostEffectInstance*	mPersistInstance;
-		DRenderLayoutPtr	mRenderLayout;
 	};
 }
 

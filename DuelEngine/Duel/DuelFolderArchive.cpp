@@ -23,7 +23,8 @@ using namespace Windows::ApplicationModel;
 namespace Duel
 {
 
-	DUEL_IMPLEMENT_RTTI_1(DFolderArchive, DArchive)
+	DUEL_IMPLEMENT_RTTI_1(DFolderArchive, DArchive);
+
 	//-----------------------------------------------------------------------
 	// utility function
 	static bool is_reserved_dir (const char *fn)
@@ -202,9 +203,9 @@ namespace Duel
 
 
 	
-	DFolderArchive::DFolderArchive( const DString& name, ArchiveType type ) :
-		mIgnoreHidden(false),
-		DArchive(name, type)
+	DFolderArchive::DFolderArchive( const DString& name) :
+		DArchive(name, "folder"),
+		mIgnoreHidden(false)
 	{
 	}
 
@@ -218,36 +219,36 @@ namespace Duel
 		DUEL_LOCK_AUTO_MUTEX
 
 		DWString	tmp;
-		if(mType == AT_WP8AppFolder)
-		{
-#ifdef DUEL_PLATFORM_WINDOWS_8
-			Windows::Storage::StorageFolder^ systemLocation = Package::Current->InstalledLocation;
-			Platform::String^ systemLocationPath = Platform::String::Concat(systemLocation->Path, "\\");
-
-			// - -Äã¶®µÄ......
-			DStringTool::convert(tmp, mName);
-			Platform::String^ fn = ref new Platform::String(tmp.c_str(), tmp.length());
-			fn = Platform::String::Concat(systemLocationPath, fn);
-			tmp = DWString(fn->Begin(), fn->End());
-			DStringTool::convert(mName,tmp);
-#endif
-
-		}
-		else
-		{
-#ifdef DUEL_PLATFORM_WINDOWS_PHONE_8
-			Windows::Storage::StorageFolder^ localFolder = ApplicationData::Current->LocalFolder;
-			Platform::String^ localFolderPath = Platform::String::Concat(localFolder->Path, "\\");
-
-			// - -Äã¶®µÄ......
-			DStringTool::convert(tmp, mName);
-			Platform::String^ fn = ref new Platform::String(tmp.c_str(), tmp.length());
-			fn = Platform::String::Concat(localFolderPath, fn);
-			tmp = DWString(fn->Begin(), fn->End());
-			DStringTool::convert(mName,tmp);
-#endif // DUEL_PLATFORM_WINDOWS_PHONE_8
-
-		}
+// 		if(mType == AT_WP8AppFolder)
+// 		{
+// #ifdef DUEL_PLATFORM_WINDOWS_8
+// 			Windows::Storage::StorageFolder^ systemLocation = Package::Current->InstalledLocation;
+// 			Platform::String^ systemLocationPath = Platform::String::Concat(systemLocation->Path, "\\");
+// 
+// 			// - -Äã¶®µÄ......
+// 			DStringTool::convert(tmp, mName);
+// 			Platform::String^ fn = ref new Platform::String(tmp.c_str(), tmp.length());
+// 			fn = Platform::String::Concat(systemLocationPath, fn);
+// 			tmp = DWString(fn->Begin(), fn->End());
+// 			DStringTool::convert(mName,tmp);
+// #endif
+// 
+// 	}
+// 		else
+// 		{
+// #ifdef DUEL_PLATFORM_WINDOWS_PHONE_8
+// 			Windows::Storage::StorageFolder^ localFolder = ApplicationData::Current->LocalFolder;
+// 			Platform::String^ localFolderPath = Platform::String::Concat(localFolder->Path, "\\");
+// 
+// 			// - -Äã¶®µÄ......
+// 			DStringTool::convert(tmp, mName);
+// 			Platform::String^ fn = ref new Platform::String(tmp.c_str(), tmp.length());
+// 			fn = Platform::String::Concat(localFolderPath, fn);
+// 			tmp = DWString(fn->Begin(), fn->End());
+// 			DStringTool::convert(mName,tmp);
+// #endif // DUEL_PLATFORM_WINDOWS_PHONE_8
+// 
+// 		}
 
 
 			
@@ -255,11 +256,11 @@ namespace Duel
 		std::ofstream	test(writeTest.c_str());
 		if(test.fail())
 		{
-			mReadOnly = true;
+			mbReadOnly = true;
 		}
 		else
 		{
-			mReadOnly = false;
+			mbReadOnly = false;
 			test.close();
 			::remove(writeTest.c_str());
 		}
@@ -283,7 +284,7 @@ namespace Duel
 		}
 			
 		// if we can open on a ios::out mode
-		if(!readOnly && !mReadOnly)
+		if(!readOnly && !mbReadOnly)
 		{
 			retFS = new DFileStream(fullName, DA_Read);
 		}
@@ -297,7 +298,7 @@ namespace Duel
 
 	DDataStreamPtr DFolderArchive::create( const DString fileName )
 	{
-		if(mReadOnly)
+		if(mbReadOnly)
 		{
 			DUEL_EXCEPT(DException::ET_InvalidParameters,
 				"Creation is denied in this archive",
@@ -313,7 +314,7 @@ namespace Duel
 
 	void DFolderArchive::remove( const DString& fileName )
 	{
-		if(mReadOnly)
+		if(mbReadOnly)
 		{
 			DUEL_EXCEPT(DException::ET_InvalidParameters,
 				"Cannot remove a file from a read-only archive",

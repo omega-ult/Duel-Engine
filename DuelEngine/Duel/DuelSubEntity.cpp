@@ -170,12 +170,6 @@ namespace Duel
 	{
 		mbVisible = visible;
 	}
-
-	DRenderLayout* DSubEntity::getRenderLayout()
-	{
-		return mRenderLayout.get();
-	}
-
 	DRenderTechnique* DSubEntity::getRenderTechnique( uint32 stage )
 	{
 		if (mMtlInst != NULL)

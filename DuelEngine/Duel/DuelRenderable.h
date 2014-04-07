@@ -62,7 +62,7 @@ namespace Duel
 		// get the render layout of this renderable object.
 		// param rs indicate which stage the layout belongs to
 		//  [6/28/2013 OMEGA] no need for stage specification
-		virtual	DRenderLayout*		getRenderLayout() = 0;
+		virtual	DRenderLayout*		getRenderLayout();
 		// get the technique of forward rendering of object,
 		// pre-defined render stages are defined above, different renderworkshop may
 		// have different render stage defined, read their specification before you
@@ -95,6 +95,7 @@ namespace Duel
 		const DCamera*			mCacheCamera;
 		DReal					mCacheDepth;
 		ShadowProperty			mShadowProperty;
+		DRenderLayoutPtr		mRenderLayout;
 	};
 
 }

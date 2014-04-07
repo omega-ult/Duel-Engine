@@ -5,67 +5,10 @@
 
 #include "DuelCommon.h"
 #include "DuelRenderWorkshop.h"
+#include "DuelDemoDeferRenderHelper.h"
 
 namespace Duel
 {
-	// this class provide functionalities for DemoRenderWorkshop's defer rendering,
-	// such as render a texture to a render target, clear GBuffer...
-	// make sure the render target is in framebuffer color attachment_0.
-	// render technique based on _BasicShaderPack/Demo_RenderWorkshop.dre
-	class DDemoDeferHelper : public DRenderable
-	{
-		DUEL_DECLARE_RTTI(DDemoDeferHelper)
-	public:
-		enum 
-		{
-			RS_Compose				= 0xc200,
-			RS_ScreenQuadTransfer	= 0xc300
-		};
-		DDemoDeferHelper();
-
-		// used in RS_ScreenQuadTransfer
-		void	setInputTexture(DGpuTextureConstantPtr tex);
-
-		// override : DRenderable--------------------------
-		virtual DRenderLayout* getRenderLayout();
-		// override : DRenderable--------------------------
-		// only RS_ScreenQuadTransfer can return a valid render layout.
-		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
-
-		// override : DRenderable--------------------------
-		void	updateCustomGpuParameter(DShaderObject* so);
-
-	protected:
-		DGpuTextureConstantPtr	mInputTex;
-		
-		DRenderTechniquePtr	mCopyTexTech;
-		DRenderTechniquePtr	mGBufferTech;	
-		DRenderTechniquePtr	mComposeTech;
-		DVertexData			mVData;
-		DIndexData			mIData;
-		DRenderLayoutPtr	mRenderLayout;
-	};
-	// helper class to render ambient light to light accumulation map.
-	class DDemoAmbientLightHelper
-	{
-	public:
-
-	};
-	// helper class to render point light to light accumulation map.
-	class DDemoPointLightHelper// : public DRenderable
-	{
-
-	};
-	// helper class to render directional light to light accumulation map.
-	class DDemoDirectionalLightHelper
-	{
-
-	};
-	// helper class to render spot light to light accumulation map.
-	class DDemoSpotLightHelper
-	{
-
-	};
 
 	class DDemoRenderWorkshop : public DRenderWorkshop
 	{

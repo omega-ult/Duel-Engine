@@ -44,18 +44,17 @@ namespace Duel
 	{
 	DUEL_DECLARE_RTTI(DArchive)
 	public:
-		DArchive(const DString& name, ArchiveType type)
-			: mName(name), mType(type), mReadOnly(true) {}
-		virtual	~DArchive() {}
+		DArchive(const DString& name, const DString& type);
+		virtual	~DArchive();
 		// get the name of the archive.
-		const DString&	getName(void) const { return mName; }
-
+		const DString&	getName(void) const;
+		const DString&	getType() const;
 		// load necessary data for work.
 		virtual	void	load() = 0;
 		// release data and stop working.
 		virtual	void	unload() = 0;
 		// if the archive is read-only, then create / remove method will not work
-		virtual	bool	isReadOnly() { return mReadOnly; }
+		virtual	bool	isReadOnly();
 
 		// no close operation provided, the returned stream must handle its lifecycle.
 		// fileName must be the full name of the file(with path included),
@@ -65,23 +64,11 @@ namespace Duel
 
 		// not all archive support create, if it does support, it must override this method.
 		// fileName must be the full name of the file(with path included).
-		virtual	DDataStreamPtr	create(const DString fileName)
-		{
-			DUEL_EXCEPT(DException::ET_NotImplemented,
-				"Base class do not support create method",
-				"Base class do not support create method, make sure you are using subclass",
-				"Duel::DArchive::create")
-		}
+		virtual	DDataStreamPtr	create(const DString fileName);
 
 		// not all archive support remove, if it does support, it must override this method.
 		// fileName must be the full name of the file(with path included).
-		virtual	void	remove(const DString& fileName)
-		{
-			DUEL_EXCEPT(DException::ET_NotImplemented,
-				"Base class do not support remove method",
-				"Base class do not support remove method, make sure you are using subclass",
-				"Duel::DArchive::remove")
-		}
+		virtual	void	remove(const DString& fileName);
 
 		// query whether the specified file exist in this archive.
 		// fileName must be the full name of the file(with path included).
@@ -100,10 +87,9 @@ namespace Duel
 	protected:
 		// name of the archive.
 		DString		mName;
-		// type of the archive.
-		ArchiveType	mType;
+		DString		mType;
 		// indicate this archive's access
-		bool		mReadOnly;
+		bool		mbReadOnly;
 	};
 }
 

@@ -36,8 +36,6 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DTerrainRenderNode)
 	public:
 		DTerrainRenderNode(DTerrainQuadTreeNode* parentNode);
-		// override : DRenderable-----------------
-		virtual DRenderLayout*	getRenderLayout();
 		virtual DRenderTechnique*	getRenderTechnique(uint32 stage);
 		virtual void	updateCustomGpuParameter(DShaderObject* so);
 		virtual	void	getWorldTransform(DMatrix4& outMat);
@@ -45,8 +43,6 @@ namespace Duel
 		void		setMorphWeight(DReal weight);
 	protected:
 		DTerrainQuadTreeNode*	mParentNode;
-		// renderable's required data.
-		DRenderLayoutPtr		mRenderLayout;
 
 		DReal					mMorphWeight;
 		DMaterialInstancePtr	mMaterial;

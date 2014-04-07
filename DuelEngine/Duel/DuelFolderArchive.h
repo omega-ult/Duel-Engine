@@ -15,7 +15,7 @@ namespace Duel
 	DUEL_DECLARE_RTTI(DFolderArchive)
 	public:
 		// type 可以是一般的AT_FOLDER 或者是 AT_APPFOLDER_WP8, 应对不同机制.
-		DFolderArchive(const DString& name, ArchiveType type);
+		DFolderArchive(const DString& name);
 		virtual ~DFolderArchive();
 		// override : DArchive--------------------------------------
 		// load necessary data for work.
@@ -73,7 +73,6 @@ namespace Duel
 
 		
 	};
-
 
 }
 #endif

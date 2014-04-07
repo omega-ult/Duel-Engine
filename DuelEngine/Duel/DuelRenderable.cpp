@@ -267,4 +267,9 @@ namespace Duel
 
 	}
 
+	DRenderLayout* DRenderable::getRenderLayout()
+	{
+		return mRenderLayout.get();
+	}
+
 }

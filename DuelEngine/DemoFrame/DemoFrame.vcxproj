@@ -78,6 +78,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DuelApplication.cpp" />
+    <ClCompile Include="DuelDemoDeferRenderHelper.cpp" />
     <ClCompile Include="DuelDemoMaterialBank.cpp" />
     <ClCompile Include="DuelDemoRenderWorkshop.cpp" />
     <ClCompile Include="DuelStateMachine.cpp" />
@@ -95,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DuelApplication.h" />
+    <ClInclude Include="DuelDemoDeferRenderHelper.h" />
     <ClInclude Include="DuelDemoRenderWorkshop.h" />
     <ClInclude Include="DuelDemoMaterialBank.h" />
     <ClInclude Include="DuelStateMachine.h" />

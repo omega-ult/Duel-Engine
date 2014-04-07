@@ -397,10 +397,6 @@ namespace Duel
 		mRenderLayout->setIndexData(DIndexData(mParentNode->getIndexBuffer()));
 	}
 
-	DRenderLayout* DTerrainRenderNode::getRenderLayout()
-	{
-		return mRenderLayout.get();
-	}
 
 	DRenderTechnique* DTerrainRenderNode::getRenderTechnique( uint32 stage )
 	{

@@ -305,7 +305,33 @@ namespace Duel
 	DPostEffect::DPostEffect( const DString& name ) :
 		mName(name)
 	{
+		mRenderLayout = DRenderResourceManager::getSingleton().createRenderLayout();
+		// a quad.
+		float data[] =
+		{ 
+			/*vert*/ -1.0f, 1.0f,
+			/*vert*/ 1.0f,  1.0f,
+			/*vert*/ 1.0f, -1.0f,
+			/*vert*/ -1.0f,-1.0f
+		};
+		DVertexDeclaration vd;
+		vd.addElement(0, 0, VET_Float2, VES_Position);
+		DVertexStreams vs;
+		DVertexBufferPtr vb = DRenderResourceManager::getSingleton().createVetexBuffer(
+			sizeof(float) * 2, 4, HBU_Static, false);
+		vb->writeData(0,  vb->getSize(), data, true);
+		vs.setStream(0, vb);
+		int16 idata[] =
+		{
+			0, 3, 2,  0, 2, 1
+		};
+		DIndexBufferPtr ib = DRenderResourceManager::getSingleton().createIndexBuffer(
+			IT_16Bit, 6, HBU_Static, false);
+		ib->writeData(0, ib->getSize(), idata, true);
 
+		mRenderLayout->setIndexData(DIndexData(ib));
+		mRenderLayout->setVertexData(DVertexData(vs, vd));
+		mRenderLayout->setTopologyType(PT_TriangleList);
 	}
 
 	DPostEffect::~DPostEffect()
@@ -323,41 +349,6 @@ namespace Duel
 		DPostEffectInstance* retInstance = new DPostEffectInstance(this);
 		*retInstance = *mPersistInstance;
 		return DPostEffectInstancePtr(retInstance);
-	}
-
-	DRenderLayout* DPostEffect::getRenderLayout()
-	{
-		if (mRenderLayout == NULL)
-		{
-			mRenderLayout = DRenderResourceManager::getSingleton().createRenderLayout();
-			// a quad.
-			float data[] =
-			{ 
-				/*vert*/ -1.0f, 1.0f,
-				/*vert*/ 1.0f,  1.0f,
-				/*vert*/ 1.0f, -1.0f,
-				/*vert*/ -1.0f,-1.0f
-			};
-			DVertexDeclaration vd;
-			vd.addElement(0, 0, VET_Float2, VES_Position);
-			DVertexStreams vs;
-			DVertexBufferPtr vb = DRenderResourceManager::getSingleton().createVetexBuffer(
-				sizeof(float) * 2, 4, HBU_Static, false);
-			vb->writeData(0,  vb->getSize(), data, true);
-			vs.setStream(0, vb);
-			int16 idata[] =
-			{
-				0, 3, 2,  0, 2, 1
-			};
-			DIndexBufferPtr ib = DRenderResourceManager::getSingleton().createIndexBuffer(
-				IT_16Bit, 6, HBU_Static, false);
-			ib->writeData(0, ib->getSize(), idata, true);
-			
-			mRenderLayout->setIndexData(DIndexData(ib));
-			mRenderLayout->setVertexData(DVertexData(vs, vd));
-			mRenderLayout->setTopologyType(PT_TriangleList);
-		}
-		return mRenderLayout.get();
 	}
 
 	void DPostEffect::updateGpuParameter( DPostEffectInstance* inst, DShaderObject* so )

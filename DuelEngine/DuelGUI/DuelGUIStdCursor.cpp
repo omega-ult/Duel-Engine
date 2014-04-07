@@ -67,11 +67,6 @@ namespace Duel
 		 return NULL;
 	}
 
-	DRenderLayout* DGStdCursorPictureLayer::getRenderLayout()
-	{
-		return mRenderLayout.get();
-	}
-	
 	void DGStdCursorPictureLayer::updateCustomGpuParameter(DShaderObject* so)
 	{
 		if (!so->isValid())

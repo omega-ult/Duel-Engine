@@ -15,7 +15,6 @@ namespace Duel
 	public:
 		DGSPictureLayer(DGRenderDelegate* parent);
 		// override : DRenderable-----------------
-		virtual DRenderLayout*	getRenderLayout();
 		virtual DRenderTechnique*	getRenderTechnique(uint32 stage);
 		virtual void	updateCustomGpuParameter(DShaderObject* so);
 		virtual	void	getWorldTransform(DMatrix4& outMat);
@@ -38,8 +37,6 @@ namespace Duel
 	protected:
 		void			markDirty();
 		DGRenderDelegate*		mParent;
-		// renderable's required data.
-		DRenderLayoutPtr		mRenderLayout;
 		DVertexStreams			mVStream;
 		DIndexBufferPtr			mIndices;
 		DVertexDeclaration		mVDecl;

@@ -21,8 +21,6 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DGSTextLayer)
 	public:
 		// override : DRenderable-----------------
-		virtual DRenderLayout*	getRenderLayout();
-		virtual DRenderTechnique*	getForwardRenderTechnique();
 		virtual void	updateCustomGpuParameter(DRenderPass* pass);
 		virtual	void	getWorldTransform(DMatrix4& outMat);
 		virtual void	preRender(); // calculate matrix;
@@ -41,10 +39,9 @@ namespace Duel
 		void		clearText();
 
 	protected:
-		DRenderLayoutPtr		mRenderLayout;
 		DVertexStreams			mVStream;
 		DIndexBufferPtr			mIndices;
-		DVertexDeclarationPtr	mVDecl;
+		DVertexDeclaration		mVDecl;
 		DResourcePtr			mRenderEffect;
 
 
