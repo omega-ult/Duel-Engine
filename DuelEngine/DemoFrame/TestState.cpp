@@ -75,7 +75,7 @@ namespace DemoKit
 
 
 		Duel::DResourcePtr aTestMesh = Duel::DResourceGroupManager::getSingleton().
-			getResouceManager("Mesh")->getResource("_BasicMediaPack", "a test.dm");
+			getResouceManager("Mesh")->getResource("_BasicMediaPack", "M_PointLightSphereModel.dm");
 		aTestMesh->touch();
 
 		Duel::DResourcePtr aTestSkel = Duel::DResourceGroupManager::getSingleton().
@@ -146,7 +146,7 @@ namespace DemoKit
 			sb->setMaterialInstance(mtl);
 		}
 		mSceneInstance->initialize(Duel::DAxisAlignedBox(-10.0f, -10.0f, -10.0f, 10.0f, 10.0f, 10.0f), 5.0f);
-		mSceneInstance->getSceneCamera()->setPorjectionType(Duel::PT_OrthoGraphic);
+		//mSceneInstance->getSceneCamera()->setPorjectionType(Duel::PT_OrthoGraphic);
 		mSceneInstance->getSceneCamera()->setEyePosition(0.0f,5.0f, -10.0f);
 		mSceneInstance->getSceneCamera()->lookAt(0.0f,0.0f, 0.0f);
 

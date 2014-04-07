@@ -48,6 +48,7 @@ namespace Duel
 	// helper class to render ambient light to light accumulation map.
 	class DDemoAmbientLightHelper
 	{
+	public:
 
 	};
 	// helper class to render point light to light accumulation map.

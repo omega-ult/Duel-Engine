@@ -147,7 +147,7 @@ void DMPDMExporter::fillSubMesh(DMPParameters* param, const MDagPath& subMeshDag
 	}
 	//MObject component = MObject::kNullObj;
 	MString submeshName = subMeshDag.partialPathName();
-	MSpace::Space space = MSpace::kWorld;
+	MSpace::Space space = MSpace::kObject;
 
 	if (status != MS::kSuccess)
 	{
@@ -382,25 +382,41 @@ void DMPDMExporter::fillSubMesh(DMPParameters* param, const MDagPath& subMeshDag
 		{
 			continue;
 		}
-		// Get object-relative indices for the vertices in this face.
-		MIntArray	polyIndices;
-		polyIter.getVertices(polyIndices);
 
 		DMPMeshData::TriangleStruct triangle;
 		for (int ti = 0; ti < triangleCount; ++ti)
 		{
 			MPointArray triPoints;	// will not use.
-			MIntArray	triIndices;
-			status = polyIter.getTriangle(ti, triPoints, triIndices, space);
+			MIntArray	tmpTriIndices, triVertexIdx;
+			status = polyIter.getTriangle(ti, triPoints, tmpTriIndices, space);
+			if (status != MS::kSuccess)
+			{
+				std::cout << "Fail to traverse polygons." << std::endl;
+				return;
+			}
+			// convert indices to face-relative indices
+			MIntArray polyIndices;
+			polyIter.getVertices(polyIndices);
+			for (unsigned int iObj = 0; iObj < tmpTriIndices.length(); ++iObj)
+			{
+				// iPoly is face-relative vertex index
+				for (unsigned int iPoly=0; iPoly < polyIndices.length(); ++iPoly)
+				{
+					if (tmpTriIndices[iObj] == polyIndices[iPoly]) 
+					{
+						triVertexIdx.append(iPoly);
+						break;
+					}
+				}
+			}
 
-			// check whether this points has been processed,
 			for (unsigned int idi = 0; idi < 3; ++idi)
 			{
-				int vtxIndexInPolygon = triIndices[idi];
+				int vtxIndexInPolygon = triVertexIdx[idi];
 				unsigned int vertexIndex = polyIter.vertexIndex(vtxIndexInPolygon);
 
 				// build triangle indices.
-				triangle.vertexIndex[idi] = vtxIndexInPolygon;
+				triangle.vertexIndex[idi] = tmpTriIndices[idi];
 
 				if (!vtxProcessed[vertexIndex])
 				{
@@ -440,7 +456,6 @@ void DMPDMExporter::fillSubMesh(DMPParameters* param, const MDagPath& subMeshDag
  							}
  						}
  					}
-
 					// mark as processed..
 					vtxProcessed[vertexIndex] = true;
 				}

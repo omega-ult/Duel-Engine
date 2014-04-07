@@ -66,6 +66,9 @@ namespace Duel
 		// get the distantce between specified point and normal
 		DReal	getDistanceTo(const DVector3& p) const;
 
+		// get the orthocenter of specified point.
+		DVector3	getPointOrthocenter(const DVector3& p);
+
 		DVector3 normal;
 		DReal	d;
 	};

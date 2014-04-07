@@ -169,9 +169,31 @@ namespace Duel
 	bool DSceneManager::isAffectedByLight( DLightSource* light, DCamera* cam )
 	{
 		LightType t = light->getLightType();
-		if (t == LT_Directional || t == LT_Ambient) 
+		if (t == LT_Ambient) 
 		{
 			return true;
+		}
+		else if (t == LT_Directional)
+		{
+			// do visibility testing
+			// basic algorithm: calculate the plane in directional light's abstract cylinder's
+			// local space p, calculate the perpendicular point p' toward origin, then testing
+			// whether p' is in the cylinder.
+			DOrientedBox ob;
+			DReal zExt = light->getDirectionalDistance();
+			DReal r = light->getDirectionalRadius();
+			ob.setMaximum(r, r, zExt);
+			ob.setMinimum(-r, -r, -zExt);
+			DVector3 cyDir = light->getDirection();
+			cyDir.normalize();
+			DVector3 zToward = DVector3::UNIT_Z;
+			ob.setOrientation(zToward.getRotationTo(cyDir));
+			ob.setOrigin(light->getPosition());
+			if (cam->isInside(ob) != DCamera::FTS_Out)
+			{
+				return true;
+			}
+
 		}
 		else if (t == LT_Point)
 		{

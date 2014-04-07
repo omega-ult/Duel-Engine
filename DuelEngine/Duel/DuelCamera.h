@@ -153,11 +153,13 @@ namespace Duel {
 		};
 		// test whether the point is inside the frustum, parameter intersect
 		// indicate result will be true even the box is just intersect with one plane.
-		virtual	FrustumTestResult	isInside(const DVector3& pos);
+		virtual	FrustumTestResult	isInside(DVector3 pos);
 		// test whether the bounding box is inside the frustum
-		virtual	FrustumTestResult	isInside(const DAxisAlignedBox& bound);
+		virtual	FrustumTestResult	isInside(DAxisAlignedBox bound);
+		// test whether the oriented box is inside the frustum
+		virtual	FrustumTestResult	isInside(DOrientedBox ob);
 		// test whether the bounding sphere is inside the frustum
-		virtual	FrustumTestResult	isInside(const DSphere& sphere);
+		virtual	FrustumTestResult	isInside(DSphere sphere);
 
 		// set fixed axis.
 		virtual	void	setFixedYawAxis(bool useFixed, const DVector3& fixedAxis = DVector3::UNIT_Y);

@@ -31,5 +31,5 @@ void main(void)
 	vec3 outUV = uvTransform * vec3(attrib_texcoord, 1.0f);
 	gl_Position = outPos;
 	VS_StageOutput.pos = outPos;
-	VS_StageOutput.texcoord = outUV;
+	VS_StageOutput.texcoord = outUV.xy;
 }

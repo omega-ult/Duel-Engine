@@ -140,7 +140,7 @@ namespace Duel
 		markProjDirty();
 	}
 
-	DCamera::FrustumTestResult DCamera::isInside( const DVector3& pos )
+	DCamera::FrustumTestResult DCamera::isInside( DVector3 pos )
 	{
 		update();
 		DPlane::Side s;
@@ -159,10 +159,9 @@ namespace Duel
 		return FTS_In;
 	}
 
-	DCamera::FrustumTestResult DCamera::isInside( const DAxisAlignedBox& bound)
+	DCamera::FrustumTestResult DCamera::isInside( DAxisAlignedBox bound)
 	{
 		update();
-		DVector3 cent = bound.getCenter();
 		if (bound.isNull())
 		{
 			return FTS_Out;
@@ -171,8 +170,6 @@ namespace Duel
 		{
 			return FTS_Intersect;
 		}
-		//DPlane::Side centSide = DPlane::S_POSITIVE;
-	//	bool centOut = false;
 		for(uint32 i = 0; i < 6; ++i)
 		{
 			DPlane::Side s = mFrustumPlanes.at(i).getSide(bound);
@@ -188,7 +185,44 @@ namespace Duel
 		return FTS_In;
 	}
 
-	DCamera::FrustumTestResult DCamera::isInside( const DSphere& sphere)
+	DCamera::FrustumTestResult DCamera::isInside( DOrientedBox ob )
+	{
+		update();
+		DAxisAlignedBox bound = ob.getBoundingBox();
+		if (bound.isNull())
+		{
+			return FTS_Out;
+		}
+		if (bound.isInfinite())
+		{
+			return FTS_Intersect;
+		}
+		DMatrix4 obLocalTrans = ob.getLocalTransform();
+
+		for(uint32 i = 0; i < 6; ++i)
+		{
+			// construct plane in ob's local space.
+			DPlane P = mFrustumPlanes.at(i);
+			DVector3 d = P.getPointOrthocenter(DVector3::ZERO);
+			DVector3 n = P.normal;
+			d = obLocalTrans * DVector4(d, 1.0f);
+			n = obLocalTrans * DVector4(n, 0.0f);
+			P = DPlane(n, d);
+
+			DPlane::Side s = P.getSide(bound);
+			if (s == DPlane::S_Negative)
+			{
+				return FTS_Out;
+			}
+			if (s == DPlane::S_Across)
+			{
+				return FTS_Intersect;
+			}
+		}
+		return FTS_In;
+	}
+
+	DCamera::FrustumTestResult DCamera::isInside( DSphere sphere)
 	{
 		update();
 		DPlane::Side s;

@@ -7,4 +7,22 @@
 		<FileFormat>dm</FileFormat> 
 		<ShadowBuffer>false</ShadowBuffer> 
 	</MeshResourceParameter>
+	<MeshResourceParameter>
+		<Name>M_DirectionalLightCylinderModel.dm</Name>
+		<Group>_BasicMediaPack</Group>
+		<FileFormat>dm</FileFormat> 
+		<ShadowBuffer>false</ShadowBuffer> 
+	</MeshResourceParameter>
+	<MeshResourceParameter>
+		<Name>M_PointLightSphereModel.dm</Name>
+		<Group>_BasicMediaPack</Group>
+		<FileFormat>dm</FileFormat> 
+		<ShadowBuffer>false</ShadowBuffer> 
+	</MeshResourceParameter>
+	<MeshResourceParameter>
+		<Name>M_SpotLightConeModel.dm</Name>
+		<Group>_BasicMediaPack</Group>
+		<FileFormat>dm</FileFormat> 
+		<ShadowBuffer>false</ShadowBuffer> 
+	</MeshResourceParameter>
 </ResourceParameters>

@@ -173,4 +173,12 @@ namespace Duel
 		d = -normal.dotProduct(p0);
 	}
 
+	DVector3 DPlane::getPointOrthocenter( const DVector3& p )
+	{
+		DVector3 n = normal;
+		n.normalize();
+		n *= getDistanceTo(p);
+		return n + p;
+	}
+
 }

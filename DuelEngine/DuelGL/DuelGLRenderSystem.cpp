@@ -29,7 +29,7 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(GLRenderSystem, DRenderSystem);
 
 
-	void	bindGLParameters(GLuint glProg, DGpuParameters* params)
+	void	bindGLParameters(DGpuParameters* params)
 	{
 		DGpuParameters::GpuConstantIterator pi = params->getAutoGpuConstantIterator();
 		uint32 texUnit = 0;
@@ -43,16 +43,16 @@ namespace Duel
 				switch (def.constType)
 				{
 				case GCT_Float1:
-					glProgramUniform1fv(glProg, loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
+					glUniform1fv(loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Float2:
-					glProgramUniform2fv(glProg, loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
+					glUniform2fv(loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Float3:
-					glProgramUniform3fv(glProg, loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
+					glUniform3fv(loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Float4:
-					glProgramUniform4fv(glProg, loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
+					glUniform4fv(loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Texture1D:
 				case GCT_Texture2D:
@@ -66,51 +66,51 @@ namespace Duel
 						GLGpuTextureConstant* glTexPtr = tex->getAs<GLGpuTextureConstant>();
 						glTexPtr->setSamplerState(params->getSamplerConstant(pi.current()->first));
 						glBindTexture(glTexPtr->getGLTextureTarget(), glTexPtr->getTextureID());
-						glProgramUniform1ui(glProg, loc, glTexPtr->getTextureID());
+						glUniform1ui(loc, glTexPtr->getTextureID());
 					}
 					else
 					{
-						glProgramUniform1ui(glProg, loc, 0);
+						glUniform1ui(loc, 0);
 					}
 					break;
 				case GCT_Int1:
-					glProgramUniform1iv(glProg, loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
+					glUniform1iv(loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
 					break;
 				case GCT_Int2:
-					glProgramUniform2iv(glProg, loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
+					glUniform2iv(loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
 					break;
 				case GCT_Int3:
-					glProgramUniform3iv(glProg, loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
+					glUniform3iv(loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
 					break;
 				case GCT_Int4:
-					glProgramUniform4iv(glProg, loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
+					glUniform4iv(loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix2x2:
-					glProgramUniformMatrix2fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix2fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix2x3:
-					glProgramUniformMatrix2x3fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix2x3fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix2x4:
-					glProgramUniformMatrix2x4fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix2x4fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix3x2:
-					glProgramUniformMatrix3x2fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix3x2fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix3x3:
-					glProgramUniformMatrix3fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix3fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix3x4:
-					glProgramUniformMatrix3x4fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix3x4fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix4x2:
-					glProgramUniformMatrix4x2fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix4x2fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix4x3:
-					glProgramUniformMatrix4x3fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix4x3fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix4x4:
-					glProgramUniformMatrix4fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix4fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				default:
 					// for sampler, do nothing.
@@ -130,16 +130,16 @@ namespace Duel
 				switch (def.constType)
 				{
 				case GCT_Float1:
-					glProgramUniform1fv(glProg, loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
+					glUniform1fv(loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Float2:
-					glProgramUniform2fv(glProg, loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
+					glUniform2fv(loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Float3:
-					glProgramUniform3fv(glProg, loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
+					glUniform3fv(loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Float4:
-					glProgramUniform4fv(glProg, loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
+					glUniform4fv(loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Texture1D:
 				case GCT_Texture2D:
@@ -153,51 +153,51 @@ namespace Duel
 						GLGpuTextureConstant* glTexPtr = tex->getAs<GLGpuTextureConstant>();
 						glTexPtr->setSamplerState(params->getSamplerConstant(pi.current()->first));
 						glBindTexture(glTexPtr->getGLTextureTarget(), glTexPtr->getTextureID());
-						glProgramUniform1ui(glProg, loc, glTexPtr->getTextureID());
+						glUniform1ui(loc, glTexPtr->getTextureID());
 					}
 					else
 					{
-						glProgramUniform1ui(glProg, loc, 0);
+						glUniform1ui(loc, 0);
 					}
 					break;
 				case GCT_Int1:
-					glProgramUniform1iv(glProg, loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
+					glUniform1iv(loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
 					break;
 				case GCT_Int2:
-					glProgramUniform2iv(glProg, loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
+					glUniform2iv(loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
 					break;
 				case GCT_Int3:
-					glProgramUniform3iv(glProg, loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
+					glUniform3iv(loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
 					break;
 				case GCT_Int4:
-					glProgramUniform4iv(glProg, loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
+					glUniform4iv(loc, def.arraySize, params->getIntValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix2x2:
-					glProgramUniformMatrix2fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix2fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix2x3:
-					glProgramUniformMatrix2x3fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix2x3fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix2x4:
-					glProgramUniformMatrix2x4fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix2x4fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix3x2:
-					glProgramUniformMatrix3x2fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix3x2fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix3x3:
-					glProgramUniformMatrix3fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix3fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix3x4:
-					glProgramUniformMatrix3x4fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix3x4fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix4x2:
-					glProgramUniformMatrix4x2fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix4x2fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix4x3:
-					glProgramUniformMatrix4x3fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix4x3fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				case GCT_Matrix4x4:
-					glProgramUniformMatrix4fv(glProg, loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
+					glUniformMatrix4fv(loc, def.arraySize, GL_FALSE, params->getFloatValuePtr(def.physicalIndex));
 					break;
 				default:
 					// for sampler, do nothing.
@@ -539,17 +539,17 @@ namespace Duel
 		// 由于oepngl的参数都是一块的...
 		if (mVSParams == mPSParams)
 		{
-			bindGLParameters(mGLProgram, mVSParams);
+			bindGLParameters(mVSParams);
 		}
 		else
 		{
 			if (mVSParams != NULL)
 			{
-				bindGLParameters(mGLProgram, mVSParams);
+				bindGLParameters(mVSParams);
 			}
 			if (mPSParams != NULL)
 			{
-				bindGLParameters(mGLProgram, mPSParams);
+				bindGLParameters(mPSParams);
 			}
 		}
 

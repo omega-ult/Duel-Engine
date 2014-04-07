@@ -56,6 +56,7 @@ void main(void)
 	vec3 normColor = texture(normalTexture, PS_StageInput.texcoord).xyz;
 	// decode the normal 
 	vec3 norm = decodeNormal(normColor);
+	// debug vnormal = vec4(encodeNormal(norm), 1.0f);
 	
 	vnormal = vec4(encodeNormal(normalize(TBN * norm)), 1.0f);
 	
