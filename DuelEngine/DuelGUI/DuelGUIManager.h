@@ -25,7 +25,7 @@ namespace Duel
 	// client directly, you should use DGUISystem::registerRenderWindow() and then
 	// use DGUIManager*	getGUIManager to retrieve it.
 	// DG = Duel GUI
-	class DUELGUI_API DGUIManager : public DAutoGpuParameterDelegate
+	class DUELGUI_API DGUIManager : public DObject
 	{
 		// this is standard gui manager,
 	DUEL_DECLARE_RTTI(DGUIManager)

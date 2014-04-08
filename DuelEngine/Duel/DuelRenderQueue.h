@@ -4,6 +4,7 @@
 #define _DUELRENDERQUEUE_H_
 
 #include "DuelCommon.h"
+#include "DuelAutoGpuParameter.h"
 #include "DuelRenderable.h"
 #include "DuelRenderGroup.h"
 
@@ -32,7 +33,7 @@ namespace Duel
 	// priority will be rendered first, no matter how far the renderables in the
 	// group from the camera, sorting renderables by the distance to the camera
 	// should be in individual group.
-	class DUEL_API DRenderQueue : public DObject
+	class DUEL_API DRenderQueue : public DAutoGpuParameterDelegate
 	{
 	DUEL_DECLARE_RTTI(DRenderQueue)
 	public:
@@ -41,6 +42,10 @@ namespace Duel
 		typedef	std::map<uint32, DRenderGroup*>	RenderGroupMap;
 		typedef	MapIterator<RenderGroupMap>		RenderGroupIterator;
 		RenderGroupIterator		getRenderGroupIterator() { return RenderGroupIterator(mGroupMap.begin(), mGroupMap.end()); }
+
+		// render camera is the one used in rendering pipeline, 
+		void			setRenderCamera(DCamera* cam);
+		DCamera*		getRenderCamera();
 
 		// used to traverse all lights.
 		typedef std::set<DLightSource*>			LightSet;
@@ -76,6 +81,10 @@ namespace Duel
 		// shortcut for clear all groups
 		void			clear();
 
+		virtual DMatrix4 getViewMatrix();
+
+		virtual DMatrix4 getProjectionMatrix();
+
 	protected:
 		// we rely on std::map because in its inner implement, the sorting is
 		// based on std::less method, and we can only rely on its ascending sorting.
@@ -83,6 +92,8 @@ namespace Duel
 		// DLight storage.
 		LightSet			mLightSet;
 		PostEffectList		mPostEffectList;
+
+		DCamera*			mRenderCamera;
 	};
 
 }

@@ -39,13 +39,9 @@ namespace Duel
 		DMaterialInstancePtr	getMaterialInstance();
 
 		// override : DRenderable-----------------------------
-		virtual void		preRender();
-		// override : DRenderable-----------------------------
 		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
 		// override : DRenderable-----------------------------
 		virtual void		updateCustomGpuParameter(DShaderObject* so);
-		// override : DRenderable-----------------------------
-		virtual	void		postRender();
 
 	protected:
 		// a pointer to its parent.

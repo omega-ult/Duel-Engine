@@ -197,16 +197,5 @@ namespace Duel
 		return mMtlInst;
 	}
 
-	void DSubEntity::preRender()
-	{
-		mParent->preRender();
-	}
-
-	void DSubEntity::postRender()
-	{
-		mParent->postRender();
-	}
-
-
 
 }

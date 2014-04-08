@@ -63,13 +63,14 @@ namespace Duel
 
 
 		// set a camera for current scene graph, which is used to update render queue and light.
-		void		setSceneCamera(DCamera* cam) { mSceneCamera = cam; }
-		DCamera*		getSceneCamera() const { return mSceneCamera; }
+		void		setSceneCamera(DCamera* cam);
+		DCamera*	getSceneCamera() const { return mSceneCamera; }
 
 	protected:
+		void		populateLights(DCamera* cam);
 		// use scenemanager's scene camera to do the culling and push to the render queue.
 		// we need extra information, such as viewport for our terrain calculation.
-		void		applyToRenderQueue(DRenderQueue* queue, DViewport vp);
+		void		applyToRenderQueue(DViewport vp);
 
 		DString			mName;
 		DTerrainPage*	mTerrain;

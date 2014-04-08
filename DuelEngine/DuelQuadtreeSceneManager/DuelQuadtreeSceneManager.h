@@ -19,7 +19,7 @@ namespace Duel
 		~QuadtreeSceneManager();
 
 		// override : DSceneManger------------------------------
-		void			initialize(DSceneInstance* owner, DAxisAlignedBox region, DReal granularity);
+		void			initialize(DAxisAlignedBox region, DReal granularity);
 		// resize the quadtree
 		virtual void	resize(DAxisAlignedBox region);
 		// get the quadtree

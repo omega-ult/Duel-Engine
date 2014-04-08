@@ -69,6 +69,7 @@ namespace Duel
 		{
 			return;
 		}
+		DAutoGpuParameter::getSingleton().setParameterDelegate(queue);
 		DRenderQueue::RenderGroupIterator ri = queue->getRenderGroupIterator();;
 		// for defer stage.
 		DeferLayerMap::iterator gi = mDeferLayerMap.find(mPresentTarget);
@@ -122,6 +123,7 @@ namespace Duel
 				signalGroupFinishRender(queue, rgrp);
 			}
 		}
+		DAutoGpuParameter::getSingleton().setParameterDelegate(NULL);
 	}
 
 	void DDemoRenderWorkshop::setPresentTarget( DFrameBuffer* target )

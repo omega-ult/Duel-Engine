@@ -23,6 +23,7 @@ namespace Duel
 		mRenderQueue = new DRenderQueue();
 		mTerrain = new DTerrainPage();
 		mSceneCamera = createCamera(mName + " DefaultCamera");
+		mRenderQueue->setRenderCamera(mSceneCamera);
 	}
 
 	DSceneInstance::~DSceneInstance()
@@ -38,7 +39,7 @@ namespace Duel
 	{
 		if (mSceneMgr)
 		{
-			mSceneMgr->initialize(this, region, granularity);
+			mSceneMgr->initialize(region, granularity);
 		}
 	}
 
@@ -61,20 +62,115 @@ namespace Duel
 		if (mRenderQueue)
 		{
 			mRenderQueue->clearAllLights();
-			applyToRenderQueue(mRenderQueue, vp);
+			applyToRenderQueue(vp);
 		}
 	}
 
-	void DSceneInstance::applyToRenderQueue( DRenderQueue* queue, DViewport vp )
+	void DSceneInstance::applyToRenderQueue( DViewport vp )
 	{
 		if (mTerrain && mSceneCamera)
 		{
-			mTerrain->applyToRenderQueue(queue, mSceneCamera, vp);
+			mTerrain->applyToRenderQueue(mRenderQueue, mSceneCamera, vp);
 		}
 		if (mSceneMgr && mSceneCamera)
 		{
-			mSceneMgr->applyToRenderQueue(queue, mSceneCamera);
-			mSceneMgr->populateLights(queue, mSceneCamera);
+			mSceneMgr->applyToRenderQueue(mRenderQueue, mSceneCamera);
+			populateLights(mSceneCamera);
+		}
+	}
+
+	void DSceneInstance::populateLights( DCamera* cam )
+	{
+		DSceneInstance::LightIterator li = getLightIterator();
+		while (li.hasMoreElements())
+		{
+			bool isAffected = false;
+			DLightSource* light = li.getNext();
+			LightType t = light->getLightType();
+			if (t == LT_Ambient) 
+			{
+				isAffected = true;
+			}
+			else if (t == LT_Directional)
+			{
+				// do visibility testing
+				// basic algorithm: calculate the plane in directional light's abstract cylinder's
+				// local space p, calculate the perpendicular point p' toward origin, then testing
+				// whether p' is in the cylinder.
+				DOrientedBox ob;
+				DReal zExt = light->getDirectionalDistance();
+				DReal r = light->getDirectionalRadius();
+				ob.setMaximum(r, r, zExt);
+				ob.setMinimum(-r, -r, -zExt);
+				DVector3 cyDir = light->getDirection();
+				cyDir.normalize();
+				DVector3 zToward = DVector3::UNIT_Z;
+				ob.setOrientation(zToward.getRotationTo(cyDir));
+				ob.setOrigin(light->getPosition());
+				if (cam->isInside(ob) != DCamera::FTS_Out)
+				{
+					isAffected = true;
+				}
+
+			}
+			else if (t == LT_Point)
+			{
+				DReal outRange;
+				light->getAttenuation(&outRange, NULL, NULL, NULL);
+				DSphere lightSphere(light->getPosition(), outRange);
+
+				if (cam->isInside(lightSphere) != DCamera::FTS_Out)
+				{
+					isAffected = true;
+				}
+			}
+			else if (t == LT_Spotlight)
+			{
+				// TODO: calculate visiblity.
+				// using common perpendicular line to calcu late intersection between camera
+				// view cone and spot light cone.
+				DReal cpLength;
+				DRay camRay(cam->getEyePosition(), cam->getDirection());
+				DRay spotRay(light->getPosition(), light->getDirection());
+				DRay comPerp = camRay.getCommonPerpendicularTo(spotRay, &cpLength);
+
+				// ensure it is a valid result.
+				if (comPerp.getDirection() != DVector3::ZERO)
+				{
+					// ignore the light if it was in the back side of the camera.
+					DVector3 comPerpToCam = (comPerp.getOrigin() - camRay.getOrigin());
+					DReal coef = comPerpToCam.dotProduct(cam->getDirection());
+					if (coef < 0)
+					{
+						// check whether the camera's origin is in the spotlight's lighting region
+						DVector3 camToSpot = cam->getEyePosition() - spotRay.getOrigin();
+
+						DRadian r = DMath::arcCos(
+							camToSpot.dotProduct(spotRay.getDirection()) / 
+							(camToSpot.length() * spotRay.getDirection().length()));
+						if (r < light->getSpotlightOuterAngle()/2)
+						{
+							isAffected = true;
+						}
+					}
+					else
+					{
+						// calculate intersection between two cone
+						DReal camDist = (comPerp.getOrigin()-cam->getEyePosition()).length() * DMath::Tan(cam->getFOV()/2);
+						DReal spotDist = ((comPerp.getOrigin()+comPerp.getDirection()*cpLength)
+							- spotRay.getOrigin()).length() * DMath::Tan(light->getSpotlightOuterAngle()/2);
+						if (camDist + spotDist > cpLength)
+						{
+							isAffected = true;
+						}
+					}
+
+				}
+			}
+			if (isAffected)
+			{
+				mRenderQueue->addLight(light);
+			}
 		}
 	}
 
@@ -222,6 +318,12 @@ namespace Duel
 	void DSceneInstance::destroyAllLights()
 	{
 
+	}
+
+	void DSceneInstance::setSceneCamera( DCamera* cam )
+	{
+		mSceneCamera = cam;
+		mRenderQueue->setRenderCamera(mSceneCamera);
 	}
 
 }

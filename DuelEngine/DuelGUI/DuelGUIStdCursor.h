@@ -12,16 +12,14 @@ namespace Duel
 	{
 		DUEL_DECLARE_RTTI(DGStdCursorPictureLayer)
 	public:
-		DGStdCursorPictureLayer(DGStdCursorRD* parent);
+		DGStdCursorPictureLayer(DGCursor* hostCursor);
 
 		// override : DRenderable-----------------
-		virtual void	preRender();
 		virtual DRenderTechnique*	getRenderTechnique(uint32 stage);
 		virtual void	updateCustomGpuParameter(DShaderObject* so);
-		virtual void	postRender();
 
 	protected:
-		DGStdCursorRD*			mParent;
+		DGCursor*				mHostCursor;
 		// renderable's required data.
 		DVertexStreams			mVStream;
 		DIndexBufferPtr			mIndices;

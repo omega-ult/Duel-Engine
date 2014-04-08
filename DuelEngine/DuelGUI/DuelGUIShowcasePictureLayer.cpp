@@ -14,8 +14,7 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(DGSPictureLayer, DRenderable);
 
 
-	DGSPictureLayer::DGSPictureLayer(DGRenderDelegate* parent) :
-		mParent(parent),
+	DGSPictureLayer::DGSPictureLayer() :
 		mRenderSize(0.0f, 0.0f),
 		mClipLeft(0.0f),
 		mClipRight(0.0f),
@@ -141,10 +140,6 @@ namespace Duel
 
 	void DGSPictureLayer::preRender()
 	{
-		if (mParent)
-		{
-			mParent->preRender();
-		}
 		if (!mbDirty)
 		{
 			return;
@@ -215,13 +210,6 @@ namespace Duel
 		}
 	}
 
-	void DGSPictureLayer::postRender()
-	{
-		if (mParent)
-		{
-			mParent->postRender();
-		}
-	}
 
 
 	void DGSPictureLayer::setRenderSize( const DGSize& size )

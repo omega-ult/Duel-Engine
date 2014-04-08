@@ -100,7 +100,7 @@ namespace Duel
 		mTargetBox(targetBox),
 		mbClipped(false)
 	{
-		mPicLayer = new DGSPictureLayer(this);
+		mPicLayer = new DGSPictureLayer();
 	}
 
 	DGSPictureBoxRD::~DGSPictureBoxRD()

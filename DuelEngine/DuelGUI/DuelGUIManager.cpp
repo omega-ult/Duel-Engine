@@ -15,7 +15,7 @@
 
 namespace Duel
 {
-	DUEL_IMPLEMENT_RTTI_1(DGUIManager, DAutoGpuParameterDelegate);
+	DUEL_IMPLEMENT_RTTI_1(DGUIManager, DObject);
 	DUEL_IMPLEMENT_RTTI_1(DGUIMouseEvent, DMouseEvent);
 
 
@@ -43,6 +43,8 @@ namespace Duel
 		DReal zVal = ((DReal)targetWindow->getHeight()/2) / DMath::Tan(mGUICamera.getFOV()/2);
 		mGUICamera.setEyePosition(0.0f, 0.0f, -zVal );
 		mGUICamera.lookAt(0.0f, 0.0f, 0.0f);
+
+		mRenderQueue->setRenderCamera(&mGUICamera);
 
 		mCacheEventQueue = new DInputEventQueue();
 

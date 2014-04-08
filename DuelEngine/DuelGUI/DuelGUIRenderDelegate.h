@@ -19,8 +19,6 @@ namespace Duel
 
 		virtual DGWidget*		getParent() = 0;
 
-		virtual void	preRender();
-		virtual void	postRender();
 		// interface for update content.
 		virtual	void	update() {}
 		// used to add renderables.

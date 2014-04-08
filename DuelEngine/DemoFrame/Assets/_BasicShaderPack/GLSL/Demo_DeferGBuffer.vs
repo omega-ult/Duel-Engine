@@ -22,6 +22,7 @@ out	Varing
 	vec4	vpos;	// view space
 	vec2	texcoord;
 	vec3	vnormal;
+	vec2	hdepth; // homogeneous space
 } VS_StageOutput;
 
 void main(void)
@@ -32,4 +33,5 @@ void main(void)
 	VS_StageOutput.vpos = Auto_WorldViewMatrix * pos;
 	VS_StageOutput.texcoord = inTexcoord;
 	VS_StageOutput.vnormal = (Auto_WorldViewMatrix * vec4(inNormal, 0.0f)).xyz;
+	VS_StageOutput.hdepth = pos.zw;
 }

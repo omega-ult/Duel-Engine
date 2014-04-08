@@ -1,14 +1,17 @@
 //  [12/21/2012 OMEGA] created
 
 #include "DuelCommon.h"
+#include "DuelCamera.h"
+#include "DuelAutoGpuParameter.h"
 #include "DuelRenderQueue.h"
 
 namespace Duel
 {
 
-	DUEL_IMPLEMENT_RTTI_1(DRenderQueue, DObject);
+	DUEL_IMPLEMENT_RTTI_1(DRenderQueue, DAutoGpuParameterDelegate);
 
-	DRenderQueue::DRenderQueue()
+	DRenderQueue::DRenderQueue() : 
+		mRenderCamera(NULL)
 	{
 
 	}
@@ -16,6 +19,16 @@ namespace Duel
 	DRenderQueue::~DRenderQueue()
 	{
 		destroyAllRenderGroups();
+	}
+
+	void DRenderQueue::setRenderCamera( DCamera* cam )
+	{
+		mRenderCamera = cam;
+	}
+
+	DCamera* DRenderQueue::getRenderCamera()
+	{
+		return mRenderCamera;
 	}
 
 	void DRenderQueue::addRenderale( uint32 groupID, DRenderable* rend )
@@ -124,6 +137,24 @@ namespace Duel
 	void DRenderQueue::removeAllPostEffects()
 	{
 		mPostEffectList.clear();
+	}
+
+	DMatrix4 DRenderQueue::getViewMatrix()
+	{
+		if (mRenderCamera == NULL)
+		{
+			return DMatrix4::IDENTITY;
+		}
+		return mRenderCamera->getViewMatrix();
+	}
+
+	DMatrix4 DRenderQueue::getProjectionMatrix()
+	{
+		if (mRenderCamera == NULL)
+		{
+			return DMatrix4::IDENTITY;
+		}
+		return mRenderCamera->getProjectionMatrix();
 	}
 
 }

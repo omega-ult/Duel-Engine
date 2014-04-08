@@ -103,20 +103,4 @@ namespace Duel
 		mSubEntities.clear();
 	}
 
-	void DEntity::preRender()
-	{
-		if (mAttachedNode != NULL)
-		{
-			DAutoGpuParameter::getSingleton().setParameterDelegate(mAttachedNode->getCreator());
-		}
-	}
-
-	void DEntity::postRender()
-	{
-		if (mAttachedNode != NULL)
-		{
-			DAutoGpuParameter::getSingleton().setParameterDelegate(NULL);
-		}
-	}
-
 }

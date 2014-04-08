@@ -4,6 +4,7 @@
 #define _DUELDEMODEFERRENDERHELPER_H_
 
 #include "DuelCommon.h"
+#include "DuelRenderable.h"
 
 namespace Duel
 {

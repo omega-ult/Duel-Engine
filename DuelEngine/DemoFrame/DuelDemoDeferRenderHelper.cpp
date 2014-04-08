@@ -1,6 +1,9 @@
 //  [4/7/2014 OMEGA] created
 #include "pch.h"
-#include "DuelCommon.h"
+#include "Duel.h"
+#include "DuelRenderEffect.h"
+#include "DuelRenderResourceManager.h"
+#include "DuelResourceGroupManager.h"
 #include "DuelDemoDeferRenderHelper.h"
 
 namespace Duel
@@ -8,6 +11,7 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(DDemoDeferHelper, DRenderable);
 	DUEL_IMPLEMENT_RTTI_1(DDemoAmbientLightHelper, DRenderable);
 	DUEL_IMPLEMENT_RTTI_1(DDemoPointLightHelper, DRenderable);
+	DUEL_IMPLEMENT_RTTI_1(DDemoDirectionalLightHelper, DRenderable);
 	DUEL_IMPLEMENT_RTTI_1(DDemoSpotLightHelper, DRenderable);
 
 	DDemoDeferHelper::DDemoDeferHelper()

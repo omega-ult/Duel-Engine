@@ -12,8 +12,8 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(DGStdCursor, DGCursor);
 
 
-	DGStdCursorPictureLayer::DGStdCursorPictureLayer( DGStdCursorRD* parent ) :
-		mParent(parent)
+	DGStdCursorPictureLayer::DGStdCursorPictureLayer(DGCursor* hostCursor) :
+		mHostCursor(hostCursor)
 	{
 
 		mRenderEffect = DResourceGroupManager::getSingleton().
@@ -78,10 +78,10 @@ namespace Duel
 		DMatrix3 uvTransform = DMatrix3::IDENTITY;
 		DGCursor::CursorAction action;
 		DVector2 posOffset(0.0f, 0.0f);
-		DReal cw = mParent->getHostCursor()->getSize().getWidth() * 0.5f;
-		DReal ch = mParent->getHostCursor()->getSize().getHeight() * 0.5f;
+		DReal cw = mHostCursor->getSize().getWidth() * 0.5f;
+		DReal ch = mHostCursor->getSize().getHeight() * 0.5f;
 		bool makeOffset = false;
-		switch (mParent->getHostCursor()->getCursorAction())
+		switch (mHostCursor->getCursorAction())
 		{
 		case Duel::DGCursor::CA_Idle:
 			action = DGCursor::CA_Idle;
@@ -135,11 +135,11 @@ namespace Duel
 			posOffset.y -= ch;
 		}
 		// 因为标准ui的HotPoint根据不同的动作会有不同的坐标, 因此需要重新计算.
-		DVector2 pos = mParent->getHostCursor()->getPointInScreen();
+		DVector2 pos = mHostCursor->getPointInScreen();
 		pos += posOffset;
-		DGSize winSize((DReal)mParent->getHostCursor()->getHostWindow()->getWidth(),
-			(DReal)mParent->getHostCursor()->getHostWindow()->getHeight());
-		vertTransform = DGGUIMathTool::getScreenSpaceTransform(pos, mParent->getHostCursor()->getSize(), winSize);
+		DGSize winSize((DReal)mHostCursor->getHostWindow()->getWidth(),
+			(DReal)mHostCursor->getHostWindow()->getHeight());
+		vertTransform = DGGUIMathTool::getScreenSpaceTransform(pos, mHostCursor->getSize(), winSize);
 		so->getVertexProgramParameters()->setValue("vertTransform", vertTransform);
 
 		// 处理UV, 反正标准Cursor图里只有12个图标. 直接计算.
@@ -155,20 +155,13 @@ namespace Duel
 
 	}
 
-	void DGStdCursorPictureLayer::preRender()
-	{
-		mParent->preRender();
-	}
 
-	void DGStdCursorPictureLayer::postRender()
-	{
-		mParent->postRender();
-	}
 
 	DGStdCursorRD::DGStdCursorRD( DGCursor* hostCursor ) :
 		mHostCursor(hostCursor)
 	{
-		mPicLayer = new DGStdCursorPictureLayer(this);
+		assert(mHostCursor != NULL);
+		mPicLayer = new DGStdCursorPictureLayer(mHostCursor);
 	}
 
 	DGStdCursorRD::~DGStdCursorRD()

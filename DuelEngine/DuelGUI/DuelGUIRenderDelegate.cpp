@@ -12,23 +12,4 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(DGRenderDelegate, DObject);
 
 	
-
-	void DGRenderDelegate::preRender()
-	{
-		DGWidget* w = getParent();
-		if (w)
-		{
-			DAutoGpuParameter::getSingleton().setParameterDelegate(w->getRootManager());
-		}
-	}
-
-	void DGRenderDelegate::postRender()
-	{
-		DGWidget* w = getParent();
-		if (w)
-		{
-			DAutoGpuParameter::getSingleton().setParameterDelegate(NULL);
-		}
-	}
-
 }

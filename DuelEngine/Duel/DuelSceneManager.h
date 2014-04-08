@@ -45,7 +45,7 @@ namespace Duel
 		dependent on the DCamera, which will always call back the DSceneManager
 		which created it to render the scene. 
      */
-	class DUEL_API DSceneManager : public DAutoGpuParameterDelegate
+	class DUEL_API DSceneManager : public DObject
 	{
 	DUEL_DECLARE_RTTI(DSceneManager)
 	public:		
@@ -56,7 +56,7 @@ namespace Duel
 		// the smallest size of an area that can be handled. the granularity affect 
 		// computation cost by the scene manager, a porper value should be tested by the 
 		// client program.
-		virtual void		initialize(DSceneInstance* owner, DAxisAlignedBox region, DReal granularity);
+		virtual void		initialize(DAxisAlignedBox region, DReal granularity);
 		// change the size of the scene manager, this method takes affect after initialization;
 		virtual	void		resize(DAxisAlignedBox region) {}
 
@@ -85,8 +85,6 @@ namespace Duel
 		// clear all scene node/lights attached to this manager.
 		virtual	void		clearScene();
 
-		// populate lights which are affecting current camera's frustum to the render group..
-		virtual void		populateLights(DRenderQueue* queue, DCamera* cam);
 
 		// apply current scene to the render queue.
 		virtual	void		applyToRenderQueue(DRenderQueue* queue, DCamera* cam) { /* leave to sub-class */ }
@@ -101,14 +99,8 @@ namespace Duel
 		virtual	void		destroyQuery(SphereQuery* query) = 0;
 		virtual	void		destroyQuery(IntersectionQuery* query) = 0;
 
-
-		// override : DAutoGpuParameterDelegate--------------
-		virtual DMatrix4	getViewMatrix();
-		// override : DAutoGpuParameterDelegate--------------
-		virtual DMatrix4	getProjectionMatrix();
-
+		
 	protected:
-		virtual bool		isAffectedByLight(DLightSource* light, DCamera* cam);
 		// sub-class implement these methods
 		virtual	DSceneNode*	createSceneNodeImpl() = 0;
 		virtual	DSceneNode*	createSceneNodeImpl(const DString& name) = 0;
@@ -118,8 +110,6 @@ namespace Duel
 
 		// creator of this sceneManager.
 		DSceneManagerFactory*	mCreator;
-		// the owner of this sceneManager;
-		DSceneInstance*		mOwner;
 		// the type of the manager.
 		DString				mType;
 		// name for the ScneneManager.
