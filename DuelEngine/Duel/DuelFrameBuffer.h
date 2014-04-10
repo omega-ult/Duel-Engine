@@ -40,10 +40,16 @@ namespace Duel
 
 		DRenderResourceFactory*		getCreator() { return mCreator; }
 
-		// attach a render color view, only if the view is not attached to another frame buffer.
+		// notice: make sure the specified v is not currently attached to another frame buffer.
+		// specified elem should not be occupied by other RenderView, otherwise you must detach it
+		// firstly, if the v is attached to another elem in this frame buffer, this method will help you
+		// change the element channel automatically. 
+		// NULL pointer is unacceptable!
 		virtual void		attachRenderColorView(ElementAttachment elem, DRenderColorView* v) = 0;
 		virtual void		detachRenderColorView(ElementAttachment elem) = 0;
-		// attach a render depth stencil view, only if the view is not attached to another frame buffer.
+		// notice: make sure the specified v is not currently attached to another frame buffer.
+		// if there is already a depth stencil view attached, detach it before you go ahead.
+		// NULL pointer is unacceptable!
 		virtual void		attachRenderDepthStencilView(DRenderDepthStencilView* v) = 0;
 		virtual void		detachRenderDepthStencilView() = 0;
 
