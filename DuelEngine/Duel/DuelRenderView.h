@@ -17,19 +17,15 @@ namespace Duel
 	public:
 		// this constructor will initialize mParent, mAttachPoint, 
 		// mWidth, mHeight, mFormat for sub-classes;
-		DRenderColorView(DFrameBuffer* parent, ElementAttachment att);
-		virtual	~DRenderColorView() {}
+		DRenderColorView(DRenderResourceFactory* creator, DPixelFormat fmt);
+		~DRenderColorView();
 
-		DFrameBuffer*	getParent() { return mParent; }
-		ElementAttachment	getAttachPoint() { return mAttachPoint; }
+		DRenderResourceFactory*	getCreator() { return mCreator; }
 		// you should retrive its propertis after you attach it to a frame buffer.
 		uint32			getWidth() { return mWidth; }
 		uint32			getHeight() { return mHeight; }
 		DPixelFormat	getFormat() { return mFormat; }
 
-		virtual void	setEnable(bool flag) { mbEnable = flag; }
-		virtual bool	isEnabled() { return mbEnable; }
-
 		// save the current content into an image.
 		virtual	void		saveToImage(DImage* dstImg) {}
 
@@ -40,22 +36,30 @@ namespace Duel
 		// resource to the gpu pipeline.
 		virtual DGpuTextureConstantPtr	getGpuTexutureConstant() = 0;
 
+		// query whether this view is attached to a frame buffer.
+		// only it is not attached, it can be bound to another frameBuffer.
+		bool				isAttached();
+		DFrameBuffer*		getAttachedFrameBuffer();
+		ElementAttachment	getAttachPoint() { return mAttachPoint; }
+
+
 	protected:
-		DFrameBuffer*	mParent;
-		ElementAttachment	mAttachPoint;
-		uint32			mWidth;
-		uint32			mHeight;
-		DPixelFormat	mFormat;
-		bool			mbEnable;
+		DRenderResourceFactory*	mCreator;
+		uint32					mWidth;
+		uint32					mHeight;
+		DPixelFormat			mFormat;
+		DFrameBuffer*			mAttachFB;
+		ElementAttachment		mAttachPoint;
 	};
 
-	class DUEL_API DRenderDepthView : public DObject
+	class DUEL_API DRenderDepthStencilView : public DObject
 	{
-		DUEL_DECLARE_RTTI(DRenderDepthView)
+		DUEL_DECLARE_RTTI(DRenderDepthStencilView)
 	public:
-		DRenderDepthView(DFrameBuffer* parent);
-		virtual ~DRenderDepthView() {}
-		DFrameBuffer*	getParent() { return mParent; }
+		DRenderDepthStencilView(DRenderResourceFactory* creator);
+		~DRenderDepthStencilView();
+
+		DRenderResourceFactory*	getCreator() { return mCreator; }
 		// you should retrive its propertis after you attach it to a frame buffer.
 		uint32			getWidth() { return mWidth; }
 		uint32			getHeight() { return mHeight; }
@@ -69,10 +73,16 @@ namespace Duel
 		// this method is implemented by sub class, used in bingding texture 
 		// resource to the gpu pipeline.
 		virtual DGpuTextureConstantPtr	getGpuTexutureConstant() = 0;
+
+		// query whether this view is attached to a frame buffer.
+		bool			isAttached();
+		DFrameBuffer*	getAttachedFrameBuffer();
+
 	protected:
-		uint32			mWidth;
-		uint32			mHeight;
-		DFrameBuffer*	mParent;
+		DRenderResourceFactory*	mCreator;
+		uint32					mWidth;
+		uint32					mHeight;
+		DFrameBuffer*			mAttachFB;
 	};
 }
 

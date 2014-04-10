@@ -47,6 +47,14 @@ namespace Duel
 		virtual DFrameBuffer* createFrameBuffer( uint32 w, uint32 h, uint32 colorBits );
 		// override : DHardwareBufferFactory-------------------------
 		virtual void destroyFrameBuffer( DFrameBuffer* buf );
+		virtual DRenderColorView* createRenderColorView( DPixelFormat fmt );
+		// override : DHardwareBufferFactory-------------------------
+		virtual void destroyRenderColorView( DRenderColorView* v );
+		// override : DHardwareBufferFactory-------------------------
+		virtual DRenderDepthStencilView* createRenderDepthStencilView();
+		// override : DHardwareBufferFactory-------------------------
+		virtual void destroyRenderDepthStencilView( DRenderDepthStencilView* v );
+
 
 	protected:
 #ifdef DUEL_PLATFORM_WINDOWS
@@ -58,6 +66,7 @@ namespace Duel
 		HGLRC	mMainHGLRC;
 		HWND	mMainHWND;
 		void	initWindowsModules();
+
 #endif
 		GLRenderSystem* mTargetRSys;
 	};

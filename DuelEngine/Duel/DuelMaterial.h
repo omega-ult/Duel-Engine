@@ -145,8 +145,8 @@ namespace Duel
 		// whether the resource is loaded, if so, the current loaded texture
 		// will be cached, and the final texture used in shader will be that cached constant.
 		TextureConstantCache	getTextureValue(const DString& paramName);
-
-		DRenderTechnique*	getRenderTechnique(uint32 stage); 
+		typedef SetIterator<std::set<DLightSource*>>	LightIterator;
+		DRenderTechnique*	getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li); 
 		// use this function to map parameters into the gpu parameter.
 		void	updateGpuParameter(DShaderObject* so);
 
@@ -217,7 +217,8 @@ namespace Duel
 		void	removeAllUVSlotTargets();
 
 		// get technique with render context...参数正在设计中, defer/forward/reflect(water)等等...
-		virtual DRenderTechnique*	getRenderTechnique(uint32 stage) = 0;
+		typedef SetIterator<std::set<DLightSource*>>	LightIterator;
+		virtual DRenderTechnique*	getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li) = 0;
 
 		// create an instance, which will be able to used in object.
 		virtual DMaterialInstancePtr	createInstance();

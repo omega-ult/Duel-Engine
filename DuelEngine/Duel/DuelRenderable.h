@@ -63,11 +63,13 @@ namespace Duel
 		// param rs indicate which stage the layout belongs to
 		//  [6/28/2013 OMEGA] no need for stage specification
 		virtual	DRenderLayout*		getRenderLayout();
+
+		typedef	SetIterator<std::set<DLightSource*>>	LightIterator;
 		// get the technique of forward rendering of object,
 		// pre-defined render stages are defined above, different renderworkshop may
 		// have different render stage defined, read their specification before you
 		// implement if you need to make it available, otherwise just return NULL.
-		virtual	DRenderTechnique*	getRenderTechnique(uint32 stage) = 0;
+		virtual DRenderTechnique*	getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li) = 0;
 
 		// get the depth to the camera,
 		//virtual	DReal	getViewDepthToCamera(const DCamera* cam) const { return Math::Sqrt(getSquaredViewDepthToCamera(cam)); }

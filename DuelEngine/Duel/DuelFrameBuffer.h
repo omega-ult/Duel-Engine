@@ -35,22 +35,22 @@ namespace Duel
 	public:
 		// due to hardware limitation, we can only have the render views with same color bits.
 		// when try to enable elements with pixel format which has different bits, that operation will fail.
-		DFrameBuffer(DRenderResourceFactory* parent, uint32 w, uint32 h, uint32 colorBits);
+		DFrameBuffer(DRenderResourceFactory* creator, uint32 w, uint32 h, uint32 colorBits);
 		virtual	~DFrameBuffer() {}
 
-		DRenderResourceFactory*		getParent() { return mParent; }
+		DRenderResourceFactory*		getCreator() { return mCreator; }
 
-		// enable specified elements for this frame buffer, notice that
-		// it may rely on rendersystem's capacity, if specified element are not available,
-		// getRenderView() will return a NULL;
-		virtual void		enableElement(ElementAttachment elem, DPixelFormat fmt) = 0;
-		// diable specified element.
-		virtual	void		disableElement(ElementAttachment elem) = 0;
+		// attach a render color view, only if the view is not attached to another frame buffer.
+		virtual void		attachRenderColorView(ElementAttachment elem, DRenderColorView* v) = 0;
+		virtual void		detachRenderColorView(ElementAttachment elem) = 0;
+		// attach a render depth stencil view, only if the view is not attached to another frame buffer.
+		virtual void		attachRenderDepthStencilView(DRenderDepthStencilView* v) = 0;
+		virtual void		detachRenderDepthStencilView() = 0;
+
 		// if a specified render view does not exist, it return NULL
 		virtual	DRenderColorView*	getRenderColorView(ElementAttachment elem) = 0;
-
 		// get the DepthView
-		virtual	DRenderDepthView*	getRenderDepthView() = 0;
+		virtual	DRenderDepthStencilView*	getRenderDepthStencilView() = 0;
 
 		// set/get the properties of the render target.
 		virtual	void		resize(uint32 width, uint32 height) { mWidth = width; mHeight = height; }
@@ -68,7 +68,7 @@ namespace Duel
 		virtual	void		clear(uint32 flags, const DColor& clr, DReal depth, int32 stencil) {}
 
 	protected:
-		DRenderResourceFactory*		mParent;
+		DRenderResourceFactory*		mCreator;
 		// basic property.
 		uint32				mWidth;
 		uint32				mHeight;

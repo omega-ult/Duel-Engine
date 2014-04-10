@@ -238,9 +238,9 @@ namespace Duel
 		return &mIntConstants[physicalIndex];
 	}
 
-	DRenderTechnique* DMaterialInstance::getRenderTechnique( uint32 stage )
+	DRenderTechnique* DMaterialInstance::getRenderTechnique( uint32 stage, DCamera* cam, LightIterator li )
 	{
-		return mParent->getRenderTechnique(stage);
+		return mParent->getRenderTechnique(stage, cam , li);
 	}
 
 	void DMaterialInstance::setValue( const DString& name, float val )

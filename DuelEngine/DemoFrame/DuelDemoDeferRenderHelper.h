@@ -28,7 +28,7 @@ namespace Duel
 
 		// override : DRenderable--------------------------
 		// only RS_ScreenQuadTransfer can return a valid render layout.
-		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
+		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
 
 		// override : DRenderable--------------------------
 		void	updateCustomGpuParameter(DShaderObject* so);
@@ -49,7 +49,7 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DDemoAmbientLightHelper)
 	public:
 		DDemoAmbientLightHelper();
-		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
+		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
 	protected:
 		DRenderTechniquePtr	mAmbientAccumTech;
 	};
@@ -62,7 +62,7 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DDemoPointLightHelper)
 	public:
 		DDemoPointLightHelper();
-		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
+		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
 	protected:
 		DRenderTechniquePtr	mPointLightAccumTech;
 	};
@@ -74,7 +74,7 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DDemoDirectionalLightHelper)
 	public:
 		DDemoDirectionalLightHelper();
-		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
+		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
 	protected:
 		DRenderTechniquePtr	mDirectionalLightAccumTech;
 	};
@@ -87,7 +87,7 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DDemoSpotLightHelper)
 	public:
 		DDemoSpotLightHelper();
-		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
+		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
 	protected:
 		DRenderTechniquePtr	mSpotLightAccumTech;
 	};

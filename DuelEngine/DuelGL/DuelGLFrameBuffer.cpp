@@ -11,17 +11,16 @@ namespace Duel
 
 	DUEL_IMPLEMENT_RTTI_1(GLFrameBuffer, DFrameBuffer);
 
-	GLFrameBuffer::GLFrameBuffer( DRenderResourceFactory* parent, /*GLRenderSystem* rSys, */uint32 w, uint32 h, uint32 colorbits ) :
+	GLFrameBuffer::GLFrameBuffer( DRenderResourceFactory* parent, uint32 w, uint32 h, uint32 colorbits ) :
 		DFrameBuffer(parent, w, h, colorbits),
-		//mTargetRSys(rSys),
 		mFBO(0),
-		mDepthView(NULL)
+		mCurDepthView(NULL)
 	{
+		assert(w != 0 && h != 0);
 		for (int32 i = 0; i < 8; i++)
 		{
 			mViewList.push_back(NULL);
 		}
-		mDepthView = new GLRenderDepthView(this);
 		glGenFramebuffers(1, &mFBO);
 		mCurViewport.reset(0,0, w, h);
 		resize(w, h);
@@ -29,18 +28,6 @@ namespace Duel
 
 	GLFrameBuffer::~GLFrameBuffer()
 	{
-		RenderColorViewList::iterator i, iend = mViewList.end();
-		for (i = mViewList.begin(); i != iend; ++i)
-		{
-			if ((*i) != NULL)
-			{
-				delete (*i);
-			}
-		}
-		if (mDepthView != NULL)
-		{
-			delete mDepthView;
-		}
 		if (mFBO != 0)
 		{
 			glDeleteRenderbuffers(1, &mFBO);
@@ -49,50 +36,50 @@ namespace Duel
 
 	}
 
-
-	void GLFrameBuffer::enableElement( ElementAttachment elem, DPixelFormat format )
-	{
-		if (DPixelFormatTool::getFormatBits(format) != mColorBits)
-		{
-			return;
-		}
-		GLuint	oldFbo = cacheFBO();
-		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
-		if (mViewList[(uint32)(elem)] == NULL)
-		{
-			GLRenderColorView* rv = new GLRenderColorView(this, elem, format);
-			mViewList[(uint32)(elem)] = rv;
-			rv->resize(mWidth, mHeight);
-			rv->setEnable(true);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, rv->getTextureID(), 0);
-		}
-		else
-		{
-			if (mViewList[(uint32)elem]->getFormat() != format)
-			{
-				delete mViewList[(uint32)elem];
-				GLRenderColorView* rv = new GLRenderColorView(this, elem, format);
-				rv->resize(mWidth, mHeight);
-				mViewList[(uint32)(elem)] = rv;
-			}
-			mViewList[(uint32)(elem)]->setEnable(true);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, mViewList[(uint32)(elem)]->getTextureID(), 0);
-
-		}
-		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
-	}
-
-	void GLFrameBuffer::disableElement( ElementAttachment elem )
-	{
-		GLuint	oldFbo = cacheFBO();
-		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
-		if (mViewList[(uint32)(elem)] != NULL)
-		{
-			mViewList[(uint32)(elem)]->setEnable(false);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, 0, 0);
-		}
-		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
-	}
+// 
+// 	void GLFrameBuffer::enableElement( ElementAttachment elem, DPixelFormat format )
+// 	{
+// 		if (DPixelFormatTool::getFormatBits(format) != mColorBits)
+// 		{
+// 			return;
+// 		}
+// 		GLuint	oldFbo = cacheFBO();
+// 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+// 		if (mViewList[(uint32)(elem)] == NULL)
+// 		{
+// 			GLRenderColorView* rv = new GLRenderColorView(this, elem, format);
+// 			mViewList[(uint32)(elem)] = rv;
+// 			rv->resize(mWidth, mHeight);
+// 			rv->setEnable(true);
+// 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, rv->getTextureID(), 0);
+// 		}
+// 		else
+// 		{
+// 			if (mViewList[(uint32)elem]->getFormat() != format)
+// 			{
+// 				delete mViewList[(uint32)elem];
+// 				GLRenderColorView* rv = new GLRenderColorView(this, elem, format);
+// 				rv->resize(mWidth, mHeight);
+// 				mViewList[(uint32)(elem)] = rv;
+// 			}
+// 			mViewList[(uint32)(elem)]->setEnable(true);
+// 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, mViewList[(uint32)(elem)]->getTextureID(), 0);
+// 
+// 		}
+// 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+// 	}
+// 
+// 	void GLFrameBuffer::disableElement( ElementAttachment elem )
+// 	{
+// 		GLuint	oldFbo = cacheFBO();
+// 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+// 		if (mViewList[(uint32)(elem)] != NULL)
+// 		{
+// 			mViewList[(uint32)(elem)]->setEnable(false);
+// 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, 0, 0);
+// 		}
+// 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+// 	}
 
 	DRenderColorView* GLFrameBuffer::getRenderColorView( ElementAttachment elem )
 	{
@@ -109,6 +96,8 @@ namespace Duel
 			Please search for the example about GL_EXT_packed_depth_stencil on this page.
 		*/
 
+		assert(width != 0 && height != 0);
+		mWidth = width, mHeight = height;
 		DFrameBuffer::resize(width, height);
 		RenderColorViewList::iterator i, iend = mViewList.end();
 		for (i = mViewList.begin(); i != iend; ++i)
@@ -119,7 +108,10 @@ namespace Duel
 			}
 		}
 
-		mDepthView->resize(width, height);
+		if(mCurDepthView != NULL)
+		{
+			mCurDepthView->resize(width, height);
+		}
 		// cache the old fbo. so that we can make no effect on the pipe line.
 		GLuint	oldFbo = cacheFBO();
 
@@ -131,35 +123,23 @@ namespace Duel
 		for (i = mViewList.begin(), j = 0; i != iend; ++i, ++j)
 		{
 			if ((*i) != NULL)
+			{	
+				// attach a texture to FBO color attachement point
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + j, GL_TEXTURE_2D, (*i)->getTextureID(), 0);
+			}
+			else
 			{
-				if ((*i)->isEnabled())
-				{			
-					// attach a texture to FBO color attachement point
-					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + j, GL_TEXTURE_2D, (*i)->getTextureID(), 0);
-				}
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + j, GL_TEXTURE_2D, 0, 0);
 			}
 		}
-
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mDepthView->getTextureID(), 0);
-
-// 		// for depth buffer and stencil buffer.
-// 		if (mDepthStencilBuffer != 0)
-// 		{
-// 			glDeleteRenderbuffers(1, &mDepthStencilBuffer);
-// 		}
-// 		glGenRenderbuffers(1, &mDepthStencilBuffer);
-// 		glBindRenderbuffer(GL_RENDERBUFFER, mDepthStencilBuffer);
-// 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-// 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
-// 
-// 
-// 
-// 		// attach a renderbuffer to depth attachment point
-// 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepthStencilBuffer);
-// 
-// 		// attach a renderbuffer to depth attachment point
-// 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, mDepthStencilBuffer);
-
+		if (mCurDepthView != NULL)
+		{		
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mCurDepthView->getTextureID(), 0);
+		}
+		else
+		{
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+		}		
 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 
 	}
@@ -199,9 +179,112 @@ namespace Duel
 		return (GLuint)oldFbo;
 	}
 
-	DRenderDepthView* GLFrameBuffer::getRenderDepthView()
+	DRenderDepthStencilView* GLFrameBuffer::getRenderDepthStencilView()
 	{
-		return mDepthView;
+		return mCurDepthView;
+	}
+
+	void GLFrameBuffer::attachRenderColorView( ElementAttachment elem, DRenderColorView* v )
+	{
+		if (v == NULL)
+		{
+			assert(false);// "Can't attach an empty render color view"
+			return;
+		}
+		if (v->getAttachedFrameBuffer() != NULL && v->getAttachedFrameBuffer() != this)
+		{
+			assert(false);// "Specified view is attached to another frame buffer, you must detach it before reusing it"
+			return;
+		}
+		// the case specified v is attached to another channel
+		if (getRenderColorView(elem) != NULL)
+		{
+			assert(false);//"Specified attachement is already in use, you must detach it firstly"
+			return;
+		}
+		// if this view has been attached to this frame buffer, change its channel.
+		if (v->getAttachedFrameBuffer() == this)
+		{
+			detachRenderColorView(v->getAttachPoint());
+		}
+
+		// chech format compatibility
+		if (DPixelFormatTool::getFormatBits(v->getFormat()) != mColorBits)
+		{
+			return;
+		}
+		GLRenderColorView* rv = v->getAs<GLRenderColorView>(false);
+		// check type availability.
+		if (rv == NULL)
+		{
+			return;
+		}
+		rv->resize(mWidth, mHeight);
+		GLuint	oldFbo = cacheFBO();
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);			
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, rv->getTextureID(), 0);
+		mViewList[(uint32)(elem)] = rv;
+		rv->setAttachFrameBuffer(this);
+		rv->setAttachElement(elem);
+		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+	}
+
+	void GLFrameBuffer::detachRenderColorView( ElementAttachment elem )
+	{
+		GLuint	oldFbo = cacheFBO();
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+		if (mViewList[(uint32)(elem)] != NULL)
+		{
+			mViewList[(uint32)(elem)]->setAttachFrameBuffer(NULL);
+			mViewList[(uint32)(elem)]->setAttachElement(EA_Color0);
+			mViewList[(uint32)(elem)] = NULL;
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, 0, 0);
+		}
+		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+
+	}
+
+	void GLFrameBuffer::attachRenderDepthStencilView( DRenderDepthStencilView* v )
+	{		
+		if (v == NULL)
+		{
+			assert(false);//"Can't attach an empty depth stencil view"
+			return;
+		}
+		if (v->getAttachedFrameBuffer() != NULL && v->getAttachedFrameBuffer() != this)
+		{
+			assert(false);//"Specified view is attached to another frame buffer, you must detach it before reusing it"
+			return;
+		}
+		GLRenderDepthStencilView* rv = v->getAs<GLRenderDepthStencilView>(false);
+		// check type availability.
+		if (rv == NULL)
+		{
+			return;
+		}
+		detachRenderDepthStencilView();
+		rv->resize(mWidth, mHeight);
+		mCurDepthView = rv;
+		mCurDepthView->setAttachFrameBuffer(this);
+		GLuint	oldFbo = cacheFBO();
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);			
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mCurDepthView->getTextureID(), 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+	}
+
+	void GLFrameBuffer::detachRenderDepthStencilView()
+	{
+		if(mCurDepthView == NULL)
+		{
+			return;
+		}
+		mCurDepthView->setAttachFrameBuffer(NULL);
+		mCurDepthView = NULL;
+		GLuint	oldFbo = cacheFBO();
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);			
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+
 	}
 
 

@@ -81,10 +81,12 @@ namespace Duel
 		// shortcut for clear all groups
 		void			clear();
 
-		virtual DMatrix4 getViewMatrix();
+		virtual DMatrix4	getViewMatrix();
 
-		virtual DMatrix4 getProjectionMatrix();
+		virtual DMatrix4	getProjectionMatrix();
 
+		virtual DMatrix4	getInverseViewMatrix();
+		virtual DMatrix4	getInverseProjectionMatrix();
 	protected:
 		// we rely on std::map because in its inner implement, the sorting is
 		// based on std::less method, and we can only rely on its ascending sorting.

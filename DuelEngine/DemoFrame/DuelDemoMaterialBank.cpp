@@ -9,7 +9,7 @@ namespace Duel
 
 
 
-	DRenderTechnique* DLambertMaterial::getRenderTechnique( uint32 stage )
+	DRenderTechnique* DLambertMaterial::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
 	{
 		if (stage == RS_Defer_GBuffer)
 		{

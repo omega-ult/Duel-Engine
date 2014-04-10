@@ -160,7 +160,8 @@ namespace Duel
 		while (rendI.hasMoreElements())
 		{
 			DRenderable* rend = rendI.getNext();
-			DRenderTechnique* tech = rend->getRenderTechnique(renderStage);
+			DRenderTechnique* tech = rend->getRenderTechnique(renderStage, 
+				grp->getParent()->getRenderCamera(), grp->getParent()->getLightIterator());
 			if (tech != NULL)
 			{
 				DRenderTechnique::RenderPassIterator pi = tech->getRenderPassIterator();
@@ -185,8 +186,8 @@ namespace Duel
 	{
 		DeferLayer ret;
 		ret.GBuffer = DRenderResourceManager::getSingleton().createFrameBuffer(target->getWidth(), target->getHeight(), 32);
-		ret.GBuffer->enableElement(EA_Color0, PF_A8R8G8B8);
-		ret.GBuffer->enableElement(EA_Color1, PF_A8R8G8B8);
+// 		ret.GBuffer->enableElement(EA_Color0, PF_A8R8G8B8);
+// 		ret.GBuffer->enableElement(EA_Color1, PF_A8R8G8B8);
 		return ret;
 	}
 

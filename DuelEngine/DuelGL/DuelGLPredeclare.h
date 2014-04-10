@@ -12,7 +12,7 @@ namespace Duel
 	class GLRenderResourceFactory;
 	class GLFrameBuffer;
 	class GLRenderColorView;
-	class GLRenderDepthView;
+	class GLRenderDepthStencilView;
 	class GLTexture;
 	class GLTextureManager;
 	class GLVertexDeclaration;

@@ -30,10 +30,12 @@ namespace Duel
 		virtual	void	update();
 		//////////////////////////////////////////////////////////////////////////
 		// override : DFrameBuffer-------------------------
-		virtual void	enableElement( ElementAttachment elem, DPixelFormat format );
-		virtual void	disableElement( ElementAttachment elem );
+		virtual void	attachRenderColorView( ElementAttachment elem, DRenderColorView* v );
+		virtual void	detachRenderColorView( ElementAttachment elem );
+		virtual void	attachRenderDepthStencilView( DRenderDepthStencilView* v );
+		virtual void	detachRenderDepthStencilView();
 		virtual DRenderColorView*	getRenderColorView( ElementAttachment elem );
-		virtual DRenderDepthView*	getRenderDepthView();
+		virtual DRenderDepthStencilView*	getRenderDepthStencilView();
 		virtual void	resize( uint32 width, uint32 height );
 		virtual void	clear( uint32 flags, const DColor& clr, DReal depth, int32 stencil );
 		//////////////////////////////////////////////////////////////////////////
@@ -58,7 +60,9 @@ namespace Duel
 		GLuint			mFBO;
 		typedef	std::vector<GLRenderColorView*>	RenderColorViewList;
 		RenderColorViewList	mViewList;
-		GLRenderDepthView*	mDepthView;
+		GLRenderDepthStencilView*	mCurDepthView;
+		GLRenderColorView*	mMainSurface;
+		GLRenderDepthStencilView*	mMainDepthView;
 	};
 
 }

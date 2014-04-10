@@ -167,6 +167,7 @@ namespace Duel {
 		virtual	const DMatrix4&	getViewMatrix();
 		virtual	const DMatrix4&	getInverseViewMatrix();
 		virtual	const DMatrix4&	getProjectionMatrix();
+		virtual	const DMatrix4&	getInverseProjectionMatrix();
 
 		// these two methods are used in object picking.
 		// get a ray in the world coordinate space, with given ray in camera space.
@@ -231,7 +232,7 @@ namespace Duel {
 
 		// projection matrix
 		DMatrix4			mProjMatrix;
-
+		DMatrix4			mInvProjMatrix;
 		// view matrix
 		DMatrix4			mViewMatrix;
 		// inverse view matrix.

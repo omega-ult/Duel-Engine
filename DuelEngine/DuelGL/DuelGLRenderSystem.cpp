@@ -637,9 +637,6 @@ namespace Duel
 				if (v != NULL)
 				{
 					maxTargetCount = i;
-				}
-				if (v != NULL && v->isEnabled())
-				{
 					targetList[i] = GL_COLOR_ATTACHMENT0 + i;
 				}
 				else

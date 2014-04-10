@@ -36,7 +36,7 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DTerrainRenderNode)
 	public:
 		DTerrainRenderNode(DTerrainQuadTreeNode* parentNode);
-		virtual DRenderTechnique*	getRenderTechnique(uint32 stage);
+		virtual DRenderTechnique*	getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
 		virtual void	updateCustomGpuParameter(DShaderObject* so);
 		virtual	void	getWorldTransform(DMatrix4& outMat);
 		

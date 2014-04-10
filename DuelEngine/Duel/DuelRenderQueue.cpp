@@ -157,4 +157,22 @@ namespace Duel
 		return mRenderCamera->getProjectionMatrix();
 	}
 
+	Duel::DMatrix4 DRenderQueue::getInverseViewMatrix()
+	{
+		if (mRenderCamera == NULL)
+		{
+			return DMatrix4::IDENTITY;
+		}
+		return mRenderCamera->getInverseViewMatrix();
+	}
+
+	Duel::DMatrix4 DRenderQueue::getInverseProjectionMatrix()
+	{
+		if (mRenderCamera == NULL)
+		{
+			return DMatrix4::IDENTITY;
+		}
+		return mRenderCamera->getInverseProjectionMatrix();
+	}
+
 }

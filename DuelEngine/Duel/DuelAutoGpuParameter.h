@@ -42,7 +42,8 @@ namespace Duel
 
 		virtual DMatrix4	getViewMatrix() = 0;
 		virtual DMatrix4	getProjectionMatrix() = 0;
-
+		virtual DMatrix4	getInverseViewMatrix() { return getViewMatrix().getInverse(); }
+		virtual DMatrix4	getInverseProjectionMatrix() { return getViewMatrix().getInverse(); }
 	private:
 
 	};
@@ -56,6 +57,8 @@ namespace Duel
 
 		DMatrix4	getViewMatrix();
 		DMatrix4	getProjectionMatrix();
+		DMatrix4	getInverseViewMatrix();
+		DMatrix4	getInverseProjectionMatrix();
 
 	private:
 		DCamera*	mCamera;
@@ -82,6 +85,8 @@ namespace Duel
 		DAutoGpuParameterDelegate*	getCurrentParameterDelegate();
 		DMatrix4	getViewMatrix();
 		DMatrix4	getProjectionMatrix();
+		DMatrix4	getInverseViewMatrix();
+		DMatrix4	getInverseProjectionMatrix();
 
 	protected:
 		DAutoGpuParameterDelegate*		mCurDelegate;

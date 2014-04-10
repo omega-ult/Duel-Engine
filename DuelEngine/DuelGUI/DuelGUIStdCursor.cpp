@@ -55,7 +55,7 @@ namespace Duel
 
 	}
 
-	DRenderTechnique* DGStdCursorPictureLayer::getRenderTechnique( uint32 stage )
+	DRenderTechnique* DGStdCursorPictureLayer::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
 	{
 		 if ( stage == RS_Forward)
 		 {

@@ -98,4 +98,24 @@ namespace Duel
 		return DRawBufferPtr(new DRawBuffer(size));
 	}
 
+	DRenderColorView* DRenderResourceManager::createRenderColorView( DPixelFormat fmt )
+	{
+		return mFactory->createRenderColorView(fmt);
+	}
+
+	DRenderDepthStencilView* DRenderResourceManager::createRenderDepthStencilView()
+	{
+		return mFactory->createRenderDepthStencilView();
+	}
+
+	void DRenderResourceManager::destroyRenderColorView( DRenderColorView* v )
+	{
+		mFactory->destroyRenderColorView(v);
+	}
+
+	void DRenderResourceManager::destroyRenderDepthStencilView( DRenderDepthStencilView* v )
+	{
+		mFactory->destroyRenderDepthStencilView(v);
+	}
+
 }

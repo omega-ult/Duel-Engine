@@ -398,11 +398,11 @@ namespace Duel
 	}
 
 
-	DRenderTechnique* DTerrainRenderNode::getRenderTechnique( uint32 stage )
+	DRenderTechnique* DTerrainRenderNode::getRenderTechnique( uint32 stage, DCamera* cam, LightIterator li )
 	{
 		if (mMaterial != NULL)
 		{
-			return mMaterial->getRenderTechnique(stage);
+			return mMaterial->getRenderTechnique(stage, cam, li);
 		}
 		return NULL;
 

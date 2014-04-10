@@ -84,7 +84,7 @@ namespace Duel
 				v = autoParam->getViewMatrix();
 				bVCal = true;
 			}
-			iv = v.getInverse();
+			iv = autoParam->getInverseViewMatrix();
 			if (vsMask & AGPN_InvViewMatrix) vsParam->setValue("Auto_InvViewMatrix", iv);
 			if (psMask & AGPN_InvViewMatrix) psParam->setValue("Auto_InvViewMatrix", iv);
 		}
@@ -104,7 +104,7 @@ namespace Duel
 				// reuse previous result.
 				p = autoParam->getProjectionMatrix();
 			}
-			ip = p.getInverse();
+			ip = autoParam->getInverseProjectionMatrix();
 			if (vsMask & AGPN_InvProjMatrix) vsParam->setValue("Auto_InvProjMatrix", ip);
 			if (psMask & AGPN_InvProjMatrix) psParam->setValue("Auto_InvProjMatrix", ip);
 		}

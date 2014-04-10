@@ -85,7 +85,7 @@ namespace Duel
 	}
 
 
-	DRenderTechnique* DGSPictureLayer::getRenderTechnique(uint32 stage)
+	DRenderTechnique* DGSPictureLayer::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
 	{
 		if ( stage == RS_Forward)
 		{

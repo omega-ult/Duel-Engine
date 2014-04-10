@@ -423,6 +423,14 @@ namespace Duel
 		return mProjMatrix;
 	}
 
+	const DMatrix4& DCamera::getInverseProjectionMatrix()
+	{
+		update();
+		return mInvProjMatrix;
+	}
+
+
+
 	void DCamera::update()
 	{
 		bool reCalPlanes = false;
@@ -477,6 +485,7 @@ namespace Duel
 				mProjMatrix[0][2] = 0.0f; mProjMatrix[1][2] = 0.0f; mProjMatrix[2][2] = mFar/(mFar- mNear); mProjMatrix[3][2] = -(mFar*mNear)/(mFar-mNear);
 				mProjMatrix[0][3] = 0.0f; mProjMatrix[1][3] = 0.0f; mProjMatrix[2][3] = 1.0f; mProjMatrix[3][3] = 0.0f;
 			}
+			mInvProjMatrix = mProjMatrix.getInverse();
 			mbProjDirty = false;
 			reCalPlanes = true;
 		}
@@ -594,7 +603,5 @@ namespace Duel
 		ret. pointTo(viewPnt);
 		return ret;
 	}
-
-
 
 }

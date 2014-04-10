@@ -15,7 +15,7 @@ namespace Duel
 	public:
 		DGSPictureLayer();
 		// override : DRenderable-----------------
-		virtual DRenderTechnique*	getRenderTechnique(uint32 stage);
+		virtual DRenderTechnique*	getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
 		virtual void	updateCustomGpuParameter(DShaderObject* so);
 		virtual	void	getWorldTransform(DMatrix4& outMat);
 		virtual void	preRender(); // calculate matrix;

@@ -170,11 +170,11 @@ namespace Duel
 	{
 		mbVisible = visible;
 	}
-	DRenderTechnique* DSubEntity::getRenderTechnique( uint32 stage )
+	DRenderTechnique* DSubEntity::getRenderTechnique( uint32 stage, DCamera* cam, LightIterator li )
 	{
 		if (mMtlInst != NULL)
 		{
-			return mMtlInst->getRenderTechnique(stage);
+			return mMtlInst->getRenderTechnique(stage, cam, li);
 		}
 		return NULL;
 	}

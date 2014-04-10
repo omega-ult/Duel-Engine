@@ -9,25 +9,6 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(DAutoGpuParameterDelegate, DObject);
 	DUEL_IMPLEMENT_RTTI_1(DNullAutoGpuParameterDelegate, DAutoGpuParameterDelegate);
 
-	DMatrix4 DAutoGpuParameter::getViewMatrix()
-	{
-		if (mCurDelegate == NULL)
-		{
-			return mNullDelegate.getViewMatrix();
-		}
-		return mCurDelegate->getViewMatrix();
-	}
-
-	DMatrix4 DAutoGpuParameter::getProjectionMatrix() 
-	{
-		if (mCurDelegate == NULL)
-		{
-			return mNullDelegate.getProjectionMatrix();
-		}
-		return mCurDelegate->getProjectionMatrix();
-	}
-
-
 	DNullAutoGpuParameterDelegate::DNullAutoGpuParameterDelegate()
 	{
 		mCamera = new DCamera("NullCamera");
@@ -58,6 +39,16 @@ namespace Duel
 		return mCamera->getProjectionMatrix();
 	}
 
+	Duel::DMatrix4 DNullAutoGpuParameterDelegate::getInverseViewMatrix()
+	{
+		return mCamera->getInverseViewMatrix();
+	}
+
+	Duel::DMatrix4 DNullAutoGpuParameterDelegate::getInverseProjectionMatrix()
+	{
+		return mCamera->getInverseProjectionMatrix();
+	}
+
 
 	DAutoGpuParameter::DAutoGpuParameter()
 	{
@@ -84,6 +75,43 @@ namespace Duel
 	DAutoGpuParameterDelegate* DAutoGpuParameter::getCurrentParameterDelegate()
 	{
 		return mCurDelegate;
+	}
+
+	DMatrix4 DAutoGpuParameter::getViewMatrix()
+	{
+		if (mCurDelegate == NULL)
+		{
+			return mNullDelegate.getViewMatrix();
+		}
+		return mCurDelegate->getViewMatrix();
+	}
+
+	DMatrix4 DAutoGpuParameter::getProjectionMatrix() 
+	{
+		if (mCurDelegate == NULL)
+		{
+			return mNullDelegate.getProjectionMatrix();
+		}
+		return mCurDelegate->getProjectionMatrix();
+	}
+
+
+	Duel::DMatrix4 DAutoGpuParameter::getInverseViewMatrix()
+	{
+		if (mCurDelegate == NULL)
+		{
+			return mNullDelegate.getInverseViewMatrix();
+		}
+		return mCurDelegate->getInverseViewMatrix();
+	}
+
+	Duel::DMatrix4 DAutoGpuParameter::getInverseProjectionMatrix()
+	{
+		if (mCurDelegate == NULL)
+		{
+			return mNullDelegate.getInverseProjectionMatrix();
+		}
+		return mCurDelegate->getInverseProjectionMatrix();
 	}
 
 }

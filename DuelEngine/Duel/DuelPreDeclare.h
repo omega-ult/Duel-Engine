@@ -176,7 +176,7 @@ namespace Duel
 	class	DRenderWorkshop;
 	class	DFrameBuffer;
 	class	DRenderColorView;
-	class	DRenderDepthView;
+	class	DRenderDepthStencilView;
 	class	DViewport;
 
 	class	DShaderObject;

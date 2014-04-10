@@ -10,6 +10,7 @@
 #include "DuelGLShaderObject.h"
 #include "DuelGLRenderWindow.h"
 #include "DuelGLFrameBuffer.h"
+#include "DuelGLRenderView.h"
 
 namespace Duel
 {
@@ -76,7 +77,7 @@ namespace Duel
 
 	void GLRenderResourceFactory::destroyRenderWindow( DRenderWindow* wind )
 	{
-		if (wind->getParent() == this)
+		if (wind->getCreator() == this)
 		{
 			delete wind;
 		}
@@ -92,7 +93,7 @@ namespace Duel
 
 	void GLRenderResourceFactory::destroyFrameBuffer( DFrameBuffer* buf )
 	{
-		if (buf->getParent() == this)
+		if (buf->getCreator() == this)
 		{
 			if (buf == mTargetRSys->getCurrentFrameBuffer())
 			{
@@ -170,6 +171,33 @@ namespace Duel
 		glewInit();
 
 	}
+
+	DRenderColorView* GLRenderResourceFactory::createRenderColorView( DPixelFormat fmt )
+	{
+		return new GLRenderColorView(this, fmt);
+	}
+
+	void GLRenderResourceFactory::destroyRenderColorView( DRenderColorView* v )
+	{
+		if (v->getAs<GLRenderColorView>(false) != NULL && v->getCreator() == this)
+		{
+			delete v;
+		}
+	}
+
+	DRenderDepthStencilView* GLRenderResourceFactory::createRenderDepthStencilView()
+	{
+		return new GLRenderDepthStencilView(this);
+	}
+
+	void GLRenderResourceFactory::destroyRenderDepthStencilView( DRenderDepthStencilView* v )
+	{
+		if (v->getAs<GLRenderDepthStencilView>(false) != NULL && v->getCreator() == this)
+		{
+			delete v;
+		}
+	}
+
 #endif // DUEL_PLATFORM_WINDOWS
 
 }

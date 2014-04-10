@@ -50,6 +50,10 @@ namespace Duel
 		// destroy a buffer,  this method is called by DRenderResourceManager, 
 		virtual void			destroyFrameBuffer(DFrameBuffer* buf) = 0;
 
+		virtual	DRenderColorView*	createRenderColorView(DPixelFormat fmt) = 0;
+		virtual	void			destroyRenderColorView(DRenderColorView* v) = 0;
+		virtual	DRenderDepthStencilView*	createRenderDepthStencilView() = 0;
+		virtual	void			destroyRenderDepthStencilView(DRenderDepthStencilView* v) = 0;
 	};
 }
 

@@ -53,7 +53,7 @@ namespace Duel
 		mRenderLayout->seal();
 	}
 
-	DRenderTechnique* DDemoDeferHelper::getRenderTechnique( uint32 stage )
+	DRenderTechnique* DDemoDeferHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
 	{
 		if (stage == RS_ScreenQuadTransfer)
 		{
@@ -118,7 +118,7 @@ namespace Duel
 		mRenderLayout->seal();
 	}
 
-	DRenderTechnique* DDemoAmbientLightHelper::getRenderTechnique( uint32 stage )
+	DRenderTechnique* DDemoAmbientLightHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
 	{
 		throw std::exception("The method or operation is not implemented.");
 	}
@@ -128,14 +128,14 @@ namespace Duel
 
 	}
 
-	DRenderTechnique* DDemoPointLightHelper::getRenderTechnique( uint32 stage )
+	DRenderTechnique* DDemoPointLightHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
 	{
 		return NULL;
 	}
 
 
 
-	DRenderTechnique* DDemoDirectionalLightHelper::getRenderTechnique( uint32 stage )
+	DRenderTechnique* DDemoDirectionalLightHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
 	{
 		return NULL;
 	}
@@ -145,7 +145,7 @@ namespace Duel
 	}
 
 
-	DRenderTechnique* DDemoSpotLightHelper::getRenderTechnique( uint32 stage )
+	DRenderTechnique* DDemoSpotLightHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
 	{
 		return NULL;
 	}

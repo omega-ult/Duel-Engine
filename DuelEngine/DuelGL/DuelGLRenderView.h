@@ -13,16 +13,18 @@ namespace Duel
 	{
 	DUEL_DECLARE_RTTI(GLRenderColorView)
 	public:
-		GLRenderColorView(DFrameBuffer* parent, ElementAttachment att, DPixelFormat fmt);
+		GLRenderColorView(DRenderResourceFactory* creator, DPixelFormat fmt);
 		~GLRenderColorView();
 
 
 		// provided for GLFramBuffer.
 		virtual void	resize(uint32 w, uint32 h);
-		GLuint			getTextureID() { return mTextureID; }
+		GLuint			getTextureID();
+		void			setAttachFrameBuffer(DFrameBuffer* fb);
+		void			setAttachElement(ElementAttachment ea);
 
 		// override : DRenderView--------------------------
-		DGpuTextureConstantPtr	getGpuTexutureConstant() { return mGpuConstant; }
+		DGpuTextureConstantPtr	getGpuTexutureConstant();
 
 	protected:
 		GLuint	mTextureID;
@@ -31,16 +33,17 @@ namespace Duel
 
 	};
 	
-	class DUELGL_API GLRenderDepthView : public DRenderDepthView
+	class DUELGL_API GLRenderDepthStencilView : public DRenderDepthStencilView
 	{
-		DUEL_DECLARE_RTTI(GLRenderDepthView)
+		DUEL_DECLARE_RTTI(GLRenderDepthStencilView)
 	public:
-		GLRenderDepthView(DFrameBuffer* parent);
-		~GLRenderDepthView();
+		GLRenderDepthStencilView(DRenderResourceFactory* creator);
+		~GLRenderDepthStencilView();
 		virtual void	resize(uint32 w, uint32 h);
-		GLuint	getTextureID() { return mTextureID; }
+		GLuint			getTextureID();
+		void			setAttachFrameBuffer(DFrameBuffer* fb);
 		// override : DRenderView--------------------------
-		DGpuTextureConstantPtr	getGpuTexutureConstant() { return mGpuConstant; }
+		DGpuTextureConstantPtr	getGpuTexutureConstant();
 
 	protected:
 		GLuint	mTextureID;

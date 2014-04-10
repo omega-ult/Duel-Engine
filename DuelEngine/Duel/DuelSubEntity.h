@@ -39,7 +39,7 @@ namespace Duel
 		DMaterialInstancePtr	getMaterialInstance();
 
 		// override : DRenderable-----------------------------
-		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
+		virtual DRenderTechnique* getRenderTechnique( uint32 stage, DCamera* cam, LightIterator li );
 		// override : DRenderable-----------------------------
 		virtual void		updateCustomGpuParameter(DShaderObject* so);
 

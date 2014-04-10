@@ -8,24 +8,64 @@ namespace Duel
 {
 
 	DUEL_IMPLEMENT_RTTI_1(DRenderColorView, DObject);
-	DUEL_IMPLEMENT_RTTI_1(DRenderDepthView, DObject);
+	DUEL_IMPLEMENT_RTTI_1(DRenderDepthStencilView, DObject);
 
 
-	DRenderColorView::DRenderColorView( DFrameBuffer* parent, ElementAttachment att ) :
-		mParent(parent),
-		mAttachPoint(att),
-		mbEnable(true)
+	DRenderColorView::DRenderColorView(DRenderResourceFactory* creator, DPixelFormat fmt) :
+		mCreator(creator),
+		mAttachFB(NULL),
+		mAttachPoint(EA_Color0),
+		mFormat(fmt),
+		mWidth(0),
+		mHeight(0)
 	{
-		mWidth = mParent->getWidth();
-		mHeight = mParent->getHeight();
+
+	}
+
+	DRenderColorView::~DRenderColorView()
+	{
+		if (mAttachFB != NULL)
+		{
+			mAttachFB->detachRenderColorView(mAttachPoint);
+		}
+	}
+
+	bool DRenderColorView::isAttached()
+	{
+		return getAttachedFrameBuffer() != NULL;
+	}
+
+	DFrameBuffer* DRenderColorView::getAttachedFrameBuffer()
+	{
+		return mAttachFB;
 	}
 
 
-	DRenderDepthView::DRenderDepthView( DFrameBuffer* parent ) :
-		mParent(parent)
+
+	DRenderDepthStencilView::DRenderDepthStencilView(DRenderResourceFactory* creator) :
+		mCreator(creator),
+		mAttachFB(NULL)
 	{
-		mWidth = mParent->getWidth();
-		mHeight = mParent->getHeight();
+
 	}
+
+	DRenderDepthStencilView::~DRenderDepthStencilView()
+	{
+		if (mAttachFB != NULL)
+		{
+			mAttachFB->detachRenderDepthStencilView();
+		}
+	}
+
+	bool DRenderDepthStencilView::isAttached()
+	{
+		return getAttachedFrameBuffer() != NULL;
+	}
+
+	DFrameBuffer* DRenderDepthStencilView::getAttachedFrameBuffer()
+	{
+		return mAttachFB;
+	}
+
 
 }

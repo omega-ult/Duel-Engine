@@ -66,6 +66,10 @@ namespace Duel
 		DFrameBuffer*	createFrameBuffer(uint32 w, uint32 h, uint32 colorBits);
 		void			destroyFrameBuffer(DFrameBuffer* buf);
 
+		DRenderColorView*	createRenderColorView(DPixelFormat fmt);
+		void				destroyRenderColorView(DRenderColorView* v);
+		DRenderDepthStencilView*	createRenderDepthStencilView();
+		void				destroyRenderDepthStencilView(DRenderDepthStencilView* v);
 	protected:
 
 

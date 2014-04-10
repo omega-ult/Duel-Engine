@@ -8,13 +8,12 @@ namespace Duel
 {
 
 	DUEL_IMPLEMENT_RTTI_1(GLRenderColorView, DRenderColorView);
-	DUEL_IMPLEMENT_RTTI_1(GLRenderDepthView, DRenderDepthView);
+	DUEL_IMPLEMENT_RTTI_1(GLRenderDepthStencilView, DRenderDepthStencilView);
 
-	GLRenderColorView::GLRenderColorView( DFrameBuffer* parent, ElementAttachment att, DPixelFormat fmt ) :
-		DRenderColorView(parent, att),
+	GLRenderColorView::GLRenderColorView( DRenderResourceFactory* creator, DPixelFormat fmt ) :
+		DRenderColorView(creator, fmt),
 		mTextureID(0)
 	{
-		mFormat = fmt;
 		// we wouldn't do resize here, parent frame buffer will call resize directly.
 	}
 
@@ -61,13 +60,33 @@ namespace Duel
 
 	}
 
-	GLRenderDepthView::GLRenderDepthView( DFrameBuffer* parent ) :
-		DRenderDepthView(parent),
+	void GLRenderColorView::setAttachFrameBuffer( DFrameBuffer* fb )
+	{
+		mAttachFB = fb;
+	}
+
+	Duel::DGpuTextureConstantPtr GLRenderColorView::getGpuTexutureConstant()
+	{
+		return mGpuConstant;
+	}
+
+	void GLRenderColorView::setAttachElement( ElementAttachment ea )
+	{
+		mAttachPoint = ea;
+	}
+
+	GLuint GLRenderColorView::getTextureID()
+	{
+		return mTextureID;
+	}
+
+	GLRenderDepthStencilView::GLRenderDepthStencilView( DRenderResourceFactory* creator ) :
+		DRenderDepthStencilView(creator),
 		mTextureID(0)
 	{
 	}
 
-	GLRenderDepthView::~GLRenderDepthView()
+	GLRenderDepthStencilView::~GLRenderDepthStencilView()
 	{
 		if (mTextureID != 0)
 		{
@@ -80,7 +99,7 @@ namespace Duel
 	}
 
 
-	void GLRenderDepthView::resize( uint32 w, uint32 h )
+	void GLRenderDepthStencilView::resize( uint32 w, uint32 h )
 	{
 		mWidth = w;
 		mHeight = h;
@@ -108,6 +127,21 @@ namespace Duel
 			mGpuConstant->getAs<GLGpuTextureConstant>()->discard();
 		}
 		mGpuConstant = DGpuTextureConstantPtr(new GLGpuTextureConstant(GL_TEXTURE_2D, mTextureID));
+	}
+
+	Duel::DGpuTextureConstantPtr GLRenderDepthStencilView::getGpuTexutureConstant()
+	{
+		return mGpuConstant;
+	}
+
+	void GLRenderDepthStencilView::setAttachFrameBuffer( DFrameBuffer* fb )
+	{
+		mAttachFB = fb;
+	}
+
+	GLuint GLRenderDepthStencilView::getTextureID()
+	{
+		return mTextureID;
 	}
 
 }

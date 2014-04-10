@@ -18,108 +18,43 @@ namespace Duel
 {
 	DUEL_IMPLEMENT_RTTI_1(GLRenderWindow, DRenderWindow);
 
-// #ifdef DUEL_PLATFORM_WINDOWS
-// 	HWND	GLRenderWindow::msEnviHWND = NULL;
-// 	HGLRC	GLRenderWindow::msEnviHGLRC = NULL;
-// 	HDC		GLRenderWindow::msEnviHDC = NULL;
-
-// 	void GLRenderWindow::initStaticEvironment()
-// 	{
-// 		if (msEnviHWND == NULL)
-// 		{
-// 			HINSTANCE hInst = GetModuleHandle(NULL);
-// 			WNDCLASSEX wc;
-// 
-// 			wc.cbSize			= sizeof(wc);
-// 			wc.style			= CS_HREDRAW | CS_VREDRAW;
-// 			wc.lpfnWndProc		= _TMPGL_DefaultWndProc;
-// 			wc.cbClsExtra		= 0;
-// 			wc.cbWndExtra		= 0;
-// 			wc.hInstance		= hInst;
-// 			wc.hIcon			= NULL;
-// 			wc.hCursor			= NULL;
-// 			wc.hbrBackground	= NULL;
-// 			wc.lpszMenuName		= NULL;
-// 			// TODO: from config
-// 			wc.lpszClassName	= "__TmpGLWindow";
-// 			wc.hIconSm			= NULL;
-// 
-// 			DWORD	styleWord;
-// 			styleWord = WS_OVERLAPPED|WS_THICKFRAME|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX;
-// 			RECT rc = { 0, 0, 50, 50 };
-// 			AdjustWindowRectEx( &rc, styleWord, FALSE, 0 );
-// 			RegisterClassEx(&wc);
-// 			msEnviHWND = CreateWindowEx(0, "__TmpGLWindow", "__TmpGLWindow", 
-// 				styleWord, 0, 0,  rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInst, NULL);
-// 
-// 			msEnviHDC = GetDC(msEnviHWND);
-// 			uint32 sufaceFormatBit = 32;
-// 			uint32 depthFormatBit = 24; // D24S8
-// 			uint32 stencilFormatBit = 8;
-// 			// there is no guarantee that the contents of the stack that become
-// 			// the pfd are zeroed, therefore _make sure_ to clear these bits.
-// 			PIXELFORMATDESCRIPTOR pfd;
-// 			memset(&pfd, 0, sizeof(pfd));
-// 			pfd.nSize		= sizeof(pfd);
-// 			pfd.nVersion	= 1;
-// 			pfd.dwFlags		= PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-// 			pfd.iPixelType	= PFD_TYPE_RGBA;
-// 			pfd.cColorBits	= static_cast<BYTE>(sufaceFormatBit);
-// 			pfd.cDepthBits	= static_cast<BYTE>(depthFormatBit);
-// 			pfd.cStencilBits = static_cast<BYTE>(stencilFormatBit);
-// 			pfd.iLayerType	= PFD_MAIN_PLANE;
-// 
-// 			// here is the trick, create a temp HWND to create glew evironment.
-// 
-// 			int pixfmt = ChoosePixelFormat(msEnviHDC, &pfd);
-// 			assert(pixfmt != 0);
-// 
-// 			SetPixelFormat(msEnviHDC, pixfmt, &pfd);//每个窗口只能设置一次  
-// 
-// 			msEnviHGLRC = wglCreateContext(msEnviHDC);
-// 			wglMakeCurrent(msEnviHDC,msEnviHGLRC); 
-// 			glewInit();
-// 		}
-// 	}
-// 
-// #endif
 	//////////////////////////////////////////////////////////////////////////
 	GLRenderWindow::GLRenderWindow( DRenderResourceFactory* parent,/* GLRenderSystem* rSys, */const DString& name ) : 
 		DRenderWindow(parent, name),
 		//mTargetRSys(rSys),
 		mName(name),
 		mFBO(0),
-		mHGLRC(NULL)
+		mHGLRC(NULL),
+		mMainSurface(NULL),
+		mMainDepthView(NULL),
+		mCurDepthView(NULL)
 	{
 		for (int32 i = 0; i < 8; i++)
 		{
 			mViewList.push_back(NULL);
 		}
-		mDepthView = new GLRenderDepthView(this);
+		glGenFramebuffers(1, &mFBO);
+		mCurViewport.reset(0,0, 100, 100);
 	}
 
 	GLRenderWindow::~GLRenderWindow()
 	{
-		RenderColorViewList::iterator i, iend = mViewList.end();
-		for (i = mViewList.begin(); i != iend; ++i)
-		{
-			if ((*i) != NULL)
-			{
-				delete (*i);
-			}
-		}
-		if (mDepthView != NULL)
-		{
-			delete mDepthView;
-		}
 		if (mFBO != 0)
 		{
 			glDeleteRenderbuffers(1, &mFBO);
 			mFBO = 0;
 		}
+		if (mMainSurface != NULL)
+		{
+			DRenderResourceManager::getSingleton().destroyRenderColorView(mMainSurface);
+		}
+		if (mMainDepthView != NULL)
+		{
+			DRenderResourceManager::getSingleton().destroyRenderDepthStencilView(mMainDepthView);
+		}
 		wglMakeCurrent(mHDC, NULL);
 		wglDeleteContext(mHGLRC);
-		mParent->getAs<GLRenderResourceFactory>()->resetResourceContext();
+		mCreator->getAs<GLRenderResourceFactory>()->resetResourceContext();
 	}
 
 	void GLRenderWindow::create( const DString& name, const RenderWindowSetting& setting, uint32 winHandle )
@@ -228,7 +163,7 @@ namespace Duel
 			attribs[1] = versions[i][0];
 			attribs[3] = versions[i][1];
 			HGLRC hRC_new = wglCreateContextAttribsARB(mHDC,
-				mParent->getAs<GLRenderResourceFactory>()->getResourceGLRC(), attribs);
+				mCreator->getAs<GLRenderResourceFactory>()->getResourceGLRC(), attribs);
 			if (hRC_new != NULL)
 			{
 				wglMakeCurrent(mHDC, NULL);
@@ -251,7 +186,7 @@ namespace Duel
 
 #endif // DUEL_PLATFORM_WINDOWS
 
-		mParent->getAs<GLRenderResourceFactory>()->resetResourceContext();
+		mCreator->getAs<GLRenderResourceFactory>()->resetResourceContext();
 
 		if (try_srgb)
 		{
@@ -267,9 +202,28 @@ namespace Duel
 
 
 		resize(mWidth, mHeight);
-		enableElement(EA_Color0, setting.surfaceFormat);
-
-
+		if (mMainSurface != NULL)
+		{
+			DRenderResourceManager::getSingleton().destroyRenderColorView(mMainSurface);
+		}
+		mMainSurface = DRenderResourceManager::getSingleton().
+			createRenderColorView(setting.surfaceFormat)->getAs<GLRenderColorView>();
+		// there isn't a render color view, use our main surface view instead.
+		if (mViewList[0] == NULL)
+		{
+			attachRenderColorView(EA_Color0, mMainSurface);
+		}
+		if(mMainDepthView != NULL)
+		{
+			DRenderResourceManager::getSingleton().destroyRenderDepthStencilView(mMainDepthView);
+		}
+		mMainDepthView = DRenderResourceManager::getSingleton().
+			createRenderDepthStencilView()->getAs<GLRenderDepthStencilView>();
+		// there isn't a render depth view, use our main depth view view instead.
+		if (getRenderDepthStencilView() == NULL)
+		{
+			attachRenderDepthStencilView(mMainDepthView);
+		}
 	}
 
 	void GLRenderWindow::setFullScreen( bool flag, const DisplayMode& fullScreenMode )
@@ -297,74 +251,105 @@ namespace Duel
 		throw std::exception("The method or operation is not implemented.");
 	}
 
-	void GLRenderWindow::enableElement( ElementAttachment elem, DPixelFormat format )
+	void GLRenderWindow::attachRenderColorView( ElementAttachment elem, DRenderColorView* v )
 	{
-		if (DPixelFormatTool::getFormatBits(format) != mColorBits)
+		if (v == NULL)
+		{
+			assert(false);// "Can't attach an empty render color view"
+			return;
+		}
+		if (v->getAttachedFrameBuffer() != NULL && v->getAttachedFrameBuffer() != this)
+		{
+			assert(false);// "Specified view is attached to another frame buffer, you must detach it before reusing it"
+			return;
+		}
+		// the case specified v is attached to another channel
+		if (getRenderColorView(elem) != NULL)
+		{
+			assert(false);//"Specified attachement is already in use, you must detach it firstly"
+			return;
+		}
+		// if this view has been attached to this frame buffer, change its channel.
+		if (v->getAttachedFrameBuffer() == this)
+		{
+			detachRenderColorView(v->getAttachPoint());
+		}
+
+		// chech format compatibility
+		if (DPixelFormatTool::getFormatBits(v->getFormat()) != mColorBits)
 		{
 			return;
 		}
+		GLRenderColorView* rv = v->getAs<GLRenderColorView>(false);
+		// check type availability.
+		if (rv == NULL)
+		{
+			return;
+		}
+		rv->resize(mWidth, mHeight);
 		GLuint	oldFbo = cacheFBO();
-		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
-		uint32 index = (uint32)elem;
-		GLRenderColorView* rv = NULL;
-		if (mViewList[(uint32)(elem)] == NULL)
-		{
-			rv = new GLRenderColorView(this, elem, format);
-			mViewList[index] = rv;
-			rv->resize(mWidth, mHeight);
-			rv->setEnable(true);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, GL_TEXTURE_2D, rv->getTextureID(), 0);
-		}
-		else
-		{
-			if (mViewList[(uint32)elem]->getFormat() != format)
-			{
-				delete mViewList[(uint32)elem];
-				GLRenderColorView* rv = new GLRenderColorView(this, elem, format);
-				rv->resize(mWidth, mHeight);
-				mViewList[(uint32)(elem)] = rv;
-			}
-			mViewList[(uint32)(elem)]->setEnable(true);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, GL_TEXTURE_2D, rv->getTextureID(), 0);
-		}
-
-		// check if everything is OK
-// 		GLenum e = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
-// 		switch (e) {
-// 
-// 		case GL_FRAMEBUFFER_UNDEFINED:
-// 			printf("FBO Undefined\n");
-// 			break;
-// 		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT :
-// 			printf("FBO Incomplete Attachment\n");
-// 			break;
-// 		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT :
-// 			printf("FBO Missing Attachment\n");
-// 			break;
-// 		case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER :
-// 			printf("FBO Incomplete Draw Buffer\n");
-// 			break;
-// 		case GL_FRAMEBUFFER_UNSUPPORTED :
-// 			printf("FBO Unsupported\n");
-// 			break;
-// 		case GL_FRAMEBUFFER_COMPLETE:
-// 			printf("FBO OK\n");
-// 			break;
-// 		default:
-// 			printf("FBO Problem?\n");
-// 		}
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);			
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, rv->getTextureID(), 0);
+		mViewList[(uint32)(elem)] = rv;
+		rv->setAttachFrameBuffer(this);
+		rv->setAttachElement(elem);
 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 	}
 
-	void GLRenderWindow::disableElement( ElementAttachment elem )
+	void GLRenderWindow::detachRenderColorView( ElementAttachment elem )
 	{
 		GLuint	oldFbo = cacheFBO();
 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 		if (mViewList[(uint32)(elem)] != NULL)
 		{
-			mViewList[(uint32)(elem)]->setEnable(false);
+			mViewList[(uint32)(elem)]->setAttachFrameBuffer(NULL);
+			mViewList[(uint32)(elem)]->setAttachElement(EA_Color0);
+			mViewList[(uint32)(elem)] = NULL;
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, 0, 0);
 		}
+		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+
+	}
+
+	void GLRenderWindow::attachRenderDepthStencilView( DRenderDepthStencilView* v )
+	{		
+		if (v == NULL)
+		{
+			assert(false);//"Can't attach an empty depth stencil view"
+			return;
+		}
+		if (v->getAttachedFrameBuffer() != NULL && v->getAttachedFrameBuffer() != this)
+		{
+			assert(false);//"Specified view is attached to another frame buffer, you must detach it before reusing it"
+			return;
+		}
+		GLRenderDepthStencilView* rv = v->getAs<GLRenderDepthStencilView>(false);
+		// check type availability.
+		if (rv == NULL)
+		{
+			return;
+		}
+		detachRenderDepthStencilView();
+		rv->resize(mWidth, mHeight);
+		mCurDepthView = rv;
+		mCurDepthView->setAttachFrameBuffer(this);
+		GLuint	oldFbo = cacheFBO();
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);			
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mCurDepthView->getTextureID(), 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+	}
+
+	void GLRenderWindow::detachRenderDepthStencilView()
+	{
+		if (mCurDepthView == NULL)
+		{
+			return;
+		}
+		mCurDepthView->setAttachFrameBuffer(NULL);
+		mCurDepthView = NULL;
+		GLuint	oldFbo = cacheFBO();
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);			
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 
 	}
@@ -383,6 +368,9 @@ namespace Duel
 			If you need a stencil buffer, then you need to make a Depth=24, Stencil=8 buffer, also called D24S8. 
 			Please search for the example about GL_EXT_packed_depth_stencil on this page.
 		*/
+
+		assert(width != 0 && height != 0);
+		mWidth = width, mHeight = height;
 		DFrameBuffer::resize(width, height);
 		RenderColorViewList::iterator i, iend = mViewList.end();
 		for (i = mViewList.begin(); i != iend; ++i)
@@ -392,46 +380,38 @@ namespace Duel
 				(*i)->resize(width, height);
 			}
 		}
-		mDepthView->resize(width, height);
+		if(mCurDepthView != NULL)
+		{
+			mCurDepthView->resize(width, height);
+		}
 		// cache the old fbo. so that we can make no effect on the pipe line.
 		GLuint	oldFbo = cacheFBO();
 
-
 		// set the rendering destination to FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
-
 
 		// bind valid and enabled render view.
 		uint32 j; 
 		for (i = mViewList.begin(), j = 0; i != iend; ++i, ++j)
 		{
 			if ((*i) != NULL)
+			{	
+				// attach a texture to FBO color attachement point
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + j, GL_TEXTURE_2D, (*i)->getTextureID(), 0);
+			}
+			else
 			{
-				if ((*i)->isEnabled())
-				{			
-					// attach a texture to FBO color attachement point
-					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + j, GL_TEXTURE_2D, (*i)->getTextureID(), 0);
-				}
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + j, GL_TEXTURE_2D, 0, 0);
 			}
 		}
-
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mDepthView->getTextureID(), 0);
-// 		// for depth buffer and stencil buffer.
-// 		if (mDepthStencilBuffer != 0)
-// 		{
-// 			glDeleteRenderbuffers(1, &mDepthStencilBuffer);
-// 		}
-// 		glGenRenderbuffers(1, &mDepthStencilBuffer);
-// 		glBindRenderbuffer(GL_RENDERBUFFER, mDepthStencilBuffer);
-// 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-// 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
-// 
-// 		// attach a renderbuffer to depth attachment point
-// 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepthStencilBuffer);
-// 
-// 		// attach a renderbuffer to depth attachment point
-// 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, mDepthStencilBuffer);
-
+		if (mCurDepthView != NULL)
+		{		
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mCurDepthView->getTextureID(), 0);
+		}
+		else
+		{
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+		}
 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 
 		// emit signals.
@@ -468,6 +448,10 @@ namespace Duel
 
 	void GLRenderWindow::update()
 	{
+		if (mViewList[0] == NULL)
+		{
+			return;
+		}
 		GLuint oldFBO = cacheFBO();
 		wglMakeCurrent(mHDC, mHGLRC);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);//脱离绑定
@@ -564,7 +548,7 @@ namespace Duel
 		SwapBuffers(mHDC);
 
 #ifdef DUEL_PLATFORM_WINDOWS
-		mParent->getAs<GLRenderResourceFactory>()->resetResourceContext();
+		mCreator->getAs<GLRenderResourceFactory>()->resetResourceContext();
 		glBindFramebuffer(GL_FRAMEBUFFER, oldFBO);
 #endif // DUEL_PLATFORM_WINDOWS
 
@@ -582,9 +566,9 @@ namespace Duel
 		return (GLuint)oldFbo;
 	}
 
-	DRenderDepthView* GLRenderWindow::getRenderDepthView()
+	DRenderDepthStencilView* GLRenderWindow::getRenderDepthStencilView()
 	{
-		return mDepthView;
+		return mCurDepthView;
 	}
 
 

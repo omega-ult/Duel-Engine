@@ -17,7 +17,7 @@ namespace Duel
 	public:
 		DLambertMaterial();
 
-		virtual DRenderTechnique* getRenderTechnique( uint32 stage );
+		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
 		void	reload();
 	protected:
 		DRenderTechniquePtr	mDeferGBufferTech;
