@@ -31,6 +31,10 @@ namespace Duel
 
 	void GLRenderColorView::resize( uint32 w, uint32 h )
 	{
+		if (w == mWidth && h == mHeight)
+		{
+			return;
+		}
 		mWidth = w;
 		mHeight = h;
 
@@ -101,6 +105,10 @@ namespace Duel
 
 	void GLRenderDepthStencilView::resize( uint32 w, uint32 h )
 	{
+		if (w == mWidth && h == mHeight)
+		{
+			return;
+		}
 		mWidth = w;
 		mHeight = h;
 

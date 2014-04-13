@@ -17,14 +17,31 @@ namespace Duel
 		DDemoRenderWorkshop();
 		~DDemoRenderWorkshop();
 
-		struct DeferLayer
+		class DeferLayer
 		{
-			DeferLayer() : GBuffer(NULL), LightAccum(NULL) {}
-			DFrameBuffer*	GBuffer;
-			DFrameBuffer*	LightAccum;
+		public:
+			DeferLayer();
+			~DeferLayer();
+			void	initialize(uint32 w, uint32 h);
+			void	prepareGBufferStage();
+			void	prepareLightingStage();
+			void	prepareMergeStage();
+			DFrameBuffer*		getFrameBuffer();
+			DRenderColorView*	getDepthMap();
+			DRenderColorView*	getViewSpaceNormalMap();
+			DRenderColorView*	getLightAccumulationMap();
+			DRenderColorView*	getMergedColorMap();
+			void	shutdown();
+		private:
+			DFrameBuffer*		mFrameBuffer;
+			DRenderColorView*	mAlbedo;
+			DRenderColorView*	mDepth;
+			DRenderColorView*	mViewSpaceNormal;
+			DRenderColorView*	mLightAccum;
+			DRenderColorView*	mMergeView;
 		};
 		// get current present target's defer layer.
-		DeferLayer		getCurrentDeferlayer();
+		DeferLayer*		getCurrentDeferlayer();
 
 		// override : DRenderWorkshop---------------------
 		void			renderSingleObject(DFrameBuffer* target, DRenderable* rendObj, DRenderPass* pass);
@@ -39,12 +56,12 @@ namespace Duel
 		
 	protected:
 		void			populateRenderables(DRenderGroup* grp, uint32 renderStage);
-		DeferLayer		createDeferLayer(DFrameBuffer* target);
-		void			destryDeferLayer(DeferLayer lay);
+		DeferLayer*		createDeferLayer(DFrameBuffer* target);
+		void			destryDeferLayer(DeferLayer* lay);
 		// because we are in a multi render target environment,
 		// we need manage gbuffer for each present target, here we
 		// can do some memory management to reduce the cost.
-		typedef std::map<DFrameBuffer*, DeferLayer>	DeferLayerMap;
+		typedef std::map<DFrameBuffer*, DeferLayer*>	DeferLayerMap;
 		DeferLayerMap		mDeferLayerMap;
 
 		DDemoDeferHelper	mDeferHelper;

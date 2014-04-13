@@ -28,6 +28,8 @@ namespace Duel
 
 	GLFrameBuffer::~GLFrameBuffer()
 	{
+		detachAllRenderColorViews();
+		detachRenderDepthStencilView();
 		if (mFBO != 0)
 		{
 			glDeleteRenderbuffers(1, &mFBO);
@@ -35,51 +37,6 @@ namespace Duel
 		}
 
 	}
-
-// 
-// 	void GLFrameBuffer::enableElement( ElementAttachment elem, DPixelFormat format )
-// 	{
-// 		if (DPixelFormatTool::getFormatBits(format) != mColorBits)
-// 		{
-// 			return;
-// 		}
-// 		GLuint	oldFbo = cacheFBO();
-// 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
-// 		if (mViewList[(uint32)(elem)] == NULL)
-// 		{
-// 			GLRenderColorView* rv = new GLRenderColorView(this, elem, format);
-// 			mViewList[(uint32)(elem)] = rv;
-// 			rv->resize(mWidth, mHeight);
-// 			rv->setEnable(true);
-// 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, rv->getTextureID(), 0);
-// 		}
-// 		else
-// 		{
-// 			if (mViewList[(uint32)elem]->getFormat() != format)
-// 			{
-// 				delete mViewList[(uint32)elem];
-// 				GLRenderColorView* rv = new GLRenderColorView(this, elem, format);
-// 				rv->resize(mWidth, mHeight);
-// 				mViewList[(uint32)(elem)] = rv;
-// 			}
-// 			mViewList[(uint32)(elem)]->setEnable(true);
-// 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, mViewList[(uint32)(elem)]->getTextureID(), 0);
-// 
-// 		}
-// 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
-// 	}
-// 
-// 	void GLFrameBuffer::disableElement( ElementAttachment elem )
-// 	{
-// 		GLuint	oldFbo = cacheFBO();
-// 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
-// 		if (mViewList[(uint32)(elem)] != NULL)
-// 		{
-// 			mViewList[(uint32)(elem)]->setEnable(false);
-// 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, 0, 0);
-// 		}
-// 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
-// 	}
 
 	DRenderColorView* GLFrameBuffer::getRenderColorView( ElementAttachment elem )
 	{
@@ -95,7 +52,10 @@ namespace Duel
 			If you need a stencil buffer, then you need to make a Depth=24, Stencil=8 buffer, also called D24S8. 
 			Please search for the example about GL_EXT_packed_depth_stencil on this page.
 		*/
-
+		if (width == mWidth && height == mHeight)
+		{
+			return;
+		}
 		assert(width != 0 && height != 0);
 		mWidth = width, mHeight = height;
 		DFrameBuffer::resize(width, height);
@@ -231,18 +191,32 @@ namespace Duel
 
 	void GLFrameBuffer::detachRenderColorView( ElementAttachment elem )
 	{
-		GLuint	oldFbo = cacheFBO();
-		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 		if (mViewList[(uint32)(elem)] != NULL)
 		{
+			GLuint	oldFbo = cacheFBO();
+			glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 			mViewList[(uint32)(elem)]->setAttachFrameBuffer(NULL);
 			mViewList[(uint32)(elem)]->setAttachElement(EA_Color0);
 			mViewList[(uint32)(elem)] = NULL;
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, 0, 0);
+			glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 		}
-		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 
 	}
+
+	void GLFrameBuffer::detachAllRenderColorViews()
+	{
+		GLuint	oldFbo = cacheFBO();
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+		for (uint32 i = 0; i < 8; ++i)
+		{
+			mViewList[i] = NULL;
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, 0, 0);
+		}
+		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+		
+	}
+
 
 	void GLFrameBuffer::attachRenderDepthStencilView( DRenderDepthStencilView* v )
 	{		
@@ -286,6 +260,5 @@ namespace Duel
 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 
 	}
-
 
 }

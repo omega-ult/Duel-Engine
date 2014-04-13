@@ -18,6 +18,18 @@ namespace Duel
 
 	}
 
+	void DFrameBuffer::detachAllRenderColorViews()
+	{
+		detachRenderColorView(EA_Color0);
+		detachRenderColorView(EA_Color1);
+		detachRenderColorView(EA_Color2);
+		detachRenderColorView(EA_Color3);
+		detachRenderColorView(EA_Color4);
+		detachRenderColorView(EA_Color5);
+		detachRenderColorView(EA_Color6);
+		detachRenderColorView(EA_Color7);
+	}
+
 // 	void DFrameBuffer::attachRenderColorView( ElementAttachment elem, DRenderColorView* v )
 // 	{
 // 		if (v == NULL)

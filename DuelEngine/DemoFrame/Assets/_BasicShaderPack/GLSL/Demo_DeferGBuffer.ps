@@ -1,9 +1,9 @@
 #version 330
 
-uniform sampler2D	diffuseTexture;
 uniform sampler2D	normalTexture;
+uniform sampler2D	diffuseTexture;
 uniform sampler2D	specularTexture;
-
+uniform sampler2D roughnessTexture;
 in 	Varing
 {	
 	vec4	vpos;	// view space
@@ -48,7 +48,7 @@ vec3 decodeNormal(vec3 color)
 	return (color * 255.0f - 128.0f)*0.00787401; // 1/127.0f;
 }
 
-vec3 float_to_color( float f)
+vec3 depth_to_color( float f)
 {
 	vec3 color;
 	f *= 256;
@@ -60,7 +60,7 @@ vec3 float_to_color( float f)
 	return color;
 }
 
-float color_to_float(vec3 color)
+float color_to_depth(vec3 color)
 {
 	const vec3 byte_to_float = vec3(1.0,1.0/256,1.0/(256*256));
 	return dot(color,byte_to_float);
@@ -78,7 +78,7 @@ void main(void)
 	vec3 norm = decodeNormal(normColor);
 	// debug vnormal = vec4(encodeNormal(norm), 1.0f);
 	// debug depth.
-	// vnormal.xyz = float_to_color(PS_StageInput.hdepth.x / PS_StageInput.hdepth.y); 
+	// vnormal.xyz = depth_to_color(PS_StageInput.hdepth.x / PS_StageInput.hdepth.y); 
 	// vnormal.w = 1.0f;
 	vnormal = vec4(encodeNormal(normalize(TBN * norm)), 1.0f);
 	

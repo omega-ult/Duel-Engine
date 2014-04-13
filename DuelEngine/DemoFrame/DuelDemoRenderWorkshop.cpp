@@ -30,14 +30,14 @@ namespace Duel
 
 
 
-	DDemoRenderWorkshop::DeferLayer DDemoRenderWorkshop::getCurrentDeferlayer()
+	DDemoRenderWorkshop::DeferLayer* DDemoRenderWorkshop::getCurrentDeferlayer()
 	{
 		DeferLayerMap::iterator i = mDeferLayerMap.find(mPresentTarget);
-		if (i == mDeferLayerMap.end())
+		if (i != mDeferLayerMap.end())
 		{
-			return DeferLayer();
+			return i->second;
 		}
-		return i->second;
+		return NULL;
 	}
 
 
@@ -69,42 +69,75 @@ namespace Duel
 		{
 			return;
 		}
+		// we use the present target's depth stencil buffer, 
+		DRenderDepthStencilView* cacheDepthStencil = mPresentTarget->getRenderDepthStencilView();
+		mPresentTarget->detachRenderDepthStencilView();
 		DAutoGpuParameter::getSingleton().setParameterDelegate(queue);
 		DRenderQueue::RenderGroupIterator ri = queue->getRenderGroupIterator();;
 		// for defer stage.
 		DeferLayerMap::iterator gi = mDeferLayerMap.find(mPresentTarget);
+		bool deferProcessed = false;	// a flag indicate whether we need to merge defer output.
 		if (gi != mDeferLayerMap.end())
 		{
 			// we can render defer stage.
-			DeferLayer deferlayer = gi->second;
-
-			ri = queue->getRenderGroupIterator();
-			while (ri.hasMoreElements())
+			DeferLayer* deferlayer = gi->second;
+			if (deferlayer != NULL)
 			{
-			 	DRenderGroup* rgrp = ri.getNext();
-			 	populateRenderables(rgrp, RS_Defer_GBuffer);
-			 	if (!mRenderList.empty())
-			 	{
-			 		signalGroupStartRender(queue, rgrp);
-			 		RenderElementList::iterator i, iend = mRenderList.end();
-			 		for (i = mRenderList.begin(); i != iend; ++i)
+				deferlayer->getFrameBuffer()->resize(mPresentTarget->getWidth(), mPresentTarget->getHeight());
+				if (cacheDepthStencil != NULL)
+				{
+					deferlayer->getFrameBuffer()->attachRenderDepthStencilView(cacheDepthStencil);
+				}
+				// GBuffer---------------------------------------------
+				deferlayer->prepareGBufferStage();
+				ri = queue->getRenderGroupIterator();
+				while (ri.hasMoreElements())
+				{
+			 		DRenderGroup* rgrp = ri.getNext();
+			 		populateRenderables(rgrp, RS_Defer_GBuffer);
+			 		if (!mRenderList.empty())
 			 		{
-			 			RenderElement& e = *i;
-			 			renderSingleObject(mPresentTarget, e.renderable, e.renderPass);
+						deferProcessed = true;
+			 			signalGroupStartRender(queue, rgrp);
+			 			RenderElementList::iterator i, iend = mRenderList.end();
+			 			for (i = mRenderList.begin(); i != iend; ++i)
+			 			{
+			 				RenderElement& e = *i;
+			 				renderSingleObject(deferlayer->getFrameBuffer(), e.renderable, e.renderPass);
+			 			}
+			 			signalGroupFinishRender(queue, rgrp);
 			 		}
-			 		signalGroupFinishRender(queue, rgrp);
-			 	}
-			 	// now go for light accumulation.
-			 	DRenderQueue::LightIterator li = queue->getLightIterator();
-			 	while (li.hasMoreElements())
-			 	{
-			 		DLightSource* l = li.getNext();
-			 	}
+				}
+				if (deferProcessed)
+				{
+			 		// light accumulation.-------------------------------	
+					deferlayer->prepareLightingStage();
+					DRenderQueue::LightIterator li = queue->getLightIterator();
+					while (li.hasMoreElements())
+					{
+						DLightSource* l = li.getNext();
+					}
+					// merge---------------------------------------------
+					deferlayer->prepareMergeStage();
+					{
+
+					}
+				}
+				deferlayer->getFrameBuffer()->detachRenderDepthStencilView();
 			}
+		}
+		// transfer color to the present target.
+		if (deferProcessed)
+		{
 
 		}
-
 		// forward stage now;
+		// re-attach depth stencil view to the present target, the drawing result
+		// in the defer stage will be re-used.
+		if (cacheDepthStencil != NULL)
+		{
+			mPresentTarget->attachRenderDepthStencilView(cacheDepthStencil);
+		}
 		mRenderSystem->bindFrameBuffer(mPresentTarget);
 		ri = queue->getRenderGroupIterator();
 		while (ri.hasMoreElements())
@@ -123,6 +156,9 @@ namespace Duel
 				signalGroupFinishRender(queue, rgrp);
 			}
 		}
+
+		// post processing stage.
+
 		DAutoGpuParameter::getSingleton().setParameterDelegate(NULL);
 	}
 
@@ -138,9 +174,8 @@ namespace Duel
 		bool isInDeferLayer = false;
 		for (i = mDeferLayerMap.begin(); i != iend; ++i)
 		{
-			DeferLayer ly = i->second;
-			if (ly.GBuffer == target || 
-				ly.LightAccum == target)
+			DeferLayer* ly = i->second;
+			if (ly->getFrameBuffer() == target)
 			{
 				isInDeferLayer = true;
 				break;
@@ -182,24 +217,138 @@ namespace Duel
 		}
 	}
 
-	DDemoRenderWorkshop::DeferLayer DDemoRenderWorkshop::createDeferLayer( DFrameBuffer* target )
+	DDemoRenderWorkshop::DeferLayer* DDemoRenderWorkshop::createDeferLayer( DFrameBuffer* target )
 	{
-		DeferLayer ret;
-		ret.GBuffer = DRenderResourceManager::getSingleton().createFrameBuffer(target->getWidth(), target->getHeight(), 32);
-// 		ret.GBuffer->enableElement(EA_Color0, PF_A8R8G8B8);
-// 		ret.GBuffer->enableElement(EA_Color1, PF_A8R8G8B8);
+		DeferLayer* ret = new DeferLayer();
+		ret->initialize(target->getWidth(), target->getHeight());
 		return ret;
 	}
 
-	void DDemoRenderWorkshop::destryDeferLayer( DeferLayer lay )
+	void DDemoRenderWorkshop::destryDeferLayer( DeferLayer* lay )
 	{
-		if (lay.GBuffer != NULL)
+		if (lay != NULL)
 		{
-			DRenderResourceManager::getSingleton().destroyFrameBuffer(lay.GBuffer);
-			lay.GBuffer = NULL;
+			delete lay;
 		}
 	}
 
 
+
+
+	DDemoRenderWorkshop::DeferLayer::DeferLayer() : 
+		mFrameBuffer(NULL),
+		mAlbedo(NULL),
+		mDepth(NULL),
+		mViewSpaceNormal(NULL),
+		mLightAccum(NULL),
+		mMergeView(NULL)
+	{
+
+	}
+
+	DDemoRenderWorkshop::DeferLayer::~DeferLayer()
+	{
+		shutdown();
+	}
+
+	void DDemoRenderWorkshop::DeferLayer::initialize(uint32 w, uint32 h)
+	{
+		assert(w != 0 && h != 0);
+		shutdown();
+		DRenderResourceManager* rm = DRenderResourceManager::getSingletonPtr();
+		mFrameBuffer = rm->createFrameBuffer(w, h, 32);
+		mAlbedo = rm->createRenderColorView(PF_R8G8B8A8);
+		mDepth = rm->createRenderColorView(PF_R8G8B8A8);
+		mViewSpaceNormal = rm->createRenderColorView(PF_R8G8B8A8);
+		mLightAccum = rm->createRenderColorView(PF_R8G8B8A8);
+		mMergeView = rm->createRenderColorView(PF_R8G8B8A8);
+		}
+
+	void DDemoRenderWorkshop::DeferLayer::prepareGBufferStage()
+	{
+		mFrameBuffer->detachAllRenderColorViews();
+		mFrameBuffer->attachRenderColorView(EA_Color0, mAlbedo);
+		mFrameBuffer->attachRenderColorView(EA_Color1, mViewSpaceNormal);
+		mFrameBuffer->attachRenderColorView(EA_Color2, mDepth);
+		mFrameBuffer->detachRenderDepthStencilView();
+		mFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
+	}
+
+	void DDemoRenderWorkshop::DeferLayer::prepareLightingStage()
+	{
+		mFrameBuffer->detachAllRenderColorViews();
+		mFrameBuffer->attachRenderColorView(EA_Color0, mLightAccum);
+		mFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
+	}
+
+	void DDemoRenderWorkshop::DeferLayer::prepareMergeStage()
+	{
+		mFrameBuffer->detachAllRenderColorViews();
+		mFrameBuffer->attachRenderColorView(EA_Color0, mMergeView);
+		mFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
+	}
+
+	DFrameBuffer* DDemoRenderWorkshop::DeferLayer::getFrameBuffer()
+	{
+		return mFrameBuffer;
+	}
+
+
+	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getDepthMap()
+	{
+		return mDepth;
+	}
+
+	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getViewSpaceNormalMap()
+	{
+		return mViewSpaceNormal;
+	}
+
+	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getLightAccumulationMap()
+	{
+		return mLightAccum;
+	}
+
+	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getMergedColorMap()
+	{
+		return mMergeView;
+	}
+
+
+	void DDemoRenderWorkshop::DeferLayer::shutdown()
+	{
+		DRenderResourceManager* rm = DRenderResourceManager::getSingletonPtr();
+		if (mFrameBuffer != NULL)
+		{
+			rm->destroyFrameBuffer(mFrameBuffer);
+			mFrameBuffer = NULL;
+		}
+		if (mAlbedo != NULL)
+		{
+			rm->destroyRenderColorView(mAlbedo);
+			mAlbedo = NULL;
+		}
+		if (mDepth != NULL)
+		{
+			rm->destroyRenderColorView(mDepth);
+			mDepth = NULL;
+		}
+		if (mViewSpaceNormal != NULL)
+		{
+			rm->destroyRenderColorView(mViewSpaceNormal);
+			mViewSpaceNormal = NULL;
+		}
+		if (mLightAccum != NULL)
+		{
+			rm->destroyRenderColorView(mLightAccum);
+			mLightAccum = NULL;
+		}
+		if (mMergeView != NULL)
+		{
+			rm->destroyRenderColorView(mMergeView);
+			mMergeView = NULL;
+		}
+
+	}
 
 }

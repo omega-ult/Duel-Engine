@@ -47,6 +47,7 @@ namespace Duel
 		// NULL pointer is unacceptable!
 		virtual void		attachRenderColorView(ElementAttachment elem, DRenderColorView* v) = 0;
 		virtual void		detachRenderColorView(ElementAttachment elem) = 0;
+		virtual	void		detachAllRenderColorViews();
 		// notice: make sure the specified v is not currently attached to another frame buffer.
 		// if there is already a depth stencil view attached, detach it before you go ahead.
 		// NULL pointer is unacceptable!

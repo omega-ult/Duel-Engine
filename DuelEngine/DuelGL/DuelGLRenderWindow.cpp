@@ -39,6 +39,8 @@ namespace Duel
 
 	GLRenderWindow::~GLRenderWindow()
 	{
+		detachAllRenderColorViews();
+		detachRenderDepthStencilView();
 		if (mFBO != 0)
 		{
 			glDeleteRenderbuffers(1, &mFBO);
@@ -298,17 +300,29 @@ namespace Duel
 
 	void GLRenderWindow::detachRenderColorView( ElementAttachment elem )
 	{
-		GLuint	oldFbo = cacheFBO();
-		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 		if (mViewList[(uint32)(elem)] != NULL)
 		{
+			GLuint	oldFbo = cacheFBO();
+			glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 			mViewList[(uint32)(elem)]->setAttachFrameBuffer(NULL);
 			mViewList[(uint32)(elem)]->setAttachElement(EA_Color0);
 			mViewList[(uint32)(elem)] = NULL;
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, 0, 0);
+			glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+		}
+
+	}
+
+	void GLRenderWindow::detachAllRenderColorViews()
+	{
+		GLuint	oldFbo = cacheFBO();
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+		for (uint32 i = 0; i < 8; ++i)
+		{
+			mViewList[i] = NULL;
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, 0, 0);
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
-
 	}
 
 	void GLRenderWindow::attachRenderDepthStencilView( DRenderDepthStencilView* v )
@@ -368,7 +382,10 @@ namespace Duel
 			If you need a stencil buffer, then you need to make a Depth=24, Stencil=8 buffer, also called D24S8. 
 			Please search for the example about GL_EXT_packed_depth_stencil on this page.
 		*/
-
+		if (width == mWidth && height == mHeight)
+		{
+			return;
+		}
 		assert(width != 0 && height != 0);
 		mWidth = width, mHeight = height;
 		DFrameBuffer::resize(width, height);

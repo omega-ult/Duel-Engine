@@ -32,6 +32,7 @@ namespace Duel
 		// override : DFrameBuffer-------------------------
 		virtual void	attachRenderColorView( ElementAttachment elem, DRenderColorView* v );
 		virtual void	detachRenderColorView( ElementAttachment elem );
+		virtual void	detachAllRenderColorViews();
 		virtual void	attachRenderDepthStencilView( DRenderDepthStencilView* v );
 		virtual void	detachRenderDepthStencilView();
 		virtual DRenderColorView*	getRenderColorView( ElementAttachment elem );
