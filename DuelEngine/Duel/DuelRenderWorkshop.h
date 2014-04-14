@@ -37,27 +37,14 @@ namespace Duel
 
 		virtual void		renderSingleObject(DFrameBuffer* target, DRenderable* rendObj, DRenderPass* pass) = 0;
 
-		// set the target rendersystem which was used to render renderables.
-		virtual void		setRenderSystem(DRenderSystem* rSys) { mRenderSystem = rSys; }
-
-
-
+	
 		// use this function to bind final render tareget.
-		// 使用这个函数绑定最终的渲染目标:
 		virtual void		setPresentTarget(DFrameBuffer* target) { mPresentTarget = target; }
 		DFrameBuffer*		getPresentTarget() { return mPresentTarget; }
-
-				/// Method for preparing shadow textures ready for use in a regular render
-		/// Do not call manually unless before frame start or rendering is paused
-		/// If lightList is not supplied, will render all lights in frustum
-   //     virtual void prepareShadowTextures(DCamera* cam, Viewport* vp, const LightList* lightList = 0);
-
 
 
 
 	protected:
-		// the target render system used to render renderables.
-		DRenderSystem*	mRenderSystem;
 				//////////////////////////////////////////////////////////////////////////
 		DFrameBuffer*	mPresentTarget;
 	};

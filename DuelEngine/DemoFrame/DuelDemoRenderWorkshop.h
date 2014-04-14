@@ -27,6 +27,7 @@ namespace Duel
 			void	prepareLightingStage();
 			void	prepareMergeStage();
 			DFrameBuffer*		getFrameBuffer();
+			DRenderColorView*	getAlbedo();
 			DRenderColorView*	getDepthMap();
 			DRenderColorView*	getViewSpaceNormalMap();
 			DRenderColorView*	getLightAccumulationMap();
@@ -57,14 +58,15 @@ namespace Duel
 	protected:
 		void			populateRenderables(DRenderGroup* grp, uint32 renderStage);
 		DeferLayer*		createDeferLayer(DFrameBuffer* target);
-		void			destryDeferLayer(DeferLayer* lay);
+		void			destroyDeferLayer(DeferLayer* lay);
 		// because we are in a multi render target environment,
 		// we need manage gbuffer for each present target, here we
 		// can do some memory management to reduce the cost.
 		typedef std::map<DFrameBuffer*, DeferLayer*>	DeferLayerMap;
 		DeferLayerMap		mDeferLayerMap;
 
-		DDemoDeferHelper	mDeferHelper;
+
+		DDemoMergeHelper	mMergeHelper;
 
 
 		struct RenderElement

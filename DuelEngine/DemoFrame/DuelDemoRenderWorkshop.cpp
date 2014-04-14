@@ -2,6 +2,8 @@
 
 #include "pch.h"
 #include "DuelCommon.h"
+#include "DuelCore.h"
+#include "DuelRenderView.h"
 #include "DuelRenderWorkshop.h"
 #include "DuelRenderEffect.h"
 #include "DuelDemoRenderWorkshop.h"
@@ -24,7 +26,7 @@ namespace Duel
 		DeferLayerMap::iterator i, iend = mDeferLayerMap.end();
 		for (i = mDeferLayerMap.begin(); i != iend; ++i)
 		{
-			destryDeferLayer(i->second);
+			destroyDeferLayer(i->second);
 		}
 	}
 
@@ -43,21 +45,26 @@ namespace Duel
 
 	void DDemoRenderWorkshop::renderSingleObject( DFrameBuffer* target, DRenderable* rendObj, DRenderPass* pass )
 	{
+		DRenderSystem* rsys = DCore::getSingleton().getRenderSystem();
+		if (rsys == NULL || pass == NULL)
+		{
+			return;
+		}
 		DShaderObject* so = pass->getShaderObject().get();
 		if (target != NULL && so != NULL && so->isValid())
 		{
-			if(mRenderSystem->getCurrentFrameBuffer() != target)
+			if(rsys->getCurrentFrameBuffer() != target)
 			{
-				mRenderSystem->bindFrameBuffer(target);
+				rsys->bindFrameBuffer(target);
 			}
 			rendObj->preRender();
 			rendObj->updateAutoGpuParameter(so);
 			rendObj->updateCustomGpuParameter(so);
-			mRenderSystem->setDepthStencilState(pass->getDepthStencilStateObject().get());
-			mRenderSystem->setRasterizerState(pass->getRaseterizerStateObject().get());
-			mRenderSystem->setBlendState(pass->getBlendStateStateObject().get(), DColor::WHITE);
-			mRenderSystem->bindShaderObject(so);
-			mRenderSystem->render(rendObj->getRenderLayout());
+			rsys->setDepthStencilState(pass->getDepthStencilStateObject().get());
+			rsys->setRasterizerState(pass->getRaseterizerStateObject().get());
+			rsys->setBlendState(pass->getBlendStateStateObject().get(), DColor::WHITE);
+			rsys->bindShaderObject(so);
+			rsys->render(rendObj->getRenderLayout());
 			rendObj->postRender();
 		}
 
@@ -65,7 +72,8 @@ namespace Duel
 
 	void DDemoRenderWorkshop::render( DRenderQueue* queue )
 	{
-		if (queue == NULL || mPresentTarget == NULL)
+		DRenderSystem* rsys = DCore::getSingleton().getRenderSystem();
+		if (queue == NULL || mPresentTarget == NULL || rsys == NULL)
 		{
 			return;
 		}
@@ -120,15 +128,45 @@ namespace Duel
 					// merge---------------------------------------------
 					deferlayer->prepareMergeStage();
 					{
-
+						mMergeHelper.setInputAlbedo(deferlayer->getAlbedo()->
+							getGpuTexutureConstant());
+						mMergeHelper.setInputLightAccumulationMap(deferlayer->getLightAccumulationMap()->
+							getGpuTexutureConstant());
+						mMergeHelper.setInputDepth(deferlayer->getDepthMap()->
+							getGpuTexutureConstant());
+						DRenderTechnique* mergetTech = mMergeHelper.getRenderTechnique(
+							DDemoMergeHelper::RS_DeferMerge, queue->getRenderCamera(), queue->getLightIterator());
+						if (mergetTech)
+						{
+							DRenderTechnique::RenderPassIterator p = mergetTech->getRenderPassIterator();
+							while (p.hasMoreElements())
+							{
+								DRenderPass* pass = p.getNext().get();
+								renderSingleObject(deferlayer->getFrameBuffer(), &mMergeHelper, pass);
+							}
+						}
 					}
 				}
+				deferlayer->getFrameBuffer()->detachAllRenderColorViews();
 				deferlayer->getFrameBuffer()->detachRenderDepthStencilView();
+				// transfer color to the present target.
+				if (deferProcessed)
+				{
+					mMergeHelper.setTransferSource(deferlayer->getMergedColorMap()->
+						getGpuTexutureConstant());
+					DRenderTechnique* transTech = mMergeHelper.getRenderTechnique(
+						DDemoMergeHelper::RS_ScreenTransfer, queue->getRenderCamera(), queue->getLightIterator());
+					if (transTech)
+					{
+						DRenderTechnique::RenderPassIterator p = transTech->getRenderPassIterator();
+						while (p.hasMoreElements())
+						{
+							DRenderPass* pass = p.getNext().get();
+							renderSingleObject(mPresentTarget, &mMergeHelper, pass);
+						}
+					}
+				}
 			}
-		}
-		// transfer color to the present target.
-		if (deferProcessed)
-		{
 
 		}
 		// forward stage now;
@@ -138,7 +176,7 @@ namespace Duel
 		{
 			mPresentTarget->attachRenderDepthStencilView(cacheDepthStencil);
 		}
-		mRenderSystem->bindFrameBuffer(mPresentTarget);
+		rsys->bindFrameBuffer(mPresentTarget);
 		ri = queue->getRenderGroupIterator();
 		while (ri.hasMoreElements())
 		{
@@ -224,7 +262,7 @@ namespace Duel
 		return ret;
 	}
 
-	void DDemoRenderWorkshop::destryDeferLayer( DeferLayer* lay )
+	void DDemoRenderWorkshop::destroyDeferLayer( DeferLayer* lay )
 	{
 		if (lay != NULL)
 		{
@@ -293,6 +331,11 @@ namespace Duel
 		return mFrameBuffer;
 	}
 
+
+	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getAlbedo()
+	{
+		return mAlbedo;
+	}
 
 	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getDepthMap()
 	{

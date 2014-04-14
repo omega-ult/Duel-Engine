@@ -68,7 +68,7 @@
   
   <!-- Demo_RenderWorkshop-->
   <GpuResourceParameter>
-	  <Name>Demo_DeferCompose.vs</Name>
+	  <Name>Demo_DeferMerge.vs</Name>
 	  <Group>_BasicShaderPack</Group>
 	  <Entry>main</Entry>
 	  <Profile>GL_VERTEX_SHADER</Profile>	
@@ -76,7 +76,7 @@
 	  <Compiled>false</Compiled>
   </GpuResourceParameter>
   <GpuResourceParameter>
-	  <Name>Demo_DeferCompose.ps</Name>
+	  <Name>Demo_DeferMerge.ps</Name>
 	  <Group>_BasicShaderPack</Group>
 	  <Entry>main</Entry>
 	  <Profile>GL_FRAGMENT_SHADER</Profile>	

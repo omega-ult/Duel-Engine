@@ -529,3 +529,7 @@ normal mapping 的制作出了点问题, mesh格式需要更改, 只支持一个uvset就好了, 这样就
 
 4.3
 完成viewspace normal的计算.
+
+4.14
+完成Defer框架的搭建, 下面就是实战LightAccum了.
+战个痛快.

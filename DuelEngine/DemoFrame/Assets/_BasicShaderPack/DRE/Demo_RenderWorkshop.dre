@@ -1,31 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RenderEffect name="Demo_RenderWorkshop"  version="2.0">
 	
-	<!--CopyTexture-->
-	<Technique name="DemoRenderWorkshop_CopyTexture">
-		<Pass name="DemoRenderWorkshop_CopyTexture">
+	<!--ScreenTransfer-->
+	<Technique name="ScreenTransfer">
+		<Pass name="ScreenTransfer_p0">
 			<VertexProgram group="_BasicShaderPack">Demo_ScreenQuadTransfer.vs</VertexProgram>
 			<PixelProgram group="_BasicShaderPack">Demo_ScreenQuadTransfer.ps</PixelProgram>
 		</Pass>
 	</Technique>
 	
 	<!--Compose-->
-	<Technique name="DemoRenderWorkshop_DeferCompose">
-		<Pass name="DemoRenderWorkshop_DeferCompose">
-			<VertexProgram group="_BasicShaderPack">Demo_DeferCompose.vs</VertexProgram>
-			<PixelProgram group="_BasicShaderPack">Demo_DeferCompose.ps</PixelProgram>
+	<Technique name="DeferMerge">
+		<Pass name="DeferMerge_p0">
+			<VertexProgram group="_BasicShaderPack">Demo_DeferMerge.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">Demo_DeferMerge.ps</PixelProgram>
 		</Pass>
 	</Technique>
 	
-	
-	<!--GBuffer-->
-	<Technique name="DemoRenderWorkshop_DeferGBuffer">
-		<Pass name="DemoRenderWorkshop_DeferGBuffer">
-			<VertexProgram group="_BasicShaderPack">Demo_DeferGBuffer.vs</VertexProgram>
-			<PixelProgram group="_BasicShaderPack">Demo_DeferGBuffer.ps</PixelProgram>
-		</Pass>
-	</Technique>
-	
-	
+		
 	
 </RenderEffect>

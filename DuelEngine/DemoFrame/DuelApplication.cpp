@@ -289,7 +289,6 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 		//////////////////////////////////////////////////////////////////////////
 		mRws = new DDemoRenderWorkshop();
-		mRws->setRenderSystem(mEngineCore->getRenderSystem());
 		mEngineCore->setRenderWorkshop(mRws);
 		new DDemoMaterialBank();
 		DDemoMaterialBank::getSingleton().init(mRws);
