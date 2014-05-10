@@ -683,101 +683,10 @@ namespace Duel
 		DRasterizerStateObjectPtr rasPtr = resMgr->createRasterizerStateObject(mCurRasState);
 		DDepthStencilStateObjectPtr depPtr = resMgr->createDepthStencilStateObject(mCurDepState);
 		DBlendStateObjectPtr blendPtr = resMgr->createBlendStateObject(mCurBlendState);
-		GLRasterizerStateObject* rasObj = rasPtr->getAs<GLRasterizerStateObject>();
-		GLDepthStencilStateObject* depObj = depPtr->getAs<GLDepthStencilStateObject>();
-		GLBlendStateObject* blendObj = blendPtr->getAs<GLBlendStateObject>();
 
-		// rasterization-------------------------
-		glPolygonMode(GL_FRONT_AND_BACK, rasObj->mGLPolygonMode);
-		glShadeModel(rasObj->mGLShadeMode);
-		if (rasObj->mbCulling)
-		{
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_BACK);
-			glFrontFace(rasObj->mGLFrontFace);
-		}
-		else
-		{
-			glDisable(GL_CULL_FACE);
-		}
-		glPolygonOffset(rasObj->mState.polygonOffsetFactor, rasObj->mState.polygonOffsetUnit);
-		if (rasObj->mState.scissorEnable)
-		{
-			glEnable(GL_SCISSOR_TEST);
-		}
-		else
-		{
-			glDisable(GL_SCISSOR_TEST);
-		}
-		if (rasObj->mState.multisampleEnable)
-		{
-			glEnable(GL_MULTISAMPLE);
-		}
-		else
-		{
-			glDisable(GL_MULTISAMPLE);
-		}
-
-		// depth stencil----------------------------
-		if (depObj->mState.depthEnable)
-		{
-			glEnable(GL_DEPTH_TEST);
-		}
-		else
-		{
-			glDisable(GL_DEPTH_TEST);
-		}
-		// front 
-		glDepthMask(depObj->mGLDepthWriteMask);
-		glDepthFunc(depObj->mGLDepthFunc);
-		glStencilFuncSeparate(GL_FRONT, depObj->mGLFrontStencilFunc, mCurFrontStencilRef, depObj->mState.frontStencilReadMask);
-		glStencilOpSeparate(GL_FRONT, depObj->mGLFrontStencilFail, depObj->mGLFrontStencilDepthFail,depObj->mGLFrontStencilPass);
-		glStencilMaskSeparate(GL_FRONT, depObj->mState.frontStencilWriteMask);
-		// back
-		glStencilFuncSeparate(GL_BACK, depObj->mGLBackStencilFunc, mCurBackStencilRef, depObj->mState.backStencilReadMask);
-		glStencilOpSeparate(GL_BACK, depObj->mGLBackStencilFail, depObj->mGLBackStencilDepthFail,depObj->mGLBackStencilPass);
-		glStencilMaskSeparate(GL_BACK, depObj->mState.backStencilWriteMask);
-		if(depObj->mState.frontStencilEnable || depObj->mState.backStencilEnable)
-		{
-			glEnable(GL_STENCIL_TEST);
-		}
-		else
-		{
-			glDisable(GL_STENCIL_TEST);
-		}
-
-		// blend state-------------------------------------
-		if (blendObj->mState.alphaToCoverageEnable)
-		{
-			glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-		}
-		else
-		{
-			glDisable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-		}
-		for (uint32 i = 0; i < 8; ++ i)
-		{
-			if (blendObj->mState.targetStates[i].blendEnable)
-			{
-				glEnablei(GL_BLEND, i);
-			}
-			else
-			{
-				glDisablei(GL_BLEND, i);
-			}
-			glBlendEquationSeparatei(i,
-				blendObj->mGLColorBlendOp[i], blendObj->mGLAlphaBlendOp[i]);
-			glBlendFuncSeparatei(i,
-					blendObj->mGLColorSrcBlend[i], blendObj->mGLColorDstBlend[i], 
-					blendObj->mGLAlphaSrcBlend[i], blendObj->mGLAlphaDstBlend[i]);
-			
-			uint8 mask = blendObj->mState.targetStates[i].colorWriteMask;
-				glColorMaski(i, (mask & CWM_Red) != 0,
-					(mask & CWM_Green) != 0,
-					(mask & CWM_Blue) != 0,
-					(mask & CWM_Alpha) != 0);
-		}
-		glBlendColor(mCurBlendFactor.r, mCurBlendFactor.g, mCurBlendFactor.b, mCurBlendFactor.a);
+		setRasterizerState(rasPtr.get());
+		setDepthStencilState(depPtr.get());
+		setBlendState(blendPtr.get(), mCurBlendFactor);
 	}
 
 }

@@ -42,16 +42,12 @@ namespace Duel
 		//////////////////////////////////////////////////////////////////////////
 
 		GLuint			getFBO() { return mFBO; }
-		HGLRC			getGLRC() { return mHGLRC; }
 		GLuint			cacheFBO();
 		//////////////////////////////////////////////////////////////////////////
-
-		void			bindContext();
 
 	protected:
 #ifdef DUEL_PLATFORM_WINDOWS
 		HWND		mHWND;
-		HGLRC		mHGLRC;
 		HDC			mHDC;
 
 

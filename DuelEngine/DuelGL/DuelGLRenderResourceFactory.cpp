@@ -17,19 +17,23 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(GLRenderResourceFactory, DRenderResourceFactory);
 
 #ifdef DUEL_PLATFORM_WINDOWS
-	LRESULT CALLBACK _TMPGL_DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+	LRESULT CALLBACK __GL_RenderContextWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 	{
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 #endif
 
-	GLRenderResourceFactory::GLRenderResourceFactory( GLRenderSystem* targetSys ) : 
-		mTargetRSys(targetSys),
+	GLRenderResourceFactory::GLRenderResourceFactory() : 
 		mMainHDC(NULL),
 		mMainHWND(NULL),
 		mMainHGLRC(NULL)
 	{
 
+	}
+
+	GLRenderResourceFactory::~GLRenderResourceFactory()
+	{
+		shutdown();
 	}
 
 	Duel::DVertexBufferPtr GLRenderResourceFactory::createVetexBuffer( size_t vertexSize, size_t verticesCount, HardwareBufferUsage usage, bool useShadow, VertexBufferType type )
@@ -85,7 +89,6 @@ namespace Duel
 
 	DFrameBuffer* GLRenderResourceFactory::createFrameBuffer( uint32 w, uint32 h, uint32 colorBits )
 	{
-		resetResourceContext();
 		GLFrameBuffer* ret = new GLFrameBuffer(this, w, h, colorBits);
 		return ret;
 
@@ -95,34 +98,30 @@ namespace Duel
 	{
 		if (buf->getCreator() == this)
 		{
-			if (buf == mTargetRSys->getCurrentFrameBuffer())
+			if (DCore::getSingleton().getRenderSystem() != NULL &&
+				buf == DCore::getSingleton().getRenderSystem()->getCurrentFrameBuffer())
 			{
-				mTargetRSys->bindFrameBuffer(NULL);
+				DCore::getSingleton().getRenderSystem()->bindFrameBuffer(NULL);
 			}
-			resetResourceContext();
 			delete buf;
 		}
 	}
 
 #ifdef DUEL_PLATFORM_WINDOWS
-	void GLRenderResourceFactory::initialize()
-	{
-		initWindowsModules();
-	}
 
-	void GLRenderResourceFactory::resetResourceContext()
+	void GLRenderResourceFactory::resetRenderContext()
 	{
 		wglMakeCurrent(mMainHDC, mMainHGLRC);
 	}
 
-	void GLRenderResourceFactory::initWindowsModules()
+	void GLRenderResourceFactory::initialize()
 	{
 		HINSTANCE hInst = GetModuleHandle(NULL);
 		WNDCLASSEX wc;
 
 		wc.cbSize			= sizeof(wc);
 		wc.style			= CS_HREDRAW | CS_VREDRAW;
-		wc.lpfnWndProc		= _TMPGL_DefaultWndProc;
+		wc.lpfnWndProc		= __GL_RenderContextWndProc;
 		wc.cbClsExtra		= 0;
 		wc.cbWndExtra		= 0;
 		wc.hInstance		= hInst;
@@ -131,7 +130,7 @@ namespace Duel
 		wc.hbrBackground	= NULL;
 		wc.lpszMenuName		= NULL;
 		// TODO: from config
-		wc.lpszClassName	= "__GLResWindow";
+		wc.lpszClassName	= "__GLContextWindow";
 		wc.hIconSm			= NULL;
 
 		DWORD	styleWord;
@@ -139,7 +138,7 @@ namespace Duel
 		RECT rc = { 0, 0, 50, 50 };
 		AdjustWindowRectEx( &rc, styleWord, FALSE, 0 );
 		RegisterClassEx(&wc);
-		mMainHWND = CreateWindowEx(0, "__GLResWindow", "__GLResWindow", 
+		mMainHWND = CreateWindowEx(0, "__GLContextWindow", "__GLContextWindow", 
 			styleWord, 0, 0,  rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInst, NULL);
 
 		mMainHDC = GetDC(mMainHWND);
@@ -166,11 +165,63 @@ namespace Duel
 
 		SetPixelFormat(mMainHDC, pixfmt, &pfd);//每个窗口只能设置一次  
 
-		mMainHGLRC = wglCreateContext(mMainHDC);
-		resetResourceContext();
+ 		mMainHGLRC = wglCreateContext(mMainHDC);
+ 		wglMakeCurrent(mMainHDC, mMainHGLRC);
 		glewInit();
 
+		int flags = 0;//WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
+#ifdef DUEL_DEBUG
+		flags |= WGL_CONTEXT_DEBUG_BIT_ARB;
+#endif
+		int versions[9][2] =
+		{
+			{ 4, 4 },
+			{ 4, 3 },
+			{ 4, 2 },
+			{ 4, 1 },
+			{ 4, 0 },
+			{ 3, 3 },
+			{ 3, 2 },
+			{ 3, 1 },
+			{ 3, 0 },
+		};
+		int attribs[] = { WGL_CONTEXT_MAJOR_VERSION_ARB, 4, WGL_CONTEXT_MINOR_VERSION_ARB, 4, WGL_CONTEXT_FLAGS_ARB, flags,
+			WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB, 0 };
+		for (int i = 0; i < 9; ++ i)
+		{
+			attribs[1] = versions[i][0];
+			attribs[3] = versions[i][1];
+			HGLRC hRC_new = wglCreateContextAttribsARB(mMainHDC,
+				0, attribs);
+			if (hRC_new != NULL)
+			{
+				wglMakeCurrent(mMainHDC, NULL);
+				wglDeleteContext(mMainHGLRC);
+				mMainHGLRC = hRC_new;
+				wglMakeCurrent(mMainHDC, mMainHGLRC);
+				break;
+			}
+		}
+
 	}
+
+	void GLRenderResourceFactory::shutdown()
+	{
+		if (mMainHGLRC != NULL)
+		{
+			wglMakeCurrent(mMainHDC, NULL);
+			wglDeleteContext(mMainHGLRC);
+		}
+		if (mMainHWND != NULL)
+		{
+			DestroyWindow(mMainHWND);
+		}
+		mMainHWND = NULL;
+		mMainHGLRC = NULL;
+		mMainHDC = NULL;
+	}
+
+#endif // DUEL_PLATFORM_WINDOWS
 
 	DRenderColorView* GLRenderResourceFactory::createRenderColorView( DPixelFormat fmt )
 	{
@@ -198,6 +249,5 @@ namespace Duel
 		}
 	}
 
-#endif // DUEL_PLATFORM_WINDOWS
 
 }
