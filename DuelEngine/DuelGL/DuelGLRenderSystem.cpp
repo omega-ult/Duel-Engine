@@ -627,6 +627,12 @@ namespace Duel
 		mCurFrameBuffer = buf;
 		GLuint fbo = getCurGLFBO();
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		DViewport vp = buf->getViewport();
+
+		// because opengl use lower-left corner as the screen origin, we must do a convertion
+		GLint fboH = buf->getHeight();
+		GLint low = fboH - (vp.getTop() + vp.getHeight());
+		glViewport(vp.getLeft(), low, vp.getWidth(), vp.getHeight());
 		if (fbo != 0)
 		{
 			uint32 maxTargetCount = 0;
@@ -646,12 +652,6 @@ namespace Duel
 			}
 			glDrawBuffers(maxTargetCount+1, targetList);
 		}
-		DViewport vp = buf->getViewport();
-
-		// because opengl use lower-left corner as the screen origin, we must do a convertion
-		GLint fboH = buf->getHeight();
-		GLint low = fboH - (vp.getTop() + vp.getHeight());
-		glViewport(vp.getLeft(), low, vp.getWidth(), vp.getHeight());
 	}
 
 	DFrameBuffer* GLRenderSystem::getCurrentFrameBuffer()

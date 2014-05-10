@@ -92,6 +92,7 @@ namespace Duel
 			if (deferlayer != NULL)
 			{
 				deferlayer->getFrameBuffer()->resize(mPresentTarget->getWidth(), mPresentTarget->getHeight());
+				deferlayer->getFrameBuffer()->detachRenderDepthStencilView();
 				if (cacheDepthStencil != NULL)
 				{
 					deferlayer->getFrameBuffer()->attachRenderDepthStencilView(cacheDepthStencil);
@@ -295,11 +296,11 @@ namespace Duel
 		shutdown();
 		DRenderResourceManager* rm = DRenderResourceManager::getSingletonPtr();
 		mFrameBuffer = rm->createFrameBuffer(w, h, 32);
-		mAlbedo = rm->createRenderColorView(PF_R8G8B8A8);
-		mDepth = rm->createRenderColorView(PF_R8G8B8A8);
-		mViewSpaceNormal = rm->createRenderColorView(PF_R8G8B8A8);
-		mLightAccum = rm->createRenderColorView(PF_R8G8B8A8);
-		mMergeView = rm->createRenderColorView(PF_R8G8B8A8);
+		mAlbedo = rm->createRenderColorView(PF_A8R8G8B8);
+		mDepth = rm->createRenderColorView(PF_A8R8G8B8);
+		mViewSpaceNormal = rm->createRenderColorView(PF_A8R8G8B8);
+		mLightAccum = rm->createRenderColorView(PF_A8R8G8B8);
+		mMergeView = rm->createRenderColorView(PF_A8R8G8B8);
 		}
 
 	void DDemoRenderWorkshop::DeferLayer::prepareGBufferStage()
@@ -308,7 +309,6 @@ namespace Duel
 		mFrameBuffer->attachRenderColorView(EA_Color0, mAlbedo);
 		mFrameBuffer->attachRenderColorView(EA_Color1, mViewSpaceNormal);
 		mFrameBuffer->attachRenderColorView(EA_Color2, mDepth);
-		mFrameBuffer->detachRenderDepthStencilView();
 		mFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
 	}
 

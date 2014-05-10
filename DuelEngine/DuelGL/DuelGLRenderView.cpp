@@ -86,19 +86,15 @@ namespace Duel
 
 	GLRenderDepthStencilView::GLRenderDepthStencilView( DRenderResourceFactory* creator ) :
 		DRenderDepthStencilView(creator),
-		mTextureID(0)
+		mRBO(0)
 	{
 	}
 
 	GLRenderDepthStencilView::~GLRenderDepthStencilView()
 	{
-		if (mTextureID != 0)
+		if (mRBO != 0)
 		{
-			glDeleteTextures(1,&mTextureID);
-		}
-		if (mGpuConstant != NULL)
-		{
-			mGpuConstant->getAs<GLGpuTextureConstant>()->discard();
+			glDeleteRenderbuffers(1, &mRBO);
 		}
 	}
 
@@ -112,44 +108,27 @@ namespace Duel
 		mWidth = w;
 		mHeight = h;
 
-		if (mTextureID != 0)
+		if (mRBO != 0)
 		{
-			glDeleteTextures(1, &mTextureID);
-			mTextureID = 0;
+			glDeleteRenderbuffers(1, &mRBO);
 		}
-		glGenTextures(1, &mTextureID);
-		glBindTexture(GL_TEXTURE_2D, mTextureID);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // automatic mipmap generation included in OpenGL v1.4
-		
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, mWidth, mHeight, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, 0);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		if (mGpuConstant != NULL)
-		{
-			mGpuConstant->getAs<GLGpuTextureConstant>()->discard();
-		}
-		mGpuConstant = DGpuTextureConstantPtr(new GLGpuTextureConstant(GL_TEXTURE_2D, mTextureID));
+		glGenRenderbuffers(1, &mRBO);
+		glBindRenderbuffer(GL_RENDERBUFFER, mRBO);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mWidth, mHeight);
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
 	}
 
-	Duel::DGpuTextureConstantPtr GLRenderDepthStencilView::getGpuTexutureConstant()
-	{
-		return mGpuConstant;
-	}
 
 	void GLRenderDepthStencilView::setAttachFrameBuffer( DFrameBuffer* fb )
 	{
 		mAttachFB = fb;
 	}
 
-	GLuint GLRenderDepthStencilView::getTextureID()
+	GLuint GLRenderDepthStencilView::getRBO()
 	{
-		return mTextureID;
+		return mRBO;
 	}
+
 
 }

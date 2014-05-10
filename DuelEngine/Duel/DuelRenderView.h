@@ -64,16 +64,6 @@ namespace Duel
 		uint32			getWidth() { return mWidth; }
 		uint32			getHeight() { return mHeight; }
 
-		// save the current content into an image.
-		virtual	void		saveToImage(DImage* dstImg) {}
-
-		// copy the content to the texture, use main surface only.
-		virtual	void		copyToTexture(DTexture* dstTexture) {}
-
-		// this method is implemented by sub class, used in bingding texture 
-		// resource to the gpu pipeline.
-		virtual DGpuTextureConstantPtr	getGpuTexutureConstant() = 0;
-
 		// query whether this view is attached to a frame buffer.
 		bool			isAttached();
 		DFrameBuffer*	getAttachedFrameBuffer();
