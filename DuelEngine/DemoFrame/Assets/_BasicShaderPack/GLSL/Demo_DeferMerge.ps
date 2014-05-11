@@ -1,6 +1,7 @@
 #version 330
 
-uniform sampler2D targetTexture;
+uniform sampler2D albedoMap;
+uniform sampler2D lightAccumMap;
 
 in 	Varing
 {
@@ -12,5 +13,5 @@ layout(location = 0)		out	vec4	color0;
 
 void main(void)
 {
-	color0 = texture(targetTexture, PS_StageInput.texcoord);
+	color0 = texture(albedoMap, PS_StageInput.texcoord);
 }

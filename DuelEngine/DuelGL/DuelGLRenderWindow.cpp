@@ -215,6 +215,8 @@ namespace Duel
 		{
 			attachRenderColorView(EA_Color0, mMainSurface);
 		}
+
+
 		if(mMainDepthView != NULL)
 		{
 			DRenderResourceManager::getSingleton().destroyRenderDepthStencilView(mMainDepthView);
@@ -387,8 +389,8 @@ namespace Duel
 			return;
 		}
 		assert(width != 0 && height != 0);
-		mWidth = width, mHeight = height;
 		DFrameBuffer::resize(width, height);
+		mCurViewport.reset(0,0, width, height);
 		RenderColorViewList::iterator i, iend = mViewList.end();
 		for (i = mViewList.begin(); i != iend; ++i)
 		{

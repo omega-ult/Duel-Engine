@@ -4,14 +4,52 @@
 	<!--ScreenTransfer-->
 	<Technique name="ScreenTransfer">
 		<Pass name="ScreenTransfer_p0">
-			<VertexProgram group="_BasicShaderPack">Demo_ScreenQuadTransfer.vs</VertexProgram>
-			<PixelProgram group="_BasicShaderPack">Demo_ScreenQuadTransfer.ps</PixelProgram>
+			<RasterizerState>
+				<state name="DepthClipEnable">false</state>
+			</RasterizerState>
+			
+			<DepthStencilState>
+				<state name="DepthEnable">false</state>
+			</DepthStencilState>
+			
+			<BlendState>
+				<RenderTargetBlendState	index = "0">
+					<state name="BlendEnable">true</state>
+					<state name="ColorBlendOpeartion">Add</state>
+					<state name="ColorSrcBlend">SrcAlpha</state>
+					<state name="ColorDestBlend">InvSrcAlpha</state>
+					<state name="AlphaBlendOpeartion">Max</state>
+					<state name="AlphaSrcBlend">One</state>
+					<state name="AlphaDestBlend">One</state>
+				</RenderTargetBlendState>
+			</BlendState>
+			<VertexProgram group="_BasicShaderPack">Demo_ScreenTransfer.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">Demo_ScreenTransfer.ps</PixelProgram>
 		</Pass>
 	</Technique>
 	
 	<!--Compose-->
 	<Technique name="DeferMerge">
 		<Pass name="DeferMerge_p0">
+			<RasterizerState>
+				<state name="DepthClipEnable">false</state>
+			</RasterizerState>
+			
+			<DepthStencilState>
+				<state name="DepthEnable">false</state>
+			</DepthStencilState>
+			
+			<BlendState>
+				<RenderTargetBlendState	index = "0">
+					<state name="BlendEnable">true</state>
+					<state name="ColorBlendOpeartion">Add</state>
+					<state name="ColorSrcBlend">SrcAlpha</state>
+					<state name="ColorDestBlend">InvSrcAlpha</state>
+					<state name="AlphaBlendOpeartion">Max</state>
+					<state name="AlphaSrcBlend">One</state>
+					<state name="AlphaDestBlend">One</state>
+				</RenderTargetBlendState>
+			</BlendState>
 			<VertexProgram group="_BasicShaderPack">Demo_DeferMerge.vs</VertexProgram>
 			<PixelProgram group="_BasicShaderPack">Demo_DeferMerge.ps</PixelProgram>
 		</Pass>

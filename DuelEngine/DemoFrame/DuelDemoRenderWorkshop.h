@@ -27,7 +27,7 @@ namespace Duel
 			void	prepareLightingStage();
 			void	prepareMergeStage();
 			DFrameBuffer*		getFrameBuffer();
-			DRenderColorView*	getAlbedo();
+			DRenderColorView*	getAlbedoMap();
 			DRenderColorView*	getDepthMap();
 			DRenderColorView*	getViewSpaceNormalMap();
 			DRenderColorView*	getLightAccumulationMap();

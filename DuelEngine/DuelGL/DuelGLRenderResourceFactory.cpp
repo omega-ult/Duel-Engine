@@ -19,7 +19,7 @@ namespace Duel
 #ifdef DUEL_PLATFORM_WINDOWS
 	LRESULT CALLBACK _TMPGL_DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 	{
-		return 0;
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 #endif
 

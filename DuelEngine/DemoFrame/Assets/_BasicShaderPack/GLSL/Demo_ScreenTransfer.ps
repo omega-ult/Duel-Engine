@@ -1,6 +1,6 @@
 #version 330
 
-uniform sampler2D targetTexture;
+uniform sampler2D srcTex;
 
 in 	Varing
 {
@@ -12,5 +12,5 @@ layout(location = 0)		out	vec4	color0;
 
 void main(void)
 {
-	color0 = texture(targetTexture, PS_StageInput.texcoord);
+	color0 = texture(srcTex, PS_StageInput.texcoord);
 }

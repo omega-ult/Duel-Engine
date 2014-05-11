@@ -128,7 +128,7 @@ namespace Duel
 					// merge---------------------------------------------
 					deferlayer->prepareMergeStage();
 					{
-						mMergeHelper.setInputAlbedo(deferlayer->getAlbedo()->
+						mMergeHelper.setInputAlbedo(deferlayer->getAlbedoMap()->
 							getGpuTexutureConstant());
 						mMergeHelper.setInputLightAccumulationMap(deferlayer->getLightAccumulationMap()->
 							getGpuTexutureConstant());
@@ -295,11 +295,11 @@ namespace Duel
 		shutdown();
 		DRenderResourceManager* rm = DRenderResourceManager::getSingletonPtr();
 		mFrameBuffer = rm->createFrameBuffer(w, h, 32);
-		mAlbedo = rm->createRenderColorView(PF_R8G8B8A8);
-		mDepth = rm->createRenderColorView(PF_R8G8B8A8);
-		mViewSpaceNormal = rm->createRenderColorView(PF_R8G8B8A8);
-		mLightAccum = rm->createRenderColorView(PF_R8G8B8A8);
-		mMergeView = rm->createRenderColorView(PF_R8G8B8A8);
+		mAlbedo = rm->createRenderColorView(PF_A8R8G8B8);
+		mDepth = rm->createRenderColorView(PF_A8R8G8B8);
+		mViewSpaceNormal = rm->createRenderColorView(PF_A8R8G8B8);
+		mLightAccum = rm->createRenderColorView(PF_A8R8G8B8);
+		mMergeView = rm->createRenderColorView(PF_A8R8G8B8);
 		}
 
 	void DDemoRenderWorkshop::DeferLayer::prepareGBufferStage()
@@ -332,7 +332,7 @@ namespace Duel
 	}
 
 
-	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getAlbedo()
+	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getAlbedoMap()
 	{
 		return mAlbedo;
 	}

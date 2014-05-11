@@ -58,7 +58,7 @@ namespace Duel
 		// 8 bits unsigned int for each channel.
 		PF_B8G8R8A8						= 19,
 		// 8 bits unsigned int for each channel.
-		PF_R8G8B8A8						= 20,
+		PF_R8G8B8A8						= 20,		
 		// 8 bits unsigned int for red, green, blue, 8 bits unused.
 		PF_X8R8G8B8						= 21,
 		// 8 bits unsigned int for red, green, blue, 8 bits unused.
