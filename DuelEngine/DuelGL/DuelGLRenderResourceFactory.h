@@ -12,17 +12,17 @@ namespace Duel
 	{
 	DUEL_DECLARE_RTTI(GLRenderResourceFactory)
 	public:
-		GLRenderResourceFactory(GLRenderSystem* targetSys);
+		GLRenderResourceFactory();
+		~GLRenderResourceFactory();
 
 		// called when loading GL plugin.
 		void	initialize();
+		void	shutdown();
 
 #ifdef DUEL_PLATFORM_WINDOWS
-		HDC				getResourceDC() { return mMainHDC; }
-		HGLRC			getResourceGLRC() { return mMainHGLRC; }
-		HWND			getResourceHWND() { return mMainHWND; }
+		HGLRC			getRenderContext() { return mMainHGLRC; }
 
-		void			resetResourceContext();
+		void			resetRenderContext();
 #endif
 		// override : DHardwareBufferFactory-------------------------
 		virtual DVertexBufferPtr		createVetexBuffer(size_t vertexSize, size_t verticesCount,
@@ -65,10 +65,8 @@ namespace Duel
 		HDC		mMainHDC;
 		HGLRC	mMainHGLRC;
 		HWND	mMainHWND;
-		void	initWindowsModules();
 
 #endif
-		GLRenderSystem* mTargetRSys;
 	};
 
 }

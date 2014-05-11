@@ -24,7 +24,6 @@ namespace Duel
 		//mTargetRSys(rSys),
 		mName(name),
 		mFBO(0),
-		mHGLRC(NULL),
 		mMainSurface(NULL),
 		mMainDepthView(NULL),
 		mCurDepthView(NULL)
@@ -54,9 +53,6 @@ namespace Duel
 		{
 			DRenderResourceManager::getSingleton().destroyRenderDepthStencilView(mMainDepthView);
 		}
-		wglMakeCurrent(mHDC, NULL);
-		wglDeleteContext(mHGLRC);
-		mCreator->getAs<GLRenderResourceFactory>()->resetResourceContext();
 	}
 
 	void GLRenderWindow::create( const DString& name, const RenderWindowSetting& setting, uint32 winHandle )
@@ -138,44 +134,11 @@ namespace Duel
 			BOOL result = SetPixelFormat(mHDC, pixfmt, &pfd);//每个窗口只能设置一次  
 			assert(result == TRUE);
 		}
-
-		mHGLRC = wglCreateContext(mHDC);
-		wglMakeCurrent(mHDC,mHGLRC); 
+// 
+// 		mHGLRC = wglCreateContext(mHDC);
+// 		wglMakeCurrent(mHDC,mHGLRC); 
 
 		
-
-		int flags = 0;//WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
-		#ifdef DUEL_DEBUG
-			flags |= WGL_CONTEXT_DEBUG_BIT_ARB;
-		#endif
-		int versions[7][2] =
-		{
-			{ 4, 2 },
-			{ 4, 1 },
-			{ 4, 0 },
-			{ 3, 3 },
-			{ 3, 2 },
-			{ 3, 1 },
-			{ 3, 0 },
-		};
-		int attribs[] = { WGL_CONTEXT_MAJOR_VERSION_ARB, 4, WGL_CONTEXT_MINOR_VERSION_ARB, 2, WGL_CONTEXT_FLAGS_ARB, flags,
-			WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB, 0 };
-		for (int i = 0; i < 7; ++ i)
-		{
-			attribs[1] = versions[i][0];
-			attribs[3] = versions[i][1];
-			HGLRC hRC_new = wglCreateContextAttribsARB(mHDC,
-				mCreator->getAs<GLRenderResourceFactory>()->getResourceGLRC(), attribs);
-			if (hRC_new != NULL)
-			{
-				wglMakeCurrent(mHDC, NULL);
-				wglDeleteContext(mHGLRC);
-				mHGLRC = hRC_new;
-				wglMakeCurrent(mHDC, mHGLRC);
-				break;
-			}
-		}
-		 	
 
 
 
@@ -188,7 +151,7 @@ namespace Duel
 
 #endif // DUEL_PLATFORM_WINDOWS
 
-		mCreator->getAs<GLRenderResourceFactory>()->resetResourceContext();
+//		mCreator->getAs<GLRenderResourceFactory>()->resetResourceContext();
 
 		if (try_srgb)
 		{
@@ -350,8 +313,9 @@ namespace Duel
 		mCurDepthView = rv;
 		mCurDepthView->setAttachFrameBuffer(this);
 		GLuint	oldFbo = cacheFBO();
-		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);			
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mCurDepthView->getTextureID(), 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rv->getRBO());
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rv->getRBO());
 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 	}
 
@@ -364,8 +328,9 @@ namespace Duel
 		mCurDepthView->setAttachFrameBuffer(NULL);
 		mCurDepthView = NULL;
 		GLuint	oldFbo = cacheFBO();
-		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);			
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0);
 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 
 	}
@@ -424,12 +389,15 @@ namespace Duel
 			}
 		}
 		if (mCurDepthView != NULL)
-		{		
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mCurDepthView->getTextureID(), 0);
+		{
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mCurDepthView->getRBO());
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, mCurDepthView->getRBO());
 		}
 		else
 		{
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0);
+
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 
@@ -471,8 +439,10 @@ namespace Duel
 		{
 			return;
 		}
+		wglMakeCurrent(mHDC, mCreator->getAs<GLRenderResourceFactory>()->getRenderContext());
 		GLuint oldFBO = cacheFBO();
-		wglMakeCurrent(mHDC, mHGLRC);
+		DRenderColorView* cacheColorView = mViewList[0];
+		detachRenderColorView(EA_Color0);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);//脱离绑定
 
 		glClearColor(0,0,0,0);
@@ -482,8 +452,8 @@ namespace Duel
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 		
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glDisable(GL_DEPTH_TEST); 
+		glBlendEquationSeparate(GL_FUNC_ADD, GL_MAX);
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
 		// gl的视口是左下角为(0,0)
 		glViewport(0, 0, mWidth, mHeight);
@@ -498,52 +468,9 @@ namespace Duel
 		glLoadIdentity();
 
 		glEnable(GL_TEXTURE_2D); // 只画第一块咯.
-		glBindTexture(GL_TEXTURE_2D, mViewList[0]->getTextureID());
+		glBindTexture(GL_TEXTURE_2D, cacheColorView->getAs<GLRenderColorView>()->getTextureID());
 
 		glBegin(GL_QUADS);
-		/*
-		//前面
-		glTexCoord2f(0.0f,0.0f);glVertex3f(-1.0f,-1.0f,1.0f);//纹理和四边形的左下
-		glTexCoord2f(1.0f,0.0f);glVertex3f(1.0f,-1.0f,1.0f);//右下
-		glTexCoord2f(1.0f,1.0f);glVertex3f(1.0f,1.0f,1.0f);//右上
-		glTexCoord2f(0.0f,1.0f);glVertex3f(-1.0f,1.0f,1.0f);//左上
-
-
-		//后面
-		glTexCoord2f(1.0f,0.0f);glVertex3f(-1.0f,-1.0f,-1.0f);//左下
-		glTexCoord2f(1.0f,1.0f);glVertex3f(-1.0f,1.0f,-1.0f);//左上
-		glTexCoord2f(0.0f,1.0f);glVertex3f(1.0f,1.0f,-1.0f);//右上
-		glTexCoord2f(0.0f,0.0f);glVertex3f(1.0f,-1.0f,-1.0f);//右下
-
-
-
-		//顶面
-		glTexCoord2f(0.0f,1.0f);glVertex3f(-1.0f,1.0f,-1.0f);//左上
-		glTexCoord2f(0.0f,0.0f);glVertex3f(-1.0f,1.0f,1.0f);//左下
-
-		glTexCoord2f(1.0f,0.0f);glVertex3f(1.0f,1.0f,1.0f);//右下
-		glTexCoord2f(1.0f,1.0f);glVertex3f(1.0f,1.0f,-1.0f);//右上
-
-
-		//底面
-		glTexCoord2f(1.0f,1.0f);glVertex3f(1.0f,-1.0f,-1.0f);//右上
-		glTexCoord2f(0.0f,1.0f);glVertex3f(-1.0f,-1.0f,-1.0f);//左上
-		glTexCoord2f(0.0f,0.0f);glVertex3f(-1.0f,-1.0f,1.0f);//左下
-		glTexCoord2f(1.0f,0.0f);glVertex3f(1.0f,-1.0f,1.0f);//右下
-
-
-		//右面
-		glTexCoord2f(1.0f,0.0f);glVertex3f(1.0f,-1.0f,-1.0f);//左下
-		glTexCoord2f(1.0f,1.0f);glVertex3f(1.0f,1.0f,-1.0f);//左上
-		glTexCoord2f(0.0f,1.0f);glVertex3f(1.0f,1.0f,1.0f);//右上
-		glTexCoord2f(0.0f,0.0f);glVertex3f(1.0f,-1.0f,1.0f);//右下
-
-
-		//左面
-		glTexCoord2f(0.0f,0.0f);glVertex3f(-1.0f,1.0f,1.0f);//右上
-		glTexCoord2f(1.0f,0.0f);glVertex3f(-1.0f,1.0f,-1.0f);//左上
-		glTexCoord2f(1.0f,1.0f);glVertex3f(-1.0f,-1.0f,-1.0f);//左下
-		glTexCoord2f(0.0f,1.0f);glVertex3f(-1.0f,-1.0f,1.0f);//右下*/
 		glTexCoord2f(0.0f, 0.0f);   glVertex3i(-halfW,  -halfH, 0);
 		glTexCoord2f(1.0f, 0.0f);   glVertex3i( halfW,  -halfH, 0);
 		glTexCoord2f(1.0f, 1.0f);   glVertex3i( halfW, halfH, 0);
@@ -560,17 +487,12 @@ namespace Duel
 		glMatrixMode( GL_MODELVIEW );   
 		glPopMatrix();    
 
-		glEnable(GL_DEPTH_TEST);
 		glPopAttrib();
 
 		glFlush();
 		SwapBuffers(mHDC);
-
-#ifdef DUEL_PLATFORM_WINDOWS
-		mCreator->getAs<GLRenderResourceFactory>()->resetResourceContext();
-		glBindFramebuffer(GL_FRAMEBUFFER, oldFBO);
-#endif // DUEL_PLATFORM_WINDOWS
-
+		attachRenderColorView(EA_Color0, cacheColorView);
+		mCreator->getAs<GLRenderResourceFactory>()->resetRenderContext();
 	}
 
 	Duel::uint32 GLRenderWindow::getWindowHandle()

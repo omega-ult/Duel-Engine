@@ -28,7 +28,7 @@ namespace Duel
 	void GLPlugin::install()
 	{
 		mRenderSystem = new GLRenderSystem();
-		mRenderResFactory = new GLRenderResourceFactory(mRenderSystem);
+		mRenderResFactory = new GLRenderResourceFactory();
 		mTextureManager = new GLTextureManager();
 		mGpuProgramManager = new GLGpuProgramManger();
 		mhbManager = new DRenderResourceManager(mRenderResFactory);
@@ -51,6 +51,7 @@ namespace Duel
 		}
 		DResourceGroupManager::getSingletonPtr()->unregisterManager(mGpuProgramManager);
 		DResourceGroupManager::getSingletonPtr()->unregisterManager(mTextureManager);
+		mRenderResFactory->shutdown();
 	}
 
 	void GLPlugin::uninstall()

@@ -3,7 +3,7 @@
 uniform sampler2D	normalTexture;
 uniform sampler2D	diffuseTexture;
 uniform sampler2D	specularTexture;
-uniform sampler2D roughnessTexture;
+uniform sampler2D	roughnessTexture;
 in 	Varing
 {	
 	vec4	vpos;	// view space
@@ -12,9 +12,9 @@ in 	Varing
 	vec2	hdepth; // homogeneous space
 } PS_StageInput;
 
-layout(location = 0) out vec4	albedo;
-layout(location = 1) out vec4	vnormal;
-layout(location = 2) out vec4 depth;
+layout(location = 0) out vec4	vnormal;
+layout(location = 1) out vec4	albedo;
+layout(location = 2) out vec4	depth;
 
 // http://www.thetenthplanet.de/archives/1180
 // Christian Schuler, ShaderX5 2.6, "Normal Mapping Without Precomputed Tangents"
@@ -84,5 +84,9 @@ void main(void)
 	vnormal = vec4(encodeNormal(normalize(TBN * norm)), 1.0f);
 	
 	// for albedo.
-	albedo = vnormal;
+	albedo = vec4(vec3(1.0f, 1.0f, 1.0f) - vnormal.xyz,1.0);
+	
+	// for depth
+	depth.xyz = depth_to_color(PS_StageInput.hdepth.x / PS_StageInput.hdepth.y); 
+	depth.w = 1.0f;
 }

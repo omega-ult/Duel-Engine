@@ -40,14 +40,10 @@ namespace Duel
 		GLRenderDepthStencilView(DRenderResourceFactory* creator);
 		~GLRenderDepthStencilView();
 		virtual void	resize(uint32 w, uint32 h);
-		GLuint			getTextureID();
+		GLuint			getRBO();
 		void			setAttachFrameBuffer(DFrameBuffer* fb);
-		// override : DRenderView--------------------------
-		DGpuTextureConstantPtr	getGpuTexutureConstant();
-
 	protected:
-		GLuint	mTextureID;
-		DGpuTextureConstantPtr	mGpuConstant;
+		GLuint			mRBO;
 
 	};
 

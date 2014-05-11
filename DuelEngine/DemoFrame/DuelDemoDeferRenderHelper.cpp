@@ -152,6 +152,10 @@ namespace Duel
 		{
 			so->getPixelProgramParameters()->setValue("srcTex", mTransSrc);
 		}
+		if (so->getPassName() == "ScreenTransfer_p0")
+		{
+			so->getPixelProgramParameters()->setValue("targetTexture", mTransSrc);
+		}
 	}
 
 	void DDemoMergeHelper::setInputAlbedo( DGpuTextureConstantPtr tex )
