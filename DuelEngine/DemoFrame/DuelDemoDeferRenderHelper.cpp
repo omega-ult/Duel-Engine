@@ -143,9 +143,13 @@ namespace Duel
 
 	void DDemoMergeHelper::updateCustomGpuParameter( DShaderObject* so )
 	{
-		if (so->getPassName() == "DemoRenderWorkshop_CopyTexture")
+		if (so->getPassName() == "DeferMerge_p0")
 		{
 			so->getPixelProgramParameters()->setValue("targetTexture", mAlbedoTex);
+		}
+		if (so->getPassName() == "ScreenTransfer_p0")
+		{
+			so->getPixelProgramParameters()->setValue("targetTexture", mTransSrc);
 		}
 	}
 

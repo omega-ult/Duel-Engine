@@ -450,8 +450,8 @@ namespace Duel
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 		
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glDisable(GL_DEPTH_TEST); 
+		glBlendEquationSeparate(GL_FUNC_ADD, GL_MAX);
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
 		// gl的视口是左下角为(0,0)
 		glViewport(0, 0, mWidth, mHeight);
@@ -485,7 +485,6 @@ namespace Duel
 		glMatrixMode( GL_MODELVIEW );   
 		glPopMatrix();    
 
-		glEnable(GL_DEPTH_TEST);
 		glPopAttrib();
 
 		glFlush();

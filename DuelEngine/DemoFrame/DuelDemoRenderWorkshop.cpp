@@ -84,8 +84,18 @@ namespace Duel
 		DRenderQueue::RenderGroupIterator ri = queue->getRenderGroupIterator();;
 		// for defer stage.
 		DeferLayerMap::iterator gi = mDeferLayerMap.find(mPresentTarget);
-		bool deferProcessed = false;	// a flag indicate whether we need to merge defer output.
-		if (gi != mDeferLayerMap.end())
+		bool deferProcessing = false;	// a flag indicate whether we need to merge defer output.
+		while(ri.hasMoreElements())
+		{
+			DRenderGroup* rgrp = ri.getNext();
+			populateRenderables(rgrp, RS_Defer_GBuffer);
+			if(!mRenderList.empty())
+			{
+				deferProcessing = true;
+				break;
+			}
+		}
+		if (gi != mDeferLayerMap.end() && deferProcessing)
 		{
 			// we can render defer stage.
 			DeferLayer* deferlayer = gi->second;
@@ -106,7 +116,6 @@ namespace Duel
 			 		populateRenderables(rgrp, RS_Defer_GBuffer);
 			 		if (!mRenderList.empty())
 			 		{
-						deferProcessed = true;
 			 			signalGroupStartRender(queue, rgrp);
 			 			RenderElementList::iterator i, iend = mRenderList.end();
 			 			for (i = mRenderList.begin(); i != iend; ++i)
@@ -117,7 +126,7 @@ namespace Duel
 			 			signalGroupFinishRender(queue, rgrp);
 			 		}
 				}
-				if (deferProcessed)
+				if (deferProcessing)
 				{
 			 		// light accumulation.-------------------------------	
 					deferlayer->prepareLightingStage();
@@ -151,7 +160,7 @@ namespace Duel
 				deferlayer->getFrameBuffer()->detachAllRenderColorViews();
 				deferlayer->getFrameBuffer()->detachRenderDepthStencilView();
 				// transfer color to the present target.
-				if (deferProcessed)
+				if (deferProcessing)
 				{
 					mMergeHelper.setTransferSource(deferlayer->getMergedColorMap()->
 						getGpuTexutureConstant());
@@ -163,6 +172,7 @@ namespace Duel
 						while (p.hasMoreElements())
 						{
 							DRenderPass* pass = p.getNext().get();
+							mPresentTarget->attachRenderDepthStencilView(cacheDepthStencil);
 							renderSingleObject(mPresentTarget, &mMergeHelper, pass);
 						}
 					}
@@ -173,7 +183,7 @@ namespace Duel
 		// forward stage now;
 		// re-attach depth stencil view to the present target, the drawing result
 		// in the defer stage will be re-used.
-		if (cacheDepthStencil != NULL)
+		if (cacheDepthStencil != NULL && mPresentTarget->getRenderDepthStencilView() == NULL)
 		{
 			mPresentTarget->attachRenderDepthStencilView(cacheDepthStencil);
 		}
