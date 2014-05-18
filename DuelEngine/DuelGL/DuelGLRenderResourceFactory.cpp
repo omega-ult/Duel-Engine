@@ -26,9 +26,10 @@ namespace Duel
 	GLRenderResourceFactory::GLRenderResourceFactory() : 
 		mMainHDC(NULL),
 		mMainHWND(NULL),
-		mMainHGLRC(NULL)
+		mMainHGLRC(NULL),
+		mWindPixelFormat(0)
 	{
-
+		memset(&mMainPfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
 	}
 
 	GLRenderResourceFactory::~GLRenderResourceFactory()
@@ -108,7 +109,6 @@ namespace Duel
 	}
 
 #ifdef DUEL_PLATFORM_WINDOWS
-
 	void GLRenderResourceFactory::resetRenderContext()
 	{
 		wglMakeCurrent(mMainHDC, mMainHGLRC);
@@ -147,62 +147,62 @@ namespace Duel
 		uint32 stencilFormatBit = 8;
 		// there is no guarantee that the contents of the stack that become
 		// the pfd are zeroed, therefore _make sure_ to clear these bits.
-		PIXELFORMATDESCRIPTOR pfd;
-		memset(&pfd, 0, sizeof(pfd));
-		pfd.nSize		= sizeof(pfd);
-		pfd.nVersion	= 1;
-		pfd.dwFlags		= PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-		pfd.iPixelType	= PFD_TYPE_RGBA;
-		pfd.cColorBits	= static_cast<BYTE>(sufaceFormatBit);
-		pfd.cDepthBits	= static_cast<BYTE>(depthFormatBit);
-		pfd.cStencilBits = static_cast<BYTE>(stencilFormatBit);
-		pfd.iLayerType	= PFD_MAIN_PLANE;
+		memset(&mMainPfd, 0, sizeof(mMainPfd));
+		mMainPfd.nSize		= sizeof(mMainPfd);
+		mMainPfd.nVersion	= 1;
+		mMainPfd.dwFlags		= PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+		mMainPfd.iPixelType	= PFD_TYPE_RGBA;
+		mMainPfd.cColorBits	= static_cast<BYTE>(sufaceFormatBit);
+		mMainPfd.cDepthBits	= static_cast<BYTE>(depthFormatBit);
+		mMainPfd.cStencilBits = static_cast<BYTE>(stencilFormatBit);
+		mMainPfd.iLayerType	= PFD_MAIN_PLANE;
 
 		// here is the trick, create a temp HWND to create glew evironment.
+		mWindPixelFormat = 0;
 
-		int pixfmt = ChoosePixelFormat(mMainHDC, &pfd);
-		assert(pixfmt != 0);
-
-		SetPixelFormat(mMainHDC, pixfmt, &pfd);//每个窗口只能设置一次  
+		mWindPixelFormat = ChoosePixelFormat(mMainHDC, &mMainPfd);
+		BOOL result = SetPixelFormat(mMainHDC, mWindPixelFormat, &mMainPfd);//每个窗口只能设置一次  
+		assert(result == TRUE);
 
  		mMainHGLRC = wglCreateContext(mMainHDC);
  		wglMakeCurrent(mMainHDC, mMainHGLRC);
 		glewInit();
+// 
+// 		int flags = 0;//WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
+// #ifdef DUEL_DEBUG
+// 		flags |= WGL_CONTEXT_DEBUG_BIT_ARB;
+// #endif
+// 		int versions[9][2] =
+// 		{
+// 			{ 4, 4 },
+// 			{ 4, 3 },
+// 			{ 4, 2 },
+// 			{ 4, 1 },
+// 			{ 4, 0 },
+// 			{ 3, 3 },
+// 			{ 3, 2 },
+// 			{ 3, 1 },
+// 			{ 3, 0 },
+// 		};
+// 		int attribs[] = { WGL_CONTEXT_MAJOR_VERSION_ARB, 4, WGL_CONTEXT_MINOR_VERSION_ARB, 4, WGL_CONTEXT_FLAGS_ARB, flags,
+// 			WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB, 0 };
+// 		for (int i = 0; i < 9; ++ i)
+// 		{
+// 			attribs[1] = versions[i][0];
+// 			attribs[3] = versions[i][1];
+// 			HGLRC hRC_new = wglCreateContextAttribsARB(mMainHDC,
+// 				0, attribs);
+// 			if (hRC_new != NULL)
+// 			{
+// 				wglMakeCurrent(mMainHDC, NULL);
+// 				wglDeleteContext(mMainHGLRC);
+// 				mMainHGLRC = hRC_new;
+// 				wglMakeCurrent(mMainHDC, mMainHGLRC);
+// 				break;
+// 			}
+// 		}
 
-		int flags = 0;//WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
-#ifdef DUEL_DEBUG
-		flags |= WGL_CONTEXT_DEBUG_BIT_ARB;
-#endif
-		int versions[9][2] =
-		{
-			{ 4, 4 },
-			{ 4, 3 },
-			{ 4, 2 },
-			{ 4, 1 },
-			{ 4, 0 },
-			{ 3, 3 },
-			{ 3, 2 },
-			{ 3, 1 },
-			{ 3, 0 },
-		};
-		int attribs[] = { WGL_CONTEXT_MAJOR_VERSION_ARB, 4, WGL_CONTEXT_MINOR_VERSION_ARB, 4, WGL_CONTEXT_FLAGS_ARB, flags,
-			WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB, 0 };
-		for (int i = 0; i < 9; ++ i)
-		{
-			attribs[1] = versions[i][0];
-			attribs[3] = versions[i][1];
-			HGLRC hRC_new = wglCreateContextAttribsARB(mMainHDC,
-				0, attribs);
-			if (hRC_new != NULL)
-			{
-				wglMakeCurrent(mMainHDC, NULL);
-				wglDeleteContext(mMainHGLRC);
-				mMainHGLRC = hRC_new;
-				wglMakeCurrent(mMainHDC, mMainHGLRC);
-				break;
-			}
-		}
-
+		glEnable(GL_FRAMEBUFFER_SRGB);
 	}
 
 	void GLRenderResourceFactory::shutdown()

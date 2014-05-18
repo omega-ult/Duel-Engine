@@ -21,7 +21,8 @@ namespace Duel
 
 #ifdef DUEL_PLATFORM_WINDOWS
 		HGLRC			getRenderContext() { return mMainHGLRC; }
-
+		PIXELFORMATDESCRIPTOR	getWindowPixelFormatDesc() { return mMainPfd; }
+		int32			getWindowPixelFormat() { return mWindPixelFormat; }
 		void			resetRenderContext();
 #endif
 		// override : DHardwareBufferFactory-------------------------
@@ -65,7 +66,8 @@ namespace Duel
 		HDC		mMainHDC;
 		HGLRC	mMainHGLRC;
 		HWND	mMainHWND;
-
+		PIXELFORMATDESCRIPTOR	mMainPfd;
+		int32	mWindPixelFormat;
 #endif
 	};
 

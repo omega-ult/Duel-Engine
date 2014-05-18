@@ -533,3 +533,7 @@ normal mapping 的制作出了点问题, mesh格式需要更改, 只支持一个uvset就好了, 这样就
 4.14
 完成Defer框架的搭建, 下面就是实战LightAccum了.
 战个痛快.
+
+5.18
+GLRenderColorView里产生白色纹理的问题终于解决!原来是glTextureParameteri里设置纹理的采样方式不对,困扰了我一个月!
+记录一下,以后opengl有什么纹理的问题,先查glTextureParameteri.

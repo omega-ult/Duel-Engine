@@ -65,99 +65,14 @@ namespace Duel
 		mHWND = (HWND)winHandle;
 		mHDC = GetDC(mHWND);
 
-		uint32 sufaceFormatBit = DPixelFormatTool::getFormatBits(setting.surfaceFormat);
-		uint32 depthFormatBit = 24; // D24S8
-		uint32 stencilFormatBit = 8;
-		// there is no guarantee that the contents of the stack that become
-		// the pfd are zeroed, therefore _make sure_ to clear these bits.
-		PIXELFORMATDESCRIPTOR pfd;
-		memset(&pfd, 0, sizeof(pfd));
-		pfd.nSize		= sizeof(pfd);
-		pfd.nVersion	= 1;
-		pfd.dwFlags		= PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-		pfd.iPixelType	= PFD_TYPE_RGBA;
-		pfd.cColorBits	= static_cast<BYTE>(sufaceFormatBit);
-		pfd.cDepthBits	= static_cast<BYTE>(depthFormatBit);
-		pfd.cStencilBits = static_cast<BYTE>(stencilFormatBit);
-		pfd.iLayerType	= PFD_MAIN_PLANE;
-		bool try_srgb = false;
-		if (setting.useGamma && ((PF_A8B8G8R8 == setting.surfaceFormat) || (PF_A8R8G8B8 == setting.surfaceFormat)))
-		{
-			try_srgb = true;
-		}
+		PIXELFORMATDESCRIPTOR pfd = mCreator->getAs<GLRenderResourceFactory>()->getWindowPixelFormatDesc();
+		int32 pxf = mCreator->getAs<GLRenderResourceFactory>()->getWindowPixelFormat();
+		SetPixelFormat(mHDC, pxf, &pfd);
 
-		// here is the trick, create a temp HWND to create glew evironment.
-
- 		int pixfmt = ChoosePixelFormat(mHDC, &pfd);
- 		assert(pixfmt != 0);
-// 
-
-		uint32 smpCount = setting.samplerCount;
-
-		if ((smpCount > 1) || try_srgb)
-		{
-			UINT num_formats;
-			float float_attrs[] = { 0, 0 };
-			BOOL valid;
-			do
-			{
-				int int_attrs[] =
-				{
-					WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
-					WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
-					WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
-					WGL_COLOR_BITS_ARB, sufaceFormatBit,
-					WGL_DEPTH_BITS_ARB, depthFormatBit,
-					WGL_STENCIL_BITS_ARB, stencilFormatBit,
-					WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
-					WGL_SAMPLE_BUFFERS_ARB, GL_TRUE,
-					WGL_SAMPLES_ARB, smpCount,
-					try_srgb ? WGL_FRAMEBUFFER_SRGB_CAPABLE_ARB : 0, try_srgb,
-					0, 0
-				};
-
-				valid = wglChoosePixelFormatARB(mHDC, int_attrs, float_attrs, 1, &pixfmt, &num_formats);
-				if (!valid || (num_formats < 1))
-				{
-					--smpCount;
-				}
-			} while ((smpCount > 1) && (!valid || (num_formats < 1)));
-
-			if (valid && ((smpCount > 1) || try_srgb))
-			{
-				BOOL result = SetPixelFormat(mHDC, pixfmt, &pfd);	//每个窗口只能设置一次 
-				assert(result == TRUE);
-			}
-		}
-		else
-		{
-			BOOL result = SetPixelFormat(mHDC, pixfmt, &pfd);//每个窗口只能设置一次  
-			assert(result == TRUE);
-		}
-// 
-// 		mHGLRC = wglCreateContext(mHDC);
-// 		wglMakeCurrent(mHDC,mHGLRC); 
-
-		
-
-
-
-		glClampColor(GL_CLAMP_VERTEX_COLOR_ARB, GL_FALSE);
-		glClampColor(GL_CLAMP_FRAGMENT_COLOR_ARB, GL_FALSE);
-		glClampColor(GL_CLAMP_READ_COLOR_ARB, GL_FALSE);
-
-
-		wglSwapIntervalEXT(setting.verticalSync);
+		wglSwapIntervalEXT(GL_FALSE);
 
 #endif // DUEL_PLATFORM_WINDOWS
 
-//		mCreator->getAs<GLRenderResourceFactory>()->resetResourceContext();
-
-		if (try_srgb)
-		{
-			glEnable(GL_FRAMEBUFFER_SRGB);
-
-		}
 
 		if (mFBO)
 		{

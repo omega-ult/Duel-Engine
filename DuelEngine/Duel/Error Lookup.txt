@@ -30,3 +30,5 @@ c2146: 最常见的原因是声明的类型未定义, 注意include
 
 画不出东西的时候, 先检查参数有没有绑定好(特别是AutoParameter, 没有绑定相应delegate的情况特别多)
 或者是检查有没有被覆盖掉.
+
+如果使用opengl出现纹理发白的情况, 请检查glTextureParameteri. 用于fbo的纹理和平常的纹理需要2种不同参数(mipmap开关)
