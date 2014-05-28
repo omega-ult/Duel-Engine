@@ -10,7 +10,7 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(GLRasterizerStateObject, DRasterizerStateObject);
 	DUEL_IMPLEMENT_RTTI_1(GLDepthStencilStateObject, DDepthStencilStateObject);
 	DUEL_IMPLEMENT_RTTI_1(GLBlendStateObject, DBlendStateObject);
-//	DUEL_IMPLEMENT_RTTI(GLTextureSamplerStateObject, DTextureSamplerStateObject);
+	DUEL_IMPLEMENT_RTTI_1(GLTextureSamplerObject, DTextureSamplerObject);
 
 
 	void GLRasterizerStateObject::getRasterizerState( DRasterizerState& outState )
@@ -128,5 +128,79 @@ namespace Duel
 // 		}
 // 		mState = state;
 // 	}
+
+
+	GLTextureSamplerObject::GLTextureSamplerObject( const DTextureSampler& state )
+	{
+		glGenSamplers(1, &mGLSampObj);
+		mState = state;
+		GLenum	addrModeU = GLTranslator::getGLTextureAddressMode(state.addressU);
+		GLenum	addrModeV = GLTranslator::getGLTextureAddressMode(state.addressV);
+		GLenum	addrModeW = GLTranslator::getGLTextureAddressMode(state.addressW);
+
+		glSamplerParameteri(mGLSampObj, GL_TEXTURE_WRAP_S, addrModeU);
+		glSamplerParameteri(mGLSampObj, GL_TEXTURE_WRAP_T, addrModeV);
+		glSamplerParameteri(mGLSampObj, GL_TEXTURE_WRAP_R, addrModeW);
+		
+		GLenum	minFilter;
+		GLenum	magFilter;
+
+		float maxAnisotropy = 1.0f;
+		if (state.minFilter == FO_Anistropic || state.magFilter == FO_Anistropic || state.mipFilter == FO_Anistropic)
+		{
+			magFilter = GL_LINEAR;
+			minFilter = GL_LINEAR_MIPMAP_LINEAR;
+		}
+		else
+		{
+			if (state.mipFilter != FO_None)
+			{
+				if (state.mipFilter == FO_Linear)
+				{
+					minFilter = (state.minFilter == FO_Linear) ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_LINEAR;
+				}
+				else
+				{
+					minFilter = (state.minFilter == FO_Linear) ? GL_LINEAR_MIPMAP_NEAREST : GL_NEAREST_MIPMAP_NEAREST;
+				}
+				magFilter = (state.magFilter == FO_Linear) ? GL_LINEAR : GL_NEAREST;
+			}
+			else
+			{
+				minFilter = (state.minFilter == FO_Linear) ? GL_LINEAR : GL_NEAREST;
+				magFilter = (state.magFilter == FO_Linear) ? GL_LINEAR : GL_NEAREST;
+			}
+		}
+		glSamplerParameteri(mGLSampObj, GL_TEXTURE_MIN_FILTER, minFilter);
+		glSamplerParameteri(mGLSampObj, GL_TEXTURE_MAG_FILTER, magFilter);
+		glSamplerParameterf(mGLSampObj, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
+
+		glSamplerParameterf(mGLSampObj, GL_TEXTURE_MIN_LOD, state.minLod);
+		glSamplerParameterf(mGLSampObj, GL_TEXTURE_MAX_LOD, state.maxLod);
+
+		if (state.samplerComparison != CF_AlwaysFail)
+		{
+			glSamplerParameteri(mGLSampObj, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+		}
+		else
+		{
+			glSamplerParameteri(mGLSampObj, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+		}
+		glSamplerParameteri(mGLSampObj, GL_TEXTURE_COMPARE_FUNC, GLTranslator::getGLCompareFunction(state.samplerComparison));
+		glSamplerParameterf(mGLSampObj, GL_TEXTURE_LOD_BIAS, state.mipLodBias);
+	}
+
+	void GLTextureSamplerObject::getTextureSampler( DTextureSampler& outState )
+	{
+		outState = mState;
+	}
+
+	GLTextureSamplerObject::~GLTextureSamplerObject()
+	{
+		if (mGLSampObj != 0)
+		{
+			glDeleteSamplers(1, &mGLSampObj);
+		}
+	}
 
 }

@@ -217,10 +217,10 @@ namespace Duel
 	class	DRasterizerStateObject;
 	class	DDepthStencilStateObject;
 	class	DBlendStateObject;
-	class	DTextureSamplerStateObject;
+	class	DTextureSamplerObject;
 
 	typedef	SharedPtr<DRasterizerStateObject>		DRasterizerStateObjectPtr;
 	typedef	SharedPtr<DDepthStencilStateObject>		DDepthStencilStateObjectPtr;
 	typedef	SharedPtr<DBlendStateObject>			DBlendStateObjectPtr;
-//	typedef	SharedPtr<DTextureSamplerStateObject>	DTextureSamplerStateObjectPtr;
+	typedef	SharedPtr<DTextureSamplerObject>		DTextureSamplerObjectPtr;
 }

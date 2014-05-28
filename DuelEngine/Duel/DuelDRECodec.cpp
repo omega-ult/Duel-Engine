@@ -500,7 +500,7 @@ namespace Duel
 	}
 	//////////////////////////////////////////////////////////////////////////
 	// v2.0
-	void	parseSamplerState(const DString& name, const DString& val, DTextureSamplerState& sampState)
+	void	parseSamplerState(const DString& name, const DString& val, DTextureSampler& sampState)
 	{
 		if ("AddressU" == name)
 		{

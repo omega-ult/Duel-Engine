@@ -39,6 +39,8 @@ namespace Duel
 		// override : DHardwareBufferFactory-------------------------
 		virtual DBlendStateObjectPtr createBlendStateObject( const DBlendState& state );
 		// override : DHardwareBufferFactory-------------------------
+		virtual DTextureSamplerObjectPtr	createTextureSamplerObject(const DTextureSampler& state);
+		// override : DHardwareBufferFactory-------------------------
 		virtual DShaderObjectPtr createShaderObject( DRenderPass* pass );
 		// override : DHardwareBufferFactory-------------------------
 		virtual DRenderWindow* createRenderWindow( const DString& name );

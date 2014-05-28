@@ -65,11 +65,11 @@ namespace Duel
 	{
 		if (constDef.isTexture())
 		{
-			mTexConstants.insert(std::make_pair<DString, DGpuTextureConstant*>(name, NULL));
+			mTexConstants.insert(TextureConstantMap::value_type(name, DGpuTextureConstantPtr()));
 		}
 		if (constDef.isSampler())
 		{
-			mSampConstants.insert(std::make_pair<DString, DTextureSamplerState>(name, DTextureSamplerState()));
+			mSampConstants.insert(SamplerConstantMap::value_type(name, DTextureSamplerObjectPtr()));
 		}
 
 
@@ -331,14 +331,13 @@ namespace Duel
 		}
 	}
 
-	void DGpuParameters::setValue( const DString& name, const DTextureSamplerState& val )
+	void DGpuParameters::setValue( const DString& name, DTextureSamplerObjectPtr val )
 	{
 		SamplerConstantMap::iterator i = mSampConstants.find(name);
 		if (i != mSampConstants.end())
 		{
 			i->second = val;
 		}
-		mSampConstants[name] = val;
 	}
 
 	void DGpuParameters::setValue( const DString& name, const DVector2& m1_, const DVector2& m2_ )
@@ -447,12 +446,12 @@ namespace Duel
 		return i->second;
 	}
 
-	DTextureSamplerState DGpuParameters::getSamplerConstant( const DString& name )
+	DTextureSamplerObjectPtr DGpuParameters::getSamplerConstant( const DString& name )
 	{
 		SamplerConstantMap::iterator i = mSampConstants.find(name);
 		if (i == mSampConstants.end())
 		{
-			return DTextureSamplerState();
+			return DTextureSamplerObjectPtr();
 		}
 		return i->second;
 	}

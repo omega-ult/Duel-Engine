@@ -248,13 +248,13 @@ namespace Duel
 	// TODO: 
 	// this state is seldomly changed, so it is designed for special use and excluded from RenderPass,
 	// you can set this state in RenderSystem
-	struct DUEL_API DTextureSamplerState
+	struct DUEL_API DTextureSampler
 	{
 		// default values are set in constructor-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-		DTextureSamplerState();
-		DTextureSamplerState(const DTextureSamplerState& tss) { operator=(tss); }
-		bool					operator == (const DTextureSamplerState& tss);
-		bool					operator != (const DTextureSamplerState& tss) { return !operator==(tss); }
+		DTextureSampler();
+		DTextureSampler(const DTextureSampler& tss) { operator=(tss); }
+		bool					operator == (const DTextureSampler& tss);
+		bool					operator != (const DTextureSampler& tss) { return !operator==(tss); }
 		// addresing mode for specified coordinate-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		TextureAddressMode	addressU;			// default: TAM_CLAMP
 		TextureAddressMode	addressV;			// default: TAM_CLAMP
@@ -301,6 +301,12 @@ namespace Duel
 		virtual void	getBlendState(DBlendState& outState) = 0;
 	};
 
+	class DUEL_API DTextureSamplerObject : public DObject
+	{
+	DUEL_DECLARE_RTTI(DTextureSamplerObject)
+	public:
+		virtual void	getTextureSampler(DTextureSampler& outSamp) = 0;
+	};
 }
 
 #endif

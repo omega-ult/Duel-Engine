@@ -103,7 +103,7 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DGpuTextureConstant)
 	public:
 		virtual	bool	isValid() = 0;
-		virtual void	setSamplerState(const DTextureSamplerState& state) = 0;
+		virtual void	setSamplerObject(DTextureSamplerObjectPtr samp) = 0;
 	};
 
 
@@ -186,7 +186,7 @@ namespace Duel
 		// set a texture value to the program.
 		virtual	void	setValue(const DString& name, DGpuTextureConstantPtr val);
 		// set a sampler value.
-		virtual	void	setValue(const DString& name, const DTextureSamplerState& val);
+		virtual	void	setValue(const DString& name, DTextureSamplerObjectPtr val);
 
 		// get the buffer size the constants takes
 		size_t			getBufferSize();
@@ -199,10 +199,10 @@ namespace Duel
 		typedef	MapIterator<TextureConstantMap>	TextureConstantIterator;
 		TextureConstantIterator	getTextureConstantIterator() { return TextureConstantIterator(mTexConstants.begin(), mTexConstants.end()); }
 		DGpuTextureConstantPtr	getTextureConstant(const DString& name);
-		typedef	std::map<DString, DTextureSamplerState>	SamplerConstantMap;
+		typedef	std::map<DString, DTextureSamplerObjectPtr>	SamplerConstantMap;
 		typedef	MapIterator<SamplerConstantMap>	SamplerConstantIterator;
 		SamplerConstantIterator	getSamplerConstantIterator() { return SamplerConstantIterator(mSampConstants.begin(), mSampConstants.end()); }
-		DTextureSamplerState	getSamplerConstant(const DString& name);
+		DTextureSamplerObjectPtr	getSamplerConstant(const DString& name);
 		// bit set which indicate whether the parameter contains auto-parameter
 		uint64			getAutoParameterMask();
 		// just leave this interface for convenience, the mask is constructed automatically,

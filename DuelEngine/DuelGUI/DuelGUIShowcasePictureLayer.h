@@ -45,7 +45,7 @@ namespace Duel
 		DMatrix3				mUVTransform;
 
 		DResourcePtr			mTexture;
-		DTextureSamplerState	mTexSampler;
+		DTextureSamplerObjectPtr	mTexSampler;
 
 		DGSize				mRenderSize;
 		DReal				mClipLeft;

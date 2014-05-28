@@ -47,6 +47,11 @@ namespace Duel
 		return mFactory->createBlendStateObject(state);
 	}
 
+	Duel::DTextureSamplerObjectPtr DRenderResourceManager::createTextureSamplerObject( const DTextureSampler& state )
+	{
+		return mFactory->createTextureSamplerObject(state);
+	}
+
 	Duel::DShaderObjectPtr DRenderResourceManager::createShaderObject( DRenderPass* pass )
 	{
 		return mFactory->createShaderObject(pass);

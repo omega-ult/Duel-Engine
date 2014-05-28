@@ -9,7 +9,7 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(DRasterizerStateObject, DObject);
 	DUEL_IMPLEMENT_RTTI_1(DDepthStencilStateObject, DObject);
 	DUEL_IMPLEMENT_RTTI_1(DBlendStateObject, DObject);
-//	DUEL_IMPLEMENT_RTTI(DTextureSamplerStateObject, DObject);
+	DUEL_IMPLEMENT_RTTI_1(DTextureSamplerObject, DObject);
 
 	DRasterizerState::DRasterizerState() :
 		polygonMode(PM_Solid),
@@ -169,7 +169,7 @@ namespace Duel
 // 	}
 
 
-	DTextureSamplerState::DTextureSamplerState() :
+	DTextureSampler::DTextureSampler() :
 		addressU(TAM_Clamp),
 		addressV(TAM_Clamp),
 		addressW(TAM_Clamp),
@@ -186,7 +186,7 @@ namespace Duel
 
 	}
 
-	bool DTextureSamplerState::operator==( const DTextureSamplerState& tss )
+	bool DTextureSampler::operator==( const DTextureSampler& tss )
 	{
 		return (addressU == tss.addressU &&
 				addressV == tss.addressV &&

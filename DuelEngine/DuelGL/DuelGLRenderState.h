@@ -73,23 +73,20 @@ namespace Duel
 		friend	class GLRenderSystem;
 	};
 
-// 	class DUELGL_API GLTextureSamplerStateObject : public DTextureSamplerStateObject
-// 	{
-// 	DUEL_DECLARE_RTTI(GLTextureSamplerStateObject);
-// 	public:
-// 		GLTextureSamplerStateObject(const DTextureSamplerState& state);
-// 		// override : DTextureSamplerStateObject -------------------------------
-// 		virtual void getTextureSamplerState( DTextureSamplerState& outState );
-// 	protected:
-// 		GLenum	mGLAddressModeU;
-// 		GLenum	mGLAddressModeV;
-// 		GLenum	mGLAddressModeW;
-// 		GLenum	mGLMinFilter;
-// 		GLenum	mGLMagFilter;
-// 		DTextureSamplerState	mState;
-// 		// for quick lookup.
-// 		friend	class GLRenderSystem;
-// 	};
+ 	class DUELGL_API GLTextureSamplerObject : public DTextureSamplerObject
+ 	{
+ 	DUEL_DECLARE_RTTI(GLTextureSamplerObject);
+ 	public:
+ 		GLTextureSamplerObject(const DTextureSampler& state);
+		~GLTextureSamplerObject();
+ 		// override : DTextureSamplerObject -------------------------------
+ 		virtual void getTextureSampler( DTextureSampler& outState );
+
+		GLuint	getSamplerObjectID() { return mGLSampObj; }
+ 	protected:
+		GLuint	mGLSampObj;
+ 		DTextureSampler	mState;
+ 	};
 }
 
 #endif

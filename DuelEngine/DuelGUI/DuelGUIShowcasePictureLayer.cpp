@@ -65,13 +65,15 @@ namespace Duel
 		mRenderLayout->setVertexData(DVertexData(mVStream, mVDecl));
 		mRenderLayout->seal();
 
-		mTexSampler.addressU = TAM_Border;
-		mTexSampler.addressV = TAM_Border;
-		mTexSampler.addressW = TAM_Border;
-		mTexSampler.minFilter = FO_Linear;
-		mTexSampler.magFilter = FO_Linear;
-		mTexSampler.mipFilter = FO_Linear;
-		mTexSampler.borderColor = DColor(0.0f, 0.0f, 0.0f, 0.0f);
+		DTextureSampler texSampler;
+		texSampler.addressU = TAM_Border;
+		texSampler.addressV = TAM_Border;
+		texSampler.addressW = TAM_Border;
+		texSampler.minFilter = FO_Linear;
+		texSampler.magFilter = FO_Linear;
+		texSampler.mipFilter = FO_None;
+		texSampler.borderColor = DColor(0.0f, 0.0f, 0.0f, 0.0f);
+		mTexSampler = hm->createTextureSamplerObject(texSampler);
 	}
 
 

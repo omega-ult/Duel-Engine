@@ -64,7 +64,7 @@ namespace Duel
 						glActiveTexture(GL_TEXTURE0 + texUnit);
 						texUnit++;
 						GLGpuTextureConstant* glTexPtr = tex->getAs<GLGpuTextureConstant>();
-						glTexPtr->setSamplerState(params->getSamplerConstant(pi.current()->first));
+						glTexPtr->setSamplerObject(params->getSamplerConstant(pi.current()->first));
 						glBindTexture(glTexPtr->getGLTextureTarget(), glTexPtr->getTextureID());
 						glUniform1ui(loc, glTexPtr->getTextureID());
 					}
@@ -151,7 +151,7 @@ namespace Duel
 						glActiveTexture(GL_TEXTURE0 + texUnit);
 						texUnit++;
 						GLGpuTextureConstant* glTexPtr = tex->getAs<GLGpuTextureConstant>();
-						glTexPtr->setSamplerState(params->getSamplerConstant(pi.current()->first));
+						glTexPtr->setSamplerObject(params->getSamplerConstant(pi.current()->first));
 						glBindTexture(glTexPtr->getGLTextureTarget(), glTexPtr->getTextureID());
 						glUniform1ui(loc, glTexPtr->getTextureID());
 					}

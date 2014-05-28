@@ -67,6 +67,12 @@ namespace Duel
 		return DBlendStateObjectPtr(new GLBlendStateObject(state));
 	}
 
+	Duel::DTextureSamplerObjectPtr GLRenderResourceFactory::createTextureSamplerObject( const DTextureSampler& state )
+	{
+		return DTextureSamplerObjectPtr(new GLTextureSamplerObject(state));
+	}
+
+
 	Duel::DShaderObjectPtr GLRenderResourceFactory::createShaderObject( DRenderPass* pass )
 	{
 		GLShaderObject* so = new GLShaderObject();
@@ -248,6 +254,5 @@ namespace Duel
 			delete v;
 		}
 	}
-
 
 }

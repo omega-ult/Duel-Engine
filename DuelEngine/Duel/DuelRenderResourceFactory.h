@@ -34,6 +34,7 @@ namespace Duel
 		virtual	DRasterizerStateObjectPtr	createRasterizerStateObject(const DRasterizerState& state) = 0;
 		virtual	DDepthStencilStateObjectPtr	createDepthStencilStateObject(const DDepthStencilState& state) = 0;
 		virtual	DBlendStateObjectPtr		createBlendStateObject(const DBlendState& state) = 0;
+		virtual DTextureSamplerObjectPtr	createTextureSamplerObject(const DTextureSampler& state) = 0;
 
 		// create shader object for a render pass.
 		virtual	DShaderObjectPtr			createShaderObject(DRenderPass* pass) = 0;

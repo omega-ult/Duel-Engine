@@ -18,7 +18,7 @@ namespace Duel
 		GLuint			getTextureID();
 		void			discard();
 		virtual	bool	isValid() { return mbValid; }
-		virtual void	setSamplerState( const DTextureSamplerState& state );
+		virtual void setSamplerObject(DTextureSamplerObjectPtr samp);
 
 	protected:
 		bool			mbValid;
