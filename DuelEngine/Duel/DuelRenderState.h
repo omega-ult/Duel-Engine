@@ -131,9 +131,9 @@ namespace Duel
 		bool			operator == (const DRasterizerState& rs);
 		bool			operator != (const DRasterizerState& rs) { return !operator == (rs);}
 		// DRasterizerState-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-		PolygonMode		polygonMode;			// default:PM_SOLID		
-		ShadeMode		shadeMode;				// default:SM_GOURAUD	
-		CullingMode		cullingMode;			// default:CULL_CLOCKWISE	
+		PolygonMode		polygonMode;			// default:PM_Solid	
+		ShadeMode		shadeMode;				// default:SM_Gouraud	
+		CullingMode		cullingMode;			// default:CM_Clockwise	
 		// solving z-fighting-=-=-=-=-=-=-=-=--=-=-=-=-=-
 		float			polygonOffsetFactor;	// default:0.0f
 		float			polygonOffsetUnit;		// default:0.0f
@@ -161,19 +161,19 @@ namespace Duel
 		// enable/disable depth write=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 		bool				depthWriteEnable;	// default: true
 		// the depth's comparation function
-		CompareFunction		depthComparison;		// default: CF_LESS
+		CompareFunction		depthComparison;		// default: CF_Less
 		//
 		// enable/disable front stencil=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 		bool				frontStencilEnable;		// default: false
 		// front stencil's comparation function=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-		CompareFunction		frontStencilComparison;	// default: CF_ALWAYS_PASS
+		CompareFunction		frontStencilComparison;	// default: CF_AlwaysPass
 		// front stencil's mask=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 		uint32				frontStencilReadMask;		// default: 0xffffffff
 		uint32				frontStencilWriteMask;		// default: 0xffffffff
 		// front stencil's operations=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-		StencilOperation	frontStencilFail;		// default: SO_KEEP
-		StencilOperation	frontStencilDepthFail;	// default: SO_KEEP
-		StencilOperation	frontStencilPass;		// default: SO_KEEP
+		StencilOperation	frontStencilFail;		// default: SO_Keep
+		StencilOperation	frontStencilDepthFail;	// default: SO_Keep
+		StencilOperation	frontStencilPass;		// default: SO_Keep
 		//
 		// enable/disable back stencil=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 		bool				backStencilEnable;		// default: false
@@ -207,16 +207,16 @@ namespace Duel
 		bool							operator ==(const DRenderTargetBlendState& sbs);
 		bool							operator != (const DRenderTargetBlendState& sbs) { return !operator==(sbs); }
 		// blend enable=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-		bool				blendEnable;			// default: FALSE
+		bool				blendEnable;			// default: false
 		// color blend=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-		BlendOperation		colorBlendOpeartion;	// default: SBO_ADD
-		BlendFactor			colorSrcBlend;			// default: SBF_ONE
-		BlendFactor			colorDestBlend;			// default: SBF_ZERO
+		BlendOperation		colorBlendOpeartion;	// default: BO_Add
+		BlendFactor			colorSrcBlend;			// default: BF_One
+		BlendFactor			colorDestBlend;			// default: BF_Zero
 		// alpha blend=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-		BlendOperation		alphaBlendOpeartion;	// default: SB0_ADD
-		BlendFactor			alphaSrcBlend;			// default: SBF_ONE
-		BlendFactor			alphaDestBlend;			// default: SBF_ZERO
-		uint8				colorWriteMask;			// default:	CWM_ALL
+		BlendOperation		alphaBlendOpeartion;	// default: B0_Add
+		BlendFactor			alphaSrcBlend;			// default: BF_One
+		BlendFactor			alphaDestBlend;			// default: BF_Zero
+		uint8				colorWriteMask;			// default:	CWM_All
 
 	};
 	struct DUEL_API DBlendState

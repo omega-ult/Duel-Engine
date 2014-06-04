@@ -243,6 +243,48 @@ namespace Duel
 	{
 
 		// initialize render states
+		// with an non-default value to force it to init with default value.
+		mCurRasState.polygonMode = PM_Wireframe;
+		mCurRasState.shadeMode = SM_Flat;
+		mCurRasState.cullingMode = CM_None;
+		mCurRasState.polygonOffsetFactor = 1.0f;
+		mCurRasState.polygonOffsetUnit = 1.0f;
+		mCurRasState.depthClipEnable = false;
+		mCurRasState.scissorEnable = true;
+		mCurRasState.multisampleEnable = false;
+
+		mCurDepState.depthEnable = false;
+		mCurDepState.depthWriteEnable = false;
+		mCurDepState.depthComparison = CF_Greater;
+		mCurDepState.frontStencilEnable = true;
+		mCurDepState.frontStencilComparison = CF_Less;
+		mCurDepState.frontStencilReadMask = 0;
+		mCurDepState.frontStencilWriteMask = 0;
+		mCurDepState.frontStencilFail = SO_Decrement;
+		mCurDepState.frontStencilDepthFail = SO_Decrement;
+		mCurDepState.frontStencilPass = SO_Decrement;
+		mCurDepState.backStencilEnable = true;
+		mCurDepState.backStencilComparison = CF_Less;
+		mCurDepState.backStencilReadMask = 0;
+		mCurDepState.backStencilWriteMask = 0;
+		mCurDepState.backStencilFail = SO_Decrement;
+		mCurDepState.backStencilDepthFail = SO_Decrement;
+		mCurDepState.backStencilPass = SO_Decrement;
+
+		mCurBlendState.alphaToCoverageEnable = false;
+		for (uint32 i = 0; i < 8; ++i)
+		{
+			mCurBlendState.targetStates[i].blendEnable = true;
+			mCurBlendState.targetStates[i].colorBlendOpeartion = BO_Sub;
+			mCurBlendState.targetStates[i].colorSrcBlend = BF_Zero;
+			mCurBlendState.targetStates[i].colorDestBlend = BF_One;
+
+			mCurBlendState.targetStates[i].alphaBlendOpeartion = BO_Sub;
+			mCurBlendState.targetStates[i].alphaSrcBlend = BF_Zero;
+			mCurBlendState.targetStates[i].alphaDestBlend = BF_One;
+			mCurBlendState.targetStates[i].colorWriteMask = 0;
+		}
+		mCurBlendFactor = DColor::WHITE;
 
 		fillDeviceCaps();
 		initRenderStates();
@@ -437,31 +479,64 @@ namespace Duel
 					glDisablei(GL_BLEND, i);
 				}
 			}
-			if ((stateObj->mState.targetStates[i].colorBlendOpeartion != mCurBlendState.targetStates[i].colorBlendOpeartion)
-				|| stateObj->mState.targetStates[i].alphaBlendOpeartion != mCurBlendState.targetStates[i].alphaBlendOpeartion)
+		}
+		// testing whether it is Opengl 4.0+ if not, use fallback function.
+		if (glBlendEquationSeparatei == NULL)
+		{
+			// use 0 target's blend.
+			if ((stateObj->mState.targetStates[0].colorBlendOpeartion != mCurBlendState.targetStates[0].colorBlendOpeartion)
+				|| stateObj->mState.targetStates[0].alphaBlendOpeartion != mCurBlendState.targetStates[0].alphaBlendOpeartion)
 			{
-				glBlendEquationSeparatei(i,
-					stateObj->mGLColorBlendOp[i], stateObj->mGLAlphaBlendOp[i]);
+				glBlendEquationSeparate(stateObj->mGLColorBlendOp[0], stateObj->mGLAlphaBlendOp[0]);
 			}
-			if ((stateObj->mState.targetStates[i].colorSrcBlend != mCurBlendState.targetStates[i].colorSrcBlend)
-				|| (stateObj->mState.targetStates[i].colorDestBlend != mCurBlendState.targetStates[i].colorDestBlend)
-				|| (stateObj->mState.targetStates[i].alphaSrcBlend != mCurBlendState.targetStates[i].alphaSrcBlend)
-				|| (stateObj->mState.targetStates[i].alphaDestBlend != mCurBlendState.targetStates[i].alphaDestBlend))
+			if ((stateObj->mState.targetStates[0].colorSrcBlend != mCurBlendState.targetStates[0].colorSrcBlend)
+				|| (stateObj->mState.targetStates[0].colorDestBlend != mCurBlendState.targetStates[0].colorDestBlend)
+				|| (stateObj->mState.targetStates[0].alphaSrcBlend != mCurBlendState.targetStates[0].alphaSrcBlend)
+				|| (stateObj->mState.targetStates[0].alphaDestBlend != mCurBlendState.targetStates[0].alphaDestBlend))
 			{
-				glBlendFuncSeparatei(i,
-					stateObj->mGLColorSrcBlend[i], stateObj->mGLColorDstBlend[i], 
-					stateObj->mGLAlphaSrcBlend[i], stateObj->mGLAlphaDstBlend[i]);
+				glBlendFuncSeparate(stateObj->mGLColorSrcBlend[0], stateObj->mGLColorDstBlend[0], 
+					stateObj->mGLAlphaSrcBlend[0], stateObj->mGLAlphaDstBlend[0]);
 			}
-			if (stateObj->mState.targetStates[i].colorWriteMask != mCurBlendState.targetStates[i].colorWriteMask)
+			if (stateObj->mState.targetStates[0].colorWriteMask != mCurBlendState.targetStates[0].colorWriteMask)
 			{
-				uint8 mask = stateObj->mState.targetStates[i].colorWriteMask;
-				glColorMaski(i, (mask & CWM_Red) != 0,
+				uint8 mask = stateObj->mState.targetStates[0].colorWriteMask;
+				glColorMask((mask & CWM_Red) != 0,
 					(mask & CWM_Green) != 0,
 					(mask & CWM_Blue) != 0,
 					(mask & CWM_Alpha) != 0);
-
 			}
 		}
+		else
+		{
+			for (uint32 i = 0; i < 8; ++ i)
+			{
+				if ((stateObj->mState.targetStates[i].colorBlendOpeartion != mCurBlendState.targetStates[i].colorBlendOpeartion)
+					|| stateObj->mState.targetStates[i].alphaBlendOpeartion != mCurBlendState.targetStates[i].alphaBlendOpeartion)
+				{
+					glBlendEquationSeparatei(i,
+						stateObj->mGLColorBlendOp[i], stateObj->mGLAlphaBlendOp[i]);
+				}
+				if ((stateObj->mState.targetStates[i].colorSrcBlend != mCurBlendState.targetStates[i].colorSrcBlend)
+					|| (stateObj->mState.targetStates[i].colorDestBlend != mCurBlendState.targetStates[i].colorDestBlend)
+					|| (stateObj->mState.targetStates[i].alphaSrcBlend != mCurBlendState.targetStates[i].alphaSrcBlend)
+					|| (stateObj->mState.targetStates[i].alphaDestBlend != mCurBlendState.targetStates[i].alphaDestBlend))
+				{
+					glBlendFuncSeparatei(i,
+						stateObj->mGLColorSrcBlend[i], stateObj->mGLColorDstBlend[i], 
+						stateObj->mGLAlphaSrcBlend[i], stateObj->mGLAlphaDstBlend[i]);
+				}
+				if (stateObj->mState.targetStates[i].colorWriteMask != mCurBlendState.targetStates[i].colorWriteMask)
+				{
+					uint8 mask = stateObj->mState.targetStates[i].colorWriteMask;
+					glColorMaski(i, (mask & CWM_Red) != 0,
+						(mask & CWM_Green) != 0,
+						(mask & CWM_Blue) != 0,
+						(mask & CWM_Alpha) != 0);
+
+				}
+			}			
+		}
+
 
 		if (mCurBlendFactor != blendFactor)
 		{
@@ -686,7 +761,7 @@ namespace Duel
 
 		setRasterizerState(rasPtr.get());
 		setDepthStencilState(depPtr.get());
-		setBlendState(blendPtr.get(), mCurBlendFactor);
+		setBlendState(blendPtr.get(), DColor(0.0f, 0.0f, 0.0f, 0.0f));
 	}
 
 }
