@@ -15,12 +15,10 @@ namespace Duel
 	class GLRenderDepthStencilView;
 	class GLTexture;
 	class GLTextureManager;
-	class GLVertexDeclaration;
 	class GLVertexBuffer;
 	class GLIndexBuffer;
 	class GLRenderSystem;
 	class GLRenderWindow;
-	class GLRenderTexture;
 	class GLGpuTextureConstant;
 }
 

@@ -12,7 +12,7 @@
 
 namespace Duel
 {
-
+	DUEL_IMPLEMENT_RTTI_1(GLPlugin, DPlugin);
 
 	GLPlugin::GLPlugin() :
 		mName("GLPlugin"),

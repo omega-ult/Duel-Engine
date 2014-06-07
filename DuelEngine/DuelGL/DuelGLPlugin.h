@@ -1,4 +1,6 @@
 //  [4/7/2013 OMEGA] created
+#ifndef _DUELGLPLUGIN_H_
+#define _DUELGLPLUGIN_H_
 
 #include "Duel.h"
 #include "DuelGLCommon.h"
@@ -8,6 +10,7 @@ namespace Duel
 
 	class DUELGL_API GLPlugin : public DPlugin
 	{
+	DUEL_DECLARE_RTTI(GLPlugin)
 	public:
 		GLPlugin();
 		~GLPlugin();
@@ -34,3 +37,4 @@ namespace Duel
 	};
 	GLPlugin*	glPlugin;
 }
+#endif
