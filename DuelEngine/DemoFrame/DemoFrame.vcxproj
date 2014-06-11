@@ -54,6 +54,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\DUEL;$(SolutionDir)\DuelGUI;$(SolutionDir)\External\boost;$(SolutionDir)\External;$(SolutionDir)External\freetype-2.5.0.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>GLPLUGIN_DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

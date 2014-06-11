@@ -27,6 +27,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DemoFrame", "DemoFrame\Demo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MayaPlugin", "MayaExporter\MayaExporter.vcxproj", "{1F4CC046-B025-4B9A-A43D-2D271C787E05}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuelD3D9", "DuelD3D9\DuelD3D9.vcxproj", "{21A501AD-7158-49F0-94C4-47501AF4E772}"
+	ProjectSection(ProjectDependencies) = postProject
+		{72DF7C0C-7B8D-4CCD-8A75-9396DB2BCF26} = {72DF7C0C-7B8D-4CCD-8A75-9396DB2BCF26}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -254,6 +259,34 @@ Global
 		{1F4CC046-B025-4B9A-A43D-2D271C787E05}.Release-GLES|Win32.Build.0 = Release|Win32
 		{1F4CC046-B025-4B9A-A43D-2D271C787E05}.Release-GLES|Windows Phone.ActiveCfg = Release|Win32
 		{1F4CC046-B025-4B9A-A43D-2D271C787E05}.Release-GLES|x64.ActiveCfg = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug|ARM.ActiveCfg = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug|Win32.ActiveCfg = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug|Win32.Build.0 = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug|Windows Phone.ActiveCfg = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug|x64.ActiveCfg = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug-GLES|ARM.ActiveCfg = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug-GLES|Mixed Platforms.ActiveCfg = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug-GLES|Mixed Platforms.Build.0 = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug-GLES|Win32.ActiveCfg = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug-GLES|Win32.Build.0 = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug-GLES|Windows Phone.ActiveCfg = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Debug-GLES|x64.ActiveCfg = Debug|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release|ARM.ActiveCfg = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release|Win32.ActiveCfg = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release|Win32.Build.0 = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release|Windows Phone.ActiveCfg = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release|x64.ActiveCfg = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release-GLES|ARM.ActiveCfg = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release-GLES|Mixed Platforms.ActiveCfg = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release-GLES|Mixed Platforms.Build.0 = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release-GLES|Win32.ActiveCfg = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release-GLES|Win32.Build.0 = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release-GLES|Windows Phone.ActiveCfg = Release|Win32
+		{21A501AD-7158-49F0-94C4-47501AF4E772}.Release-GLES|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
