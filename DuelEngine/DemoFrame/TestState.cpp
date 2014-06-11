@@ -50,6 +50,7 @@ namespace DemoKit
 		mStartTime = mTimer->getMilliseconds();
 		mLastFrameTime = mStartTime;
 		mRenderWindow = DApplication::getSingleton().getMainWindow();
+#ifdef GLPLUGIN_DEBUG
 		mGManager = DGUISystem::getSingleton().createGUIManager(mRenderWindow);
 		mGManager->setInputEventQueue(DInputManager::getSingleton().registerWindow(mRenderWindow, false));
 
@@ -164,6 +165,10 @@ namespace DemoKit
 		Duel::DSceneNode* anode = mSceneInstance->getSceneManager()->createSceneNode("yoooooNode");
 		anode->attachMovable(mTestEntity);
 
+#else
+
+#endif // GLPLUGIN_DEBUG
+
 		// debug
 		signalGKeyPressed.connect(DBind(&Duel::DDemoMaterialBank::debugReload, Duel::DDemoMaterialBank::getSingletonPtr()));
 	}
@@ -177,13 +182,18 @@ namespace DemoKit
 		DGUISystem::getSingleton().destroyGUIManager(mRenderWindow);
 		mGManager->setInputEventQueue(NULL);
 
+#ifdef GLPLUGIN_DEBUG
+
+
 		mGManager->removeWidget(mTestBox);
 		delete mSubTestBox;
 		delete mTestBox;
+#endif // GLPLUGIN_DEBUG
 	}
 
 	void TestState::parseInput()
 	{
+#ifdef GLPLUGIN_DEBUG
 		mGManager->processInputEvent();
 		// now there is no logic layer. pop all events.
 		Duel::DInputEventQueue* eq = Duel::DInputManager::getSingleton().getEventQueue(mRenderWindow);
@@ -250,13 +260,15 @@ namespace DemoKit
 			}
 		}
 		eq->clearEvents();
+#endif
 	}
 
 	void TestState::update()
 	{
 		mSceneInstance->update(mRenderWindow->getViewport());
-
+#ifdef GLPLUGIN_DEBUG
 		mGManager->update();
+#endif
 		mCurTime = mTimer->getMilliseconds();
 	}
 
@@ -270,10 +282,15 @@ namespace DemoKit
 		
 			Duel::DRenderWorkshop* ws = Duel::DCore::getSingleton().getRenderWorkshop();
 
+
+#ifdef GLPLUGIN_DEBUG
 			// just write to final window.
 			ws->setPresentTarget(mRenderWindow);
 			ws->render(mSceneInstance->getRenderQueue());
 			ws->render(mGManager->getRenderQueue());
+
+#endif // GLPLUGIN_DEBUG
+
 		}
 		
 	}

@@ -9,4 +9,35 @@ namespace Duel
 
 
 
+
+	D3D9Plugin::D3D9Plugin()
+	{
+
+	}
+
+	D3D9Plugin::~D3D9Plugin()
+	{
+
+	}
+
+	void D3D9Plugin::install()
+	{
+
+	}
+
+	void D3D9Plugin::initialize()
+	{
+
+	}
+
+	void D3D9Plugin::shutdown()
+	{
+
+	}
+
+	void D3D9Plugin::uninstall()
+	{
+
+	}
+
 }

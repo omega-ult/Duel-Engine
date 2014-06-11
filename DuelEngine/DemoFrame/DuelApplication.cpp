@@ -187,7 +187,7 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		wndSetting.useGamma = false;
 		wndSetting.surfaceFormat = Duel::PF_A8R8G8B8;
 		mMainWindow = DRenderResourceManager::getSingleton().createRenderWindow(appCfgFile,wndSetting, (Duel::uint32)mHwnd );
-
+#ifdef GLPLUGIN_DEBUG
 		//////////////////////////////////////////////////////////////////////////
 		// basic resources.
 		if(rSys->getName() == "OpenGL")
@@ -286,13 +286,15 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		}
 		DResourceGroupManager::getSingleton().createDeclaredResource("_BasicShaderPack");
 		DResourceGroupManager::getSingleton().createDeclaredResource("_BasicMediaPack");
-
-		//////////////////////////////////////////////////////////////////////////
+#else
+#endif
+//////////////////////////////////////////////////////////////////////////
+#ifdef GLPLUGIN_DEBUG
 		mRws = new DDemoRenderWorkshop();
 		mEngineCore->setRenderWorkshop(mRws);
 		new DDemoMaterialBank();
 		DDemoMaterialBank::getSingleton().init(mRws);
-
+#endif
 		//////////////////////////////////////////////////////////////////////////
 		DInputManager::getSingleton().registerWindow(mMainWindow, false);
 

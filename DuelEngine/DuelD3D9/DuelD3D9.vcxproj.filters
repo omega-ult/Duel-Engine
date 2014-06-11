@@ -54,6 +54,15 @@
     <ClCompile Include="DuelD3D9FrameBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DuelD3D9GpuProgramManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelD3D9GpuProgram.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DuelD3D9RenderView.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DuelD3D9Common.h">
@@ -99,6 +108,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DuelD3D9FrameBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelD3D9GpuProgramManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelD3D9GpuProgram.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelD3D9RenderView.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

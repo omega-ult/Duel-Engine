@@ -86,9 +86,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="DuelD3D9FrameBuffer.cpp" />
+    <ClCompile Include="DuelD3D9GpuProgram.cpp" />
+    <ClCompile Include="DuelD3D9GpuProgramManager.cpp" />
     <ClCompile Include="DuelD3D9IndexBuffer.cpp" />
     <ClCompile Include="DuelD3D9PixelBuffer.cpp" />
     <ClCompile Include="DuelD3D9Plugin.cpp" />
+    <ClCompile Include="DuelD3D9RenderView.cpp" />
     <ClCompile Include="DuelD3D9RenderLayout.cpp" />
     <ClCompile Include="DuelD3D9RenderResourceFactory.cpp" />
     <ClCompile Include="DuelD3D9RenderSystem.cpp" />
@@ -102,6 +105,8 @@
     <ClInclude Include="DuelD3D9Common.h" />
     <ClInclude Include="DuelD3D9Config.h" />
     <ClInclude Include="DuelD3D9FrameBuffer.h" />
+    <ClInclude Include="DuelD3D9GpuProgram.h" />
+    <ClInclude Include="DuelD3D9GpuProgramManager.h" />
     <ClInclude Include="DuelD3D9IndexBuffer.h" />
     <ClInclude Include="DuelD3D9PixelBuffer.h" />
     <ClInclude Include="DuelD3D9Plugin.h" />
@@ -109,6 +114,7 @@
     <ClInclude Include="DuelD3D9RenderLayout.h" />
     <ClInclude Include="DuelD3D9RenderResourceFactory.h" />
     <ClInclude Include="DuelD3D9RenderSystem.h" />
+    <ClInclude Include="DuelD3D9RenderView.h" />
     <ClInclude Include="DuelD3D9ShaderObject.h" />
     <ClInclude Include="DuelD3D9Texture.h" />
     <ClInclude Include="DuelD3D9TextureManager.h" />
