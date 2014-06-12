@@ -91,10 +91,12 @@
     <ClCompile Include="DuelD3D9IndexBuffer.cpp" />
     <ClCompile Include="DuelD3D9PixelBuffer.cpp" />
     <ClCompile Include="DuelD3D9Plugin.cpp" />
+    <ClCompile Include="DuelD3D9RenderState.cpp" />
     <ClCompile Include="DuelD3D9RenderView.cpp" />
     <ClCompile Include="DuelD3D9RenderLayout.cpp" />
     <ClCompile Include="DuelD3D9RenderResourceFactory.cpp" />
     <ClCompile Include="DuelD3D9RenderSystem.cpp" />
+    <ClCompile Include="DuelD3D9RenderWindow.cpp" />
     <ClCompile Include="DuelD3D9ShaderObject.cpp" />
     <ClCompile Include="DuelD3D9Texture.cpp" />
     <ClCompile Include="DuelD3D9TextureManager.cpp" />
@@ -113,8 +115,10 @@
     <ClInclude Include="DuelD3D9PreDeclare.h" />
     <ClInclude Include="DuelD3D9RenderLayout.h" />
     <ClInclude Include="DuelD3D9RenderResourceFactory.h" />
+    <ClInclude Include="DuelD3D9RenderState.h" />
     <ClInclude Include="DuelD3D9RenderSystem.h" />
     <ClInclude Include="DuelD3D9RenderView.h" />
+    <ClInclude Include="DuelD3D9RenderWindow.h" />
     <ClInclude Include="DuelD3D9ShaderObject.h" />
     <ClInclude Include="DuelD3D9Texture.h" />
     <ClInclude Include="DuelD3D9TextureManager.h" />

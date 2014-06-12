@@ -8,10 +8,23 @@
 
 namespace Duel
 {
-	class DUELD3D9_API D3D9FrameBuffer : public DFrameBuffer
+	class D3D9FrameBuffer : public DFrameBuffer
 	{
 		DUEL_DECLARE_RTTI(D3D9FrameBuffer)
 	public:
+		D3D9FrameBuffer(DRenderResourceFactory* creator, uint32 w, uint32 h, uint32 colorBits);
+
+		virtual void attachRenderColorView( ElementAttachment elem, DRenderColorView* v );
+
+		virtual void detachRenderColorView( ElementAttachment elem );
+
+		virtual void attachRenderDepthStencilView( DRenderDepthStencilView* v );
+
+		virtual void detachRenderDepthStencilView();
+
+		virtual DRenderColorView* getRenderColorView( ElementAttachment elem );
+
+		virtual DRenderDepthStencilView* getRenderDepthStencilView();
 
 	};
 }

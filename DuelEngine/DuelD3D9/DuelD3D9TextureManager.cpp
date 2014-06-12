@@ -2,6 +2,7 @@
 
 #include "DuelD3D9Common.h"
 #include "DuelTextureManager.h"
+#include "DuelD3D9Texture.h"
 #include "DuelD3D9TextureManager.h"
 
 namespace Duel
@@ -16,7 +17,8 @@ namespace Duel
 
 	DResource* D3D9TextureManager::createImpl( DResourceDescription* createParam )
 	{
-		throw std::exception("The method or operation is not implemented.");
+		D3D9Texture* ret = new D3D9Texture(this, createParam->getName(), createParam->getGroupName());
+		return ret;
 	}
 
 }

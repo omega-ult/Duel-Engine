@@ -8,7 +8,7 @@
 
 namespace Duel
 {
-	class DUELD3D9_API D3D9TextureManager : public DTextureManager
+	class D3D9TextureManager : public DTextureManager
 	{
 		DUEL_DECLARE_RTTI(D3D9TextureManager)
 	public:

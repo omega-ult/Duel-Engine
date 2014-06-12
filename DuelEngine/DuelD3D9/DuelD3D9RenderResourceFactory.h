@@ -8,7 +8,7 @@
 
 namespace Duel
 {
-	class DUELD3D9_API D3D9RenderResourceFactory : public DRenderResourceFactory
+	class D3D9RenderResourceFactory : public DRenderResourceFactory
 	{
 		DUEL_DECLARE_RTTI(D3D9RenderResourceFactory)
 	public:
@@ -46,6 +46,7 @@ namespace Duel
 		virtual void destroyRenderDepthStencilView( DRenderDepthStencilView* v );
 
 		void initialize();
+		void shutdown();
 	};
 
 }

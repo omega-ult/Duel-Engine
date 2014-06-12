@@ -8,15 +8,17 @@
 
 namespace Duel
 {
-	class DUELD3D9_API D3D9VertexBuffer : public DVertexBuffer
+	class D3D9VertexBuffer : public DVertexBuffer
 	{
 		DUEL_DECLARE_RTTI(D3D9VertexBuffer)
 	public:
-		D3D9VertexBuffer();
+		D3D9VertexBuffer(size_t vertexSize, size_t verticesCount,
+			HardwareBufferUsage usage, bool useShadow, VertexBufferType type = VBT_Geometry);
 		virtual void readData( size_t offset, size_t length, void* pDest );
 
 		virtual void writeData( size_t offset, size_t length, const void* pSource, bool discardWholeBuffer = false );
 
+	protected:
 		virtual void* lockImpl( size_t offset, size_t size, HardwareBufferLock locklockType );
 
 		virtual void unlockImpl();

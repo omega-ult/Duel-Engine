@@ -32,7 +32,7 @@ namespace Duel
 		detachRenderDepthStencilView();
 		if (mFBO != 0)
 		{
-			glDeleteRenderbuffers(1, &mFBO);
+			glDeleteFramebuffers(1, &mFBO);
 			mFBO = 0;
 		}
 

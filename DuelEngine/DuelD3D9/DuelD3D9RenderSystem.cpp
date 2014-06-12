@@ -7,14 +7,15 @@ namespace Duel
 {
 	DUEL_IMPLEMENT_RTTI_1(D3D9RenderSystem, DRenderSystem);
 
-	D3D9RenderSystem::D3D9RenderSystem()
+	D3D9RenderSystem::D3D9RenderSystem():
+		mName("D3D9")
 	{
 
 	}
 
 	const DString& D3D9RenderSystem::getName() const
 	{
-		throw std::exception("The method or operation is not implemented.");
+		return mName;
 	}
 
 	void D3D9RenderSystem::shutdown()

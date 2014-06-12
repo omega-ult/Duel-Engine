@@ -8,11 +8,11 @@
 
 namespace Duel
 {
-	class DUELD3D9_API D3D9RenderLayout : public DRenderLayout
+	class D3D9RenderLayout : public DRenderLayout
 	{
 		DUEL_DECLARE_RTTI(D3D9RenderLayout)
 	public:
-
+		D3D9RenderLayout(DRenderResourceFactory* creator);
 	};
 
 }

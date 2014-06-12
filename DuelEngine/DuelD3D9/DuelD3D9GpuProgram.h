@@ -8,7 +8,7 @@
 
 namespace Duel
 {
-	class DUELD3D9_API D3D9GpuProgram : public DGpuProgram
+	class D3D9GpuProgram : public DGpuProgram
 	{
 		DUEL_DECLARE_RTTI(D3D9GpuProgram)
 	};

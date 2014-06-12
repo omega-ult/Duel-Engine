@@ -5,5 +5,21 @@
 
 namespace Duel
 {
+	DUEL_IMPLEMENT_RTTI_1(D3D9ShaderObject, DShaderObject);
+
+	D3D9ShaderObject::D3D9ShaderObject()
+	{
+
+	}
+
+	DGpuParameters* D3D9ShaderObject::getVertexProgramParameters()
+	{
+		throw std::exception("The method or operation is not implemented.");
+	}
+
+	DGpuParameters* D3D9ShaderObject::getPixelProgramParameters()
+	{
+		throw std::exception("The method or operation is not implemented.");
+	}
 
 }

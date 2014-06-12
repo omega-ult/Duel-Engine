@@ -7,6 +7,12 @@ namespace Duel
 {
 	DUEL_IMPLEMENT_RTTI_1(D3D9VertexBuffer, DVertexBuffer);
 
+	D3D9VertexBuffer::D3D9VertexBuffer( size_t vertexSize, size_t verticesCount, HardwareBufferUsage usage, bool useShadow, VertexBufferType type /*= VBT_Geometry*/ ) :
+		DVertexBuffer(vertexSize, verticesCount, usage, useShadow)
+	{
+
+	}
+
 
 	void D3D9VertexBuffer::readData( size_t offset, size_t length, void* pDest )
 	{

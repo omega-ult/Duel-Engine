@@ -8,10 +8,10 @@
 
 namespace Duel
 {
-	class DUELD3D9_API D3D9GpuProgramManger : public DGpuProgramManager
+	class D3D9GpuProgramManger : public DGpuProgramManager
 	{
 		DUEL_DECLARE_RTTI(D3D9GpuProgramManger)
-	public:
+	protected:
 
 		virtual DResource* createImpl( DResourceDescription* createParam );
 

@@ -8,7 +8,7 @@
 
 namespace Duel
 {
-	class DUELD3D9_API D3D9Plugin : public DPlugin
+	class D3D9Plugin : public DPlugin
 	{
 	DUEL_DECLARE_RTTI(D3D9Plugin)
 	public:
@@ -35,7 +35,7 @@ namespace Duel
 		DRenderResourceManager* mhbManager;
 
 	};
-
+	D3D9Plugin* d3d9Plugin;
 }
 
 #endif

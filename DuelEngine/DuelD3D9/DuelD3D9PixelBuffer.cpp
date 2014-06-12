@@ -6,6 +6,8 @@
 namespace Duel
 {
 
+	DUEL_IMPLEMENT_RTTI_1(D3D9PixelBuffer, DPixelBuffer);
+
 
 
 }

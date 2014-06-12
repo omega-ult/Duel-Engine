@@ -7,4 +7,11 @@
 namespace Duel
 {
 	DUEL_IMPLEMENT_RTTI_1(D3D9RenderLayout, DRenderLayout);
+
+	D3D9RenderLayout::D3D9RenderLayout( DRenderResourceFactory* creator ) :
+		DRenderLayout(creator)
+	{
+
+	}
+
 }

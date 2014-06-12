@@ -8,7 +8,7 @@
 
 namespace Duel
 {
-	class DUELD3D9_API D3D9RenderSystem : public DRenderSystem
+	class D3D9RenderSystem : public DRenderSystem
 	{
 		DUEL_DECLARE_RTTI(D3D9RenderSystem)
 	public:
@@ -39,6 +39,31 @@ namespace Duel
 
 		virtual void fillDeviceCaps();
 
+	protected:
+		void			initRenderStates();
+
+		// current frame buffer binded to the pipe line. on which all draw calls happen.
+		DFrameBuffer*	mCurFrameBuffer;
+
+		// use a pointer to indicate whether the current render states are available.
+		DRasterizerState			mCurRasState;
+		DDepthStencilState			mCurDepState;
+		uint32						mCurFrontStencilRef;
+		uint32						mCurBackStencilRef;
+		DBlendState					mCurBlendState;
+		DColor						mCurBlendFactor;
+
+
+
+
+		// used in bug tracing.
+		DGpuProgram*		mVSProgram;
+		DGpuProgram*		mPSProgram;
+		// just a reference pointer.
+		DGpuParameters*		mVSParams;
+		DGpuParameters*		mPSParams;
+
+		DString				mName;
 	};
 
 }
