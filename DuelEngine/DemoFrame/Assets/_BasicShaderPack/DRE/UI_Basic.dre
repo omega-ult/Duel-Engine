@@ -17,11 +17,11 @@
 				<RenderTargetBlendState	index = "0">
 					<state name="BlendEnable">true</state>
 					<state name="ColorBlendOpeartion">Add</state>
-					<state name="ColorSrcBlend">SrcAlpha</state>
-					<state name="ColorDestBlend">InvSrcAlpha</state>
+					<state name="ColorSrcFactor">SrcAlpha</state>
+					<state name="ColorDstFactor">InvSrcAlpha</state>
 					<state name="AlphaBlendOpeartion">Max</state>
-					<state name="AlphaSrcBlend">One</state>
-					<state name="AlphaDestBlend">One</state>
+					<state name="AlphaSrcFactor">One</state>
+					<state name="AlphaDstFactor">One</state>
 				</RenderTargetBlendState>
 			</BlendState>
 			
@@ -47,11 +47,11 @@
 				<RenderTargetBlendState	index = "0">
 					<state name="BlendEnable">true</state>
 					<state name="ColorBlendOpeartion">Add</state>
-					<state name="ColorSrcBlend">SrcAlpha</state>
-					<state name="ColorDestBlend">InvSrcAlpha</state>
-					<state name="AlphaBlendOpeartion">Add</state>
-					<state name="AlphaSrcBlend">One</state>
-					<state name="AlphaDestBlend">One</state>
+					<state name="ColorSrcFactor">SrcAlpha</state>
+					<state name="ColorDstFactor">InvSrcAlpha</state>
+					<state name="AlphaBlendOpeartion">Max</state>
+					<state name="AlphaSrcFactor">One</state>
+					<state name="AlphaDstFactor">One</state>
 				</RenderTargetBlendState>
 			</BlendState>
 			

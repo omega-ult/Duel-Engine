@@ -1,6 +1,7 @@
 //  [6/6/2014 OMEGA] created
 
 #include "DuelD3D9Common.h"
+#include <d3d9.h>
 #include "DuelRenderResourceFactory.h"
 #include "DuelD3D9FrameBuffer.h"
 #include "DuelD3D9RenderView.h"
@@ -12,10 +13,19 @@
 #include "DuelD3D9VertexBuffer.h"
 #include "DuelD3D9RenderResourceFactory.h"
 
+
+
 namespace Duel
 {
 
 	DUEL_IMPLEMENT_RTTI_1(D3D9RenderResourceFactory, DRenderResourceFactory);
+
+#ifdef DUEL_PLATFORM_WINDOWS
+	LRESULT CALLBACK __D3D_RenderContextWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+	{
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
+	}
+#endif
 
 	Duel::DVertexBufferPtr D3D9RenderResourceFactory::createVetexBuffer( size_t vertexSize, size_t verticesCount, HardwareBufferUsage usage, bool useShadow, VertexBufferType type )
 	{
@@ -108,6 +118,44 @@ namespace Duel
 
 	void D3D9RenderResourceFactory::initialize()
 	{
+		HINSTANCE hInst = GetModuleHandle(NULL);
+		WNDCLASSEX wc;
+
+		wc.cbSize			= sizeof(wc);
+		wc.style			= CS_HREDRAW | CS_VREDRAW;
+		wc.lpfnWndProc		= __D3D_RenderContextWndProc;
+		wc.cbClsExtra		= 0;
+		wc.cbWndExtra		= 0;
+		wc.hInstance		= hInst;
+		wc.hIcon			= NULL;
+		wc.hCursor			= NULL;
+		wc.hbrBackground	= NULL;
+		wc.lpszMenuName		= NULL;
+		// TODO: from config
+		wc.lpszClassName	= "__D3DContextWindow";
+		wc.hIconSm			= NULL;
+
+		DWORD	styleWord;
+		styleWord = WS_OVERLAPPED|WS_THICKFRAME|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX;
+		RECT rc = { 0, 0, 50, 50 };
+		AdjustWindowRectEx( &rc, styleWord, FALSE, 0 );
+		RegisterClassEx(&wc);
+		mMainHWND = CreateWindowEx(0, "__D3DContextWindow", "__D3DContextWindow", 
+			styleWord, 0, 0,  rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInst, NULL);
+
+
+		LPDIRECT3D9 pd3d9 = NULL;
+		pd3d9 = Direct3DCreate9(D3D_SDK_VERSION);
+		// Set up the structure used to create the D3DDevice
+		D3DPRESENT_PARAMETERS d3dpp;
+		ZeroMemory( &d3dpp, sizeof( d3dpp ) );
+		d3dpp.Windowed = TRUE;
+		d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+		d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
+
+		pd3d9->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, mMainHWND,
+			D3DCREATE_HARDWARE_VERTEXPROCESSING,
+			&d3dpp, &mMainDevice );
 
 	}
 

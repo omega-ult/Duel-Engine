@@ -403,11 +403,11 @@ namespace Duel
 // 			{
 // 				targetPass->sceneBlendState.colorBlendOpeartion = getSceneBlendOperation(val);
 // 			}
-// 			else if ( "ColorSrcBlend" == name )
+// 			else if ( "ColorSrcFactor" == name )
 // 			{
 // 				targetPass->sceneBlendState.colorSrcBlend = getSceneBlendFactor(val);
 // 			}
-// 			else if ( "ColorDestBlend" == name )
+// 			else if ( "ColorDstFactor" == name )
 // 			{
 // 				targetPass->sceneBlendState.colorDestBlend = getSceneBlendFactor(val);
 // 			}
@@ -415,11 +415,11 @@ namespace Duel
 // 			{
 // 				targetPass->sceneBlendState.alphaBlendOpeartion = getSceneBlendOperation(val);
 // 			}
-// 			else if ( "AlphaSrcBlend" == name )
+// 			else if ( "AlphaSrcFactor" == name )
 // 			{
 // 				targetPass->sceneBlendState.alphaSrcBlend = getSceneBlendFactor(val);
 // 			}
-// 			else if ( "AlphaDestBlend" == name )
+// 			else if ( "AlphaDstFactor" == name )
 // 			{
 // 				targetPass->sceneBlendState.alphaDestBlend = getSceneBlendFactor(val);
 // 			}
@@ -466,25 +466,25 @@ namespace Duel
 		{
 			blendState.colorBlendOpeartion = getSceneBlendOperation(val);
 		}
-		else if ( "ColorSrcBlend" == name )
+		else if ( "ColorSrcFactor" == name )
 		{
-			blendState.colorSrcBlend = getSceneBlendFactor(val);
+			blendState.colorSrcFactor = getSceneBlendFactor(val);
 		}
-		else if ( "ColorDestBlend" == name )
+		else if ( "ColorDstFactor" == name )
 		{
-			blendState.colorDestBlend = getSceneBlendFactor(val);
+			blendState.colorDstFactor = getSceneBlendFactor(val);
 		}
 		else if ( "AlphaBlendOpeartion" == name )
 		{
 			blendState.alphaBlendOpeartion = getSceneBlendOperation(val);
 		}
-		else if ( "AlphaSrcBlend" == name )
+		else if ( "AlphaSrcFactor" == name )
 		{
-			blendState.alphaSrcBlend = getSceneBlendFactor(val);
+			blendState.alphaSrcFactor = getSceneBlendFactor(val);
 		}
-		else if ( "AlphaDestBlend" == name )
+		else if ( "AlphaDstFactor" == name )
 		{
-			blendState.alphaDestBlend = getSceneBlendFactor(val);
+			blendState.alphaDstBlend = getSceneBlendFactor(val);
 		}
 		else if ( "ColorWriteMask" == name)
 		{
@@ -1124,11 +1124,11 @@ namespace Duel
 // 				sceneBlendNode->append_node(stateNode);
 // 
 // 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->sceneBlendState.colorSrcBlend).c_str());
-// 				stateNode->append_attribute(doc.allocate_attribute("name","ColorSrcBlend"));
+// 				stateNode->append_attribute(doc.allocate_attribute("name","ColorSrcFactor"));
 // 				sceneBlendNode->append_node(stateNode);
 // 
 // 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->sceneBlendState.colorDestBlend).c_str());
-// 				stateNode->append_attribute(doc.allocate_attribute("name","ColorDestBlend"));
+// 				stateNode->append_attribute(doc.allocate_attribute("name","ColorDstFactor"));
 // 				sceneBlendNode->append_node(stateNode);
 // 
 // 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendOperation(curPass->sceneBlendState.alphaBlendOpeartion).c_str());
@@ -1136,11 +1136,11 @@ namespace Duel
 // 				sceneBlendNode->append_node(stateNode);
 // 
 // 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->sceneBlendState.alphaSrcBlend).c_str());
-// 				stateNode->append_attribute(doc.allocate_attribute("name","AlphaSrcBlend"));
+// 				stateNode->append_attribute(doc.allocate_attribute("name","AlphaSrcFactor"));
 // 				sceneBlendNode->append_node(stateNode);
 // 
 // 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->sceneBlendState.alphaDestBlend).c_str());
-// 				stateNode->append_attribute(doc.allocate_attribute("name","AlphaDestBlend"));
+// 				stateNode->append_attribute(doc.allocate_attribute("name","AlphaDstFactor"));
 // 				sceneBlendNode->append_node(stateNode);
 				//////////////////////////////////////////////////////////////////////////
 
@@ -1171,24 +1171,24 @@ namespace Duel
 							rtbsNode->append_node(stateNode);
 
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].colorSrcBlend).c_str());
-							stateNode->append_attribute(doc.allocate_attribute("name","ColorSrcBlend"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].colorSrcFactor).c_str());
+							stateNode->append_attribute(doc.allocate_attribute("name","ColorSrcFactor"));
 							rtbsNode->append_node(stateNode);
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].colorDestBlend).c_str());
-							stateNode->append_attribute(doc.allocate_attribute("name","ColorDestBlend"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].colorDstFactor).c_str());
+							stateNode->append_attribute(doc.allocate_attribute("name","ColorDstFactor"));
 							rtbsNode->append_node(stateNode);
 
 							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendOperation(curPass->blendState.targetStates[i].alphaBlendOpeartion).c_str());
 							stateNode->append_attribute(doc.allocate_attribute("name","AlphaBlendOpeartion"));
 							rtbsNode->append_node(stateNode);
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].alphaSrcBlend).c_str());
-							stateNode->append_attribute(doc.allocate_attribute("name","AlphaSrcBlend"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].alphaSrcFactor).c_str());
+							stateNode->append_attribute(doc.allocate_attribute("name","AlphaSrcFactor"));
 							rtbsNode->append_node(stateNode);
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].alphaDestBlend).c_str());
-							stateNode->append_attribute(doc.allocate_attribute("name","AlphaDestBlend"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].alphaDstBlend).c_str());
+							stateNode->append_attribute(doc.allocate_attribute("name","AlphaDstFactor"));
 							rtbsNode->append_node(stateNode);
 
 							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", DStringTool::toString(curPass->blendState.targetStates[i].colorWriteMask).c_str());

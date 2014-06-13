@@ -2,7 +2,7 @@
 <CoreConfig DuelVersion = '1.0.0'>
 	<PluginList>
 		<Plugin>
-			DuelGL.dll
+			DuelD3D9.dll
 		</Plugin>
 		<Plugin>
 			DuelQuadtreeSceneManager.dll

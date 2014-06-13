@@ -276,12 +276,12 @@ namespace Duel
 		{
 			mCurBlendState.targetStates[i].blendEnable = true;
 			mCurBlendState.targetStates[i].colorBlendOpeartion = BO_Sub;
-			mCurBlendState.targetStates[i].colorSrcBlend = BF_Zero;
-			mCurBlendState.targetStates[i].colorDestBlend = BF_One;
+			mCurBlendState.targetStates[i].colorSrcFactor = BF_Zero;
+			mCurBlendState.targetStates[i].colorDstFactor = BF_One;
 
 			mCurBlendState.targetStates[i].alphaBlendOpeartion = BO_Sub;
-			mCurBlendState.targetStates[i].alphaSrcBlend = BF_Zero;
-			mCurBlendState.targetStates[i].alphaDestBlend = BF_One;
+			mCurBlendState.targetStates[i].alphaSrcFactor = BF_Zero;
+			mCurBlendState.targetStates[i].alphaDstBlend = BF_One;
 			mCurBlendState.targetStates[i].colorWriteMask = 0;
 		}
 		mCurBlendFactor = DColor::WHITE;
@@ -489,10 +489,10 @@ namespace Duel
 			{
 				glBlendEquationSeparate(stateObj->mGLColorBlendOp[0], stateObj->mGLAlphaBlendOp[0]);
 			}
-			if ((stateObj->mState.targetStates[0].colorSrcBlend != mCurBlendState.targetStates[0].colorSrcBlend)
-				|| (stateObj->mState.targetStates[0].colorDestBlend != mCurBlendState.targetStates[0].colorDestBlend)
-				|| (stateObj->mState.targetStates[0].alphaSrcBlend != mCurBlendState.targetStates[0].alphaSrcBlend)
-				|| (stateObj->mState.targetStates[0].alphaDestBlend != mCurBlendState.targetStates[0].alphaDestBlend))
+			if ((stateObj->mState.targetStates[0].colorSrcFactor != mCurBlendState.targetStates[0].colorSrcFactor)
+				|| (stateObj->mState.targetStates[0].colorDstFactor != mCurBlendState.targetStates[0].colorDstFactor)
+				|| (stateObj->mState.targetStates[0].alphaSrcFactor != mCurBlendState.targetStates[0].alphaSrcFactor)
+				|| (stateObj->mState.targetStates[0].alphaDstBlend != mCurBlendState.targetStates[0].alphaDstBlend))
 			{
 				glBlendFuncSeparate(stateObj->mGLColorSrcBlend[0], stateObj->mGLColorDstBlend[0], 
 					stateObj->mGLAlphaSrcBlend[0], stateObj->mGLAlphaDstBlend[0]);
@@ -516,10 +516,10 @@ namespace Duel
 					glBlendEquationSeparatei(i,
 						stateObj->mGLColorBlendOp[i], stateObj->mGLAlphaBlendOp[i]);
 				}
-				if ((stateObj->mState.targetStates[i].colorSrcBlend != mCurBlendState.targetStates[i].colorSrcBlend)
-					|| (stateObj->mState.targetStates[i].colorDestBlend != mCurBlendState.targetStates[i].colorDestBlend)
-					|| (stateObj->mState.targetStates[i].alphaSrcBlend != mCurBlendState.targetStates[i].alphaSrcBlend)
-					|| (stateObj->mState.targetStates[i].alphaDestBlend != mCurBlendState.targetStates[i].alphaDestBlend))
+				if ((stateObj->mState.targetStates[i].colorSrcFactor != mCurBlendState.targetStates[i].colorSrcFactor)
+					|| (stateObj->mState.targetStates[i].colorDstFactor != mCurBlendState.targetStates[i].colorDstFactor)
+					|| (stateObj->mState.targetStates[i].alphaSrcFactor != mCurBlendState.targetStates[i].alphaSrcFactor)
+					|| (stateObj->mState.targetStates[i].alphaDstBlend != mCurBlendState.targetStates[i].alphaDstBlend))
 				{
 					glBlendFuncSeparatei(i,
 						stateObj->mGLColorSrcBlend[i], stateObj->mGLColorDstBlend[i], 

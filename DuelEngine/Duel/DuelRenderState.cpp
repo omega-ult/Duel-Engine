@@ -232,11 +232,11 @@ namespace Duel
 	DRenderTargetBlendState::DRenderTargetBlendState() :
 		blendEnable(false),
 		colorBlendOpeartion(BO_Add),
-		colorSrcBlend(BF_One),
-		colorDestBlend(BF_Zero),
+		colorSrcFactor(BF_SrcAlpha),
+		colorDstFactor(BF_InvSrcAlpha),
 		alphaBlendOpeartion(BO_Add),
-		alphaSrcBlend(BF_One),
-		alphaDestBlend(BF_Zero),
+		alphaSrcFactor(BF_One),
+		alphaDstBlend(BF_InvSrcAlpha),
 		colorWriteMask(CWM_All)
 	{
 
@@ -246,12 +246,12 @@ namespace Duel
 	bool DRenderTargetBlendState::operator==( const DRenderTargetBlendState& sbs )
 	{
 		return (sbs.alphaBlendOpeartion == alphaBlendOpeartion &&
-			sbs.alphaDestBlend == alphaDestBlend &&
-			sbs.alphaSrcBlend == alphaSrcBlend &&
+			sbs.alphaDstBlend == alphaDstBlend &&
+			sbs.alphaSrcFactor == alphaSrcFactor &&
 			sbs.blendEnable == blendEnable &&
 			sbs.colorBlendOpeartion == colorBlendOpeartion &&
-			sbs.colorDestBlend == colorDestBlend &&
-			sbs.colorSrcBlend == colorSrcBlend &&
+			sbs.colorDstFactor == colorDstFactor &&
+			sbs.colorSrcFactor == colorSrcFactor &&
 			sbs.colorWriteMask == colorWriteMask);
 	}
 

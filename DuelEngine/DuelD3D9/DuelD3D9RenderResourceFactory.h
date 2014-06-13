@@ -4,6 +4,7 @@
 #define _DUELD3D9RENDERRESOURCEFACTORY_H_
 
 #include "DuelD3D9Common.h"
+#include <d3d9.h>
 #include "DuelRenderResourceFactory.h"
 
 namespace Duel
@@ -47,6 +48,9 @@ namespace Duel
 
 		void initialize();
 		void shutdown();
+	protected:
+		HWND	mMainHWND;
+		LPDIRECT3DDEVICE9	mMainDevice;
 	};
 
 }

@@ -10,44 +10,48 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(D3D9BlendStateObject, DBlendStateObject);
 	DUEL_IMPLEMENT_RTTI_1(D3D9TextureSamplerObject, DTextureSamplerObject);
 
-	D3D9RasterizerStateObject::D3D9RasterizerStateObject( const DRasterizerState& state )
+	D3D9RasterizerStateObject::D3D9RasterizerStateObject( const DRasterizerState& state ) :
+		mState(state)
 	{
 
 	}
 
 	void D3D9RasterizerStateObject::getRasterizerState( DRasterizerState& outState )
 	{
-		throw std::exception("The method or operation is not implemented.");
+		outState = mState;
 	}
 
-	D3D9DepthStencilStateObject::D3D9DepthStencilStateObject( const DDepthStencilState& state )
+	D3D9DepthStencilStateObject::D3D9DepthStencilStateObject( const DDepthStencilState& state ) :
+		mState(state)
 	{
 
 	}
 
 	void D3D9DepthStencilStateObject::getDepthStencilState( DDepthStencilState& outState )
 	{
-		throw std::exception("The method or operation is not implemented.");
+		outState = mState;
 	}
 
-	D3D9BlendStateObject::D3D9BlendStateObject( const DBlendState& state )
+	D3D9BlendStateObject::D3D9BlendStateObject( const DBlendState& state ) :
+		mState(state)
 	{
 
 	}
 
 	void D3D9BlendStateObject::getBlendState( DBlendState& outState )
 	{
-		throw std::exception("The method or operation is not implemented.");
+		outState = mState;
 	}
 
-	D3D9TextureSamplerObject::D3D9TextureSamplerObject( const DTextureSampler& samp )
+	D3D9TextureSamplerObject::D3D9TextureSamplerObject( const DTextureSampler& samp ) :
+		mSamp(samp)
 	{
 
 	}
 
 	void D3D9TextureSamplerObject::getTextureSampler( DTextureSampler& outSamp )
 	{
-		throw std::exception("The method or operation is not implemented.");
+		outSamp = mSamp;
 	}
 
 

@@ -15,6 +15,10 @@ namespace Duel
 		D3D9RasterizerStateObject(const DRasterizerState& state);
 		virtual void getRasterizerState( DRasterizerState& outState );
 
+	protected:
+		// just a copy.
+		DRasterizerState	mState;
+
 	};
 
 	class D3D9DepthStencilStateObject : public DDepthStencilStateObject
@@ -23,7 +27,9 @@ namespace Duel
 	public:
 		D3D9DepthStencilStateObject(const DDepthStencilState& state);
 		virtual void getDepthStencilState( DDepthStencilState& outState );
-
+	
+	protected:
+		DDepthStencilState	mState;
 	};
 
 	class D3D9BlendStateObject : public DBlendStateObject
@@ -32,7 +38,8 @@ namespace Duel
 	public:
 		D3D9BlendStateObject(const DBlendState& state);
 		virtual void getBlendState( DBlendState& outState );
-
+	protected:
+		DBlendState		mState;
 
 	};
 
@@ -42,7 +49,8 @@ namespace Duel
 	public:
 		D3D9TextureSamplerObject(const DTextureSampler& samp);
 		virtual void getTextureSampler( DTextureSampler& outSamp );
-
+	protected:
+		DTextureSampler mSamp;
 
 	};
 }

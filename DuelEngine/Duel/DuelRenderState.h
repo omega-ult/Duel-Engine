@@ -208,14 +208,14 @@ namespace Duel
 		bool							operator != (const DRenderTargetBlendState& sbs) { return !operator==(sbs); }
 		// blend enable=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 		bool				blendEnable;			// default: false
-		// color blend=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+		// color blend default as alpha blending =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 		BlendOperation		colorBlendOpeartion;	// default: BO_Add
-		BlendFactor			colorSrcBlend;			// default: BF_One
-		BlendFactor			colorDestBlend;			// default: BF_Zero
-		// alpha blend=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+		BlendFactor			colorSrcFactor;			// default: BF_SrcAlpha
+		BlendFactor			colorDstFactor;			// default: BF_InvSrcAlpha
+		// alpha blend  default as alpha blending =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 		BlendOperation		alphaBlendOpeartion;	// default: B0_Add
-		BlendFactor			alphaSrcBlend;			// default: BF_One
-		BlendFactor			alphaDestBlend;			// default: BF_Zero
+		BlendFactor			alphaSrcFactor;			// default: BF_One
+		BlendFactor			alphaDstBlend;			// default: BF_InvSrcAlpha
 		uint8				colorWriteMask;			// default:	CWM_All
 
 	};

@@ -186,7 +186,7 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		wndSetting.verticalSync = false;
 		wndSetting.useGamma = false;
 		wndSetting.surfaceFormat = Duel::PF_A8R8G8B8;
-		mMainWindow = DRenderResourceManager::getSingleton().createRenderWindow(appCfgFile,wndSetting, (Duel::uint32)mHwnd );
+//		mMainWindow = DRenderResourceManager::getSingleton().createRenderWindow(appCfgFile,wndSetting, (Duel::uint32)mHwnd );
 #ifdef GLPLUGIN_DEBUG
 		//////////////////////////////////////////////////////////////////////////
 		// basic resources.
@@ -296,7 +296,7 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		DDemoMaterialBank::getSingleton().init(mRws);
 #endif
 		//////////////////////////////////////////////////////////////////////////
-		DInputManager::getSingleton().registerWindow(mMainWindow, false);
+ 		DInputManager::getSingleton().registerWindow(mMainWindow, false);
 
 		//////////////////////////////////////////////////////////////////////////
 		mTestState = new DemoKit::TestState();
