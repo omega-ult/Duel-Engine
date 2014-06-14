@@ -6,6 +6,7 @@
 #include "DuelD3D9Common.h"
 #include <d3d9.h>
 #include "DuelRenderResourceFactory.h"
+#include "DuelD3D9VolatileResource.h"
 
 namespace Duel
 {
@@ -13,7 +14,7 @@ namespace Duel
 	{
 		DUEL_DECLARE_RTTI(D3D9RenderResourceFactory)
 	public:
-
+		D3D9RenderResourceFactory();
 		virtual DVertexBufferPtr createVetexBuffer( size_t vertexSize, size_t verticesCount, HardwareBufferUsage usage, bool useShadow, VertexBufferType type );
 
 		virtual DIndexBufferPtr createIndexBuffer( IndexType itype, size_t indexCount, HardwareBufferUsage usage, bool useShadow );
@@ -48,9 +49,19 @@ namespace Duel
 
 		void initialize();
 		void shutdown();
+
+		IDirect3DDevice9*	getMainDevice();
+		void	reset();
+
 	protected:
 		HWND	mMainHWND;
-		LPDIRECT3DDEVICE9	mMainDevice;
+		IDirect3D9*			mD3D9;
+		IDirect3DDevice9*	mMainDevice;
+		D3DPRESENT_PARAMETERS	mPresentParam;
+
+		typedef std::vector<D3D9VolatileResource*>	VolatileResourceList;
+		VolatileResourceList	mVolatileResList;
+
 	};
 
 }

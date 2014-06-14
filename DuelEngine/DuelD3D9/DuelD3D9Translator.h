@@ -4,10 +4,8 @@
 #define _DUELD3D9TRANSLATOR_H_
 
 #include "DuelD3D9Common.h"
-#include <d3d9.h>
-#include <dxgi.h>
-#include <d3d9types.h>
 #include "Duel.h"
+#include "DuelD3D9Include.h"
 
 
 namespace Duel

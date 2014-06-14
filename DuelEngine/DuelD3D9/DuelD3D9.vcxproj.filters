@@ -131,5 +131,11 @@
     <ClInclude Include="DuelD3D9RenderState.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DuelD3D9VolatileResource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DuelD3D9Include.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

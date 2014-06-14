@@ -109,6 +109,7 @@
     <ClInclude Include="DuelD3D9FrameBuffer.h" />
     <ClInclude Include="DuelD3D9GpuProgram.h" />
     <ClInclude Include="DuelD3D9GpuProgramManager.h" />
+    <ClInclude Include="DuelD3D9Include.h" />
     <ClInclude Include="DuelD3D9IndexBuffer.h" />
     <ClInclude Include="DuelD3D9PixelBuffer.h" />
     <ClInclude Include="DuelD3D9Plugin.h" />
@@ -124,6 +125,7 @@
     <ClInclude Include="DuelD3D9TextureManager.h" />
     <ClInclude Include="DuelD3D9Translator.h" />
     <ClInclude Include="DuelD3D9VertexBuffer.h" />
+    <ClInclude Include="DuelD3D9VolatileResource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

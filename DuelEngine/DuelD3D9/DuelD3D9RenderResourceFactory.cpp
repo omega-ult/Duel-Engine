@@ -27,6 +27,14 @@ namespace Duel
 	}
 #endif
 
+	D3D9RenderResourceFactory::D3D9RenderResourceFactory() :
+		mD3D9(NULL),
+		mMainDevice(NULL),
+		mMainHWND(0)
+	{
+		ZeroMemory(&mPresentParam, sizeof(D3DPRESENT_PARAMETERS));
+	}
+
 	Duel::DVertexBufferPtr D3D9RenderResourceFactory::createVetexBuffer( size_t vertexSize, size_t verticesCount, HardwareBufferUsage usage, bool useShadow, VertexBufferType type )
 	{
 		return DVertexBufferPtr(new D3D9VertexBuffer(vertexSize, verticesCount,usage, useShadow));
@@ -69,12 +77,28 @@ namespace Duel
 
 	DRenderWindow* D3D9RenderResourceFactory::createRenderWindow( const DString& name )
 	{
-		return NULL;
+		D3D9RenderWindow* ret = new D3D9RenderWindow(this, name);
+		mVolatileResList.push_back(ret);
+		return ret;
 	}
 
 	void D3D9RenderResourceFactory::destroyRenderWindow( DRenderWindow* wind )
 	{
-		throw std::exception("The method or operation is not implemented.");
+		D3D9RenderWindow* d3dRendWind = wind->getAs<D3D9RenderWindow>();
+		if (d3dRendWind != NULL && d3dRendWind->getCreator() == this)
+		{
+			VolatileResourceList::iterator i = mVolatileResList.begin();
+			while (i != mVolatileResList.end())
+			{
+				if ((*i) == d3dRendWind)
+				{
+					mVolatileResList.erase(i);
+					break;
+				}
+				++i;
+			}
+			delete wind;
+		}
 	}
 
 	DFrameBuffer* D3D9RenderResourceFactory::createFrameBuffer( uint32 w, uint32 h, uint32 colorbits )
@@ -143,9 +167,7 @@ namespace Duel
 		mMainHWND = CreateWindowEx(0, "__D3DContextWindow", "__D3DContextWindow", 
 			styleWord, 0, 0,  rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInst, NULL);
 
-
-		LPDIRECT3D9 pd3d9 = NULL;
-		pd3d9 = Direct3DCreate9(D3D_SDK_VERSION);
+		mD3D9 = Direct3DCreate9(D3D_SDK_VERSION);
 		// Set up the structure used to create the D3DDevice
 		D3DPRESENT_PARAMETERS d3dpp;
 		ZeroMemory( &d3dpp, sizeof( d3dpp ) );
@@ -153,14 +175,61 @@ namespace Duel
 		d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 		d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
 
-		pd3d9->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, mMainHWND,
+		mPresentParam.BackBufferCount			= 1; // 双倍缓冲
+		mPresentParam.Windowed					= true;		
+		mPresentParam.BackBufferWidth			= 50;
+		mPresentParam.BackBufferHeight			= 50;
+		mPresentParam.SwapEffect				= D3DSWAPEFFECT_DISCARD;
+		mPresentParam.hDeviceWindow				= mMainHWND;	// 目标窗口, 不一定与device创建窗口相同.
+		mPresentParam.EnableAutoDepthStencil	= false;
+		mPresentParam.PresentationInterval		= D3DPRESENT_INTERVAL_ONE;	// swapbuffer数决定.
+		mPresentParam.FullScreen_RefreshRateInHz= 0;
+		mPresentParam.BackBufferFormat			= D3DFMT_X8R8G8B8;
+
+		mD3D9->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, mMainHWND,
 			D3DCREATE_HARDWARE_VERTEXPROCESSING,
 			&d3dpp, &mMainDevice );
 
+		mMainDevice->Reset(&mPresentParam);
 	}
 
 	void D3D9RenderResourceFactory::shutdown()
 	{
+		ReleaseCOM(mMainDevice);
+		ReleaseCOM(mD3D9);
+		DestroyWindow(mMainHWND);
+		mMainHWND = 0;
+	}
+
+	LPDIRECT3DDEVICE9 D3D9RenderResourceFactory::getMainDevice()
+	{
+		return mMainDevice;
+	}
+
+	void D3D9RenderResourceFactory::reset()
+	{
+		// release all volatile resources.
+		VolatileResourceList::iterator i = mVolatileResList.begin();
+		while (i != mVolatileResList.end())
+		{
+			(*i)->onDeviceLost();
+			++i;
+		}
+
+		HRESULT hr = mMainDevice->Reset(&mPresentParam);
+		while (hr != S_OK)
+		{
+			Sleep(100);
+			hr = mMainDevice->Reset(&mPresentParam);
+		}
+
+		// recreate all volatile resources.
+		i = mVolatileResList.begin();
+		while (i != mVolatileResList.end())
+		{
+			(*i)->onDeviceReset(mMainDevice);
+			++i;
+		}
 
 	}
 
