@@ -5,6 +5,7 @@
 
 namespace Duel
 {
+	DUEL_IMPLEMENT_RTTI_1(D3D9GpuTextureConstant, DGpuTextureConstant);
 	DUEL_IMPLEMENT_RTTI_1(D3D9ShaderObject, DShaderObject);
 
 	D3D9ShaderObject::D3D9ShaderObject()
@@ -20,6 +21,24 @@ namespace Duel
 	DGpuParameters* D3D9ShaderObject::getPixelProgramParameters()
 	{
 		throw std::exception("The method or operation is not implemented.");
+	}
+
+
+	D3D9GpuTextureConstant::D3D9GpuTextureConstant( IDirect3DTexture9* tex ) :
+		mTexture(tex),
+		mbValid(true)
+	{
+
+	}
+
+	bool D3D9GpuTextureConstant::isValid()
+	{
+		return mbValid;
+	}
+
+	void D3D9GpuTextureConstant::setSamplerObject( DTextureSamplerObjectPtr samp )
+	{
+		mTexSamp = samp;
 	}
 
 }

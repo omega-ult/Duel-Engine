@@ -14,9 +14,13 @@ namespace Duel
 	public:
 		D3D9FrameBuffer(DRenderResourceFactory* creator, uint32 w, uint32 h, uint32 colorBits);
 
+		virtual void resize(uint32 width, uint32 height);
+
 		virtual void attachRenderColorView( ElementAttachment elem, DRenderColorView* v );
 
 		virtual void detachRenderColorView( ElementAttachment elem );
+
+		virtual void detachAllRenderColorViews();
 
 		virtual void attachRenderDepthStencilView( DRenderDepthStencilView* v );
 
@@ -25,7 +29,11 @@ namespace Duel
 		virtual DRenderColorView* getRenderColorView( ElementAttachment elem );
 
 		virtual DRenderDepthStencilView* getRenderDepthStencilView();
-
+	protected:
+		// frame buffer part.
+		typedef	std::vector<D3D9RenderColorView*>	RenderColorViewList;
+		RenderColorViewList			mViewList;
+		D3D9RenderDepthStencilView*	mCurDepthView;
 	};
 }
 

@@ -26,15 +26,17 @@ namespace Duel
 
 		virtual void onDeviceReset( IDirect3DDevice9* dev );
 
+		IDirect3DSurface9*	getRenderSurface();
+
 	protected:
 		DFrameBuffer*	mAttachFB;
 		ElementAttachment	mAttachPoint;
 		DGpuTextureConstantPtr	mGpuConstant;
 
-		IDirect3DSurface9* mSurface;
+		IDirect3DTexture9* mTexture;
 	};
 
-	class D3D9RenderDepthStencilView : public DRenderDepthStencilView
+	class D3D9RenderDepthStencilView : public DRenderDepthStencilView, public D3D9VolatileResource
 	{
 		DUEL_DECLARE_RTTI(D3D9RenderDepthStencilView)
 	public:
@@ -42,8 +44,17 @@ namespace Duel
 
 		virtual void	resize(uint32 w, uint32 h);
 		void			setAttachFrameBuffer(DFrameBuffer* fb);
+
+		virtual void onDeviceLost();
+
+		virtual void onDeviceReset( IDirect3DDevice9* dev );
+
+		IDirect3DSurface9*	getRenderSurface();
+
 	protected:
 		DFrameBuffer*	mAttachFB;
+
+		IDirect3DSurface9* mSurface;
 	};
 
 }

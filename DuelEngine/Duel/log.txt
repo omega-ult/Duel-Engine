@@ -537,3 +537,11 @@ normal mapping 的制作出了点问题, mesh格式需要更改, 只支持一个uvset就好了, 这样就
 5.18
 GLRenderColorView里产生白色纹理的问题终于解决!原来是glTextureParameteri里设置纹理的采样方式不对,困扰了我一个月!
 记录一下,以后opengl有什么纹理的问题,先查glTextureParameteri.
+
+6.15
+好久没写日志,其中发生了很多事情
+先是defer pipeline 在OpenGL的环境下的bug暂时确诊为A卡fbo不支持detach, 必须使用多个fbo来完成这个事情,
+这样导致的结果是深度模板缓冲不能重复利用, 因此需要一个单独的流程将defer的深度信息写入(OpenGL:gl_FragDepth,
+Dx:out Depth), stack overflow的朋友给了个建议, 不要使用cacheFBO的函数, 使用一个专门的类, 在构造和析构的时候
+分别绑定/解绑fbo.
+另外,由于工作原因, Dx9项目再开, 这段时间都在做Dx9部分, 都可以看得到的.

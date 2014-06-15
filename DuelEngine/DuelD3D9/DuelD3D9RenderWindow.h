@@ -41,6 +41,8 @@ namespace Duel
 
 		virtual void detachRenderColorView( ElementAttachment elem );
 
+		virtual void detachAllRenderColorViews();
+
 		virtual void attachRenderDepthStencilView( DRenderDepthStencilView* v );
 
 		virtual void detachRenderDepthStencilView();

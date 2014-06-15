@@ -203,7 +203,26 @@ namespace Duel
 
 	void D3D9RenderWindow::resize( uint32 width, uint32 height )
 	{
+		if (width == mWidth && height == mHeight)
+		{
+			return;
+		}
+		assert(width != 0 && height != 0);
+		DFrameBuffer::resize(width, height);
+		mCurViewport.reset(0,0, width, height);
+		RenderColorViewList::iterator i, iend = mViewList.end();
+		for (i = mViewList.begin(); i != iend; ++i)
+		{
+			if ((*i) != NULL)
+			{
+				(*i)->resize(width, height);
+			}
+		}
 
+		if(mCurDepthView != NULL)
+		{
+			mCurDepthView->resize(width, height);
+		}
 	}
 
 	Duel::uint32 D3D9RenderWindow::getWindowHandle()
@@ -213,13 +232,61 @@ namespace Duel
 
 	void D3D9RenderWindow::attachRenderColorView( ElementAttachment elem, DRenderColorView* v )
 	{
+		if (v == NULL)
+		{
+			assert(false);// "Can't attach an empty render color view"
+			return;
+		}
+		if (v->getAttachedFrameBuffer() != NULL && v->getAttachedFrameBuffer() != this)
+		{
+			assert(false);// "Specified view is attached to another frame buffer, you must detach it before reusing it"
+			return;
+		}
+		// the case specified v is attached to another channel
+		if (getRenderColorView(elem) != NULL)
+		{
+			assert(false);//"Specified attachement is already in use, you must detach it firstly"
+			return;
+		}
+		// if this view has been attached to this frame buffer, change its channel.
+		if (v->getAttachedFrameBuffer() == this)
+		{
+			detachRenderColorView(v->getAttachPoint());
+		}
 
+		// chech format compatibility
+		if (DPixelFormatTool::getFormatBits(v->getFormat()) != mColorBits)
+		{
+			return;
+		}
+		D3D9RenderColorView* rv = v->getAs<D3D9RenderColorView>(false);
+		// check type availability.
+		if (rv == NULL)
+		{
+			return;
+		}
+		rv->resize(mWidth, mHeight);
+		mViewList[(uint32)(elem)] = rv;
+		rv->setAttachFrameBuffer(this);
+		rv->setAttachElement(elem);
 	}
 
 	void D3D9RenderWindow::detachRenderColorView( ElementAttachment elem )
 	{
+		if (mViewList[(uint32)(elem)] != NULL)
+		{
+			mViewList[(uint32)(elem)]->setAttachFrameBuffer(NULL);
+			mViewList[(uint32)(elem)]->setAttachElement(EA_Color0);
+			mViewList[(uint32)(elem)] = NULL;
+		}
+	}
 
-
+	void D3D9RenderWindow::detachAllRenderColorViews()
+	{
+		for (uint32 i = 0; i < 8; ++i)
+		{
+			mViewList[i] = NULL;
+		}
 	}
 
 	void D3D9RenderWindow::attachRenderDepthStencilView( DRenderDepthStencilView* v )

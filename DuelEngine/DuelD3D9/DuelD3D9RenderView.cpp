@@ -4,6 +4,7 @@
 #include "DuelD3D9RenderView.h"
 #include "DuelD3D9RenderResourceFactory.h"
 #include "DuelD3D9Translator.h"
+#include "DuelD3D9ShaderObject.h"
 
 namespace Duel
 {
@@ -15,7 +16,7 @@ namespace Duel
 		DRenderColorView(creator, fmt),
 		mAttachFB(NULL),
 		mAttachPoint(EA_Color0),
-		mSurface(NULL)
+		mTexture(NULL)
 	{
 
 	}
@@ -27,18 +28,16 @@ namespace Duel
 
 	void D3D9RenderColorView::resize( uint32 w, uint32 h )
 	{
-		if (mSurface != NULL)
-		{
-			ReleaseCOM(mSurface);
-		}
 		if (w == mWidth && h == mHeight)
 		{
 			return;
 		}
+		onDeviceLost();
 		mWidth = w;
 		mHeight = h;
 		D3D9RenderResourceFactory* fact = mCreator->getAs<D3D9RenderResourceFactory>();
-		onDeviceReset(fact->getMainDevice());
+		IDirect3DDevice9* dev = fact->getMainDevice();
+		onDeviceReset(dev);
 	}
 
 	void D3D9RenderColorView::setAttachFrameBuffer( DFrameBuffer* fb )
@@ -53,22 +52,36 @@ namespace Duel
 
 	void D3D9RenderColorView::onDeviceLost()
 	{
-		if (mSurface != NULL)
+		ReleaseCOM(mTexture);
+		if (mGpuConstant != NULL)
 		{
-			ReleaseCOM(mSurface);
+			mGpuConstant->getAs<D3D9GpuTextureConstant>()->discard();
+			mGpuConstant = DGpuTextureConstantPtr();
 		}
 	}
 
 	void D3D9RenderColorView::onDeviceReset( IDirect3DDevice9* dev )
 	{
-		dev->CreateRenderTarget(mWidth, mHeight, D3D9Translator::getD3DFormat(mFormat),
-			D3DMULTISAMPLE_NONE, 0, FALSE, &mSurface, NULL);
+		dev->CreateTexture(mWidth, mHeight, 1, 0, D3D9Translator::getD3DFormat(mFormat), D3DPOOL_DEFAULT,
+			&mTexture, NULL);
+		mGpuConstant = DGpuTextureConstantPtr(new D3D9GpuTextureConstant(mTexture));
 	}
 
+	IDirect3DSurface9* D3D9RenderColorView::getRenderSurface()
+	{
+		if (mTexture)
+		{
+			IDirect3DSurface9* suf = NULL;
+			mTexture->GetSurfaceLevel(0, &suf);
+			return suf;
+		}
+		return NULL;
+	}
 
 	D3D9RenderDepthStencilView::D3D9RenderDepthStencilView( DRenderResourceFactory* creator ) : 
 		DRenderDepthStencilView(creator),
-		mAttachFB(NULL)
+		mAttachFB(NULL),
+		mSurface(NULL)
 	{
 		
 	}
@@ -76,12 +89,38 @@ namespace Duel
 
 	void D3D9RenderDepthStencilView::resize( uint32 w, uint32 h )
 	{
+		if (w == mWidth && h == mHeight)
+		{
+			return;
+		}
 
+		ReleaseCOM(mSurface);
+
+		mWidth = w;
+		mHeight = h;
+		D3D9RenderResourceFactory* fact = mCreator->getAs<D3D9RenderResourceFactory>();
+		onDeviceReset(fact->getMainDevice());
 	}
 
 	void D3D9RenderDepthStencilView::setAttachFrameBuffer( DFrameBuffer* fb )
 	{
 		mAttachFB = fb;
+	}
+
+	void D3D9RenderDepthStencilView::onDeviceLost()
+	{
+		ReleaseCOM(mSurface);
+	}
+
+	void D3D9RenderDepthStencilView::onDeviceReset( IDirect3DDevice9* dev )
+	{
+		dev->CreateDepthStencilSurface(mWidth, mHeight, D3DFMT_D24S8, D3DMULTISAMPLE_NONE, 0,
+			FALSE, &mSurface, NULL);
+	}
+
+	IDirect3DSurface9* D3D9RenderDepthStencilView::getRenderSurface()
+	{
+		return mSurface;
 	}
 
 }
