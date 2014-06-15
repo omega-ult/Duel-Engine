@@ -69,21 +69,22 @@ namespace Duel
 		// release created resources.
 		releaseHardwareResource();
 		D3DFORMAT texFormat = (mFormat == PF_Unknown) ? D3DFMT_A8R8G8B8 : D3D9Translator::getD3DFormat(mFormat);
+		uint32 mipmap = mMipMapCount == MIPMAP_MAXCOUNT ? 0 : mMipMapCount + 1;
 		if (mType == TT_1D || mType == TT_2D)
 		{
-			dev->CreateTexture(mWidth, mHeight, mMipMapCount + 1, 0,
+			dev->CreateTexture(mWidth, mHeight, mipmap, D3D9Translator::getD3DUsage(mUsage),
 				texFormat, D3DPOOL_MANAGED, &mTexture.p2DTexture, NULL);
 			mTexture.pBaseTexture = mTexture.p2DTexture;
 		}
 		else if (mType == TT_3D)
 		{
-			dev->CreateVolumeTexture(mWidth, mHeight, mDepth, mMipMapCount + 1, 0, 
+			dev->CreateVolumeTexture(mWidth, mHeight, mDepth, mipmap, D3D9Translator::getD3DUsage(mUsage), 
 				texFormat, D3DPOOL_MANAGED, &mTexture.p3DTexture, NULL);
 			mTexture.pBaseTexture = mTexture.p3DTexture;
 		}
 		else
 		{
-			dev-> CreateCubeTexture(mWidth, mMipMapCount + 1, 0,
+			dev-> CreateCubeTexture(mWidth, mipmap, D3D9Translator::getD3DUsage(mUsage),
 				texFormat, D3DPOOL_MANAGED, &mTexture.pCubeTexture, NULL);
 			mTexture.pBaseTexture = mTexture.pCubeTexture;
 		}
@@ -125,7 +126,9 @@ namespace Duel
 		// push new pixel buffer.
 		uint32 faceCount = (mType == TT_Cube) ? 6 : 1;
 
-		size_t surfaceCount = (mMipMapCount+1) * faceCount;
+		uint32 level = mTexture.pBaseTexture->GetLevelCount();
+		mMipMapCount = level - 1;
+		size_t surfaceCount = level * faceCount;
 		D3D9PixelBuffer* buf = NULL;
 		for (size_t i = 0; i < faceCount; ++i)
 		{

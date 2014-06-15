@@ -97,12 +97,18 @@ namespace Duel
 			/*vert*/ -1.0f,-1.0f, 0.0f, /*uv*/ 0.0f, 1.0f
 		};
 		device->CreateVertexBuffer(sizeof(float)*20, 0, 0, D3DPOOL_MANAGED, &mQuadVert, NULL);
+		void* tempBuf = NULL;
+		mQuadVert->Lock(0,sizeof(float)*20, &tempBuf, D3DLOCK_DISCARD);
+		memcpy(tempBuf, vertData, sizeof(float)*20);
+		mQuadVert->Unlock();
 		int16 idata[] =
 		{
 			0, 3, 2,  0, 2, 1
 		};
 		device->CreateIndexBuffer(sizeof(uint16)*6, 0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &mQuadIndx, NULL);
-
+		mQuadIndx->Lock(0, sizeof(uint16)*6, &tempBuf, D3DLOCK_DISCARD);
+		memcpy(tempBuf, idata, sizeof(uint16)*6);
+		mQuadIndx->Unlock();
 		DString vsCode = "struct VS_INPUT\
 		{\
 			float4 Position   : POSITION;\

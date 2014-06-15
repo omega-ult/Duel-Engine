@@ -37,12 +37,12 @@ namespace Duel
 
 	Duel::DVertexBufferPtr D3D9RenderResourceFactory::createVetexBuffer( size_t vertexSize, size_t verticesCount, HardwareBufferUsage usage, bool useShadow, VertexBufferType type )
 	{
-		return DVertexBufferPtr(new D3D9VertexBuffer(vertexSize, verticesCount,usage, useShadow));
+		return DVertexBufferPtr(new D3D9VertexBuffer(this, vertexSize, verticesCount,usage, useShadow));
 	}
 
 	Duel::DIndexBufferPtr D3D9RenderResourceFactory::createIndexBuffer( IndexType itype, size_t indexCount, HardwareBufferUsage usage, bool useShadow )
 	{
-		return DIndexBufferPtr(new D3D9IndexBuffer(itype, indexCount, usage, useShadow));
+		return DIndexBufferPtr(new D3D9IndexBuffer(this, itype, indexCount, usage, useShadow));
 	}
 
 	Duel::DRenderLayoutPtr D3D9RenderResourceFactory::createRenderLayout()
