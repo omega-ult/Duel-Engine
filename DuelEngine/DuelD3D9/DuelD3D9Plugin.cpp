@@ -35,9 +35,9 @@ namespace Duel
 	{
 		mRenderSystem = new D3D9RenderSystem();
 		mRenderResFactory = new D3D9RenderResourceFactory();
-		mTextureManager = new D3D9TextureManager();
 		mGpuProgramManager = new D3D9GpuProgramManger();
 		mhbManager = new DRenderResourceManager(mRenderResFactory);
+		mTextureManager = new D3D9TextureManager(mRenderResFactory);
 	}
 
 	void D3D9Plugin::initialize()

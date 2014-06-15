@@ -9,7 +9,8 @@ namespace Duel
 {
 	DUEL_IMPLEMENT_RTTI_1(D3D9TextureManager, DTextureManager);
 
-	D3D9TextureManager::D3D9TextureManager()
+	D3D9TextureManager::D3D9TextureManager(D3D9RenderResourceFactory* resFact) :
+		mResFactory(resFact)
 	{
 
 	}
@@ -18,7 +19,13 @@ namespace Duel
 	DResource* D3D9TextureManager::createImpl( DResourceDescription* createParam )
 	{
 		D3D9Texture* ret = new D3D9Texture(this, createParam->getName(), createParam->getGroupName());
+		ret->setHardwareBufferUsage(createParam->getAs<DTextureDescription>()->memoryStrategy);
 		return ret;
+	}
+
+	D3D9RenderResourceFactory* D3D9TextureManager::getD3DResourceFactory()
+	{
+		return mResFactory;
 	}
 
 }

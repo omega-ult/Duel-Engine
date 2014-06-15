@@ -24,7 +24,7 @@ namespace Duel
 	}
 
 
-	D3D9GpuTextureConstant::D3D9GpuTextureConstant( IDirect3DTexture9* tex ) :
+	D3D9GpuTextureConstant::D3D9GpuTextureConstant( IDirect3DBaseTexture9* tex ) :
 		mTexture(tex),
 		mbValid(true)
 	{

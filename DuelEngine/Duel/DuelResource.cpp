@@ -13,7 +13,7 @@ namespace Duel
 	
 	DResource::DResource( DResourceManager* fathermanager,
 						const DString& name, const DString& groupName, const DString& type ) :
-		fatherManager(fathermanager), mName(name), mGroupName(groupName), mType(type),
+		mFatherManager(fathermanager), mName(name), mGroupName(groupName), mType(type),
 		mLoadState(LS_Unloaded)
 	{
 

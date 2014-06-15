@@ -65,7 +65,7 @@ namespace Duel
 		//////////////////////////////////////////////////////////////////////////
 
 		// get a pointer to its creator
-		DResourceManager*	getManager() { return fatherManager; }
+		DResourceManager*	getManager() { return mFatherManager; }
 		// get the resource's name
 		const DString&		getName() { return mName; }
 		// get the resource's groupName
@@ -132,7 +132,7 @@ namespace Duel
 		virtual	void		unprepareImpl();
 
 		// pointer to the manager who create it.
-		DResourceManager*	fatherManager;
+		DResourceManager*	mFatherManager;
 		// name of the resource, MUST be unique
 		DString				mName;
 		// the name of group of which the resource should be in

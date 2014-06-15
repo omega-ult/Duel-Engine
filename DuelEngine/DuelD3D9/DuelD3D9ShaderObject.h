@@ -13,7 +13,7 @@ namespace Duel
 	{
 		DUEL_DECLARE_RTTI(D3D9GpuTextureConstant)
 	public:
-		D3D9GpuTextureConstant(IDirect3DTexture9* tex);
+		D3D9GpuTextureConstant(IDirect3DBaseTexture9* tex);
 
 		virtual bool isValid();
 
@@ -21,12 +21,12 @@ namespace Duel
 
 		void	discard() { mbValid = false; }
 
-		IDirect3DTexture9*	getTexture() { return mTexture; }
+		IDirect3DBaseTexture9*	getTexture() { return mTexture; }
 		DTextureSamplerObjectPtr	getSampler() { return mTexSamp; }
 
 	protected:
 		bool	mbValid;
-		IDirect3DTexture9*	mTexture;
+		IDirect3DBaseTexture9*	mTexture;
 		DTextureSamplerObjectPtr	mTexSamp;
 	};
 
