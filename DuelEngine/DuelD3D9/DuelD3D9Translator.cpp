@@ -89,7 +89,7 @@ namespace Duel
 		return D3DSTENCILOP_KEEP;
 	}
 
-	DWORD D3D9Translator::getD3DShadeMode( ShadeMode sm )
+	D3DSHADEMODE D3D9Translator::getD3DShadeMode( ShadeMode sm )
 	{
 		switch(sm)
 		{
@@ -222,7 +222,7 @@ namespace Duel
 		return D3DFILL_FORCE_DWORD;
 	}
 
-	DWORD D3D9Translator::getD3DCompareFunction( CompareFunction cf )
+	D3DCMPFUNC D3D9Translator::getD3DCompareFunction( CompareFunction cf )
 	{
 		switch(cf)
 		{

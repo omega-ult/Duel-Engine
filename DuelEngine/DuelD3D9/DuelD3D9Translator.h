@@ -19,7 +19,7 @@ namespace Duel
 		static	DXGI_FORMAT			getDXGIFormat(DPixelFormat pf);
 		static	DPixelFormat		getPixelFormat(DXGI_FORMAT df);
 		static	D3DSTENCILOP		getD3DStencilOperation(StencilOperation so);
-		static	DWORD				getD3DShadeMode(ShadeMode sm);
+		static	D3DSHADEMODE		getD3DShadeMode(ShadeMode sm);
 		static	D3DBLENDOP			getD3DBlendOperation(BlendOperation bo);
 		static	D3DBLEND			getD3DBlendFactor(BlendFactor bf);
 		static	D3DCULL				getD3DCullingMode(CullingMode cm);
@@ -27,7 +27,7 @@ namespace Duel
 		static	D3DTEXTUREFILTERTYPE	getD3DTextureFilterMode(FilterOption fo);
 		static	D3DCOLOR			getD3DColor(DColor c);
 		static	D3DFILLMODE			getD3DFillMode(PolygonMode pm);
-		static	DWORD				getD3DCompareFunction(CompareFunction cf);
+		static	D3DCMPFUNC				getD3DCompareFunction(CompareFunction cf);
 		static	DWORD				getD3DUsage(HardwareBufferUsage usage);
 		static	DWORD				getD3DLock(HardwareBufferLock lock, HardwareBufferUsage usage);
 		static	D3DDECLTYPE			getD3DDeclaraType(VertexElementType elemType);
