@@ -40,6 +40,15 @@ namespace Duel
 
 	void GLShaderObject::build( DRenderPass* pass )
 	{
+		if (pass == NULL)
+		{
+			return;
+		}
+		if ((pass->getVertexProgram() == NULL && !pass->getVertexProgram()->isLoaded())
+			|| (pass->getPixelProgram() == NULL && !pass->getPixelProgram()->isLoaded()))
+		{
+			return;
+		}
 		DShaderObject::build(pass);
 
 		if (mProgramID != 0)
@@ -63,10 +72,11 @@ namespace Duel
 		mProgramID = glCreateProgram();
 		mGLVSShaderID = glCreateShader(GL_VERTEX_SHADER);
 		mGLPSShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-		const char* vsSrc = vs->getSourceCode().c_str();
-		const char* psSrc = ps->getSourceCode().c_str();
-		glShaderSource(mGLVSShaderID, 1, &vsSrc, NULL);
-		glShaderSource(mGLPSShaderID, 1, &psSrc, NULL);
+		const char* vsSrc[2] = { vs->getPreProcessor().c_str(), vs->getSourceCode().c_str()};
+
+		const char* psSrc[2] = { ps->getPreProcessor().c_str(), ps->getSourceCode().c_str()};
+		glShaderSource(mGLVSShaderID, 2, vsSrc, NULL);
+		glShaderSource(mGLPSShaderID, 2, psSrc, NULL);
 		glAttachShader(mProgramID, mGLVSShaderID);
 		glAttachShader(mProgramID, mGLPSShaderID);
 
@@ -89,7 +99,7 @@ namespace Duel
 				vs->getGroupName() + "/" + vs->getName());
 
 #ifdef DUEL_DEBUG
-			std::cout << vs->getName() << ":\n" << vs->getCompilationError() + "\n";
+			std::cout << vs->getName() << ":\n" << vs->getCompileError() + "\n";
 #endif // DUEL_DEBUG
 
 		}
@@ -115,7 +125,7 @@ namespace Duel
 				ps->getGroupName() + "/" + ps->getName());
 
 #ifdef DUEL_DEBUG
-			std::cout << ps->getName() << ":\n" << ps->getCompilationError() + "\n";
+			std::cout << ps->getName() << ":\n" << ps->getCompileError() + "\n";
 #endif // DUEL_DEBUG
 
 		}

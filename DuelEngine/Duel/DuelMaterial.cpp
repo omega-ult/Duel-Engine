@@ -19,6 +19,7 @@ namespace Duel
 	std::map<MaterialParameterType, DString> initParamNameMap()
 	{
 		std::map<MaterialParameterType, DString> ret;
+		ret[MPT_Bool] = "bool";
 		ret[MPT_Color] = "color";
 		ret[MPT_Texture] = "texture";
 		ret[MPT_Int1] = "int1";
@@ -42,6 +43,16 @@ namespace Duel
 	}
 
 	std::map<MaterialParameterType, DString>	DMaterialParameter::msParamNameMap = initParamNameMap();
+
+	bool DMaterialParameter::isBool()
+	{
+		return isBool(paramType);
+	}
+
+	bool DMaterialParameter::isBool( MaterialParameterType type )
+	{
+		return type == MPT_Bool;
+	}
 
 	bool DMaterialParameter::isInt()
 	{
@@ -128,6 +139,7 @@ namespace Duel
 		{
 		case Duel::MPT_Texture:
 			return 0;
+		case Duel::MPT_Bool:
 		case Duel::MPT_Int1:
 		case Duel::MPT_Float1:
 			return 1;
@@ -211,6 +223,11 @@ namespace Duel
 			param.physicalIndex = mIntConstants.size();
 			mIntConstants.insert(mIntConstants.end(), param.arraySize * param.elemSize, 0);
 		}
+		else if (param.isBool())
+		{
+			param.physicalIndex = mBoolConstants.size();
+			mBoolConstants.insert(mBoolConstants.end(), param.arraySize * param.elemSize, 0);
+		}
 		mParamMap[name] = param;
 	}
 
@@ -238,10 +255,25 @@ namespace Duel
 		return &mIntConstants[physicalIndex];
 	}
 
+	int32* DMaterialInstance::getBoolValuePtr( uint32 physicalIndex )
+	{
+		return &mBoolConstants[physicalIndex];
+	}
+
 	DRenderTechnique* DMaterialInstance::getRenderTechnique( uint32 stage, DCamera* cam, LightIterator li )
 	{
 		return mParent->getRenderTechnique(stage, cam , li);
 	}
+
+	void DMaterialInstance::setValue( const DString& name, bool val )
+	{
+		ParameterMap::iterator i = mParamMap.find(name);
+		if (i != mParamMap.end())
+		{
+			mBoolConstants[i->second.physicalIndex] = val ? 1 : 0;
+		}
+	}
+
 
 	void DMaterialInstance::setValue( const DString& name, float val )
 	{
@@ -286,7 +318,14 @@ namespace Duel
 		ParameterMap::iterator i = mParamMap.find(name);
 		if (i != mParamMap.end())
 		{
-			mIntConstants[i->second.physicalIndex] = val;
+			if (i->second.isInt())
+			{
+				mIntConstants[i->second.physicalIndex] = val;
+			}
+			else if (i->second.isBool())
+			{
+				mBoolConstants[i->second.physicalIndex] = val;
+			}
 		}
 	}
 
@@ -295,8 +334,16 @@ namespace Duel
 		ParameterMap::iterator i = mParamMap.find(name);
 		if (i != mParamMap.end())
 		{
-			assert(i->second.physicalIndex + i->second.elemSize * count <= mIntConstants.size());
-			memcpy(&mIntConstants[i->second.physicalIndex], val, count * sizeof(int));
+			if (i->second.isInt())
+			{		
+				assert(i->second.physicalIndex + i->second.elemSize * count <= mIntConstants.size());
+				memcpy(&mIntConstants[i->second.physicalIndex], val, count * sizeof(int));
+			}
+			else if (i->second.isBool())
+			{
+				assert(i->second.physicalIndex + i->second.elemSize * count <= mBoolConstants.size());
+				memcpy(&mBoolConstants[i->second.physicalIndex], val, count * sizeof(int));
+			}
 		}
 	}
 
@@ -413,7 +460,7 @@ namespace Duel
 		tmp[8] = m3_.x; tmp[9] = m3_.y; tmp[10] = m3_.z; tmp[11] = m3_.w;
 		setValue(name, tmp, 12);
 	}
-	
+
 	DMaterialInstance::TextureConstantCache DMaterialInstance::getTextureValue( const DString& paramName )
 	{
 		TextureConstantCacheMap::iterator i = mTextureMap.find(paramName);
@@ -495,6 +542,10 @@ namespace Duel
 			{
 				gpuParam->setValue(p.targetGpuParam, inst->getIntValuePtr(p.physicalIndex), p.elemSize * p.arraySize);
 			}
+			else if (p.isBool())
+			{
+				gpuParam->setValue(p.targetGpuParam, inst->getBoolValuePtr(p.physicalIndex), p.elemSize * p.arraySize);
+			}
 			else if (p.isTexture())
 			{
 				DMaterialInstance::TextureConstantCache c = inst->getTextureValue(p.paramName);
@@ -515,6 +566,10 @@ namespace Duel
 			else if (p.isInt())
 			{
 				gpuParam->setValue(p.targetGpuParam, inst->getIntValuePtr(p.physicalIndex), p.elemSize * p.arraySize);
+			}
+			else if (p.isBool())
+			{
+				gpuParam->setValue(p.targetGpuParam, inst->getBoolValuePtr(p.physicalIndex), p.elemSize * p.arraySize);
 			}
 			else if (p.isTexture())
 			{

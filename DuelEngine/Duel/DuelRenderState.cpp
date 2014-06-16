@@ -236,7 +236,7 @@ namespace Duel
 		colorDstFactor(BF_InvSrcAlpha),
 		alphaBlendOpeartion(BO_Add),
 		alphaSrcFactor(BF_One),
-		alphaDstBlend(BF_InvSrcAlpha),
+		alphaDstFactor(BF_InvSrcAlpha),
 		colorWriteMask(CWM_All)
 	{
 
@@ -246,7 +246,7 @@ namespace Duel
 	bool DRenderTargetBlendState::operator==( const DRenderTargetBlendState& sbs )
 	{
 		return (sbs.alphaBlendOpeartion == alphaBlendOpeartion &&
-			sbs.alphaDstBlend == alphaDstBlend &&
+			sbs.alphaDstFactor == alphaDstFactor &&
 			sbs.alphaSrcFactor == alphaSrcFactor &&
 			sbs.blendEnable == blendEnable &&
 			sbs.colorBlendOpeartion == colorBlendOpeartion &&

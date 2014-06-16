@@ -22,7 +22,16 @@ namespace Duel
 			memset(mShadowBuf,0,mByteSize);
 		}
 		IDirect3DDevice9* dev = fact->getMainDevice();
-		dev->CreateIndexBuffer(mByteSize, D3D9Translator::getD3DUsage(mUsage), NULL, D3DPOOL_MANAGED,
+		D3DFORMAT indxFmt;
+		if (type == IT_16Bit)
+		{
+			indxFmt = D3DFMT_INDEX16;
+		}
+		else
+		{
+			indxFmt = D3DFMT_INDEX32;
+		}
+		dev->CreateIndexBuffer(mByteSize, D3D9Translator::getD3DUsage(mUsage), indxFmt, D3DPOOL_MANAGED,
 			&mIndxBuf, NULL);
 	}
 
@@ -55,7 +64,7 @@ namespace Duel
 		return mIndxBuf;
 	}
 
-	void* D3D9IndexBuffer::lockImpl( size_t offset, size_t size, HardwareBufferLock locklockType )
+	void* D3D9IndexBuffer::lockImpl( size_t offset, size_t size, HardwareBufferLock lockType )
 	{
 		if (mbIsLocked)
 		{

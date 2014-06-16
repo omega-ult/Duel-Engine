@@ -484,7 +484,7 @@ namespace Duel
 		}
 		else if ( "AlphaDstFactor" == name )
 		{
-			blendState.alphaDstBlend = getSceneBlendFactor(val);
+			blendState.alphaDstFactor = getSceneBlendFactor(val);
 		}
 		else if ( "ColorWriteMask" == name)
 		{
@@ -1187,7 +1187,7 @@ namespace Duel
 							stateNode->append_attribute(doc.allocate_attribute("name","AlphaSrcFactor"));
 							rtbsNode->append_node(stateNode);
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].alphaDstBlend).c_str());
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].alphaDstFactor).c_str());
 							stateNode->append_attribute(doc.allocate_attribute("name","AlphaDstFactor"));
 							rtbsNode->append_node(stateNode);
 

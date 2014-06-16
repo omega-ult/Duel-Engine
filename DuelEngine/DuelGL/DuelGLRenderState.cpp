@@ -74,7 +74,7 @@ namespace Duel
 			mGLColorSrcBlend[i]		= GLTranslator::getGLBlendFactor(state.targetStates[i].colorSrcFactor);
 			mGLColorDstBlend[i]		= GLTranslator::getGLBlendFactor(state.targetStates[i].colorDstFactor);
 			mGLAlphaSrcBlend[i]		= GLTranslator::getGLBlendFactor(state.targetStates[i].alphaSrcFactor);
-			mGLAlphaDstBlend[i]		= GLTranslator::getGLBlendFactor(state.targetStates[i].alphaDstBlend);
+			mGLAlphaDstBlend[i]		= GLTranslator::getGLBlendFactor(state.targetStates[i].alphaDstFactor);
 		}
 		mState = state;
 	}

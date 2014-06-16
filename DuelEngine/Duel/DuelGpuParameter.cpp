@@ -83,6 +83,11 @@ namespace Duel
 			constDef.physicalIndex = mFloatConstants.size();
 			mFloatConstants.insert(mFloatConstants.end(), constDef.arraySize*constDef.elementSize, 0.0f);
 		}
+		else if (constDef.isBool())
+		{
+			constDef.physicalIndex = mBoolConstants.size();
+			mBoolConstants.insert(mBoolConstants.end(), constDef.arraySize*constDef.elementSize, 0);
+		}
 		
 		AutoConstantMap::const_iterator i = AutoConstantDictionary.find(name);
 		if (i != AutoConstantDictionary.end())
@@ -191,6 +196,28 @@ namespace Duel
 		{
 			mIntConstants[i->second.physicalIndex] = val;
 		}
+		else if (i->second.isBool())
+		{
+			mBoolConstants[i->second.physicalIndex] = val;
+		}
+	}
+
+	void DGpuParameters::setValue( const DString& name, bool val )
+	{
+		GpuConstantMap::iterator i = mAutoConstantsMap.find(name);
+		// find auto constants first.
+		if (i == mAutoConstantsMap.end())
+		{
+			i = mConstantsMap.find(name);
+			if (i == mConstantsMap.end())
+			{
+				return;
+			}
+		}
+		if (i->second.isBool())
+		{
+			mBoolConstants[i->second.physicalIndex] = val ? 1 : 0;
+		}
 	}
 
 	void DGpuParameters::setValue( const DString& name, const DVector4& vec )
@@ -277,6 +304,11 @@ namespace Duel
 		{
 			assert(i->second.physicalIndex + i->second.elementSize * count <= mIntConstants.size());
 			memcpy(&mIntConstants[i->second.physicalIndex], val, count * sizeof(int32));
+		}
+		else if (i->second.isBool())
+		{
+			assert(i->second.physicalIndex + i->second.elementSize * count <= mBoolConstants.size());
+			memcpy(&mBoolConstants[i->second.physicalIndex], val, count * sizeof(int32));
 		}
 	}
 
@@ -426,6 +458,12 @@ namespace Duel
 		return &mIntConstants[physicalIndex];
 	}
 
+	int32* DGpuParameters::getBoolValuePtr( uint32 physicalIndex )
+	{
+		return &mBoolConstants[physicalIndex];
+	}
+
+
 	uint64 DGpuParameters::getAutoParameterMask()
 	{
 		return mAutoParamMask;
@@ -456,13 +494,13 @@ namespace Duel
 		return i->second;
 	}
 
-
 	size_t GpuConstantDefinition::getElementByteSize( GpuConstantType ctype, bool padToMultiplesOf4 )
 	{
 		if (padToMultiplesOf4)
 		{
 			switch(ctype)
 			{
+			case GCT_Bool:
 			case GCT_Float1:
 			case GCT_Int1:
 			case GCT_Texture1D:
@@ -496,6 +534,7 @@ namespace Duel
 		{
 			switch(ctype)
 			{
+			case GCT_Bool:
 			case GCT_Float1:
 			case GCT_Int1:
 			case GCT_Texture1D:
@@ -611,6 +650,16 @@ namespace Duel
 		return false;
 	}
 
+	bool GpuConstantDefinition::isBool( GpuConstantType c )
+	{
+		return c == GCT_Bool;
+	}
+
+	bool GpuConstantDefinition::isBool()
+	{
+		return isBool(constType);
+	}
+
 	bool GpuConstantDefinition::isMatrix() const
 	{
 		return isMatrix(constType);
@@ -620,6 +669,7 @@ namespace Duel
 	{
 		switch(c)
 		{
+		case GCT_Bool:
 		case GCT_Int1:
 		case GCT_Int2:
 		case GCT_Int3:

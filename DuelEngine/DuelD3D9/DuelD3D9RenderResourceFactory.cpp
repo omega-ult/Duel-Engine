@@ -72,7 +72,9 @@ namespace Duel
 
 	Duel::DShaderObjectPtr D3D9RenderResourceFactory::createShaderObject( DRenderPass* pass )
 	{
-		return DShaderObjectPtr(new D3D9ShaderObject());
+		DShaderObjectPtr ret = DShaderObjectPtr(new D3D9ShaderObject(this));
+		ret->build(pass);
+		return ret;
 	}
 
 	DRenderWindow* D3D9RenderResourceFactory::createRenderWindow( const DString& name )

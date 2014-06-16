@@ -29,11 +29,23 @@ namespace Duel
 		// set the program type, it is neccessary when compiling happened.
 		void				setProgramType(GpuProgramType type);
 		GpuProgramType		getProgramType();
+
+		virtual void		setPreProcessor(const DString& pp);
+		const DString&		getPreProcessor() const;
+
+		virtual void		setProfile(const DString& profile);
+		const DString&		getProfile() const;
+
+		virtual void		setEntry(const DString& entry);
+		const DString&		getEntry() const;
+
 		// Did this program encounter a compile error?
 		virtual bool			hasCompileError(void) const;
 
 		// Reset a compile error if it occurred, allowing the load to be retried
 		virtual void			resetCompileError(void);
+
+		virtual	const DString&	getCompileError() const = 0;
 
 		// get the language of the DGpuProgram, for example hlsl cg.
 		virtual	const DString&	getLanguage(void) const = 0;
@@ -58,6 +70,10 @@ namespace Duel
 		bool			mbUseFile;
 		// the string code of file, can be used for compile.
 		DString			mSourceCode;
+
+		DString			mPreProcessor;
+		DString			mProfile;
+		DString			mEntry;
 
 		// if we failed to compile, this flag should be true.
 		bool			mbFailed;

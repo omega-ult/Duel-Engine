@@ -215,7 +215,7 @@ namespace Duel
 		// alpha blend  default as alpha blending =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 		BlendOperation		alphaBlendOpeartion;	// default: B0_Add
 		BlendFactor			alphaSrcFactor;			// default: BF_One
-		BlendFactor			alphaDstBlend;			// default: BF_InvSrcAlpha
+		BlendFactor			alphaDstFactor;			// default: BF_InvSrcAlpha
 		uint8				colorWriteMask;			// default:	CWM_All
 
 	};

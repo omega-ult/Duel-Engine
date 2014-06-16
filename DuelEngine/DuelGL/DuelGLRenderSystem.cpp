@@ -281,7 +281,7 @@ namespace Duel
 
 			mCurBlendState.targetStates[i].alphaBlendOpeartion = BO_Sub;
 			mCurBlendState.targetStates[i].alphaSrcFactor = BF_Zero;
-			mCurBlendState.targetStates[i].alphaDstBlend = BF_One;
+			mCurBlendState.targetStates[i].alphaDstFactor = BF_One;
 			mCurBlendState.targetStates[i].colorWriteMask = 0;
 		}
 		mCurBlendFactor = DColor::WHITE;
@@ -492,7 +492,7 @@ namespace Duel
 			if ((stateObj->mState.targetStates[0].colorSrcFactor != mCurBlendState.targetStates[0].colorSrcFactor)
 				|| (stateObj->mState.targetStates[0].colorDstFactor != mCurBlendState.targetStates[0].colorDstFactor)
 				|| (stateObj->mState.targetStates[0].alphaSrcFactor != mCurBlendState.targetStates[0].alphaSrcFactor)
-				|| (stateObj->mState.targetStates[0].alphaDstBlend != mCurBlendState.targetStates[0].alphaDstBlend))
+				|| (stateObj->mState.targetStates[0].alphaDstFactor != mCurBlendState.targetStates[0].alphaDstFactor))
 			{
 				glBlendFuncSeparate(stateObj->mGLColorSrcBlend[0], stateObj->mGLColorDstBlend[0], 
 					stateObj->mGLAlphaSrcBlend[0], stateObj->mGLAlphaDstBlend[0]);
@@ -519,7 +519,7 @@ namespace Duel
 				if ((stateObj->mState.targetStates[i].colorSrcFactor != mCurBlendState.targetStates[i].colorSrcFactor)
 					|| (stateObj->mState.targetStates[i].colorDstFactor != mCurBlendState.targetStates[i].colorDstFactor)
 					|| (stateObj->mState.targetStates[i].alphaSrcFactor != mCurBlendState.targetStates[i].alphaSrcFactor)
-					|| (stateObj->mState.targetStates[i].alphaDstBlend != mCurBlendState.targetStates[i].alphaDstBlend))
+					|| (stateObj->mState.targetStates[i].alphaDstFactor != mCurBlendState.targetStates[i].alphaDstFactor))
 				{
 					glBlendFuncSeparatei(i,
 						stateObj->mGLColorSrcBlend[i], stateObj->mGLColorDstBlend[i], 

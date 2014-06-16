@@ -34,12 +34,29 @@ namespace Duel
 	{
 		DUEL_DECLARE_RTTI(D3D9ShaderObject)
 	public:
-		D3D9ShaderObject();
+		D3D9ShaderObject(D3D9RenderResourceFactory* fact);
+
+
+		// we assert the vertex shader and pixel shader are all loaded.
+		void	build(DRenderPass* pass);
 
 		virtual DGpuParameters* getVertexProgramParameters();
 
 		virtual DGpuParameters* getPixelProgramParameters();
 
+	protected:		
+		void	processParam( DGpuParameters& param, ID3DXConstantTable* constTable,
+			D3DXHANDLE parent, DString prefix, uint32 index );
+
+
+		D3D9RenderResourceFactory*	mCreator;
+		IDirect3DVertexShader9*	mVShader;
+		IDirect3DPixelShader9*	mPShader;
+		ID3DXConstantTable*		mVSConstTable;
+		ID3DXConstantTable*		mPSConstTable;
+
+		DGpuParameters		mVSParameter;
+		DGpuParameters		mPSParameter;
 	};
 }
 

@@ -12,6 +12,7 @@ namespace Duel
 		//MPT_Bool,
 		MPT_Color,
 		MPT_Texture,
+		MPT_Bool,
 		MPT_Int1,
 		MPT_Int2,
 		MPT_Int3,
@@ -52,6 +53,8 @@ namespace Duel
 		// whether this parameter is open to user.
 		bool					bUserAccess;
 
+		bool					isBool();
+		static bool				isBool(MaterialParameterType type);
 		bool					isInt();
 		static bool				isInt(MaterialParameterType type);
 		// 		bool					isBool();
@@ -95,13 +98,17 @@ namespace Duel
 		void	removeParameter(const DString& name);
 		void	removeAllParameters();
 
+		// set a bool constant to the program,
+		void	setValue(const DString& name, bool val);
 		// set a floating constant to the material,
 		void	setValue(const DString& name, float val);
 		// set a float array
 		void	setValue(const DString& name, float* val, uint32 count);
 		// set an int constant to the material,
+		// this function also works for bool value.
 		void	setValue(const DString& name, int val);
 		// set an int array.
+		// this function also works for bool value.
 		void	setValue(const DString& name, int* val, uint32 count);
 		// sets a DVector4 costant to the material.
 		void	setValue(const DString& name, const DVector4& vec);
@@ -140,6 +147,7 @@ namespace Duel
 
 		float*	getFloatValuePtr(uint32 physicalIndex);
 		int32*	getIntValuePtr(uint32 physicalIndex);
+		int32*	getBoolValuePtr(uint32 physicalIndex);
 		// the constant cache allow you to speed up texture binding, 
 		// when setting the texture value, this instance will query the resource manager
 		// whether the resource is loaded, if so, the current loaded texture
@@ -159,9 +167,11 @@ namespace Duel
 		ParameterMap	mParamMap;
 		typedef	std::vector<float>	FloatConstantList;
 		typedef	std::vector<int32>	IntConstantList;
+		typedef std::vector<int32>	BoolConstantList;
 		typedef std::map<DString, TextureConstantCache>	TextureConstantCacheMap;
 		FloatConstantList	mFloatConstants;
 		IntConstantList		mIntConstants;
+		BoolConstantList	mBoolConstants;
 		TextureConstantCacheMap	mTextureMap;
 
 	};   

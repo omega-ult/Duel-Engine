@@ -29,6 +29,37 @@ namespace Duel
 		return mProgramType;
 	}
 
+	void DGpuProgram::setPreProcessor( const DString& pp )
+	{
+		mPreProcessor = pp;
+	}
+
+	const DString& DGpuProgram::getPreProcessor() const
+	{
+		return mPreProcessor;
+	}
+
+
+	void DGpuProgram::setProfile( const DString& profile )
+	{
+		mProfile = profile;
+	}
+
+	const DString& DGpuProgram::getProfile() const
+	{
+		return mProfile;
+	}
+
+	void DGpuProgram::setEntry( const DString& entry )
+	{
+		mEntry = entry;
+	}
+
+	const DString& DGpuProgram::getEntry() const
+	{
+		return mEntry;
+	}
+
 	bool DGpuProgram::hasCompileError( void ) const
 	{
 		return mbFailed;
@@ -67,6 +98,5 @@ namespace Duel
 	{
 		mSourceCode.clear();
 	}
-
 
 }

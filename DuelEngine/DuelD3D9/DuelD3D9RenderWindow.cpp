@@ -140,9 +140,23 @@ namespace Duel
 		}\
 		";
 		ID3DXBuffer* psCodeBuf;
+		//////////////////////////////////////////////////////////////////////////
+		//		ID3DXConstantTable* constTable = NULL;
+		//		D3DXCompileShader(psCode.c_str(), vsCode.length(),NULL,NULL,"main","ps_2_0",0, &psCodeBuf, NULL, &constTable);
+		//////////////////////////////////////////////////////////////////////////
 		D3DXCompileShader(psCode.c_str(), vsCode.length(),NULL,NULL,"main","ps_2_0",0, &psCodeBuf, NULL, NULL);
 		hr = device->CreatePixelShader(static_cast<DWORD*>(psCodeBuf->GetBufferPointer()), &mPShader);
 		psCodeBuf->Release();
+
+		// debug
+// 		D3DXCONSTANT_DESC desc;
+// 		uint32 paramCount;
+// 		constTable->GetConstantDesc(NULL, &desc, &paramCount);
+// 		for (uint32 i = 0; i < paramCount; ++i)
+// 		{
+// 			D3DXHANDLE hConstant = constTable->GetConstant(NULL, i);
+// 			constTable->GetConstantDesc(hConstant, &desc, &paramCount);
+// 		}
 
 #endif
 		resize(mWidth, mHeight);

@@ -33,7 +33,6 @@ namespace Duel
 
 	void GLGpuProgram::setProfile( const DString& profile )
 	{
-		mProfile = profile;
 		if (mProfile == "GL_VERTEX_SHADER")
 		{
 			mProgramType = GPT_Vertex;
@@ -48,24 +47,12 @@ namespace Duel
 				"Unknown shader type: " + mProfile,
 				"Duel::GLGpuProgram::setProfile")
 		}
+		DGpuProgram::setProfile(profile);
 	}
 
-	const DString& GLGpuProgram::getProfile() const
-	{
-		return mProfile;
-	}
 
-	void GLGpuProgram::setEntry( const DString& entry )
-	{
-		mEntry = entry;
-	}
-
-	const DString& GLGpuProgram::getEntry() const
-	{
-		return mEntry;
-	}
-
-	const DString& GLGpuProgram::getCompilationError()
+	
+	const DString& GLGpuProgram::getCompileError() const
 	{
 		return mCompileError;
 	}

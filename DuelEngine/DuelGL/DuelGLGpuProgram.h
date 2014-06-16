@@ -17,15 +17,12 @@ namespace Duel
 		// override : DGpuProgram
 		virtual const DString& getLanguage( void ) const;
 
+		virtual const DString& getCompileError() const;
 
-		void			setProfile(const DString& profile);
-		const DString&	getProfile() const;
+		virtual void		setProfile(const DString& profile);
 
-		void			setEntry(const DString& entry);
-		const DString&	getEntry() const;
-
-		const DString&	getCompilationError();
-
+		// override : DGpuProgram
+		virtual size_t	calculateSize();
 		// public for GLShaderObject
 		INTERNAL void	setCompileErrorFlag(bool flag) { mbFailed = flag; }
 		INTERNAL void	setCompileError(const DString& err) { mCompileError = err; }
@@ -35,11 +32,9 @@ namespace Duel
 		// to the GLShaderObject::build.
 		// override : DGpuProgram
 		virtual void	loadFromSource();
-		// override : DGpuProgram
-		virtual size_t	calculateSize();
+
+
 		static DString		msLanguage;
-		DString				mProfile;
-		DString				mEntry;
 
 		DString				mCompileError;
 

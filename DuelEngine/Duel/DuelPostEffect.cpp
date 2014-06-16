@@ -14,6 +14,7 @@ namespace Duel
 	std::map<PostEffectParameterType, DString> initParamNameMap()
 	{
 		std::map<PostEffectParameterType, DString> ret;
+		ret[PEPT_Bool] = "bool";
 		ret[PEPT_Color] = "color";
 		ret[PEPT_Texture] = "texture";
 		ret[PEPT_Int1] = "int1";
@@ -28,6 +29,17 @@ namespace Duel
 	}
 
 	std::map<PostEffectParameterType, DString> DPostEffectParameter::msParamNameMap = initParamNameMap();
+
+	bool DPostEffectParameter::isBool()
+	{
+		return isBool(paramType);
+	}
+
+	bool DPostEffectParameter::isBool( PostEffectParameterType type )
+	{
+		return type == PEPT_Bool;
+	}
+
 
 	bool DPostEffectParameter::isInt()
 	{
@@ -91,6 +103,7 @@ namespace Duel
 		{
 		case Duel::PEPT_Texture:
 			return 0;
+		case Duel::PEPT_Bool:
 		case Duel::PEPT_Int1:
 		case Duel::PEPT_Float1:
 			return 1;
@@ -125,7 +138,6 @@ namespace Duel
 		return DStringTool::BLANK;
 	}
 
-
 	DPostEffectInstance::DPostEffectInstance( DPostEffect* parent ) :
 		mParent(parent)
 	{
@@ -153,6 +165,11 @@ namespace Duel
 			param.physicalIndex = mIntConstants.size();
 			mIntConstants.insert(mIntConstants.end(), param.elemSize, 0);
 		}
+		else if (param.isBool())
+		{
+			param.physicalIndex = mBoolConstants.size();
+			mBoolConstants.insert(mBoolConstants.end(), param.elemSize, 0);
+		}
 		mParamMap[name] = param;
 	}
 
@@ -169,6 +186,15 @@ namespace Duel
 	void DPostEffectInstance::removeAllParameters()
 	{
 		mParamMap.clear();
+	}
+
+	void DPostEffectInstance::setValue( const DString& name, bool val )
+	{
+		ParameterMap::iterator i = mParamMap.find(name);
+		if (i != mParamMap.end())
+		{
+			mBoolConstants[i->second.physicalIndex] = val ? 1 : 0;
+		}
 	}
 
 	void DPostEffectInstance::setValue( const DString& name, float val )
@@ -199,7 +225,14 @@ namespace Duel
 		ParameterMap::iterator i = mParamMap.find(name);
 		if (i != mParamMap.end())
 		{
-			mIntConstants[i->second.physicalIndex] = val;
+			if (i->second.isInt())
+			{
+				mIntConstants[i->second.physicalIndex] = val;
+			}
+			if (i->second.isBool())
+			{
+				mBoolConstants[i->second.physicalIndex] = val;
+			}
 		}
 	}
 
@@ -210,6 +243,7 @@ namespace Duel
 		{
 			assert(i->second.physicalIndex + i->second.elemSize * count <= mIntConstants.size());
 			memcpy(&mIntConstants[i->second.physicalIndex], val, count * sizeof(int));
+
 		}
 	}
 
@@ -283,6 +317,12 @@ namespace Duel
 		return &mIntConstants[physicalIndex];
 	}
 
+	int32* DPostEffectInstance::getBoolValuePtr( uint32 physicalIndex )
+	{
+		return &mBoolConstants[physicalIndex];
+	}
+
+
 	DPostEffectInstance::TextureConstantCache DPostEffectInstance::getTextureValue( const DString& paramName )
 	{
 		TextureConstantMap::iterator i = mTextureMap.find(paramName);
@@ -300,7 +340,6 @@ namespace Duel
 			*inst = *this;
 		}
 	}
-
 
 	DPostEffect::DPostEffect( const DString& name ) :
 		mName(name)
@@ -389,6 +428,10 @@ namespace Duel
 			{
 				gpuParam->setValue(p.targetGpuParam, inst->getIntValuePtr(p.physicalIndex), p.elemSize);
 			}
+			else if (p.isBool())
+			{
+				gpuParam->setValue(p.targetGpuParam, inst->getBoolValuePtr(p.physicalIndex), p.elemSize);
+			}
 			else if (p.isTexture())
 			{
 				DPostEffectInstance::TextureConstantCache c = inst->getTextureValue(p.paramName);
@@ -409,6 +452,10 @@ namespace Duel
 			else if (p.isInt())
 			{
 				gpuParam->setValue(p.targetGpuParam, inst->getIntValuePtr(p.physicalIndex), p.elemSize);
+			}
+			else if (p.isBool())
+			{
+				gpuParam->setValue(p.targetGpuParam, inst->getBoolValuePtr(p.physicalIndex), p.elemSize);
 			}
 			else if (p.isTexture())
 			{

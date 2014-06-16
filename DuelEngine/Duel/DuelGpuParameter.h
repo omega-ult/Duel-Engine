@@ -34,6 +34,7 @@ namespace Duel
 		GCT_Int2 = 21,
 		GCT_Int3 = 22,
 		GCT_Int4 = 23,
+		GCT_Bool = 24,
 		GCT_Unknown = 99
 	};
 
@@ -71,6 +72,8 @@ namespace Duel
 		uint32	slot;
 
 		//---------------------
+		static bool	isBool(GpuConstantType c);
+		bool		isBool();
 		bool		isFloat() const;
 
 		static bool	isFloat(GpuConstantType c);
@@ -147,7 +150,10 @@ namespace Duel
 		// set a floating constant to the program,
 		virtual void	setValue(const DString& name, float val);
 		// set an int constant to the program,
+		// this function also works for Bool value type.
 		virtual void	setValue(const DString& name, int val);
+		// set a bool constant to the program,
+		virtual void	setValue(const DString& name, bool val);
 		// sets a DVector4 costant to the program.
 		virtual void	setValue(const DString& name, const DVector4& vec);
 		// sets a DMatrix4 costant to the program.
@@ -178,6 +184,7 @@ namespace Duel
 		// set a floating array constant to the program,
 		virtual void	setValue(const DString& name, float* val, size_t count);		
 		// set a int array constant to the program,
+		// this function also works for Bool type.
 		virtual void	setValue(const DString& name, int* val, size_t count);
 		// set a DMatrix4 array costant to the program.
 		virtual void	setValue(const DString& name, DMatrix4* mat, size_t count);
@@ -194,7 +201,10 @@ namespace Duel
 		// get the float value pointer using specified index, used in binding constants in graphic card.
 		virtual float*	getFloatValuePtr(uint32 physicalIndex);
 		// get the int value pointer using specified index, used in binding constants in graphic card.
-		virtual int*	getIntValuePtr(uint32 physicalIndex);
+		virtual int32*	getIntValuePtr(uint32 physicalIndex);
+		// get the bool value pointer using specified index, notice that 0 means false, non-zero means true.
+		virtual int32*	getBoolValuePtr(uint32 physicalIndex);
+
 		typedef	std::map<DString, DGpuTextureConstantPtr>	TextureConstantMap;
 		typedef	MapIterator<TextureConstantMap>	TextureConstantIterator;
 		TextureConstantIterator	getTextureConstantIterator() { return TextureConstantIterator(mTexConstants.begin(), mTexConstants.end()); }
@@ -224,8 +234,10 @@ namespace Duel
 		// video card.
 		typedef	std::vector<float>	FloatConstantList;
 		typedef	std::vector<int32>	IntConstantList;
+		typedef std::vector<int32>	BoolConstantList;
 		FloatConstantList	mFloatConstants;
 		IntConstantList		mIntConstants;
+		BoolConstantList	mBoolConstants;
 
 		// store textures.
 		TextureConstantMap	mTexConstants;

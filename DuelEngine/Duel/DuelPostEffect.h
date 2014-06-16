@@ -12,6 +12,7 @@ namespace Duel
 	{
 		PEPT_Color,
 		PEPT_Texture,
+		PEPT_Bool,
 		PEPT_Int1,
 		PEPT_Int2,
 		PEPT_Int3,
@@ -42,6 +43,8 @@ namespace Duel
 		// whether this parameter is open to user.
 		bool					bUserAccess;
 
+		bool					isBool();
+		static bool				isBool(PostEffectParameterType type);
 		bool					isInt();
 		static bool				isInt(PostEffectParameterType type);
 		// 		bool					isBool();
@@ -80,11 +83,14 @@ namespace Duel
 		void	removeParameter(const DString& name);
 		void	removeAllParameters();
 
+		// set a bool constant to the program,
+		void	setValue(const DString& name, bool val);
 		// set a floating constant to the material,
 		void	setValue(const DString& name, float val);
 		// set a float array, for PEPT_Float[n] type, count should not bigger than 4;
 		void	setValue(const DString& name, float* val, uint32 count);
 		// set an int constant to the material,
+		// this function also works for bool value.
 		void	setValue(const DString& name, int val);
 		// set an int array, for PEPT_Int[n] type, count should not bigger than 4;
 		void	setValue(const DString& name, int* val, uint32 count);
@@ -105,6 +111,7 @@ namespace Duel
 
 		float*	getFloatValuePtr(uint32 physicalIndex);
 		int32*	getIntValuePtr(uint32 physicalIndex);
+		int32*	getBoolValuePtr(uint32 physicalIndex);
 		TextureConstantCache	getTextureValue(const DString& paramName);
 		
 		// copy the parameter definitions and the values to another instance.
@@ -116,9 +123,11 @@ namespace Duel
 		ParameterMap		mParamMap;
 		typedef	std::vector<float>	FloatConstantList;
 		typedef	std::vector<int32>	IntConstantList;
+		typedef std::vector<int32>	BoolConstantList;
 		typedef std::map<DString, TextureConstantCache>	TextureConstantMap;
 		FloatConstantList	mFloatConstants;
 		IntConstantList		mIntConstants;
+		BoolConstantList	mBoolConstants;
 		TextureConstantMap	mTextureMap;
 	};
 
