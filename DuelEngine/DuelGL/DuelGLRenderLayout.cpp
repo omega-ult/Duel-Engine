@@ -79,7 +79,7 @@ namespace Duel
 			int32 smIndex = (int32)sm;
 			if (sm == VES_TexCoord)
 			{
-				smIndex += vd.getIndex();
+				smIndex += vd.getSemanticIndex();
 			}
 			GLuint	size = 0;
 			GLenum	type = 0;

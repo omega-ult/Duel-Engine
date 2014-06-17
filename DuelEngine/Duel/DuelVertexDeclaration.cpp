@@ -14,7 +14,7 @@ namespace Duel
 		mOffset(offset),
 		mType(type),
 		mSemantic(semantic),
-		mIndex(index),
+		mSemanticIndex(index),
 		mBufferType(bufType),
 		mStepRate(instanceStepRate)
 	{
@@ -75,7 +75,7 @@ namespace Duel
 	bool DVertexElement::operator==( const DVertexElement& ve ) const
 	{
 		if (mType != ve.mType ||
-			mIndex != ve.mIndex ||
+			mSemanticIndex != ve.mSemanticIndex ||
 			mOffset != ve.mOffset ||
 			mSemantic != ve.mSemantic ||
 			mSource != ve.mSource)
@@ -109,7 +109,7 @@ namespace Duel
 			return addElement(source, offset, type, semantic, index, bufType, instanceStepRate);
 		}
 
-		VertexElements::iterator i = mVertexElementList.begin();
+		VertexElementList::iterator i = mVertexElementList.begin();
 		for ( uint32 n = 0; n < atPosition; ++n)
 		{
 			++i;
@@ -124,7 +124,7 @@ namespace Duel
 	{
 		if(elem_index < mVertexElementList.size())
 		{
-			VertexElements::iterator i = mVertexElementList.begin();
+			VertexElementList::iterator i = mVertexElementList.begin();
 			for (uint32 n = 0; n < elem_index; ++n)
 			{
 				++i;
@@ -156,7 +156,7 @@ namespace Duel
 			else if (e1.getSemantic() == e2.getSemantic())
 			{
 				// Use index to sort
-				if (e1.getIndex() < e2.getIndex())
+				if (e1.getSemanticIndex() < e2.getSemanticIndex())
 				{
 					return true;
 				}
@@ -172,7 +172,7 @@ namespace Duel
 
 	size_t DVertexDeclaration::getVertexSize( uint16 source )
 	{
-		VertexElements::const_iterator i, iend;
+		VertexElementList::const_iterator i, iend;
 		iend = mVertexElementList.end();
 		size_t sz = 0;
 

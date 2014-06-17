@@ -207,7 +207,7 @@ namespace Duel
 		@remarks
 		Provide a container to initialise.
 		*/
-		explicit ConstListIterator ( const T& c )
+		explicit ConstListIterator ( T& c )
 			: VectorIteratorWrapper<T,  typename T::const_iterator> (c.begin() , c.end() )
 		{
 		}
@@ -322,8 +322,8 @@ namespace Duel
 		@remarks
 		Provide a container to initialise.
 		*/
-		explicit ConstVectorIterator ( const T& c )
-			: VectorIteratorWrapper<T,  typename T::const_iterator> (c.begin() , c.end() )
+		explicit ConstVectorIterator ( T& c )
+			: VectorIteratorWrapper<T,  typename T::const_iterator> (c.cbegin() , c.cend() )
 		{
 		}
 	};
@@ -413,7 +413,7 @@ namespace Duel
 		Provide a container to initialise.
 		*/
 		explicit ConstSetIterator( T& c )
-			: SetIteratorWrapper<T,  typename T::const_iterator> ( c.begin(), c.end() )
+			: SetIteratorWrapper<T,  typename T::const_iterator> ( c.cbegin(), c.cend() )
 		{
 		}
 	};

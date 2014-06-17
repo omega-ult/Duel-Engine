@@ -77,7 +77,7 @@ namespace Duel
 
 		/// Constructor, should not be called directly, instead, call DVertexDeclaration::addElement
 		DVertexElement(uint16 source, size_t offset, VertexElementType type,
-			VertexElementSemantic semantic, uint16 index = 0, 
+			VertexElementSemantic semantic, uint16 semanticIndex = 0, 
 			VertexBufferType bufType = VBT_Geometry, uint32 instanceStepRate = 0);
 
 		/// Gets the vertex buffer index from where this element draws it's values
@@ -89,7 +89,7 @@ namespace Duel
 		/// Gets the meaning of this element
 		VertexElementSemantic	getSemantic(void) const { return mSemantic; }
 		/// Gets the index of this element, only applicable for repeating elements
-		uint16			getIndex(void) const { return mIndex; }
+		uint16			getSemanticIndex(void) const { return mSemanticIndex; }
 		/// Gets the size of this element in bytes
 		size_t			getSize(void) const;
 		// buffer type for multistream rendering.
@@ -112,7 +112,7 @@ namespace Duel
 		/// The meaning of the element
 		VertexElementSemantic mSemantic;
 		/// Index of the item, only applicable for some elements like texture coords
-		uint16 mIndex;
+		uint16 mSemanticIndex;
 		// buffer type binded in pipeline.
 		VertexBufferType mBufferType;
 		// step rate for used in multistream.
@@ -186,13 +186,12 @@ namespace Duel
 		size_t			getElementCount(void) { return mVertexElementList.size(); }
 		
 
-		typedef std::list<DVertexElement>	VertexElements;
-		typedef ListIterator<VertexElements>	VertexElementIterator;
-		VertexElementIterator	getVertexElementIterator() { return VertexElementIterator(mVertexElementList.begin(), mVertexElementList.end()); }
-
+		typedef std::list<DVertexElement>	VertexElementList;
+		typedef ListIterator<VertexElementList>	VertexElementIterator;
+		VertexElementIterator	getVertexElementIterator() { return VertexElementIterator(mVertexElementList); }
 
 	protected:
-		VertexElements	mVertexElementList;
+		VertexElementList	mVertexElementList;
 	};
 }
 #endif
