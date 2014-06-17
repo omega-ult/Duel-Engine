@@ -33,8 +33,8 @@ namespace Duel
 
 	void D3D9Plugin::install()
 	{
-		mRenderSystem = new D3D9RenderSystem();
 		mRenderResFactory = new D3D9RenderResourceFactory();
+		mRenderSystem = new D3D9RenderSystem(mRenderResFactory);
 		mGpuProgramManager = new D3D9GpuProgramManger();
 		mhbManager = new DRenderResourceManager(mRenderResFactory);
 		mTextureManager = new D3D9TextureManager(mRenderResFactory);
@@ -43,6 +43,7 @@ namespace Duel
 	void D3D9Plugin::initialize()
 	{
 		mRenderResFactory->initialize();
+		mRenderSystem->initialize();
 		DCore::getSingleton().setRenderSystem(mRenderSystem);
 		DResourceGroupManager::getSingletonPtr()->registerManager(mGpuProgramManager);
 		DResourceGroupManager::getSingletonPtr()->registerManager(mTextureManager);
@@ -50,6 +51,7 @@ namespace Duel
 
 	void D3D9Plugin::shutdown()
 	{
+		mRenderSystem->shutdown();
 		if (DCore::getSingleton().getRenderSystem() == mRenderSystem)
 		{
 			DCore::getSingleton().setRenderSystem(NULL);

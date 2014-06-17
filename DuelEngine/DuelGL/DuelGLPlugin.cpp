@@ -37,6 +37,7 @@ namespace Duel
 	void GLPlugin::initialize()
 	{
 		mRenderResFactory->initialize();
+		mRenderSystem->initialize();
 		DCore::getSingleton().setRenderSystem(mRenderSystem);
 		DResourceGroupManager::getSingletonPtr()->registerManager(mGpuProgramManager);
 		DResourceGroupManager::getSingletonPtr()->registerManager(mTextureManager);
@@ -45,6 +46,7 @@ namespace Duel
 
 	void GLPlugin::shutdown()
 	{
+		mRenderSystem->shutdown();
 		if (DCore::getSingleton().getRenderSystem() == mRenderSystem)
 		{
 			DCore::getSingleton().setRenderSystem(NULL);

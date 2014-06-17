@@ -32,7 +32,7 @@ namespace Duel
 		D3D9DepthStencilStateObject(const DDepthStencilState& state);
 		virtual void getDepthStencilState( DDepthStencilState& outState );
 	
-		DWORD		D3DDepthComparison;
+		D3DCMPFUNC		D3DDepthComparison;
 
 		D3DCMPFUNC		D3DFrontStencilComparison;
 		D3DSTENCILOP	D3DFrontStencilFail;

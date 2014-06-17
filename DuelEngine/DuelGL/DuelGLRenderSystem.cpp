@@ -234,13 +234,6 @@ namespace Duel
 
 	void GLRenderSystem::initialize()
 	{
-		InitializationOptions	op;
-		initialize(op);
-
-	}
-
-	void GLRenderSystem::initialize( const InitializationOptions& options )
-	{
 
 		// initialize render states
 		// with an non-default value to force it to init with default value.
@@ -249,7 +242,6 @@ namespace Duel
 		mCurRasState.cullingMode = CM_None;
 		mCurRasState.polygonOffsetFactor = 1.0f;
 		mCurRasState.polygonOffsetUnit = 1.0f;
-		mCurRasState.depthClipEnable = false;
 		mCurRasState.scissorEnable = true;
 		mCurRasState.multisampleEnable = false;
 

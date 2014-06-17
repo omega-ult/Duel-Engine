@@ -17,7 +17,6 @@ namespace Duel
 		cullingMode(CM_None),
 		polygonOffsetFactor(0.0f),
 		polygonOffsetUnit(0.0f),
-		depthClipEnable(true),
 		scissorEnable(false),
 		multisampleEnable(true)
 	{
@@ -27,7 +26,6 @@ namespace Duel
 	bool DRasterizerState::operator==( const DRasterizerState& rs )
 	{
 		return (rs.cullingMode == cullingMode &&
-				rs.depthClipEnable	== depthClipEnable &&
 				rs.multisampleEnable == multisampleEnable &&
 				rs.polygonMode == polygonMode &&
 				rs.polygonOffsetFactor == polygonOffsetFactor &&

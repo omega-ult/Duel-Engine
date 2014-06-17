@@ -173,9 +173,6 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 
 		mEngineCore = new Duel::DCore("coreConfig.xml");
-		Duel::DRenderSystem* rSys = mEngineCore->getRenderSystem();
-		Duel::DRenderSystem::InitializationOptions initOp;
-		rSys->initialize(initOp);
 		Duel::RenderWindowSetting wndSetting;
 		wndSetting.left = 200;
 		wndSetting.top = 100;

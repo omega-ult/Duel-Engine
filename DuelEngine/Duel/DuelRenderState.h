@@ -137,8 +137,6 @@ namespace Duel
 		// solving z-fighting-=-=-=-=-=-=-=-=--=-=-=-=-=-
 		float			polygonOffsetFactor;	// default:0.0f
 		float			polygonOffsetUnit;		// default:0.0f
-		// enable/disable depth clip=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-		bool			depthClipEnable;		// default: true
 		// enable/disable scissor test=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 		bool			scissorEnable;			// default: false
 		// enable/disable multisample=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

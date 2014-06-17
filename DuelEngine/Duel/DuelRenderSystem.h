@@ -33,9 +33,6 @@ namespace Duel {
 	{
 	DUEL_DECLARE_RTTI(DRenderSystem)
 	public:
-		// use this struct to store necessary information to initialize the render system.
-		typedef	std::map<DString, void*>	InitializationOptions;
-
 		DRenderSystem();
 		virtual ~DRenderSystem();
 		
@@ -45,7 +42,7 @@ namespace Duel {
 		// this function give the rendersystem the ability of adapting different
 		// application environment, for example, add <"WindowHandle", HWND*> into 
 		// the options to intialize devices in Windows platform.
-		virtual	void			initialize(const InitializationOptions& options) {}
+		virtual	void			initialize() = 0;
 		// in this function do resource clearup
 		virtual void			shutdown() = 0;
 

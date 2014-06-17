@@ -19,9 +19,8 @@ namespace Duel
 		virtual const DString& getName() const;
 
 
-		virtual void	initialize();
 		// override : DRenderSystem---------------------------------
-		virtual void	initialize( const InitializationOptions& options );
+		virtual void	initialize();
 		// override : DRenderSystem---------------------------------
 		virtual void	shutdown();
 

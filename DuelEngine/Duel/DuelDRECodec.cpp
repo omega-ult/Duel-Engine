@@ -307,10 +307,6 @@ namespace Duel
 			{
 				DStringTool::parseString(val, targetPass->rasterizeState.polygonOffsetUnit);
 			}
-			else if ( "DepthClipEnable" == name )
-			{
-				targetPass->rasterizeState.depthClipEnable = getBool(val);
-			}
 			else if ( "ScissorEnable" == name )
 			{
 				targetPass->rasterizeState.scissorEnable = getBool(val);
@@ -1024,10 +1020,6 @@ namespace Duel
 
 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", DStringTool::toString(curPass->rasterizeState.polygonOffsetUnit).c_str());
 				stateNode->append_attribute(doc.allocate_attribute("name","PolygonOffsetUnit"));
-				rasterizerNode->append_node(stateNode);
-
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseBool(curPass->rasterizeState.depthClipEnable).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","DepthClipEnable"));
 				rasterizerNode->append_node(stateNode);
 
 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseBool(curPass->rasterizeState.scissorEnable).c_str());

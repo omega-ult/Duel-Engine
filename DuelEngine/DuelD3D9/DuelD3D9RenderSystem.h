@@ -5,6 +5,7 @@
 
 #include "DuelD3D9Common.h"
 #include "DuelRenderSystem.h"
+#include "DuelD3D9Include.h"
 
 namespace Duel
 {
@@ -12,8 +13,10 @@ namespace Duel
 	{
 		DUEL_DECLARE_RTTI(D3D9RenderSystem)
 	public:
-		D3D9RenderSystem();
+		D3D9RenderSystem(D3D9RenderResourceFactory* fact);
 		virtual const DString& getName() const;
+
+		virtual void initialize();
 
 		virtual void shutdown();
 
@@ -41,7 +44,8 @@ namespace Duel
 
 	protected:
 		void			initRenderStates();
-
+		// a pointer to the device holder.
+		D3D9RenderResourceFactory*	mFactory;
 		// current frame buffer binded to the pipe line. on which all draw calls happen.
 		DFrameBuffer*	mCurFrameBuffer;
 
@@ -53,8 +57,7 @@ namespace Duel
 		DBlendState					mCurBlendState;
 		DColor						mCurBlendFactor;
 
-
-
+		IDirect3DDevice9*	mDevice;
 
 		// used in bug tracing.
 		DGpuProgram*		mVSProgram;
