@@ -220,7 +220,9 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				}				
 			}
 		}
+#else
 
+#endif
 		Duel::DArchivePtr mediaArchive = Duel::DArchiveManager::getSingleton().
 			getArchive("Assets\\_BasicMediaPack");
 		if (mediaArchive != NULL)
@@ -283,8 +285,7 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		}
 		DResourceGroupManager::getSingleton().createDeclaredResource("_BasicShaderPack");
 		DResourceGroupManager::getSingleton().createDeclaredResource("_BasicMediaPack");
-#else
-#endif
+
 //////////////////////////////////////////////////////////////////////////
 #ifdef GLPLUGIN_DEBUG
 		mRws = new DDemoRenderWorkshop();

@@ -689,10 +689,18 @@ namespace Duel
 		mDevice->Clear(0, NULL, d3dClearFlag, d3dColor, depth, stencil);
 	}
 
-	void D3D9RenderSystem::blitTexture( IDirect3DBaseTexture9* input, IDirect3DSurface9* output )
+	void D3D9RenderSystem::blitTexture( IDirect3DBaseTexture9* input, IDirect3DSurface9* output, DViewport outputVP )
 	{
 		D3D9FrameBufferCache cache(this, mCurFrameBuffer);
 		mDevice->SetRenderTarget(0, output);
+		D3DVIEWPORT9 d3dvp;
+		d3dvp.X = outputVP.getLeft();
+		d3dvp.Y = outputVP.getTop();
+		d3dvp.Width = outputVP.getWidth();
+		d3dvp.Height = outputVP.getHeight();
+		d3dvp.MinZ = 0.0f;
+		d3dvp.MaxZ = 1.0f;
+		mDevice->SetViewport(&d3dvp);
 		mDevice->SetIndices(mBlitQuadIndx);
 		mDevice->SetStreamSource(0,mBlitQuadVert,0,sizeof(float)*5);
 		mDevice->SetTexture(0, input);

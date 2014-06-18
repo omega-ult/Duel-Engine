@@ -21,7 +21,8 @@ namespace Duel
 			memset(mShadowBuf,0,mByteSize);
 		}
 		IDirect3DDevice9* dev = fact->getMainDevice();
-		dev->CreateVertexBuffer(mByteSize, D3D9Translator::getD3DUsage(mUsage), NULL, D3DPOOL_MANAGED,
+		// d3dusage must be 0 if using hardware vertex processing.
+		dev->CreateVertexBuffer(mByteSize, 0, 0, D3DPOOL_MANAGED,
 			&mVertBuf, NULL);
 	}
 

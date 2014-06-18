@@ -121,7 +121,7 @@ namespace Duel
 			mSwapChain->GetBackBuffer(0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
 			DCore::getSingleton().getRenderSystem()->getAs<D3D9RenderSystem>()->blitTexture(
 				mViewList[0]->getGpuTexutureConstant()->getAs<D3D9GpuTextureConstant>()->getD3DTexture(),
-				backBuffer);
+				backBuffer, DViewport(0,0,mWidth,mHeight));
 			ReleaseCOM(backBuffer);
 		}
 

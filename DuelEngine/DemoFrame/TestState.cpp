@@ -166,6 +166,43 @@ namespace DemoKit
 		anode->attachMovable(mTestEntity);
 
 #else
+	Duel::DArchivePtr mediaArchive = Duel::DArchiveManager::getSingleton().
+		getArchive("Assets\\_BasicMediaPack");
+	if (mediaArchive != NULL)
+	{
+		// for textures.
+		Duel::DDataStreamPtr descFilePtf = 
+			mediaArchive->open("ShowcaseTexture.xml");
+		if (descFilePtf != NULL)
+		{
+			Duel::ResourceDescriptionList resList =  Duel::DResourceGroupManager::getSingleton().
+				getResouceManager("Texture")->parseParameter(descFilePtf.get());
+			Duel::ResourceDescriptionList::iterator i, iend = resList.end();
+			for (i = resList.begin(); i != iend; ++i)
+			{
+				Duel::DResourceGroupManager::getSingleton().declareResource(*i);
+			}
+		}				
+		Duel::DResourceGroupManager::getSingleton().createDeclaredResource("_ShowcasePack");
+	}
+
+
+	Duel::DResourcePtr aTestMesh = Duel::DResourceGroupManager::getSingleton().
+		getResouceManager("Mesh")->getResource("_BasicMediaPack", "M_PointLightSphereModel.dm");
+	aTestMesh->touch();
+
+	Duel::DResourcePtr aTestSkel = Duel::DResourceGroupManager::getSingleton().
+		getResouceManager("Skeleton")->getResource("_BasicMediaPack", "a test.ds");
+	aTestSkel->touch();
+
+
+	Duel::DResourcePtr reimuTex = Duel::DResourceGroupManager::getSingleton().
+		getResouceManager("Texture")->getResource("_ShowcasePack", "reimu.dds");
+	reimuTex->touch();
+
+	Duel::DResourcePtr testNormal = Duel::DResourceGroupManager::getSingleton().
+		getResouceManager("Texture")->getResource("_BasicMediaPack", "T_Test_Normal.dds");
+	testNormal->touch();
 
 #endif // GLPLUGIN_DEBUG
 

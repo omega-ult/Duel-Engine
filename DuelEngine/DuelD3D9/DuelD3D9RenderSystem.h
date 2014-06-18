@@ -43,7 +43,7 @@ namespace Duel
 		virtual void fillDeviceCaps();
 
 		void	clearFrameBuffer(DFrameBuffer* fb, uint32 flags, const DColor& clr, DReal depth, int32 stencil );
-		void	blitTexture(IDirect3DBaseTexture9* input, IDirect3DSurface9* output);
+		void	blitTexture(IDirect3DBaseTexture9* input, IDirect3DSurface9* output, DViewport outputVP);
 
 	protected:
 		void			initRenderStates();
@@ -54,15 +54,15 @@ namespace Duel
 		// a pointer to the device holder.
 		D3D9RenderResourceFactory*	mFactory;
 		// current frame buffer binded to the pipe line. on which all draw calls happen.
-		DFrameBuffer*	mCurFrameBuffer;
+		DFrameBuffer*		mCurFrameBuffer;
 
 		// use a pointer to indicate whether the current render states are available.
-		DRasterizerState			mCurRasState;
-		DDepthStencilState			mCurDepState;
-		uint32						mCurFrontStencilRef;
-		uint32						mCurBackStencilRef;
-		DBlendState					mCurBlendState;
-		DColor						mCurBlendFactor;
+		DRasterizerState	mCurRasState;
+		DDepthStencilState	mCurDepState;
+		uint32				mCurFrontStencilRef;
+		uint32				mCurBackStencilRef;
+		DBlendState			mCurBlendState;
+		DColor				mCurBlendFactor;
 
 		IDirect3DDevice9*	mDevice;
 

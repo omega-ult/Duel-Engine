@@ -31,7 +31,7 @@ namespace Duel
 		{
 			indxFmt = D3DFMT_INDEX32;
 		}
-		dev->CreateIndexBuffer(mByteSize, D3D9Translator::getD3DUsage(mUsage), indxFmt, D3DPOOL_MANAGED,
+		dev->CreateIndexBuffer(mByteSize, 0, indxFmt, D3DPOOL_MANAGED,
 			&mIndxBuf, NULL);
 	}
 

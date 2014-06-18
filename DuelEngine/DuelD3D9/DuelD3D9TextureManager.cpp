@@ -20,6 +20,7 @@ namespace Duel
 	{
 		D3D9Texture* ret = new D3D9Texture(this, createParam->getName(), createParam->getGroupName());
 		ret->setHardwareBufferUsage(createParam->getAs<DTextureDescription>()->memoryStrategy);
+		ret->setCodecFormat(createParam->getAs<DTextureDescription>()->codecFormat);
 		return ret;
 	}
 

@@ -72,19 +72,19 @@ namespace Duel
 		uint32 mipmap = mMipMapCount == MIPMAP_MAXCOUNT ? 0 : mMipMapCount + 1;
 		if (mType == TT_1D || mType == TT_2D)
 		{
-			dev->CreateTexture(mWidth, mHeight, mipmap, D3D9Translator::getD3DUsage(mUsage),
+			dev->CreateTexture(mWidth, mHeight, mipmap, 0,
 				texFormat, D3DPOOL_MANAGED, &mTexture.p2DTexture, NULL);
 			mTexture.pBaseTexture = mTexture.p2DTexture;
 		}
 		else if (mType == TT_3D)
 		{
-			dev->CreateVolumeTexture(mWidth, mHeight, mDepth, mipmap, D3D9Translator::getD3DUsage(mUsage), 
+			dev->CreateVolumeTexture(mWidth, mHeight, mDepth, mipmap, 0, 
 				texFormat, D3DPOOL_MANAGED, &mTexture.p3DTexture, NULL);
 			mTexture.pBaseTexture = mTexture.p3DTexture;
 		}
 		else
 		{
-			dev-> CreateCubeTexture(mWidth, mipmap, D3D9Translator::getD3DUsage(mUsage),
+			dev-> CreateCubeTexture(mWidth, mipmap, 0,
 				texFormat, D3DPOOL_MANAGED, &mTexture.pCubeTexture, NULL);
 			mTexture.pBaseTexture = mTexture.pCubeTexture;
 		}

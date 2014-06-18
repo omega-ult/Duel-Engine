@@ -4,9 +4,6 @@
 	<!--ScreenTransfer-->
 	<Technique name="ScreenTransfer">
 		<Pass name="ScreenTransfer_p0">
-			<RasterizerState>
-				<state name="DepthClipEnable">false</state>
-			</RasterizerState>
 			
 			<DepthStencilState>
 				<state name="DepthEnable">false</state>
@@ -31,9 +28,6 @@
 	<!--Compose-->
 	<Technique name="DeferMerge">
 		<Pass name="DeferMerge_p0">
-			<RasterizerState>
-				<state name="DepthClipEnable">false</state>
-			</RasterizerState>
 			
 			<DepthStencilState>
 				<state name="DepthEnable">false</state>

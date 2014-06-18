@@ -31,6 +31,14 @@ namespace Duel
 				"Duel::D3D9PixelBuffer::lockRect")
 		}
 
+		if (mbIsLocked)
+		{
+			DUEL_EXCEPT_BRIEF(DException::ET_InvalidStatus,
+				"Buffer lock is aready locked.",
+				"Duel::D3D9PixelBuffer::lockRect")
+		}
+		mbIsLocked = true;
+
 		HRESULT hr;
 		LockedRect ret;
 		ret.dataPtr = NULL;
@@ -84,6 +92,14 @@ namespace Duel
 				"Failed to lock a box on a PixelBuffer without type: TT_3D",
 				"Duel::D3D9PixelBuffer::lockBox")
 		}
+
+		if (mbIsLocked)
+		{
+			DUEL_EXCEPT_BRIEF(DException::ET_InvalidStatus,
+				"Buffer lock is aready locked.",
+				"Duel::D3D9PixelBuffer::lockBox")
+		}
+		mbIsLocked = true;
 
 		HRESULT hr;
 		LockedBox ret;
