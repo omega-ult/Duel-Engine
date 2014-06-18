@@ -42,6 +42,9 @@ namespace Duel
 
 		virtual void fillDeviceCaps();
 
+		void	clearFrameBuffer(DFrameBuffer* fb, uint32 flags, const DColor& clr, DReal depth, int32 stencil );
+		void	blitTexture(IDirect3DBaseTexture9* input, IDirect3DSurface9* output);
+
 	protected:
 		void			initRenderStates();
 		// internal function used in binding parameters.
@@ -63,14 +66,20 @@ namespace Duel
 
 		IDirect3DDevice9*	mDevice;
 
-		// used in bug tracing.
-		DGpuProgram*		mVSProgram;
-		DGpuProgram*		mPSProgram;
-		// just a reference pointer.
-		DGpuParameters*		mVSParams;
-		DGpuParameters*		mPSParams;
-
 		DString				mName;
+
+
+
+		// resources for transfering data from render target to 
+		// the back buffer.
+		IDirect3DVertexBuffer9*	mBlitQuadVert;
+		IDirect3DIndexBuffer9*	mBlitQuadIndx;
+		IDirect3DVertexDeclaration9*	mBlitVDecl;
+		IDirect3DVertexShader9*	mBlitVShader;
+		IDirect3DPixelShader9*	mBlitPShader;
+		DRasterizerStateObjectPtr	mBlitRasState;
+		DDepthStencilStateObjectPtr	mBlitDepthState;
+		DBlendStateObjectPtr		mBlitBlendState;
 	};
 
 }

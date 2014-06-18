@@ -4,6 +4,8 @@
 #include "DuelFrameBuffer.h"
 #include "DuelD3D9RenderView.h"
 #include "DuelD3D9FrameBuffer.h"
+#include "DuelD3D9RenderSystem.h"
+#include "DuelCore.h"
 
 namespace Duel
 {
@@ -145,6 +147,16 @@ namespace Duel
 	DRenderDepthStencilView* D3D9FrameBuffer::getRenderDepthStencilView()
 	{
 		return mCurDepthView;
+	}
+
+
+	void D3D9FrameBuffer::clear( uint32 flags, const DColor& clr, DReal depth, int32 stencil )
+	{
+
+		D3D9RenderSystem* d3dRSys = DCore::getSingleton().getRenderSystem()->getAs<D3D9RenderSystem>();
+		
+		d3dRSys->clearFrameBuffer(this, flags, clr, depth, stencil);
+
 	}
 
 }

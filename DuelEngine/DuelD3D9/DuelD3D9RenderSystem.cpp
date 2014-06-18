@@ -11,6 +11,8 @@
 #include "DuelD3D9RenderLayout.h"
 #include "DuelD3D9IndexBuffer.h"
 #include "DuelD3D9VertexBuffer.h"
+#include "DuelD3D9FrameBufferCache.h"
+#include "DuelD3D9Translator.h"
 
 namespace Duel
 {
@@ -18,7 +20,14 @@ namespace Duel
 
 	D3D9RenderSystem::D3D9RenderSystem(D3D9RenderResourceFactory* fact) :
 		mFactory(fact),
-		mName("Direct3D9")
+		mName("Direct3D9"),
+		mDevice(NULL),
+		mCurFrameBuffer(NULL),
+		mBlitQuadVert(NULL),
+		mBlitQuadIndx(NULL),
+		mBlitVDecl(NULL),
+		mBlitVShader(NULL),
+		mBlitPShader(NULL)
 	{
 
 	}
@@ -30,8 +39,14 @@ namespace Duel
 
 	void D3D9RenderSystem::shutdown()
 	{
+		ReleaseCOM(mBlitQuadVert);
+		ReleaseCOM(mBlitQuadIndx);
+		ReleaseCOM(mBlitVDecl);
+		ReleaseCOM(mBlitVShader);
+		ReleaseCOM(mBlitPShader);
 		mDevice = NULL;
 		mFactory = NULL;
+
 	}
 
 	void D3D9RenderSystem::bindFrameBuffer( DFrameBuffer* buf )
@@ -390,6 +405,89 @@ namespace Duel
 
 		fillDeviceCaps();
 		initRenderStates();
+
+
+		// create resources for transfering data from render target to 
+		// the back buffer.
+		D3DVERTEXELEMENT9 dwDecl3[] = 
+		{
+			{0, 0,  D3DDECLTYPE_FLOAT3,   D3DDECLMETHOD_DEFAULT, 
+			D3DDECLUSAGE_POSITION, 0},
+			{0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, 
+			D3DDECLUSAGE_TEXCOORD, 0},
+			D3DDECL_END()
+		};
+		mDevice->CreateVertexDeclaration(dwDecl3, &mBlitVDecl);
+		// a quad.
+		float vertData[] =
+		{ 
+			/*vert*/ -1.0f, 1.0f, 0.0f, /*uv*/ 0.0f, 0.0f,
+			/*vert*/ 1.0f,  1.0f, 0.0f, /*uv*/ 1.0f, 0.0f,
+			/*vert*/ 1.0f, -1.0f, 0.0f, /*uv*/ 1.0f, 1.0f,
+			/*vert*/ -1.0f,-1.0f, 0.0f, /*uv*/ 0.0f, 1.0f
+		};
+		mDevice->CreateVertexBuffer(sizeof(float)*20, 0, 0, D3DPOOL_MANAGED, &mBlitQuadVert, NULL);
+		void* tempBuf = NULL;
+		mBlitQuadVert->Lock(0,sizeof(float)*20, &tempBuf, D3DLOCK_DISCARD);
+		memcpy(tempBuf, vertData, sizeof(float)*20);
+		mBlitQuadVert->Unlock();
+		int16 idata[] =
+		{
+			0, 3, 2,  0, 2, 1
+		};
+		mDevice->CreateIndexBuffer(sizeof(uint16)*6, 0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &mBlitQuadIndx, NULL);
+		mBlitQuadIndx->Lock(0, sizeof(uint16)*6, &tempBuf, D3DLOCK_DISCARD);
+		memcpy(tempBuf, idata, sizeof(uint16)*6);
+		mBlitQuadIndx->Unlock();
+		DString vsCode = "struct VS_INPUT\
+						 {\
+						 float4 Position   : POSITION;\
+						 float2 Texcoord   : TEXCOORD0;\
+						 };\
+						 struct VS_OUTPUT \
+						 {\
+						 float4 Position   : POSITION;\
+						 float2 Texcoord   : TEXCOORD0;\
+						 };\
+						 VS_OUTPUT main(in VS_INPUT Input)\
+						 {\
+						 VS_OUTPUT Output; Output.Position = Input.Position; Output.Texcoord = Input.Texcoord; return Output;\
+						 }";
+		ID3DXBuffer* vsCodeBuf;
+		D3DXCompileShader(vsCode.c_str(), vsCode.length(),NULL,NULL,"main","vs_2_0",0, &vsCodeBuf, NULL, NULL);
+		HRESULT hr = mDevice->CreateVertexShader(static_cast<DWORD*>(vsCodeBuf->GetBufferPointer()), &mBlitVShader);
+		vsCodeBuf->Release();
+
+		DString psCode = "struct PS_INPUT\
+						 {\
+						 float4 Position   : POSITION;\
+						 float2 Texcoord   : TEXCOORD0;\
+						 };\
+						 sampler srcTex : register(s0);\
+						 float4 main(in PS_INPUT input) : COLOR0\
+						 {\
+						 return tex2D(srcTex, input.Texcoord);\
+						 }\
+						 ";
+		ID3DXBuffer* psCodeBuf;
+		D3DXCompileShader(psCode.c_str(), psCode.length(),NULL,NULL,"main","ps_2_0",0, &psCodeBuf, NULL, NULL);
+		hr = mDevice->CreatePixelShader(static_cast<DWORD*>(psCodeBuf->GetBufferPointer()), &mBlitPShader);
+		psCodeBuf->Release();
+
+		DRasterizerState rasState;
+		rasState.cullingMode = CM_ClockWise;
+		rasState.polygonMode = PM_Solid;
+		rasState.multisampleEnable = false;
+		rasState.shadeMode = SM_Flat;
+		mBlitRasState = DRenderResourceManager::getSingleton().createRasterizerStateObject(rasState);
+
+		DDepthStencilState depState;
+		depState.depthEnable = false;
+		mBlitDepthState = DRenderResourceManager::getSingleton().createDepthStencilStateObject(depState);
+
+		DBlendState blendState;
+		blendState.targetStates[0].blendEnable = false;
+		mBlitBlendState = DRenderResourceManager::getSingleton().createBlendStateObject(blendState);
 	}
 
 	void D3D9RenderSystem::initRenderStates()
@@ -570,6 +668,42 @@ namespace Duel
 					D3DSAMP_MAXANISOTROPY, d3dSamp->mPreserveSamp.maxAnisotropy);
 			}
 		}
+	}
+
+	void D3D9RenderSystem::clearFrameBuffer( DFrameBuffer* fb, uint32 flags, const DColor& clr, DReal depth, int32 stencil )
+	{
+		D3D9FrameBufferCache cache(this, mCurFrameBuffer);
+		bindFrameBuffer(fb);
+
+		DWORD  d3dClearFlag = 0;
+		if (flags & CBM_Color)
+		{
+			d3dClearFlag |= D3DCLEAR_TARGET;
+		}
+		if ((flags & CBM_Depth) || (flags & CBM_Stencil))
+		{
+			d3dClearFlag |= D3DCLEAR_ZBUFFER;
+			d3dClearFlag |= D3DCLEAR_STENCIL;
+		}
+		D3DCOLOR d3dColor = D3D9Translator::getD3DColor(clr);
+		mDevice->Clear(0, NULL, d3dClearFlag, d3dColor, depth, stencil);
+	}
+
+	void D3D9RenderSystem::blitTexture( IDirect3DBaseTexture9* input, IDirect3DSurface9* output )
+	{
+		D3D9FrameBufferCache cache(this, mCurFrameBuffer);
+		mDevice->SetRenderTarget(0, output);
+		mDevice->SetIndices(mBlitQuadIndx);
+		mDevice->SetStreamSource(0,mBlitQuadVert,0,sizeof(float)*5);
+		mDevice->SetTexture(0, input);
+
+		setRasterizerState(mBlitRasState.get());
+		setDepthStencilState(mBlitDepthState.get());
+		setBlendState(mBlitBlendState.get(), DColor::WHITE);
+
+		mDevice->DrawPrimitive(D3DPT_POINTLIST, 0, 2);
+
+		
 	}
 
 }

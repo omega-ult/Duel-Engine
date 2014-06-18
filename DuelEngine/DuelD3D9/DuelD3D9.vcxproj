@@ -107,6 +107,7 @@
     <ClInclude Include="DuelD3D9Common.h" />
     <ClInclude Include="DuelD3D9Config.h" />
     <ClInclude Include="DuelD3D9FrameBuffer.h" />
+    <ClInclude Include="DuelD3D9FrameBufferCache.h" />
     <ClInclude Include="DuelD3D9GpuProgram.h" />
     <ClInclude Include="DuelD3D9GpuProgramManager.h" />
     <ClInclude Include="DuelD3D9Include.h" />

@@ -29,6 +29,9 @@ namespace Duel
 		virtual DRenderColorView* getRenderColorView( ElementAttachment elem );
 
 		virtual DRenderDepthStencilView* getRenderDepthStencilView();
+
+		virtual	void clear(uint32 flags, const DColor& clr, DReal depth, int32 stencil);
+
 	protected:
 		// frame buffer part.
 		typedef	std::vector<D3D9RenderColorView*>	RenderColorViewList;

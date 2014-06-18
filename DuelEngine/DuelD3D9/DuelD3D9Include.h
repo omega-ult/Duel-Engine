@@ -8,5 +8,7 @@
 #include <d3d9types.h>
 #include <dxgi.h>
 #include <d3dx9.h>
+#include "DuelD3D9Common.h"
+
 
 #endif

@@ -137,5 +137,8 @@
     <ClInclude Include="DuelD3D9Include.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DuelD3D9FrameBufferCache.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

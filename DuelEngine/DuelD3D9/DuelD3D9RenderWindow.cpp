@@ -5,6 +5,10 @@
 #include "DuelD3D9RenderWindow.h"
 #include "DuelD3D9RenderView.h"
 #include "DuelD3D9RenderResourceFactory.h"
+#include "DuelD3D9RenderSystem.h"
+#include "DuelCore.h"
+#include "DuelD3D9ShaderObject.h"
+
 
 namespace Duel
 {
@@ -17,11 +21,6 @@ namespace Duel
 		mSwapChain(NULL),
 		mCurDepthView(NULL),
 		mName(name),
-		mQuadVert(NULL),
-		mQuadIndx(NULL),
-		mVDecl(NULL),
-		mVShader(NULL),
-		mPShader(NULL),
 		mMainSurface(NULL),
 		mMainDepthView(NULL)
 	{
@@ -35,11 +34,6 @@ namespace Duel
 	D3D9RenderWindow::~D3D9RenderWindow()
 	{
 		ReleaseCOM(mSwapChain);
-		ReleaseCOM(mQuadVert);
-		ReleaseCOM(mQuadIndx);
-		ReleaseCOM(mVDecl);
-		ReleaseCOM(mVShader);
-		ReleaseCOM(mPShader);
 
 		if (mMainSurface != NULL)
 		{
@@ -54,20 +48,13 @@ namespace Duel
 
 	void D3D9RenderWindow::create( const DString& name, const RenderWindowSetting& setting, uint32 winHandle )
 	{
-		DFrameBuffer::resize(setting.width, setting.height);
-		mCurViewport.reset(0,0, setting.width, setting.height);
 		mColorBits = DPixelFormatTool::getFormatBits(setting.surfaceFormat);
-#ifdef DUEL_PLATFORM_WINDOWS
-		// 
+
 		mHWND = (HWND)winHandle;
 
-		D3D9RenderResourceFactory* d3dFact = mCreator->getAs<D3D9RenderResourceFactory>();
-
-		IDirect3DDevice9* device = d3dFact->getMainDevice();
-		mPresentParam.BackBufferCount			= 1; // 双倍缓冲
 		mPresentParam.Windowed					= true;		// 暂时先做窗口化, 全屏需要考虑设备丢失问题.
-		mPresentParam.BackBufferWidth			= mWidth;
-		mPresentParam.BackBufferHeight			= mHeight;
+// 		mPresentParam.BackBufferWidth			= mWidth;
+// 		mPresentParam.BackBufferHeight			= mHeight;
 		mPresentParam.SwapEffect				= D3DSWAPEFFECT_DISCARD;
 		mPresentParam.hDeviceWindow				= mHWND;	// 目标窗口, 不一定与device创建窗口相同.
 		mPresentParam.EnableAutoDepthStencil	= false;
@@ -75,91 +62,8 @@ namespace Duel
 		mPresentParam.FullScreen_RefreshRateInHz= 0;
 		mPresentParam.BackBufferFormat			= D3DFMT_X8R8G8B8;
 
-		device->CreateAdditionalSwapChain(&mPresentParam,&mSwapChain);
+		resize(setting.width, setting.height);
 
-		// create resources for transfering data from render target to 
-		// the back buffer.
-		D3DVERTEXELEMENT9 dwDecl3[] = 
-		{
-			{0, 0,  D3DDECLTYPE_FLOAT3,   D3DDECLMETHOD_DEFAULT, 
-			D3DDECLUSAGE_POSITION, 0},
-			{0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, 
-			D3DDECLUSAGE_TEXCOORD, 0},
-			D3DDECL_END()
-		};
-		device->CreateVertexDeclaration(dwDecl3, &mVDecl);
-		// a quad.
-		float vertData[] =
-		{ 
-			/*vert*/ -1.0f, 1.0f, 0.0f, /*uv*/ 0.0f, 0.0f,
-			/*vert*/ 1.0f,  1.0f, 0.0f, /*uv*/ 1.0f, 0.0f,
-			/*vert*/ 1.0f, -1.0f, 0.0f, /*uv*/ 1.0f, 1.0f,
-			/*vert*/ -1.0f,-1.0f, 0.0f, /*uv*/ 0.0f, 1.0f
-		};
-		device->CreateVertexBuffer(sizeof(float)*20, 0, 0, D3DPOOL_MANAGED, &mQuadVert, NULL);
-		void* tempBuf = NULL;
-		mQuadVert->Lock(0,sizeof(float)*20, &tempBuf, D3DLOCK_DISCARD);
-		memcpy(tempBuf, vertData, sizeof(float)*20);
-		mQuadVert->Unlock();
-		int16 idata[] =
-		{
-			0, 3, 2,  0, 2, 1
-		};
-		device->CreateIndexBuffer(sizeof(uint16)*6, 0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &mQuadIndx, NULL);
-		mQuadIndx->Lock(0, sizeof(uint16)*6, &tempBuf, D3DLOCK_DISCARD);
-		memcpy(tempBuf, idata, sizeof(uint16)*6);
-		mQuadIndx->Unlock();
-		DString vsCode = "struct VS_INPUT\
-		{\
-			float4 Position   : POSITION;\
-			float2 Texcoord   : TEXCOORD0;\
-		};\
-		struct VS_OUTPUT \
-		{\
-			float4 Position   : POSITION;\
-			float2 Texcoord   : TEXCOORD0;\
-		};\
-		VS_OUTPUT main(in VS_INPUT Input)\
-		{\
-			VS_OUTPUT Output; Output.Position = Input.Position; Output.Texcoord = Input.Texcoord; return Output;\
-		}";
-		ID3DXBuffer* vsCodeBuf;
-		D3DXCompileShader(vsCode.c_str(), vsCode.length(),NULL,NULL,"main","vs_2_0",0, &vsCodeBuf, NULL, NULL);
-		HRESULT hr = device->CreateVertexShader(static_cast<DWORD*>(vsCodeBuf->GetBufferPointer()), &mVShader);
-		vsCodeBuf->Release();
-
-		DString psCode = "struct PS_INPUT\
-		{\
-			float4 Position   : POSITION;\
-			float2 Texcoord   : TEXCOORD0;\
-		};\
-		sampler srcTex : register(s0);\
-		float4 main(in PS_INPUT input) : COLOR0\
-		{\
-			return tex2D(srcTex, input.Texcoord);\
-		}\
-		";
-		ID3DXBuffer* psCodeBuf;
-		//////////////////////////////////////////////////////////////////////////
-		//		ID3DXConstantTable* constTable = NULL;
-		//		D3DXCompileShader(psCode.c_str(), vsCode.length(),NULL,NULL,"main","ps_2_0",0, &psCodeBuf, NULL, &constTable);
-		//////////////////////////////////////////////////////////////////////////
-		D3DXCompileShader(psCode.c_str(), vsCode.length(),NULL,NULL,"main","ps_2_0",0, &psCodeBuf, NULL, NULL);
-		hr = device->CreatePixelShader(static_cast<DWORD*>(psCodeBuf->GetBufferPointer()), &mPShader);
-		psCodeBuf->Release();
-
-		// debug
-// 		D3DXCONSTANT_DESC desc;
-// 		uint32 paramCount;
-// 		constTable->GetConstantDesc(NULL, &desc, &paramCount);
-// 		for (uint32 i = 0; i < paramCount; ++i)
-// 		{
-// 			D3DXHANDLE hConstant = constTable->GetConstant(NULL, i);
-// 			constTable->GetConstantDesc(hConstant, &desc, &paramCount);
-// 		}
-
-#endif
-		resize(mWidth, mHeight);
 		if (mMainSurface != NULL)
 		{
 			mCreator->destroyRenderColorView(mMainSurface);
@@ -182,7 +86,6 @@ namespace Duel
 		{
 			attachRenderDepthStencilView(mMainDepthView);
 		}
-
 	}
 
 	void D3D9RenderWindow::setFullScreen( bool flag, const DisplayMode& fullScreenMode )
@@ -212,6 +115,17 @@ namespace Duel
 
 	void D3D9RenderWindow::update()
 	{
+		if (mViewList[0] != NULL)
+		{
+			IDirect3DSurface9* backBuffer = NULL;
+			mSwapChain->GetBackBuffer(0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
+			DCore::getSingleton().getRenderSystem()->getAs<D3D9RenderSystem>()->blitTexture(
+				mViewList[0]->getGpuTexutureConstant()->getAs<D3D9GpuTextureConstant>()->getD3DTexture(),
+				backBuffer);
+			ReleaseCOM(backBuffer);
+		}
+
+
 		HRESULT hr = mSwapChain->Present(NULL,NULL,NULL,NULL,D3DPRESENT_DONOTWAIT);
 		// test device lost state.
 		if (hr == D3DERR_DEVICELOST || hr == D3DERR_DRIVERINTERNALERROR)
@@ -230,6 +144,10 @@ namespace Duel
 		assert(width != 0 && height != 0);
 		DFrameBuffer::resize(width, height);
 		mCurViewport.reset(0,0, width, height);
+
+		onDeviceLost();
+		onDeviceReset(mCreator->getAs<D3D9RenderResourceFactory>()->getMainDevice());
+
 		RenderColorViewList::iterator i, iend = mViewList.end();
 		for (i = mViewList.begin(); i != iend; ++i)
 		{
@@ -362,7 +280,19 @@ namespace Duel
 
 	void D3D9RenderWindow::onDeviceReset(IDirect3DDevice9* dev)
 	{
+		mPresentParam.BackBufferWidth	= mWidth;
+		mPresentParam.BackBufferHeight	= mHeight;
+
 		dev->CreateAdditionalSwapChain(&mPresentParam,&mSwapChain);
+	}
+
+	void D3D9RenderWindow::clear( uint32 flags, const DColor& clr, DReal depth, int32 stencil )
+	{
+
+		D3D9RenderSystem* d3dRSys = DCore::getSingleton().getRenderSystem()->getAs<D3D9RenderSystem>();
+
+		d3dRSys->clearFrameBuffer(this, flags, clr, depth, stencil);
+
 	}
 
 }

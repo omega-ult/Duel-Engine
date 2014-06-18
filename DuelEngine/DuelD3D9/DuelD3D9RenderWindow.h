@@ -55,19 +55,14 @@ namespace Duel
 
 		virtual void onDeviceReset(IDirect3DDevice9* dev);
 
+		virtual	void clear(uint32 flags, const DColor& clr, DReal depth, int32 stencil);
+
 	protected:
 #ifdef DUEL_PLATFORM_WINDOWS
 		HWND		mHWND;
 		IDirect3DSwapChain9*	mSwapChain;
 		D3DPRESENT_PARAMETERS	mPresentParam;
 
-		// resources for transfering data from render target to 
-		// the back buffer.
-		IDirect3DVertexBuffer9*	mQuadVert;
-		IDirect3DIndexBuffer9*	mQuadIndx;
-		IDirect3DVertexDeclaration9*	mVDecl;
-		IDirect3DVertexShader9*	mVShader;
-		IDirect3DPixelShader9*	mPShader;
 #endif
 		DString		mName;
 		// frame buffer part.
