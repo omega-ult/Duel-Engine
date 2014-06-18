@@ -18,9 +18,10 @@ namespace Duel
 		void		seal();
 
 		IDirect3DVertexDeclaration9*	getD3DVertexDeclaration();
-
+		D3DPRIMITIVETYPE	getD3DPrimitiveType() { return mD3DPrimitiveType; }
 	protected:
 		IDirect3DVertexDeclaration9*	mVDecl;
+		D3DPRIMITIVETYPE	mD3DPrimitiveType;
 	};
 
 }

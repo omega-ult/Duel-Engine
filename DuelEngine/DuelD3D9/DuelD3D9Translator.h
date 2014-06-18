@@ -32,7 +32,7 @@ namespace Duel
 		static	DWORD				getD3DLock(HardwareBufferLock lock, HardwareBufferUsage usage);
 		static	D3DDECLTYPE			getD3DDeclaraType(VertexElementType elemType);
 		static	D3DDECLUSAGE		getD3DDeclaraUsage(VertexElementSemantic elemSem);
-
+		static	D3DPRIMITIVETYPE	getD3DPrimitiveType(PrimitiveTopology tp);
 	protected:
 		// do not modify these maps!!
 		typedef	std::map<DPixelFormat, DXGI_FORMAT>	PixelFormatToDXGIMap;

@@ -3,6 +3,7 @@
 #include "DuelD3D9Common.h"
 #include "DuelD3D9RenderLayout.h"
 #include "DuelD3D9RenderResourceFactory.h"
+#include "DuelD3D9Translator.h"
 
 
 namespace Duel
@@ -73,7 +74,8 @@ namespace Duel
 
 	D3D9RenderLayout::D3D9RenderLayout( DRenderResourceFactory* creator ) :
 		DRenderLayout(creator),
-		mVDecl(NULL)
+		mVDecl(NULL),
+		mD3DPrimitiveType(D3DPT_POINTLIST)
 	{
 
 	}
@@ -96,7 +98,7 @@ namespace Duel
 			d3dElem.Type = getD3DElementType(elem.getElementType());
 			d3dElem.Method = D3DDECLMETHOD_DEFAULT;
 			d3dElem.Usage = getD3DElementUsage(elem.getSemantic());
-			d3dElem.UsageIndex = elem.getSemanticIndex();
+			d3dElem.UsageIndex = (BYTE)elem.getSemanticIndex();
 			if (elem.getSemantic() == VES_Specular)
 			{
 				d3dElem.UsageIndex = 1;
@@ -113,6 +115,8 @@ namespace Duel
 		d3dDecl.push_back(end);
 
 		dev->CreateVertexDeclaration(&d3dDecl[0], &mVDecl);
+
+		mD3DPrimitiveType = D3D9Translator::getD3DPrimitiveType(mPrimitiveTopology);
 	}
 
 	IDirect3DVertexDeclaration9* D3D9RenderLayout::getD3DVertexDeclaration()

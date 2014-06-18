@@ -496,5 +496,26 @@ namespace Duel
 		return	retMap;
 	}
 
+	D3DPRIMITIVETYPE D3D9Translator::getD3DPrimitiveType( PrimitiveTopology tp )
+	{
+		switch (tp)
+		{
+		case PT_PointList:
+			return D3DPT_POINTLIST;
+		case PT_LineList:
+			return D3DPT_LINELIST;
+		case PT_LineStrip:
+			return D3DPT_LINESTRIP;
+		case PT_TriangleList:
+			return D3DPT_TRIANGLELIST;
+		case PT_TriangleStrip:
+			return D3DPT_TRIANGLESTRIP;
+		case PT_TriangleFan:
+			return D3DPT_TRIANGLEFAN;
+		default:
+			return D3DPT_POINTLIST;
+		}
+	}
+
 
 }

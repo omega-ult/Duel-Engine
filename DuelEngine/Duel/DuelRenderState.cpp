@@ -178,7 +178,7 @@ namespace Duel
 		borderColor(DColor::BLACK),
 		minLod(DMath::NEG_INFINITY),
 		maxLod(DMath::POS_INFINITY),
-		maxAnisotropy(16),
+		maxAnisotropy(1),
 		mipLodBias(0.0f)
 	{
 

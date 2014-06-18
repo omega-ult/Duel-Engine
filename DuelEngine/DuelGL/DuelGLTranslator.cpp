@@ -539,9 +539,6 @@ namespace Duel
 	{
 		switch (topo)
 		{
-		case Duel::PT_Undefined:
-			return GL_POINT;
-			break;
 		case Duel::PT_PointList:
 			return GL_POINT;
 			break;

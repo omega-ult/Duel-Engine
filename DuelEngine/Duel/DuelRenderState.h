@@ -271,7 +271,7 @@ namespace Duel
 		// Upper end of the mipmap range to clamp access to-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		float				maxLod;				// default: Math::POS_INFINITY
 		// Clamping value used in FO_ANISOTROPIC, valid value is 0 to 16
-		uint32				maxAnisotropy;		// default: 16
+		uint32				maxAnisotropy;		// default: 1
 		// Offset from the calculated mipmap level-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		float				mipLodBias;			// default: 0.0f
 	};

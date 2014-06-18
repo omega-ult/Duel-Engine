@@ -11,7 +11,7 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(D3D9VertexBuffer, DVertexBuffer);
 
 	D3D9VertexBuffer::D3D9VertexBuffer(D3D9RenderResourceFactory* fact, size_t vertexSize, size_t verticesCount, HardwareBufferUsage usage, bool useShadow, VertexBufferType type /*= VBT_Geometry*/ ) :
-		DVertexBuffer(vertexSize, verticesCount, usage, useShadow),
+		DVertexBuffer(vertexSize, verticesCount, usage, useShadow, type),
 		mVertBuf(NULL),
 		mShadowBuf(NULL)
 	{
@@ -50,7 +50,7 @@ namespace Duel
 		this->unlock();	
 	}
 
-	IDirect3DVertexBuffer9* D3D9VertexBuffer::getVertexBuffer()
+	IDirect3DVertexBuffer9* D3D9VertexBuffer::getD3DVertexBuffer()
 	{
 		return mVertBuf;
 	}

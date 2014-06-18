@@ -177,24 +177,24 @@ namespace Duel
 		
 		D3DXCONSTANTTABLE_DESC desc;
 
-		mVSConstTable = vs->getConstantTable();
-		mVSConstTable->GetDesc(&desc);
+		ID3DXConstantTable* VSConstTable = vs->getConstantTable();
+		VSConstTable->GetDesc(&desc);
 		mVSParameter.removeAllConstants();
 		mVSParameter.setName(pass->getName() + "." + vs->getName());
 		for (uint32 i = 0; i < desc.Constants; ++i)
 		{
 			// Recursively descend through the structure levels
-			processParam(mVSParameter, mVSConstTable, NULL, "", i);
+			processParam(mVSParameter, VSConstTable, NULL, "", i);
 		}
 
-		mPSConstTable = ps->getConstantTable();
-		mPSConstTable->GetDesc(&desc);
+		ID3DXConstantTable* PSConstTable = ps->getConstantTable();
+		PSConstTable->GetDesc(&desc);
 		mPSParameter.removeAllConstants();
 		mPSParameter.setName(pass->getName() + "." + ps->getName());
 		for (uint32 i = 0; i < desc.Constants; ++i)
 		{
 			// Recursively descend through the structure levels
-			processParam(mVSParameter, mPSConstTable, NULL, "", i);
+			processParam(mVSParameter, PSConstTable, NULL, "", i);
 		}
 	}
 

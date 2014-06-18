@@ -5,6 +5,12 @@
 #include "DuelD3D9RenderState.h"
 #include "DuelRenderResourceManager.h"
 #include "DuelD3D9RenderResourceFactory.h"
+#include "DuelD3D9FrameBuffer.h"
+#include "DuelD3D9RenderView.h"
+#include "DuelD3D9ShaderObject.h"
+#include "DuelD3D9RenderLayout.h"
+#include "DuelD3D9IndexBuffer.h"
+#include "DuelD3D9VertexBuffer.h"
 
 namespace Duel
 {
@@ -30,12 +36,45 @@ namespace Duel
 
 	void D3D9RenderSystem::bindFrameBuffer( DFrameBuffer* buf )
 	{
-		throw std::exception("The method or operation is not implemented.");
+		mCurFrameBuffer = buf;
+		if (buf == NULL)
+		{
+			return;
+		}
+		for (uint32 i = EA_Color0; i <= EA_Color7; ++i)
+		{
+			DRenderColorView* v = buf->getRenderColorView((ElementAttachment)i);
+			if(v != NULL)
+			{
+				D3D9RenderColorView* d3dView = v->getAs<D3D9RenderColorView>();
+				IDirect3DSurface9* suf = d3dView->getRenderSurface();
+				mDevice->SetRenderTarget(i, suf);
+			}
+		}
+		DRenderDepthStencilView* dsView = buf->getRenderDepthStencilView();
+		if (dsView != NULL)
+		{
+			D3D9RenderDepthStencilView* d3dDSView = dsView->getAs<D3D9RenderDepthStencilView>();
+			mDevice->SetDepthStencilSurface(d3dDSView->getRenderSurface());
+		}
+		else
+		{
+			mDevice->SetDepthStencilSurface(NULL);
+		}
+		DViewport vp = buf->getViewport();
+		D3DVIEWPORT9 d3dvp;
+		d3dvp.X = vp.getLeft();
+		d3dvp.Y = vp.getTop();
+		d3dvp.Width = vp.getWidth();
+		d3dvp.Height = vp.getHeight();
+		d3dvp.MinZ = 0.0f;
+		d3dvp.MaxZ = 1.0f;
+		mDevice->SetViewport(&d3dvp);
 	}
 
 	DFrameBuffer* D3D9RenderSystem::getCurrentFrameBuffer()
 	{
-		throw std::exception("The method or operation is not implemented.");
+		return mCurFrameBuffer;
 	}
 
 	void D3D9RenderSystem::setRasterizerState( DRasterizerStateObject* rs )
@@ -221,27 +260,78 @@ namespace Duel
 
 	Duel::DRasterizerStateObjectPtr D3D9RenderSystem::getCurrentRaseterizerState()
 	{
-		throw std::exception("The method or operation is not implemented.");
+		return DRenderResourceManager::getSingleton().createRasterizerStateObject(mCurRasState);
 	}
 
 	Duel::DDepthStencilStateObjectPtr D3D9RenderSystem::getCurrentDepthStencilStateObject()
 	{
-		throw std::exception("The method or operation is not implemented.");
+		return DRenderResourceManager::getSingleton().createDepthStencilStateObject(mCurDepState);
 	}
 
 	Duel::DBlendStateObjectPtr D3D9RenderSystem::getCurrentBlendState()
 	{
-		throw std::exception("The method or operation is not implemented.");
+		return DRenderResourceManager::getSingleton().createBlendStateObject(mCurBlendState);
 	}
 
 	void D3D9RenderSystem::bindShaderObject( DShaderObject* so )
 	{
-		throw std::exception("The method or operation is not implemented.");
+		if (so == NULL || !so->isValid())
+		{
+			return;
+		}
+		D3D9ShaderObject* d3dShaderObj = so->getAs<D3D9ShaderObject>();
+		mDevice->SetVertexShader(d3dShaderObj->getD3DVertexShader());
+		mDevice->SetPixelShader(d3dShaderObj->getD3DPixelShader());
+
+		DGpuParameters* vsParam = d3dShaderObj->getVertexProgramParameters();
+		DGpuParameters* psParam = d3dShaderObj->getPixelProgramParameters();
+
+		// vs parameter.
+		setVertexShaderParameter(mDevice, vsParam);
+		setPixelShaderParameter(mDevice, psParam);
 	}
 
 	void D3D9RenderSystem::render( DRenderLayout* layout )
 	{
-		throw std::exception("The method or operation is not implemented.");
+		if (layout == NULL)
+		{
+			return;
+		}
+		DIndexData idata = layout->getIndexData();
+		if (idata.getIndexBuffer() == NULL)
+		{
+			return;
+		}
+		D3D9RenderLayout* d3dLayout = layout->getAs<D3D9RenderLayout>();
+		mDevice->SetVertexDeclaration(d3dLayout->getD3DVertexDeclaration());
+		mDevice->SetIndices(idata.getIndexBuffer()->getAs<D3D9IndexBuffer>()->getD3DIndexBuffer());
+		DVertexStreams vdata = layout->getVertexData().getBufferStreams();
+		DVertexStreams::VertexStreamIterator vi = vdata.getVertexStreamIterator();
+		while (vi.hasMoreElements())
+		{
+			uint32 idx = vi.peekNextKey();
+			D3D9VertexBuffer* vBuf = vi.getNext()->getAs<D3D9VertexBuffer>();
+			mDevice->SetStreamSource(idx, vBuf->getD3DVertexBuffer(), 0, vBuf->getVertexSize());
+			// do not supprot instanced-drawing now.
+		}
+		uint32 pDivider = 1;
+		switch (d3dLayout->getTopologyType())
+		{
+		case PT_PointList:
+			pDivider = 1;
+			break;
+		case PT_LineList:
+		case PT_LineStrip:
+			pDivider = 2;
+			break;
+		case PT_TriangleFan:
+		case PT_TriangleList:
+		case PT_TriangleStrip:
+			pDivider = 3;
+			break;
+		}
+		mDevice->DrawPrimitive(d3dLayout->getD3DPrimitiveType(), idata.getIndexStart(), 
+			(idata.getIndexEnd() - idata.getIndexStart())/pDivider);
 	}
 
 	void D3D9RenderSystem::fillDeviceCaps()
@@ -313,6 +403,173 @@ namespace Duel
 		setDepthStencilState(depPtr.get());
 		setBlendState(blendPtr.get(), DColor(0.0f, 0.0f, 0.0f, 0.0f));
 
+	}
+
+	void D3D9RenderSystem::setVertexShaderParameter( IDirect3DDevice9* dev, DGpuParameters* vsParam )
+	{
+		DGpuParameters::GpuConstantIterator ci = vsParam->getAutoGpuConstantIterator();
+		while (ci.hasMoreElements())
+		{
+			DString paramName = ci.peekNextKey();
+			GpuConstantDefinition constdef = ci.getNext();
+			// HLSL always packing.
+			assert(constdef.elementSize % 4 == 0);
+			if (constdef.isBool())
+			{
+				dev->SetVertexShaderConstantB(constdef.logicalIndex,
+					vsParam->getBoolValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isInt())
+			{
+				dev->SetVertexShaderConstantI(constdef.logicalIndex,
+					vsParam->getIntValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isFloat())
+			{
+				dev->SetVertexShaderConstantF(constdef.logicalIndex,
+					vsParam->getFloatValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isTexture())
+			{
+				DGpuTextureConstantPtr tex = vsParam->getTextureConstant(paramName);
+				setTextureSampler(dev, constdef.logicalIndex, tex);
+			}
+		}
+		ci = vsParam->getCustomGpuConstantIterator();
+		while (ci.hasMoreElements())
+		{
+			DString paramName = ci.peekNextKey();
+			GpuConstantDefinition constdef = ci.getNext();
+			// HLSL always packing.
+			assert(constdef.elementSize % 4 == 0);
+			if (constdef.isBool())
+			{
+				dev->SetVertexShaderConstantB(constdef.logicalIndex,
+					vsParam->getBoolValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isInt())
+			{
+				dev->SetVertexShaderConstantI(constdef.logicalIndex,
+					vsParam->getIntValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isFloat())
+			{
+				dev->SetVertexShaderConstantF(constdef.logicalIndex,
+					vsParam->getFloatValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isTexture())
+			{
+				DGpuTextureConstantPtr tex = vsParam->getTextureConstant(paramName);
+				setTextureSampler(dev, constdef.logicalIndex, tex);
+			}
+		}
+	}
+
+	void D3D9RenderSystem::setPixelShaderParameter( IDirect3DDevice9* dev, DGpuParameters* psParam )
+	{
+		DGpuParameters::GpuConstantIterator ci = psParam->getAutoGpuConstantIterator();
+		while (ci.hasMoreElements())
+		{
+			DString paramName = ci.peekNextKey();
+			GpuConstantDefinition constdef = ci.getNext();
+			// HLSL always packing.
+			assert(constdef.elementSize % 4 == 0);
+			if (constdef.isBool())
+			{
+				dev->SetVertexShaderConstantB(constdef.logicalIndex,
+					psParam->getBoolValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isInt())
+			{
+				dev->SetVertexShaderConstantI(constdef.logicalIndex,
+					psParam->getIntValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isFloat())
+			{
+				dev->SetVertexShaderConstantF(constdef.logicalIndex,
+					psParam->getFloatValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isTexture())
+			{
+				DGpuTextureConstantPtr tex = psParam->getTextureConstant(paramName);
+				setTextureSampler(dev, constdef.logicalIndex, tex);
+			}
+		}
+		ci = psParam->getCustomGpuConstantIterator();
+		while (ci.hasMoreElements())
+		{
+			DString paramName = ci.peekNextKey();
+			GpuConstantDefinition constdef = ci.getNext();
+			// HLSL always packing.
+			assert(constdef.elementSize % 4 == 0);
+			if (constdef.isBool())
+			{
+				dev->SetVertexShaderConstantB(constdef.logicalIndex,
+					psParam->getBoolValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isInt())
+			{
+				dev->SetVertexShaderConstantI(constdef.logicalIndex,
+					psParam->getIntValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isFloat())
+			{
+				dev->SetVertexShaderConstantF(constdef.logicalIndex,
+					psParam->getFloatValuePtr(constdef.physicalIndex),
+					constdef.elementSize/4);
+			}
+			else if (constdef.isTexture())
+			{
+				DGpuTextureConstantPtr tex = psParam->getTextureConstant(paramName);
+				setTextureSampler(dev, constdef.logicalIndex, tex);
+			}
+		}
+	}
+
+	void D3D9RenderSystem::setTextureSampler( IDirect3DDevice9* dev, uint32 logicalIdx, DGpuTextureConstantPtr tex )
+	{
+		if (tex != NULL)
+		{
+			D3D9GpuTextureConstant* d3dTex = tex->getAs<D3D9GpuTextureConstant>();
+			dev->SetTexture(logicalIdx,
+				d3dTex->getD3DTexture());
+			DTextureSamplerObjectPtr samp = d3dTex->getSampler();
+			if (samp != NULL)
+			{
+				D3D9TextureSamplerObject* d3dSamp = samp->getAs<D3D9TextureSamplerObject>();
+				dev->SetSamplerState(logicalIdx,
+					D3DSAMP_ADDRESSU, d3dSamp->D3DTextureAddressU);
+				dev->SetSamplerState(logicalIdx,
+					D3DSAMP_ADDRESSV, d3dSamp->D3DTextureAddressV);
+				dev->SetSamplerState(logicalIdx,
+					D3DSAMP_ADDRESSW, d3dSamp->D3DTextureAddressW);
+				dev->SetSamplerState(logicalIdx,
+					D3DSAMP_BORDERCOLOR, d3dSamp->D3DBorderColor);
+				dev->SetSamplerState(logicalIdx,
+					D3DSAMP_MAGFILTER, d3dSamp->D3DMagFilter);
+				dev->SetSamplerState(logicalIdx,
+					D3DSAMP_MINFILTER, d3dSamp->D3DMinFilter);
+				dev->SetSamplerState(logicalIdx,
+					D3DSAMP_MIPFILTER, d3dSamp->D3DMipFilter);
+				int32 iLodBias = (int32)d3dSamp->mPreserveSamp.mipLodBias;
+				dev->SetSamplerState(logicalIdx,
+					D3DSAMP_MIPMAPLODBIAS, iLodBias);
+				// don't handle for min/max lod.
+				dev->SetSamplerState(logicalIdx,
+					D3DSAMP_MAXANISOTROPY, d3dSamp->mPreserveSamp.maxAnisotropy);
+			}
+		}
 	}
 
 }

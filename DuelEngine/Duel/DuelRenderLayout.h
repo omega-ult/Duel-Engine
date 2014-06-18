@@ -14,7 +14,6 @@ namespace Duel
 
 	enum PrimitiveTopology
 	{
-		PT_Undefined,
 		PT_PointList,
 		PT_LineList,
 		PT_LineStrip,

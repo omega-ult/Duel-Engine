@@ -19,7 +19,7 @@ namespace Duel
 
 		virtual void writeData( size_t offset, size_t length, const void* pSource, bool discardWholeBuffer = false );
 
-		IDirect3DIndexBuffer9*	getIndexBuffer();;
+		IDirect3DIndexBuffer9*	getD3DIndexBuffer();;
 	protected:
 		virtual void* lockImpl( size_t offset, size_t size, HardwareBufferLock locklockType );
 

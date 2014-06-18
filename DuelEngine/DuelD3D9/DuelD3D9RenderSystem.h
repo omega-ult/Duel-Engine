@@ -44,6 +44,10 @@ namespace Duel
 
 	protected:
 		void			initRenderStates();
+		// internal function used in binding parameters.
+		void			setVertexShaderParameter(IDirect3DDevice9* dev, DGpuParameters* param);
+		void			setPixelShaderParameter(IDirect3DDevice9* dev, DGpuParameters* param);
+		void			setTextureSampler(IDirect3DDevice9* dev, uint32 logicalIdx, DGpuTextureConstantPtr tex);
 		// a pointer to the device holder.
 		D3D9RenderResourceFactory*	mFactory;
 		// current frame buffer binded to the pipe line. on which all draw calls happen.

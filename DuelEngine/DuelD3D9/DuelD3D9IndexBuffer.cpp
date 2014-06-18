@@ -59,7 +59,7 @@ namespace Duel
 		this->unlock();	
 	}
 
-	IDirect3DIndexBuffer9* D3D9IndexBuffer::getIndexBuffer()
+	IDirect3DIndexBuffer9* D3D9IndexBuffer::getD3DIndexBuffer()
 	{
 		return mIndxBuf;
 	}

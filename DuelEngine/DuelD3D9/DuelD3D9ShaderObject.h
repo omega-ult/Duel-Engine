@@ -21,7 +21,7 @@ namespace Duel
 
 		void	discard() { mbValid = false; }
 
-		IDirect3DBaseTexture9*	getTexture() { return mTexture; }
+		IDirect3DBaseTexture9*	getD3DTexture() { return mTexture; }
 		DTextureSamplerObjectPtr	getSampler() { return mTexSamp; }
 
 	protected:
@@ -44,6 +44,9 @@ namespace Duel
 
 		virtual DGpuParameters* getPixelProgramParameters();
 
+		IDirect3DVertexShader9*	getD3DVertexShader() { return mVShader; }
+		IDirect3DPixelShader9*	getD3DPixelShader() { return mPShader; }
+
 	protected:		
 		void	processParam( DGpuParameters& param, ID3DXConstantTable* constTable,
 			D3DXHANDLE parent, DString prefix, uint32 index );
@@ -52,8 +55,6 @@ namespace Duel
 		D3D9RenderResourceFactory*	mCreator;
 		IDirect3DVertexShader9*	mVShader;
 		IDirect3DPixelShader9*	mPShader;
-		ID3DXConstantTable*		mVSConstTable;
-		ID3DXConstantTable*		mPSConstTable;
 
 		DGpuParameters		mVSParameter;
 		DGpuParameters		mPSParameter;
