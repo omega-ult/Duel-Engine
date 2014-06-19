@@ -62,7 +62,7 @@ namespace Duel
 
 	void D3D9RenderColorView::onDeviceReset( IDirect3DDevice9* dev )
 	{
-		dev->CreateTexture(mWidth, mHeight, 1, 0, D3D9Translator::getD3DFormat(mFormat), D3DPOOL_DEFAULT,
+		dev->CreateTexture(mWidth, mHeight, 1, D3DUSAGE_RENDERTARGET, D3D9Translator::getD3DFormat(mFormat), D3DPOOL_DEFAULT,
 			&mTexture, NULL);
 		mGpuConstant = DGpuTextureConstantPtr(new D3D9GpuTextureConstant(mTexture));
 	}

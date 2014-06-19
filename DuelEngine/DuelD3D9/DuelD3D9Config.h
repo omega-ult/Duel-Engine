@@ -12,6 +12,11 @@ namespace Duel
 #define	DUELD3D9_API	__declspec(dllimport)
 #endif
 
+#ifdef _DEBUG
+#define  D3D_DEBUG_INFO
+#endif // DEBUG
+
+
 }
 
 #endif

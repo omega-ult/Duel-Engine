@@ -692,7 +692,9 @@ namespace Duel
 	void D3D9RenderSystem::blitTexture( IDirect3DBaseTexture9* input, IDirect3DSurface9* output, DViewport outputVP )
 	{
 		D3D9FrameBufferCache cache(this, mCurFrameBuffer);
-		mDevice->SetRenderTarget(0, output);
+		HRESULT hr = mDevice->SetRenderTarget(0, output);
+		hr = mDevice->SetDepthStencilSurface(NULL);
+		hr = mDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3D9Translator::getD3DColor(DColor::BLACK), 0.0f, 0);
 		D3DVIEWPORT9 d3dvp;
 		d3dvp.X = outputVP.getLeft();
 		d3dvp.Y = outputVP.getTop();
@@ -703,15 +705,14 @@ namespace Duel
 		mDevice->SetViewport(&d3dvp);
 		mDevice->SetIndices(mBlitQuadIndx);
 		mDevice->SetStreamSource(0,mBlitQuadVert,0,sizeof(float)*5);
+		mDevice->SetVertexDeclaration(mBlitVDecl);
 		mDevice->SetTexture(0, input);
 
 		setRasterizerState(mBlitRasState.get());
 		setDepthStencilState(mBlitDepthState.get());
 		setBlendState(mBlitBlendState.get(), DColor::WHITE);
 
-		mDevice->DrawPrimitive(D3DPT_POINTLIST, 0, 2);
-
-		
+		hr = mDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 2);
 	}
 
 }
