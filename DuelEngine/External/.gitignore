@@ -2,7 +2,9 @@
 ## Duel
 ############
 !boost/
+!boost/tools/build/
 !glew-1.10.0/
+!glew-1.10.0/build/
 !freetype-2.5.0.1/
 !glew-1.10.0/
 !ois-v1-3/
