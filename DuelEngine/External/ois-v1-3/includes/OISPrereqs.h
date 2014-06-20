@@ -37,7 +37,7 @@ restrictions:
 #include "OISConfig.h"
 
 // Default is blank for most OS's
-#define _OISExport /*Duel Modified*/__declspec( dllimport )
+#define _OISExport
 
 //-------------- Determine Compiler ---------------------------------
 #if defined( _MSC_VER )

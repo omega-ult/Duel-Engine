@@ -1,0 +1,385 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B58A4F9E-8E75-46A3-B726-A14CD7F6EC66}</ProjectGuid>
+    <RootNamespace>DuelEngine</RootNamespace>
+    <ProjectName>Duel</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>DUEL_EXPORT;_CRT_SECURE_NO_WARNINGS;BOOST_ALL_DYN_LINK;OIS_DYNAMIC_LIB;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>DuelCommon.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>.\..\..\External\freetype-2.5.0.1\include;.\..\..\External\boost;.\..\..\External\ois-v1-3\includes;.\..\..\External\rapidxml-1.13;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm120 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>.\..\..\External\Lib\x86;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wsock32.lib;OIS_d.lib;freetype250_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy $(TargetDir)$(TargetName).dll .\..\..\Bin\x86 /y
+xcopy $(TargetDir)$(TargetName).lib .\..\..\External\Lib\x86 /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>DUEL_EXPORT;_CRT_SECURE_NO_WARNINGS;BOOST_ALL_DYN_LINK;OIS_DYNAMIC_LIB;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>DuelCommon.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>.\..\..\External\freetype-2.5.0.1\include;.\..\..\External\boost;.\..\..\External\ois-v1-3\includes;.\..\..\External\rapidxml-1.13;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm120 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>.\..\..\External\Lib\x86;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wsock32.lib;OIS.lib;freetype250.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy $(TargetDir)$(TargetName).dll .\..\..\Bin\x86 /y
+xcopy $(TargetDir)$(TargetName).lib .\..\..\External\Lib\x86 /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Code\Duel\Duel.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelAngle.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelAnimation.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelAnimationClip.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelAnimationTrack.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelApplication.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelArchive.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelArchiveManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelAtomic.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelAudio.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelAudioManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelAutoGpuParameter.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelBitTool.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelBone.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelBoundingBox.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelBox.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelCamera.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelCodec.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelColor.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelCommon.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelCondition.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelConfig.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelCore.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelDataStream.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelDDSCodec.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelDMCodec.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelDRECodec.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelDSCodec.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelDynLib.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelDynLibManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelEntity.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelException.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelFileStream.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelFileStreamWP8.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelFolderArchive.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelFont.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelFontManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelFrameBuffer.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelGpuParameter.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelGpuProgram.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelGpuProgramManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelHardwareBuffer.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelImage.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelImage2D.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelImage3D.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelImageCube.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelImageDesc.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelIndexBuffer.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelIndexData.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelInputComponent.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelInputEventQueue.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelInputJoyStick.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelInputKeyBoard.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelInputManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelInputMouse.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelInputReceiver.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelKeyFrame.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelLightSource.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelLog.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelLogManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelMaterial.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelMaterialManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelMath.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelMathLib.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelMatrix.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelMemoryStream.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelMesh.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelMeshManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelMovable.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelMutex.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelNode.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelObject.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelParticle.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelParticleAffector.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelParticleEmitter.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelParticleRenderDelegate.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelParticleSystem.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelPixelBuffer.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelPixelFormat.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelPlane.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelPlugin.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelPostEffect.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelPostEffectManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelPreDeclare.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelQuaternion.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRay.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRectangle.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderable.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderDeviceCaps.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderEffect.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderEffectManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderGroup.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderLayout.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderPass.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderQueue.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderResourceFactory.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderResourceManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderState.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderSystem.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderTechnique.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderView.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderWindow.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRenderWorkshop.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelResource.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelResourceGroupManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelResourceManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelResultCode.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRotator.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelRTTI.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelScene.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSceneInstance.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSceneManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSceneManagerEnumerator.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSceneNode.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSceneQuery.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelShaderObject.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSignal.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSingleton.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSkeleton.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSkeletonManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSocket.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSphere.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSpline.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSTLWrapper.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelString.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSubEntity.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSubMesh.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSubSkeleton.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelTagPoint.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelTerrain.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelTerrainFileFormat.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelTerrainHeightField.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelTerrainManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelTerrainPage.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelTerrainQuadTree.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelTerrainResource.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelTexture.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelTextureManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelThread.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelThreadLib.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelThreadPool.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelTimer.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelType.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelVector.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelVertexBuffer.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelVertexData.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelVertexDeclaration.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelViewport.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelWindowManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelXML.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Code\Duel\DuelAngle.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelAnimation.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelAnimationClip.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelAnimationTrack.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelArchive.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelArchiveManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelAudio.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelAudioManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelAutoGpuParameter.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelBone.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelBoundingBox.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelBox.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelCamera.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelCodec.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelColor.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelCommon.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelCondition.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelCore.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelDataStream.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelDDSCodec.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelDMCodec.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelDRECodec.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelDSCodec.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelDynLib.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelDynLibManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelEntity.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelException.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelFileStream.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelFileStreamWP8.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelFolderArchive.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelFont.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelFontManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelFrameBuffer.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelGpuParameter.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelGpuProgram.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelGpuProgramManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelHardwareBuffer.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelImage.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelImage2D.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelImage3D.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelImageCube.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelImageDesc.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelIndexBuffer.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelIndexData.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelInputComponent.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelInputEventQueue.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelInputJoyStick.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelInputKeyBoard.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelInputManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelInputMouse.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelInputReceiver.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelKeyFrame.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelLightSource.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelLog.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelLogManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelMaterial.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelMaterialManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelMath.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelMatrix.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelMemoryStream.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelMesh.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelMeshManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelMovable.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelMutex.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelNode.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelObject.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelParticle.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelParticleAffector.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelParticleEmitter.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelParticleSystem.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelPixelBuffer.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelPixelFormat.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelPlane.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelPlugin.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelPostEffect.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelPostEffectManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelQuaternion.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRay.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRectangle.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderable.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderEffect.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderEffectManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderGroup.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderLayout.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderPass.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderQueue.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderResourceFactory.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderResourceManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderState.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderSystem.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderTechnique.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderView.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderWindow.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRenderWorkshop.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelResource.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelResourceGroupManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelResourceManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRotator.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelRTTI.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSceneInstance.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSceneManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSceneManagerEnumerator.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSceneNode.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSceneQuery.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelShaderObject.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSkeleton.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSkeletonManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSocket.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSphere.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSpline.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelString.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSubEntity.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSubMesh.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSubSkeleton.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelTagPoint.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelTerrain.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelTerrainManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelTerrainPage.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelTerrainQuadTree.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelTexture.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelTextureManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelThread.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelThreadPool.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelTimer.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelVector.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelVertexBuffer.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelVertexData.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelVertexDeclaration.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelViewport.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelWindowManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelXML.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

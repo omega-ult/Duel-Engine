@@ -322,7 +322,10 @@ void doStartup()
     std::cout << "WindowRef: " << mWin << " WindowRef as int: " << wnd.str() << "\n";
 	pl.insert(std::make_pair(std::string("WINDOW"), wnd.str()));
 #endif
-
+	//////////////////////////////////////////////////////////////////////////
+	pl.insert(std::make_pair(std::string("w32_mouse"), "DISCL_FOREGROUND"));    
+	pl.insert(std::make_pair(std::string("w32_mouse"), "DISCL_NONEXCLUSIVE"));
+	//////////////////////////////////////////////////////////////////////////
 	//This never returns null.. it will raise an exception on errors
 	g_InputManager = InputManager::createInputSystem(pl);
 

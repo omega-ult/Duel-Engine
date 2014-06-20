@@ -217,10 +217,10 @@ pip-log.txt
 ##################
 ## boost exception rule
 ##################
-!/DuelEngine/External/boost/boost/preprocessor/debug/
+#!/DuelEngine/External/boost/boost/preprocessor/debug/
 
 ##################
 ## glew exception rule
 ##################
-!DuelEngine/External/glew-1.10.0/lib/Debug/
-!DuelEngine/External/glew-1.10.0/lib/Release/
+#!DuelEngine/External/glew-1.10.0/lib/Debug/
+#!DuelEngine/External/glew-1.10.0/lib/Release/

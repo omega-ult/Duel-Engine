@@ -1,4 +1,9 @@
 ############
 ## Duel
 ############
-maya/
+!boost/
+!glew-1.10.0/
+!freetype-2.5.0.1/
+!glew-1.10.0/
+!ois-v1-3/
+!rapidxml-1.13/

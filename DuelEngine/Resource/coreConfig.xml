@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CoreConfig DuelVersion = '1.0.0'>
+	<PluginList>
+		<Plugin>
+			DuelD3D9_d.dll
+		</Plugin>
+		<Plugin>
+			DuelQuadtreeSceneManager_d.dll
+		</Plugin>
+		<Plugin>
+			DuelOctreeSceneManager_d.dll
+		</Plugin>
+	</PluginList>
+	
+	<ArchiveList> 
+		<Archive><!-- root-->
+		  <Name></Name>
+		  <Type>folder</Type>
+		</Archive>
+		<Archive><!-- asset-->
+		  <Name>Assets</Name>
+		  <Type>folder</Type>
+		</Archive>
+		<!-- shaderPack-->
+		<Archive>
+		  <Name>Assets\_BasicShaderPack</Name>
+		  <Type>folder</Type>
+		</Archive>
+		<Archive>
+		  <Name>Assets\_BasicShaderPack\DRE</Name>
+		  <Type>folder</Type>
+		</Archive>
+		<Archive>
+		  <Name>Assets\_BasicShaderPack\GLSL</Name>
+		  <Type>folder</Type>
+		</Archive>
+		
+		<!-- mediaPack-->
+		<Archive>
+		  <Name>Assets\_BasicMediaPack</Name>
+		  <Type>folder</Type>
+		</Archive>
+		<Archive>
+		  <Name>Assets\_BasicMediaPack\Mesh</Name>
+		  <Type>folder</Type>
+		</Archive>
+		<Archive>
+		  <Name>Assets\_BasicMediaPack\Skeleton</Name>
+		  <Type>folder</Type>
+		</Archive>
+		<Archive>
+		  <Name>Assets\_BasicMediaPack\Texture</Name>
+		  <Type>folder</Type>
+		</Archive>
+		<Archive>
+		  <Name>Assets\_BasicMediaPack\Font</Name>
+		  <Type>folder</Type>
+		</Archive>
+		
+		<!-- GUIShowcasePack-->
+		<Archive>
+		  <Name>Assets\_BasicMediaPack\ShowcaseTexture</Name>
+		  <Type>folder</Type>
+		</Archive>
+		
+	</ArchiveList>
+	
+	<GroupDescription>
+		<!-- shaderPack-->
+		<Group name = '_BasicShaderPack'>
+			<LocationList>
+				<Location>Assets\_BasicShaderPack</Location>
+				<Location>Assets\_BasicShaderPack\DRE</Location>
+				<!-- shaderPack for glsl -->
+				<Location>Assets\_BasicShaderPack\GLSL</Location>
+			</LocationList>
+		</Group>
+		
+		<!-- mediaPack-->
+		<Group name = '_BasicMediaPack'>
+			<LocationList>
+				<Location>Assets\_BasicMediaPack</Location>
+				<Location>Assets\_BasicMediaPack\Mesh</Location>
+				<Location>Assets\_BasicMediaPack\Skeleton</Location>
+				<Location>Assets\_BasicMediaPack\Texture</Location>
+				<Location>Assets\_BasicMediaPack\Font</Location>
+			</LocationList>
+		</Group>
+		
+		<!-- GUIShowcasePack-->
+		<Group name = '_ShowcasePack'>
+			<LocationList>
+				<Location>Assets\_BasicMediaPack\ShowcaseTexture</Location>
+			</LocationList>
+		</Group>
+		
+		
+	</GroupDescription>
+	
+</CoreConfig>
