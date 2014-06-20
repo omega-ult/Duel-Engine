@@ -4,6 +4,7 @@
 !boost/
 !boost/tools/build/
 !boost/tools/build/v2/build
+!boost/libs/*/build
 !glew-1.10.0/
 !glew-1.10.0/build/
 !freetype-2.5.0.1/
