@@ -1,11 +1,10 @@
 @echo off
 set DuelEnginePath=%cd%
 
-del .\boost_build_log.log /q
-del .\glew_build_log.log /q
-del .\freetype_build_log.log /q
-del .\OIS_build_log.log /q
-
+if exist .\boost_build_log.log del .\boost_build_log.log /q
+if exist .\glew_build_log.log del .\glew_build_log.log /q
+if exist .\freetype_build_log.log del .\freetype_build_log.log /q
+if exist .\OIS_build_log.log del .\OIS_build_log.log /q
 
 @echo Building boost...
 cd .\..\..\External\boost\
