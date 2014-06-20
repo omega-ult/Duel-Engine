@@ -8,13 +8,12 @@ if exist .\OIS_build_log.log del .\OIS_build_log.log /q
 
 @echo Building boost...
 cd .\..\..\External\boost\
-call build_vc10.bat -> %DuelEnginePath%\boost_build_log.log
-@echo Building completed, see boost_build_log.log
+call build_vc11.bat -> "%DuelEnginePath%\boost_build_log.log"
+@echo Build completed, see boost_build_log.log
 
-cd %VS100COMNTOOLS%
-call vsvars32.bat
+call "%VS100COMNTOOLS%vsvars32.bat"
 
-cd %DuelEnginePath%
+cd "%DuelEnginePath%"
 @echo Buiding glew... 
 devenv.exe ".\..\..\External\glew-1.10.0\build\vc10\glew.sln" /Project glew_shared /Build "Debug|Win32" /Out glew_build_log.log
 devenv.exe ".\..\..\External\glew-1.10.0\build\vc10\glew.sln" /Project glew_shared /Build "Release|Win32" /Out glew_build_log.log
@@ -24,9 +23,9 @@ devenv.exe ".\..\..\External\glew-1.10.0\build\vc10\glew.sln" /Project glew_shar
 devenv.exe ".\..\..\External\glew-1.10.0\build\vc10\glew.sln" /Project glew_shared /Clean "Release|Win32" /Out glew_build_log.log
 devenv.exe ".\..\..\External\glew-1.10.0\build\vc10\glew.sln" /Project glew_shared /Clean "Debug MX|Win32" /Out glew_build_log.log
 devenv.exe ".\..\..\External\glew-1.10.0\build\vc10\glew.sln" /Project glew_shared /Clean "Release MX|Win32" /Out glew_build_log.log
-@echo Building completed, see glew_build_log.log
+@echo Build completed, see glew_build_log.log
 
-@echo Buiding freetype... 
+@echo Building freetype... 
 devenv.exe ".\..\..\External\freetype-2.5.0.1\builds\win32\vc2010\freetype.sln" /Project freetype /Build "Debug|Win32" /Out freetype_build_log.log
 devenv.exe ".\..\..\External\freetype-2.5.0.1\builds\win32\vc2010\freetype.sln" /Project freetype /Build "Debug Singlethreaded|Win32" /Out freetype_build_log.log
 devenv.exe ".\..\..\External\freetype-2.5.0.1\builds\win32\vc2010\freetype.sln" /Project freetype /Build "Debug Multithreaded|Win32" /Out freetype_build_log.log
@@ -39,12 +38,12 @@ devenv.exe ".\..\..\External\freetype-2.5.0.1\builds\win32\vc2010\freetype.sln" 
 devenv.exe ".\..\..\External\freetype-2.5.0.1\builds\win32\vc2010\freetype.sln" /Project freetype /Clean "Release|Win32" /Out freetype_build_log.log
 devenv.exe ".\..\..\External\freetype-2.5.0.1\builds\win32\vc2010\freetype.sln" /Project freetype /Clean "Release Singlethreaded|Win32" /Out freetype_build_log.log
 devenv.exe ".\..\..\External\freetype-2.5.0.1\builds\win32\vc2010\freetype.sln" /Project freetype /Clean "Release Multithreaded|Win32" /Out freetype_build_log.log
-@echo Building completed, see freetype_build_log.log
+@echo Build completed, see freetype_build_log.log
 
 
-@echo Buiding OIS... 
+@echo Building OIS... 
 devenv.exe ".\..\..\External\ois-v1-3\Win32\ois_vc10.sln" /Project OIS /Build "OIS_DebugDll|Win32" /Out OIS_build_log.log
 devenv.exe ".\..\..\External\ois-v1-3\Win32\ois_vc10.sln" /Project OIS /Build "OIS_ReleaseDll|Win32" /Out OIS_build_log.log
 devenv.exe ".\..\..\External\ois-v1-3\Win32\ois_vc10.sln" /Project OIS /Clean "OIS_DebugDll|Win32" /Out OIS_build_log.log
 devenv.exe ".\..\..\External\ois-v1-3\Win32\ois_vc10.sln" /Project OIS /Clean "OIS_ReleaseDll|Win32" /Out OIS_build_log.log
-@echo Building completed, see OIS_build_log.log
+@echo Build completed, see OIS_build_log.log
