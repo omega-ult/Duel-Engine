@@ -40,9 +40,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>$(ProjectName)_d</TargetName>
+    <OutDir>$(ProjectDir)..\..\Bin\x86\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\..\Bin\x86\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -56,13 +58,12 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>.\..\..\External\Lib\x86;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\..\..\External\Lib\x86;.\..\..\Bin\x86;</AdditionalLibraryDirectories>
       <AdditionalDependencies>Duel_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(TargetDir)$(TargetName).dll .\..\..\Bin\x86 /y
-xcopy $(TargetDir)$(TargetName).pdb .\..\..\Bin\x86 /y
-xcopy $(TargetDir)$(TargetName).lib .\..\..\External\Lib\x86 /y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -81,12 +82,12 @@ xcopy $(TargetDir)$(TargetName).lib .\..\..\External\Lib\x86 /y</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>.\..\..\External\Lib\x86;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\..\..\External\Lib\x86;.\..\..\Bin\x86;</AdditionalLibraryDirectories>
       <AdditionalDependencies>Duel.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(TargetDir)$(TargetName).dll .\..\..\Bin\x86 /y
-xcopy $(TargetDir)$(TargetName).lib .\..\..\External\Lib\x86 /y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -155,6 +156,11 @@ xcopy $(TargetDir)$(TargetName).lib .\..\..\External\Lib\x86 /y</Command>
     <ClCompile Include="..\..\Code\DuelGUI\DuelGUITextDocument.cpp" />
     <ClCompile Include="..\..\Code\DuelGUI\DuelGUIWidget.cpp" />
     <ClCompile Include="..\..\Code\DuelGUI\DuelGUIWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Duel.vcxproj">
+      <Project>{b58a4f9e-8e75-46a3-b726-a14cd7f6ec66}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
