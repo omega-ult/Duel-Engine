@@ -545,3 +545,6 @@ GLRenderColorViewÀï²úÉú°×É«ÎÆÀíµÄÎÊÌâÖÕÓÚ½â¾ö!Ô­À´ÊÇglTextureParameteriÀïÉèÖÃÎÆÀ
 Dx:out Depth), stack overflowµÄÅóÓÑ¸øÁË¸ö½¨Òé, ²»ÒªÊ¹ÓÃcacheFBOµÄº¯Êý, Ê¹ÓÃÒ»¸ö×¨ÃÅµÄÀà, ÔÚ¹¹ÔìºÍÎö¹¹µÄÊ±ºò
 ·Ö±ð°ó¶¨/½â°ófbo.
 ÁíÍâ,ÓÉÓÚ¹¤×÷Ô­Òò, Dx9ÏîÄ¿ÔÙ¿ª, Õâ¶ÎÊ±¼ä¶¼ÔÚ×öDx9²¿·Ö, ¶¼¿ÉÒÔ¿´µÃµ½µÄ.
+
+6.21
+ÎÒcaocaocaocao! °²×°ÁËDXSDKÖ®ºóVS2010 Redistributable °æ±¾±ä³É10.0.3,Õâ¸öÊ±ºòdx9³ÌÐò»áÖ±½Ó±Àµô(°²×°¹ý¸ß°æ±¾µÄ10.0.4µÄ»úÆ÷½µ¼¶Çé¿ö), ÁíÍâ, Á´½ÓÉú³ÉdebugÐÅÏ¢ÓÃµÄvc110.pdb±ØÐëÒªÑÏ¸ñºÍÏîÄ¿Êä³ö¶ÔÓ¦,Ê¹ÆäÄÜ¹»Á´½ÓÉÏ,·ñÔòÎÞ·¨¶Ïµã.

@@ -43,12 +43,14 @@
     <IncludePath>$(IncludePath);$(DXSDK_DIR)Include;</IncludePath>
     <LibraryPath>$(LibraryPath);$(DXSDK_DIR)Lib\x86;</LibraryPath>
     <OutDir>$(ProjectDir)..\..\Bin\x86\</OutDir>
+    <IntDir>$(ProjectDir)..\..\Bin\x86\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>$(ProjectName)_d</TargetName>
     <IncludePath>$(IncludePath);$(DXSDK_DIR)Include;</IncludePath>
     <LibraryPath>$(LibraryPath);$(DXSDK_DIR)Lib\x86;</LibraryPath>
     <OutDir>$(ProjectDir)..\..\Bin\x86\</OutDir>
+    <IntDir>$(ProjectDir)..\..\Bin\x86\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
