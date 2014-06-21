@@ -97,7 +97,6 @@ xcopy $(TargetDir)$(TargetName).lib .\..\..\External\Lib\x86 /y</Command>
     <ClInclude Include="..\..\Code\Duel\DuelAnimation.h" />
     <ClInclude Include="..\..\Code\Duel\DuelAnimationClip.h" />
     <ClInclude Include="..\..\Code\Duel\DuelAnimationTrack.h" />
-    <ClInclude Include="..\..\Code\Duel\DuelApplication.h" />
     <ClInclude Include="..\..\Code\Duel\DuelArchive.h" />
     <ClInclude Include="..\..\Code\Duel\DuelArchiveManager.h" />
     <ClInclude Include="..\..\Code\Duel\DuelAtomic.h" />
@@ -240,7 +239,6 @@ xcopy $(TargetDir)$(TargetName).lib .\..\..\External\Lib\x86 /y</Command>
     <ClInclude Include="..\..\Code\Duel\DuelVertexData.h" />
     <ClInclude Include="..\..\Code\Duel\DuelVertexDeclaration.h" />
     <ClInclude Include="..\..\Code\Duel\DuelViewport.h" />
-    <ClInclude Include="..\..\Code\Duel\DuelWindowManager.h" />
     <ClInclude Include="..\..\Code\Duel\DuelXML.h" />
   </ItemGroup>
   <ItemGroup>
@@ -376,7 +374,6 @@ xcopy $(TargetDir)$(TargetName).lib .\..\..\External\Lib\x86 /y</Command>
     <ClCompile Include="..\..\Code\Duel\DuelVertexData.cpp" />
     <ClCompile Include="..\..\Code\Duel\DuelVertexDeclaration.cpp" />
     <ClCompile Include="..\..\Code\Duel\DuelViewport.cpp" />
-    <ClCompile Include="..\..\Code\Duel\DuelWindowManager.cpp" />
     <ClCompile Include="..\..\Code\Duel\DuelXML.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

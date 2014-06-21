@@ -1,66 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="源文件">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Render">
+      <UniqueIdentifier>{760accd8-fdb9-458c-98f0-4056cb24e71a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Code\DemoFrame\DuelApplication.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Code\DemoFrame\DuelDemoDeferRenderHelper.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\DemoFrame\DuelDemoMaterialBank.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\DemoFrame\DuelDemoRenderWorkshop.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\DemoFrame\DuelStateMachine.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\DemoFrame\entry.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\DemoFrame\pch.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\DemoFrame\TestState.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
+    <ClCompile Include="..\..\Code\DemoFrame\TestState.cpp" />
+    <ClCompile Include="..\..\Code\DemoFrame\DuelApplication.cpp" />
+    <ClCompile Include="..\..\Code\DemoFrame\DuelStateMachine.cpp" />
+    <ClCompile Include="..\..\Code\DemoFrame\entry.cpp" />
+    <ClCompile Include="..\..\Code\DemoFrame\pch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Code\DemoFrame\DuelApplication.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Code\DemoFrame\DuelDemoDeferRenderHelper.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\DemoFrame\DuelDemoMaterialBank.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\DemoFrame\DuelDemoRenderWorkshop.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Code\DemoFrame\DuelStateMachine.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\DemoFrame\pch.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\DemoFrame\TestState.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\Code\DemoFrame\DuelApplication.h" />
+    <ClInclude Include="..\..\Code\DemoFrame\DuelStateMachine.h" />
+    <ClInclude Include="..\..\Code\DemoFrame\pch.h" />
+    <ClInclude Include="..\..\Code\DemoFrame\TestState.h" />
   </ItemGroup>
 </Project>

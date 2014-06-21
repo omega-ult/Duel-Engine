@@ -36,8 +36,7 @@ namespace Duel
 		IDirect3DSurface9*		mSurface;
 		IDirect3DVolume9*		mVolume;
 		IDirect3DBaseTexture9*	mBaseTex;
-		// current lock flag.
-		DWORD	mLockFlag;
+
 
 	};
 

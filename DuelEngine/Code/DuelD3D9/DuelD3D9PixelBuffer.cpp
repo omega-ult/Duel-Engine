@@ -44,25 +44,12 @@ namespace Duel
 		ret.dataPtr = NULL;
 		ret.rowPitch = 0;
 
-		mLockFlag = 0;
-		switch(lockType)
-		{
-		case HBL_Discard:
-			// D3D only likes D3DLOCK_DISCARD if you created the texture with D3DUSAGE_DYNAMIC
-			// debug runtime flags this up, could cause problems on some drivers
-			if(mUsage == HBU_Dynamic)
-				mLockFlag |= D3DLOCK_DISCARD;
-			break;
-		case HBL_ReadOnly:
-			mLockFlag |= D3DLOCK_READONLY;
-			break;
-		}
 
 		D3DLOCKED_RECT lrect;
 		if (rect.xBegin == 0 && rect.yBegin == 0 && 
 			rect.xExtend == mWidth && rect.yExtend == mHeight)
 		{
-			hr = mSurface->LockRect(&lrect, NULL, mLockFlag);
+			hr = mSurface->LockRect(&lrect, NULL, 0);
 		}
 		else
 		{
@@ -71,7 +58,7 @@ namespace Duel
 			d3dRect.right = rect.xExtend + rect.xBegin;
 			d3dRect.top = rect.yBegin;
 			d3dRect.bottom = rect.yExtend + rect.yBegin;
-			hr = mSurface->LockRect(&lrect, &d3dRect, mLockFlag);
+			hr = mSurface->LockRect(&lrect, &d3dRect, 0);
 		}
 		if (FAILED(hr))
 		{
@@ -107,25 +94,11 @@ namespace Duel
 		ret.rowPitch = 0;
 		ret.slicePitch = 0;
 
-		mLockFlag = 0;
-		switch(lockType)
-		{
-		case HBL_Discard:
-			// D3D only likes D3DLOCK_DISCARD if you created the texture with D3DUSAGE_DYNAMIC
-			// debug runtime flags this up, could cause problems on some drivers
-			if(mUsage == HBU_Dynamic)
-				mLockFlag |= D3DLOCK_DISCARD;
-			break;
-		case HBL_ReadOnly:
-			mLockFlag |= D3DLOCK_READONLY;
-			break;
-		}
-
 		D3DLOCKED_BOX lbox;
 		if (box.left == 0 && box.top == 0 && box.back == 0 && 
 			box.right == mWidth && box.bottom == mHeight && box.front == mDepth)
 		{
-			hr = mVolume->LockBox(&lbox, NULL, mLockFlag);
+			hr = mVolume->LockBox(&lbox, NULL, 0);
 		}
 		else
 		{
@@ -136,7 +109,7 @@ namespace Duel
 			d3dBox.Right = box.right;
 			d3dBox.Bottom = box.bottom;
 			d3dBox.Front = box.front;
-			hr = mVolume->LockBox(&lbox, &d3dBox, mLockFlag);
+			hr = mVolume->LockBox(&lbox, &d3dBox, 0);
 		}
 		if (FAILED(hr))
 		{

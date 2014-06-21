@@ -428,7 +428,7 @@ namespace Duel
 		};
 		mDevice->CreateVertexBuffer(sizeof(float)*20, 0, 0, D3DPOOL_MANAGED, &mBlitQuadVert, NULL);
 		void* tempBuf = NULL;
-		mBlitQuadVert->Lock(0,sizeof(float)*20, &tempBuf, D3DLOCK_DISCARD);
+		mBlitQuadVert->Lock(0,sizeof(float)*20, &tempBuf, 0);
 		memcpy(tempBuf, vertData, sizeof(float)*20);
 		mBlitQuadVert->Unlock();
 		int16 idata[] =
@@ -436,7 +436,7 @@ namespace Duel
 			0, 3, 2,  0, 2, 1
 		};
 		mDevice->CreateIndexBuffer(sizeof(uint16)*6, 0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &mBlitQuadIndx, NULL);
-		mBlitQuadIndx->Lock(0, sizeof(uint16)*6, &tempBuf, D3DLOCK_DISCARD);
+		mBlitQuadIndx->Lock(0, sizeof(uint16)*6, &tempBuf, 0);
 		memcpy(tempBuf, idata, sizeof(uint16)*6);
 		mBlitQuadIndx->Unlock();
 		DString vsCode = "struct VS_INPUT\
@@ -712,7 +712,9 @@ namespace Duel
 		setDepthStencilState(mBlitDepthState.get());
 		setBlendState(mBlitBlendState.get(), DColor::WHITE);
 
+		mDevice->BeginScene();
 		hr = mDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 2);
+		mDevice->EndScene();
 	}
 
 }

@@ -1,864 +1,886 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="源文件">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Common">
+      <UniqueIdentifier>{dfd95c88-fc3e-44ad-8be2-e3532acfc665}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="Math">
+      <UniqueIdentifier>{3c21a73c-badb-47cb-86cb-0be080614601}</UniqueIdentifier>
     </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{29a4106a-43fe-4ca4-ab31-d4e6a31fe304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Material">
+      <UniqueIdentifier>{bc60eda8-f985-4c0e-840d-e28872a28bcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{4eb75aa6-e0ea-4bc0-8cdb-d51305a9b8bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Packing">
+      <UniqueIdentifier>{0ff5c364-f679-447b-b480-98140dbc574e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostEffect">
+      <UniqueIdentifier>{3d07bbab-27ec-43ac-b0b8-affc8161df5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{f7450fd9-def1-44dd-9257-dd41612907aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{804a4a95-c1f0-485b-bdbb-d43067a67c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{2969b547-76da-4aad-97a6-11408abb7236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Codec">
+      <UniqueIdentifier>{b466c266-16c4-4bc9-9a0a-4e13e9cfdcf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{d97d32fb-e77f-48a6-9b1a-63244c7555c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{ee075820-89d1-4a75-a02b-a0cb2861f642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle">
+      <UniqueIdentifier>{7ddc782a-e7d7-43aa-9a7f-42a5f18d725c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{cb9d5f5f-ec75-4455-8ab9-750bb055699c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Code\Duel\Duel.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelAngle.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelAnimation.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelAnimationClip.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelAnimationTrack.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelApplication.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelArchive.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelArchiveManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelAtomic.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelAudio.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelAudioManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelAngle.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelAnimation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\Duel.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelAnimationClip.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelAnimationTrack.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelArchive.h">
+      <Filter>Resource\Packing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelArchiveManager.h">
+      <Filter>Resource\Packing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelAtomic.h">
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelAutoGpuParameter.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelBitTool.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelBone.h">
-      <Filter>头文件</Filter>
+      <Filter>Animation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelBoundingBox.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelBox.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelCamera.h">
-      <Filter>头文件</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelCodec.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource\Codec</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelColor.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelCommon.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelCondition.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelConfig.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelCore.h">
-      <Filter>头文件</Filter>
+      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelDataStream.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelDDSCodec.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource\Codec</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelDMCodec.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource\Codec</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelDRECodec.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource\Codec</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelDSCodec.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource\Codec</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelDynLib.h">
-      <Filter>头文件</Filter>
+      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelDynLibManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelEntity.h">
-      <Filter>头文件</Filter>
+      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelException.h">
-      <Filter>头文件</Filter>
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelEntity.h">
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelFileStream.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelFileStreamWP8.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelFolderArchive.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelFont.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelFontManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelFrameBuffer.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelGpuParameter.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelGpuProgram.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelGpuProgramManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelHardwareBuffer.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelImage.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelImage2D.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelImage3D.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelImageCube.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelImageDesc.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelIndexBuffer.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelIndexData.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelInputComponent.h">
-      <Filter>头文件</Filter>
+      <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelInputEventQueue.h">
-      <Filter>头文件</Filter>
+      <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelInputJoyStick.h">
-      <Filter>头文件</Filter>
+      <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelInputKeyBoard.h">
-      <Filter>头文件</Filter>
+      <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelInputManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelInputMouse.h">
-      <Filter>头文件</Filter>
+      <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelInputReceiver.h">
-      <Filter>头文件</Filter>
+      <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelKeyFrame.h">
-      <Filter>头文件</Filter>
+      <Filter>Animation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelLightSource.h">
-      <Filter>头文件</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelLog.h">
-      <Filter>头文件</Filter>
+      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelLogManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelMaterial.h">
-      <Filter>头文件</Filter>
+      <Filter>Material</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelMaterialManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Material</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelMath.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelMathLib.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelMatrix.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelMemoryStream.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelMesh.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelMeshManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelMovable.h">
-      <Filter>头文件</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelMutex.h">
-      <Filter>头文件</Filter>
+      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelNode.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelObject.h">
-      <Filter>头文件</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelParticle.h">
-      <Filter>头文件</Filter>
+      <Filter>Particle</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelParticleAffector.h">
-      <Filter>头文件</Filter>
+      <Filter>Particle</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelParticleEmitter.h">
-      <Filter>头文件</Filter>
+      <Filter>Particle</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelParticleRenderDelegate.h">
-      <Filter>头文件</Filter>
+      <Filter>Particle</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelParticleSystem.h">
-      <Filter>头文件</Filter>
+      <Filter>Particle</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelPixelBuffer.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelPixelFormat.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelPlane.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelPlugin.h">
-      <Filter>头文件</Filter>
+      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelPostEffect.h">
-      <Filter>头文件</Filter>
+      <Filter>PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelPostEffectManager.h">
-      <Filter>头文件</Filter>
+      <Filter>PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelPreDeclare.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelQuaternion.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRay.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRectangle.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderable.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderDeviceCaps.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelRenderEffect.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelRenderEffectManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderGroup.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderLayout.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderPass.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderQueue.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderResourceFactory.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderResourceManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderState.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderSystem.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderTechnique.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderView.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderWindow.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRenderWorkshop.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelResource.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelResourceGroupManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelResourceManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelResultCode.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRotator.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelRTTI.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelScene.h">
-      <Filter>头文件</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSceneInstance.h">
-      <Filter>头文件</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSceneManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSceneManagerEnumerator.h">
-      <Filter>头文件</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSceneNode.h">
-      <Filter>头文件</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSceneQuery.h">
-      <Filter>头文件</Filter>
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelShaderObject.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSignal.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSingleton.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSkeleton.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSkeletonManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSocket.h">
-      <Filter>头文件</Filter>
+      <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSphere.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSpline.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSTLWrapper.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelString.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelSubEntity.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSubMesh.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSubSkeleton.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelTagPoint.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelTerrain.h">
-      <Filter>头文件</Filter>
+      <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelTerrainFileFormat.h">
-      <Filter>头文件</Filter>
+      <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelTerrainHeightField.h">
-      <Filter>头文件</Filter>
+      <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelTerrainManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelTerrainPage.h">
-      <Filter>头文件</Filter>
+      <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelTerrainQuadTree.h">
-      <Filter>头文件</Filter>
+      <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelTerrainResource.h">
-      <Filter>头文件</Filter>
+      <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelTexture.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelTextureManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelThread.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelThreadLib.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelThreadPool.h">
-      <Filter>头文件</Filter>
+      <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelTimer.h">
-      <Filter>头文件</Filter>
+      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelType.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelVector.h">
-      <Filter>头文件</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelVertexBuffer.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelVertexData.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelVertexDeclaration.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelViewport.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelWindowManager.h">
-      <Filter>头文件</Filter>
+      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelXML.h">
-      <Filter>头文件</Filter>
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelThreadLib.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelThread.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelThreadPool.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelMathLib.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelObject.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelRenderEffect.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelRenderEffectManager.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelSubEntity.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\Duel\DuelAngle.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelAnimation.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Animation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelAnimationClip.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Animation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelAnimationTrack.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Animation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelArchive.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelArchiveManager.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelAudio.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelAudioManager.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelAutoGpuParameter.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelBone.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Animation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelBoundingBox.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelBox.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelCamera.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelCodec.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Codec</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelColor.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelCommon.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelCondition.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelCore.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelDataStream.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelDDSCodec.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Codec</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelDMCodec.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Codec</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelDRECodec.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Codec</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelDSCodec.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Codec</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelDynLib.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelDynLibManager.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelEntity.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelException.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelFileStream.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelFileStreamWP8.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelFolderArchive.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelFont.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelFontManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelFrameBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelGpuParameter.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelGpuProgram.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelGpuProgramManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelHardwareBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelImage.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelImage2D.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelImage3D.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelImageCube.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelImageDesc.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelIndexBuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelIndexData.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelInputComponent.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelInputEventQueue.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelInputJoyStick.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelInputKeyBoard.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelInputManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelInputMouse.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelInputReceiver.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelKeyFrame.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelLightSource.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelLog.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelLogManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelMaterial.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelMaterialManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelMath.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelMatrix.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelMemoryStream.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Resource\Packing</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelMesh.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelFont.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelMeshManager.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelFontManager.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelMovable.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelGpuProgram.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelMutex.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelGpuProgramManager.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelNode.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelImage.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelObject.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelImage3D.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelParticle.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelImage2D.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelParticleAffector.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelImageCube.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelParticleEmitter.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelImageDesc.cpp">
+      <Filter>Resource</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelParticleSystem.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelInputComponent.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelPixelBuffer.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelInputEventQueue.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelPixelFormat.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelInputJoyStick.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelPlane.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelInputKeyBoard.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelPlugin.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelInputManager.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelPostEffect.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelInputMouse.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelPostEffectManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelQuaternion.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRay.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRectangle.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderable.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderEffect.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderEffectManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderGroup.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderLayout.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderPass.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderQueue.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderResourceFactory.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderResourceManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderState.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderSystem.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderTechnique.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderView.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderWindow.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRenderWorkshop.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelResource.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelResourceGroupManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelResourceManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRotator.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelRTTI.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSceneInstance.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSceneManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSceneManagerEnumerator.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSceneNode.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSceneQuery.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelShaderObject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSkeleton.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSkeletonManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSocket.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSphere.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSpline.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelString.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSubEntity.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSubMesh.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelSubSkeleton.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelTagPoint.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelInputReceiver.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelTerrain.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelTerrainManager.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelTerrainPage.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelTerrainQuadTree.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelTexture.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelFrameBuffer.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelTextureManager.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelGpuParameter.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelThread.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelHardwareBuffer.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelThreadPool.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelIndexBuffer.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelTimer.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelIndexData.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelLog.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelLogManager.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelMath.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelMatrix.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRay.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelQuaternion.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRectangle.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRotator.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSpline.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSphere.cpp">
+      <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelVector.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelMesh.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelMeshManager.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelResource.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelResourceGroupManager.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelResourceManager.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSkeleton.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSkeletonManager.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSubMesh.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSubSkeleton.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelTagPoint.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelTexture.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelTextureManager.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelLightSource.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelMovable.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelNode.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelPlane.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelMutex.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelParticle.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelParticleAffector.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelParticleEmitter.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelParticleSystem.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelPlugin.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelObject.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelKeyFrame.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelPostEffect.cpp">
+      <Filter>PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelPostEffectManager.cpp">
+      <Filter>PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderEffect.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderEffectManager.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelMaterialManager.cpp">
+      <Filter>Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelMaterial.cpp">
+      <Filter>Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelPixelBuffer.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelPixelFormat.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderable.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderGroup.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderLayout.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderPass.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderQueue.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderResourceFactory.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderResourceManager.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderState.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderSystem.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderTechnique.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderView.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderWindow.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRenderWorkshop.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelRTTI.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSocket.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSceneQuery.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSceneManagerEnumerator.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSceneNode.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSceneInstance.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSubEntity.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelShaderObject.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelVertexBuffer.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelVertexData.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelVertexDeclaration.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelViewport.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\Duel\DuelWindowManager.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\Code\Duel\DuelString.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelThread.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelThreadPool.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelXML.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelTimer.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

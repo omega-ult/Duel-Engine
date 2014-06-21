@@ -79,7 +79,7 @@ namespace Duel
 			return mShadowBuf + offset;
 		}
 		void* retPtr = 0;
-		mIndxBuf->Lock(offset, size, &retPtr, D3D9Translator::getD3DLock(mLockType, mUsage));
+		mIndxBuf->Lock(offset, size, &retPtr, 0);
 		return retPtr;
 	}
 
@@ -97,7 +97,7 @@ namespace Duel
 			if (mbUseShadow)
 			{
 				void* pBuf = 0;
-				mIndxBuf->Lock(0, mByteSize, &pBuf, D3DLOCK_DISCARD);
+				mIndxBuf->Lock(0, mByteSize, &pBuf, 0);
 				memcpy(pBuf, mShadowBuf, mByteSize);
 			}
 			mIndxBuf->Unlock();
