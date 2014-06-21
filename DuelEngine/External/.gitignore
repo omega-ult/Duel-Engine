@@ -11,3 +11,5 @@
 !glew-1.10.0/
 !ois-v1-3/
 !rapidxml-1.13/
+Lib/x86/*.lib
+Lib/x64/*.lib

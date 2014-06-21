@@ -1,0 +1,7 @@
+############
+## Duel
+############
+Bin/x86/*.dll
+Bin/x86/*.exe
+Bin/x64/*.dll
+Bin/x64/*.exe
