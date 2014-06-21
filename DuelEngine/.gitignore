@@ -5,5 +5,3 @@ Bin/x86/*.dll
 Bin/x86/*.exe
 Bin/x64/*.dll
 Bin/x64/*.exe
-!Project/vs2010/*.user
-!Project/vs2012/*.user
