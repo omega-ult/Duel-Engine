@@ -81,6 +81,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(TargetDir)$(TargetName).dll .\..\..\Bin\x86 /y
+xcopy $(TargetDir)$(TargetName).pdb .\..\..\Bin\x86 /y
 xcopy $(TargetDir)$(TargetName).lib .\..\..\External\Lib\x86 /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

@@ -57,6 +57,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(TargetDir)$(TargetName).exe .\..\..\Bin\x86 /y
+xcopy $(TargetDir)$(TargetName).pdb .\..\..\Bin\x86 /y
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
