@@ -10,34 +10,9 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtree.cpp" />
-    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeCommon.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreePlugin.cpp" />
-    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeQuery.cpp" />
-    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeSceneManager.cpp" />
-    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeSceneNode.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtree.h" />
-    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeCommon.h" />
-    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeConfig.h" />
-    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreePlugin.h" />
-    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeQuery.h" />
-    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeSceneManager.h" />
-    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeSceneNode.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Duel.vcxproj">
-      <Project>{b58a4f9e-8e75-46a3-b726-a14cd7f6ec66}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7488C78B-9887-4473-8445-89BFA1A7ACE3}</ProjectGuid>
-    <RootNamespace>DuelOctreeSceneManager</RootNamespace>
+    <ProjectGuid>{FECD5772-BF8C-4CA9-84EB-050B0961BB66}</ProjectGuid>
+    <RootNamespace>DuelQuadtreeSceneManager</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -64,12 +39,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>$(ProjectName)_d</TargetName>
     <OutDir>$(ProjectDir)..\..\Bin\x86\</OutDir>
     <IntDir>$(ProjectDir)..\..\Bin\x86\</IntDir>
+    <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)..\..\Bin\x86\</OutDir>
     <IntDir>$(ProjectDir)..\..\Bin\x86\</IntDir>
   </PropertyGroup>
@@ -78,20 +52,16 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>DUELQUADTREE_EXPORT;_CRT_SECURE_NO_WARNINGS;BOOST_ALL_DYN_LINK;OIS_DYNAMIC_LIB;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\..\..\External\freetype-2.5.0.1\include;.\..\..\External\boost;.\..\..\External\ois-v1-3\includes;.\..\..\External\rapidxml-1.13;.\..\..\Code\Duel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DUELQUADTREE_EXPORT;_CRT_SECURE_NO_WARNINGS;BOOST_ALL_DYN_LINK;OIS_DYNAMIC_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>DuelQuadtreeCommon.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>.\..\..\External\freetype-2.5.0.1\include;.\..\..\External\boost;.\..\..\External\ois-v1-3\includes;.\..\..\External\rapidxml-1.13;.\..\..\External\glew-1.10.0\include;.\..\..\Code\Duel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>.\..\..\External\Lib\x86;.\..\..\Bin\x86;</AdditionalLibraryDirectories>
       <AdditionalDependencies>Duel_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\..\..\External\Lib\x86;.\..\..\Bin\x86;</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -100,23 +70,44 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>DUELQUADTREE_EXPORT;_CRT_SECURE_NO_WARNINGS;BOOST_ALL_DYN_LINK;OIS_DYNAMIC_LIB;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\..\..\External\freetype-2.5.0.1\include;.\..\..\External\boost;.\..\..\External\ois-v1-3\includes;.\..\..\External\rapidxml-1.13;.\..\..\Code\Duel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DUELQUADTREE_EXPORT;_CRT_SECURE_NO_WARNINGS;BOOST_ALL_DYN_LINK;OIS_DYNAMIC_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>DuelQuadtreeCommon.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>.\..\..\External\freetype-2.5.0.1\include;.\..\..\External\boost;.\..\..\External\ois-v1-3\includes;.\..\..\External\rapidxml-1.13;.\..\..\External\glew-1.10.0\include;.\..\..\Code\Duel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>.\..\..\External\Lib\x86;.\..\..\Bin\x86;</AdditionalLibraryDirectories>
       <AdditionalDependencies>Duel.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\..\..\External\Lib\x86;.\..\..\Bin\x86;</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtree.cpp" />
+    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeCommon.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreePlugin.cpp" />
+    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeQuery.cpp" />
+    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeSceneManager.cpp" />
+    <ClCompile Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeSceneNode.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtree.h" />
+    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeCommon.h" />
+    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeConfig.h" />
+    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreePlugin.h" />
+    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeQuery.h" />
+    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeSceneManager.h" />
+    <ClInclude Include="..\..\Code\DuelQuadtreeSceneManager\DuelQuadtreeSceneNode.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Duel.vcxproj">
+      <Project>{b58a4f9e-8e75-46a3-b726-a14cd7f6ec66}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
