@@ -13,11 +13,25 @@ namespace Duel
 
 	D3D9PixelBuffer::D3D9PixelBuffer( TextureType type, DPixelFormat fmt, HardwareBufferUsage usage ) :
 		DPixelBuffer(0,0,0, type, fmt, usage),
-		mSurface(NULL),
-		mVolume(NULL),
-		mBaseTex(NULL)
+		mLockedSurface(NULL),
+		mLockedVolume(NULL),
+		m2DTarget(NULL),
+		mCubeTarget(NULL),
+		m3DTarget(NULL),
+		mFaceIndex(D3DCUBEMAP_FACE_POSITIVE_X),
+		mMipIndex(0)
 	{
 
+	}
+
+
+	D3D9PixelBuffer::~D3D9PixelBuffer()
+	{
+		if (mbIsLocked)
+		{
+			unlock();
+		}
+		
 	}
 
 
@@ -30,7 +44,12 @@ namespace Duel
 				"Failed to lock a rect on a PixelBuffer with type: TT_3D",
 				"Duel::D3D9PixelBuffer::lockRect")
 		}
-
+		if (m2DTarget == NULL && mCubeTarget == NULL)
+		{
+			DUEL_EXCEPT_BRIEF(DException::ET_InvalidStatus,
+				"Pixel buffer is not binded to any texture",
+				"Duel::D3D9PixelBuffer::lockRect")
+		}
 		if (mbIsLocked)
 		{
 			DUEL_EXCEPT_BRIEF(DException::ET_InvalidStatus,
@@ -44,12 +63,20 @@ namespace Duel
 		ret.dataPtr = NULL;
 		ret.rowPitch = 0;
 
+		if (mCubeTarget != NULL)
+		{
+			mCubeTarget->GetCubeMapSurface(mFaceIndex, mMipIndex, &mLockedSurface);
+		}
+		else if (m2DTarget != NULL)
+		{
+			m2DTarget->GetSurfaceLevel(mMipIndex, &mLockedSurface);
+		}
 
 		D3DLOCKED_RECT lrect;
 		if (rect.xBegin == 0 && rect.yBegin == 0 && 
 			rect.xExtend == mWidth && rect.yExtend == mHeight)
 		{
-			hr = mSurface->LockRect(&lrect, NULL, 0);
+			hr = mLockedSurface->LockRect(&lrect, NULL, 0);
 		}
 		else
 		{
@@ -58,7 +85,7 @@ namespace Duel
 			d3dRect.right = rect.xExtend + rect.xBegin;
 			d3dRect.top = rect.yBegin;
 			d3dRect.bottom = rect.yExtend + rect.yBegin;
-			hr = mSurface->LockRect(&lrect, &d3dRect, 0);
+			hr = mLockedSurface->LockRect(&lrect, &d3dRect, 0);
 		}
 		if (FAILED(hr))
 		{
@@ -79,7 +106,12 @@ namespace Duel
 				"Failed to lock a box on a PixelBuffer without type: TT_3D",
 				"Duel::D3D9PixelBuffer::lockBox")
 		}
-
+		if (m3DTarget == NULL)
+		{
+			DUEL_EXCEPT_BRIEF(DException::ET_InvalidStatus,
+				"Pixel buffer is not binded to any texture",
+				"Duel::D3D9PixelBuffer::lockBox")
+		}
 		if (mbIsLocked)
 		{
 			DUEL_EXCEPT_BRIEF(DException::ET_InvalidStatus,
@@ -94,11 +126,14 @@ namespace Duel
 		ret.rowPitch = 0;
 		ret.slicePitch = 0;
 
+
+		m3DTarget->GetVolumeLevel(mMipIndex, &mLockedVolume);
+
 		D3DLOCKED_BOX lbox;
 		if (box.left == 0 && box.top == 0 && box.back == 0 && 
 			box.right == mWidth && box.bottom == mHeight && box.front == mDepth)
 		{
-			hr = mVolume->LockBox(&lbox, NULL, 0);
+			hr = mLockedVolume->LockBox(&lbox, NULL, 0);
 		}
 		else
 		{
@@ -109,7 +144,7 @@ namespace Duel
 			d3dBox.Right = box.right;
 			d3dBox.Bottom = box.bottom;
 			d3dBox.Front = box.front;
-			hr = mVolume->LockBox(&lbox, &d3dBox, 0);
+			hr = mLockedVolume->LockBox(&lbox, &d3dBox, 0);
 		}
 		if (FAILED(hr))
 		{
@@ -123,29 +158,19 @@ namespace Duel
 		return ret;
 	}
 
-	void D3D9PixelBuffer::bind( IDirect3DSurface9* surface )
+	void D3D9PixelBuffer::bind( uint32 mip, IDirect3DTexture9* texTarget )
 	{
 		unbind();
-
-		void *pTex = NULL;
-		HRESULT hr;
-		hr = surface->GetContainer(IID_IDirect3DBaseTexture9, &pTex);
-		if (SUCCEEDED(hr) && pTex)
+		mMipIndex = mip;
+		m2DTarget = texTarget;
+		IDirect3DSurface9* suf = NULL;
+		if (FAILED(texTarget->GetSurfaceLevel(mip,&suf)))
 		{
-			mBaseTex = (IDirect3DTexture9*)pTex;
+			unbind();
+			return;
 		}
-		mSurface = surface;
-		// hold a reference.
-		mSurface->AddRef();
-
 		D3DSURFACE_DESC desc;
-		hr = surface->GetDesc(&desc);
-		if (FAILED(hr))
-		{
-			DUEL_EXCEPT_BRIEF(DException::ET_InternalError,
-				"Can't retrieve surface information from given parameter",
-				"Duel::D3D9PixelBuffer::bind")
-		}
+		suf->GetDesc(&desc);
 		mWidth	= desc.Width;
 		mHeight	= desc.Height;
 		mDepth	= 1;
@@ -153,31 +178,66 @@ namespace Duel
 		mRowPitch = mWidth * DPixelFormatTool::getFormatBytes(mFormat);
 		mSlicePitch = mHeight * mRowPitch;
 		mByteSize	= mSlicePitch;
+		ReleaseCOM(suf);
 	}
 
-	void D3D9PixelBuffer::bind( IDirect3DVolume9* volume )
+	void D3D9PixelBuffer::bind( uint32 face, uint32 mip, IDirect3DCubeTexture9* texTarget )
 	{
 		unbind();
-
-		void *pTex = NULL;
-		HRESULT hr;
-		hr = volume->GetContainer(IID_IDirect3DBaseTexture9, &pTex);
-		if (SUCCEEDED(hr) && pTex)
+		mMipIndex = mip;
+		mCubeTarget = texTarget;
+		switch(face)
 		{
-			mBaseTex = (IDirect3DTexture9*)pTex;
+		case 0:
+			mFaceIndex = D3DCUBEMAP_FACE_POSITIVE_X;
+			break;
+		case 1:
+			mFaceIndex = D3DCUBEMAP_FACE_NEGATIVE_X;
+			break;
+		case 2:
+			mFaceIndex = D3DCUBEMAP_FACE_POSITIVE_Y;
+			break;
+		case 3:
+			mFaceIndex = D3DCUBEMAP_FACE_NEGATIVE_Y;
+			break;
+		case 4:
+			mFaceIndex = D3DCUBEMAP_FACE_POSITIVE_Z;
+			break;
+		case 5:
+			mFaceIndex = D3DCUBEMAP_FACE_NEGATIVE_Z;
+			break;
 		}
-		mVolume = volume;
-		// hold a reference.
-		mVolume->AddRef();
+		IDirect3DSurface9* suf = NULL;
+		if (FAILED(texTarget->GetCubeMapSurface(mFaceIndex,mip,&suf)))
+		{
+			unbind();
+			return;
+		}
+		D3DSURFACE_DESC desc;
+		suf->GetDesc(&desc);
+		mWidth	= desc.Width;
+		mHeight	= desc.Height;
+		mDepth	= 1;
+		mFormat	= D3D9Translator::getPixelFormat(desc.Format);
+		mRowPitch = mWidth * DPixelFormatTool::getFormatBytes(mFormat);
+		mSlicePitch = mHeight * mRowPitch;
+		mByteSize	= mSlicePitch;
+		ReleaseCOM(suf);
+	}
 
+	void D3D9PixelBuffer::bind( uint32 mip, IDirect3DVolumeTexture9* texTarget )
+	{
+		unbind();
+		mMipIndex = mip;
+		m3DTarget = texTarget;
+		IDirect3DVolume9* vol = NULL;
+		if (FAILED(texTarget->GetVolumeLevel(mip, &vol)))
+		{
+			unbind();
+			return;
+		}
 		D3DVOLUME_DESC desc;
-		hr = volume->GetDesc(&desc);
-		if (FAILED(hr))
-		{
-			DUEL_EXCEPT_BRIEF(DException::ET_InternalError,
-				"Can't retrieve surface information from given parameter",
-				"Duel::D3D9PixelBuffer::bind")
-		}
+		vol->GetDesc(&desc);
 		mWidth	= desc.Width;
 		mHeight	= desc.Height;
 		mDepth	= desc.Depth;
@@ -185,30 +245,35 @@ namespace Duel
 		mRowPitch = mWidth * DPixelFormatTool::getFormatBytes(mFormat);
 		mSlicePitch = mHeight * mRowPitch;
 		mByteSize	= mSlicePitch * mDepth;
+		ReleaseCOM(vol);
 	}
+
+
+
 
 	void D3D9PixelBuffer::unbind()
 	{
-		if (mSurface != NULL)
-		{
-			ReleaseCOM(mSurface);
-		}
-		if (mVolume != NULL)
-		{
-			ReleaseCOM(mSurface);
-		}
-		mBaseTex = NULL;
+		m2DTarget = NULL;
+		m3DTarget = NULL;
+		mCubeTarget = NULL;
+		mWidth = 0;
+		mHeight = 0;
+		mDepth = 0;
+		mMipIndex = 0;
+		mFaceIndex = D3DCUBEMAP_FACE_POSITIVE_X;
 	}
 
 	void D3D9PixelBuffer::unlockImpl()
 	{
-		if (mSurface != NULL)
+		if (mLockedSurface != NULL)
 		{
-			mSurface->UnlockRect();
+			mLockedSurface->UnlockRect();
+			ReleaseCOM(mLockedSurface);
 		}
-		if (mVolume != NULL)
+		if (mLockedVolume != NULL)
 		{
-			mVolume->UnlockBox();
+			mLockedVolume->UnlockBox();
+			ReleaseCOM(mLockedVolume);
 		}	
 	}
 

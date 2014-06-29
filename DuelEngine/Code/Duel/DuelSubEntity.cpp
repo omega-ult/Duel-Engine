@@ -93,7 +93,7 @@ namespace Duel
 			if (posBuf != NULL)
 			{
 				DVertexBufferPtr newBuf = DRenderResourceManager::getSingleton().
-					createVetexBuffer(posBuf->getVertexSize(), posBuf->getVerticesCount(), HBU_DynamicWriteOnly, true);
+					createVetexBuffer(posBuf->getVertexSize(), posBuf->getVertexCount(), HBU_DynamicWriteOnly, true);
 				void* newBufPtr = newBuf->lock(HBL_Discard);
 				posBuf->readData(0, posBuf->getSize(), newBufPtr);
 				newBuf->unlock();
@@ -103,7 +103,7 @@ namespace Duel
 				{
 					char* buf = (char*)newBuf->lock(HBL_ReadOnly);
 					buf += posElem.getOffset();
-					uint32 vcount = newBuf->getVerticesCount();
+					uint32 vcount = newBuf->getVertexCount();
 					DReal min[3] = { DMath::POS_INFINITY };
 					DReal max[3] = { DMath::NEG_INFINITY };
 					for (uint32 i = 0; i < vcount; ++i)
@@ -125,7 +125,7 @@ namespace Duel
 			if (normBuf != NULL && posBuf.get() != normBuf.get())
 			{
 				DVertexBufferPtr newBuf = DRenderResourceManager::getSingleton().
-					createVetexBuffer(normBuf->getVertexSize(), normBuf->getVerticesCount(), HBU_DynamicWriteOnly, true);
+					createVetexBuffer(normBuf->getVertexSize(), normBuf->getVertexCount(), HBU_DynamicWriteOnly, true);
 				void* newBufPtr = newBuf->lock(HBL_Discard);
 				normBuf->readData(0, normBuf->getSize(), newBufPtr);
 				newBuf->unlock();

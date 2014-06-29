@@ -75,9 +75,16 @@ namespace Duel
 	D3D9RenderLayout::D3D9RenderLayout( DRenderResourceFactory* creator ) :
 		DRenderLayout(creator),
 		mVDecl(NULL),
-		mD3DPrimitiveType(D3DPT_POINTLIST)
+		mD3DPrimitiveType(D3DPT_POINTLIST),
+		mVertexCount(0)
 	{
 
+	}
+
+
+	D3D9RenderLayout::~D3D9RenderLayout()
+	{
+		ReleaseCOM(mVDecl);
 	}
 
 
@@ -85,14 +92,24 @@ namespace Duel
 	{
 		IDirect3DDevice9* dev = mCreator->getAs<D3D9RenderResourceFactory>()->getMainDevice();
 		ReleaseCOM(mVDecl);
-
+		mVertexCount = 0;
 		DVertexDeclaration vDecl = getVertexData().getDeclaration();
 		DVertexDeclaration::VertexElementIterator ei = vDecl.getVertexElementIterator();
 		std::vector<D3DVERTEXELEMENT9> d3dDecl;
 		while (ei.hasMoreElements())
 		{
+			
 			const DVertexElement elem = ei.getNext();
 			D3DVERTEXELEMENT9 d3dElem;
+			if (elem.getSemantic() == VES_Position)
+			{
+				DVertexStreams vdata = getVertexData().getBufferStreams();
+				DVertexBufferPtr buf = vdata.getStream(elem.getSource());
+				if (buf != NULL)
+				{
+					mVertexCount = buf->getVertexCount();
+				}
+			}
 			d3dElem.Stream = elem.getSource();
 			d3dElem.Offset = elem.getOffset();
 			d3dElem.Type = getD3DElementType(elem.getElementType());

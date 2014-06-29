@@ -29,7 +29,7 @@ namespace Duel
 		virtual ~DVertexBuffer();
 
 		size_t	getVertexSize() { return mVertexSize; }
-		size_t	getVerticesCount() { return mVerticesCount; }
+		size_t	getVertexCount() { return mVertexCount; }
 
 		void		setVertexBufferType(VertexBufferType type ) { mType = type; }
 		VertexBufferType	getVertexBufferType() { return mType; }
@@ -38,7 +38,7 @@ namespace Duel
 
 	protected:
 		size_t	mVertexSize;
-		size_t	mVerticesCount;
+		size_t	mVertexCount;
 		VertexBufferType	mType;
 		bool	mbUseShadow;
 	};

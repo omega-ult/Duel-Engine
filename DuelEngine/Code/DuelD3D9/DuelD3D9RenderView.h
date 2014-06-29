@@ -15,6 +15,7 @@ namespace Duel
 		DUEL_DECLARE_RTTI(D3D9RenderColorView)
 	public:
 		D3D9RenderColorView(DRenderResourceFactory* creator, DPixelFormat fmt);
+		~D3D9RenderColorView();
 		virtual DGpuTextureConstantPtr getGpuTexutureConstant();
 
 		// provided for GLFramBuffer.
@@ -41,6 +42,7 @@ namespace Duel
 		DUEL_DECLARE_RTTI(D3D9RenderDepthStencilView)
 	public:
 		D3D9RenderDepthStencilView(DRenderResourceFactory* creator);
+		~D3D9RenderDepthStencilView();
 
 		virtual void	resize(uint32 w, uint32 h);
 		void			setAttachFrameBuffer(DFrameBuffer* fb);

@@ -179,8 +179,6 @@ namespace Duel
 
 		mPresentParam.BackBufferCount			= 1; // 双倍缓冲
 		mPresentParam.Windowed					= true;		
-		mPresentParam.BackBufferWidth			= 50;
-		mPresentParam.BackBufferHeight			= 50;
 		mPresentParam.SwapEffect				= D3DSWAPEFFECT_DISCARD;
 		mPresentParam.hDeviceWindow				= mMainHWND;	// 目标窗口, 不一定与device创建窗口相同.
 		mPresentParam.EnableAutoDepthStencil	= false;

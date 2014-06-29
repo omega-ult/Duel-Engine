@@ -21,6 +21,15 @@ namespace Duel
 
 	}
 
+	D3D9RenderColorView::~D3D9RenderColorView()
+	{
+		onDeviceLost();
+	}
+
+
+
+
+
 	Duel::DGpuTextureConstantPtr D3D9RenderColorView::getGpuTexutureConstant()
 	{
 		return mGpuConstant;
@@ -84,6 +93,12 @@ namespace Duel
 		mSurface(NULL)
 	{
 		
+	}
+
+
+	D3D9RenderDepthStencilView::~D3D9RenderDepthStencilView()
+	{
+		onDeviceLost();
 	}
 
 

@@ -15,6 +15,7 @@ namespace Duel
 		DUEL_DECLARE_RTTI(D3D9PixelBuffer)
 	public:
 		D3D9PixelBuffer(TextureType type, DPixelFormat fmt, HardwareBufferUsage usage);
+		~D3D9PixelBuffer();
 
 		virtual LockedRect lockRect( URect& rect, HardwareBufferLock lockType );
 
@@ -23,9 +24,9 @@ namespace Duel
 
 		// bind actual hardware-related resources.
 		// surface can be a mip map part.
-		void	bind(IDirect3DSurface9* surface);
-		// bind actual hardware-related resources, in TT_3D.
-		void	bind(IDirect3DVolume9* volume);
+		void	bind(uint32 mip, IDirect3DTexture9* texTarget);
+		void	bind(uint32 face, uint32 mip, IDirect3DCubeTexture9* texTarget);
+		void	bind(uint32 mip, IDirect3DVolumeTexture9* texTarget);
 	protected:
 		// unbind all resources.
 		void	unbind();
@@ -33,10 +34,15 @@ namespace Duel
 		void	unlockImpl();
 
 		// the pointer to the hardware-realated resources.
-		IDirect3DSurface9*		mSurface;
-		IDirect3DVolume9*		mVolume;
-		IDirect3DBaseTexture9*	mBaseTex;
+		IDirect3DSurface9*			mLockedSurface;
+		IDirect3DVolume9*			mLockedVolume;
 
+		IDirect3DTexture9*			m2DTarget;
+		IDirect3DCubeTexture9*		mCubeTarget;
+		IDirect3DVolumeTexture9*	m3DTarget;
+
+		D3DCUBEMAP_FACES	mFaceIndex;
+		uint32	mMipIndex;
 
 	};
 

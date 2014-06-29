@@ -40,6 +40,8 @@ namespace Duel
 
 		virtual void render( DRenderLayout* layout );
 
+
+
 		virtual void fillDeviceCaps();
 
 		void	clearFrameBuffer(DFrameBuffer* fb, uint32 flags, const DColor& clr, DReal depth, int32 stencil );
@@ -51,6 +53,12 @@ namespace Duel
 		void			setVertexShaderParameter(IDirect3DDevice9* dev, DGpuParameters* param);
 		void			setPixelShaderParameter(IDirect3DDevice9* dev, DGpuParameters* param);
 		void			setTextureSampler(IDirect3DDevice9* dev, uint32 logicalIdx, DGpuTextureConstantPtr tex);
+
+		void	bindShaderObjectImpl();
+		void	setRasterizerStateImpl();
+		void	setDepthStencilStateImpl();
+		void	setBlendStateImpl();
+
 		// a pointer to the device holder.
 		D3D9RenderResourceFactory*	mFactory;
 		// current frame buffer binded to the pipe line. on which all draw calls happen.
@@ -63,6 +71,14 @@ namespace Duel
 		uint32				mCurBackStencilRef;
 		DBlendState			mCurBlendState;
 		DColor				mCurBlendFactor;
+
+		// used in a render call, these values will be cached when corresponding 
+		// functions are called, then they will be used in render() function.
+		D3D9RasterizerStateObject*	mCacheRasState;
+		D3D9DepthStencilStateObject*	mCacheDepState;
+		D3D9BlendStateObject*		mCacheBlendState;
+		DColor					mCacheBlendFactor;
+		D3D9ShaderObject*		mCacheShaderObj;
 
 		IDirect3DDevice9*	mDevice;
 

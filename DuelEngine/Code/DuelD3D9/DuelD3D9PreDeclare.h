@@ -21,7 +21,10 @@ namespace Duel
 	class D3D9RenderSystem;
 	class D3D9RenderWindow;
 	class D3D9GpuTextureConstant;
-
+	class D3D9RasterizerStateObject;
+	class D3D9DepthStencilStateObject;
+	class D3D9BlendStateObject;
+	class D3D9ShaderObject;
 }
 
 #endif

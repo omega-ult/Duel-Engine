@@ -66,6 +66,16 @@ namespace Duel
 		void		registerState(DAStateBase* state);
 		// 注销一个state 但是不会删除它.注意. 而且不能刪除當前狀態或者下一個狀態.
 		void		unregisterState(DAStateBase* state);
+		void		shutdown()
+		{
+			if (mCurState != NULL)
+			{
+				mCurState->release();
+				mCurState = NULL;
+				mNextState = NULL;
+			}
+			
+		}
 
 		// 在一个事务开始前执行的函数, 一般调用eventListener就可以了.
 		void		transactionStart()

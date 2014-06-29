@@ -46,31 +46,11 @@ namespace Duel {
 		// in this function do resource clearup
 		virtual void			shutdown() = 0;
 
-		//  [10/30/2013 OMEGA]
-		// move to RenderResourceManager.
-// 		// create a window with name and setting, with a platform-specified handle.
-// 		virtual DRenderWindow*	createRenderWindow(const DString& name, const RenderWindowSetting& WndSetting, uint32 targetWnd) = 0;
-// 		// destory a render window.
-// 		virtual	void			destroyRenderWindow(DRenderWindow* wind) = 0;
-// 
-// 		// use frame buffer to take place of render target, 
-// 		virtual	DFrameBuffer*	createFrameBuffer(uint32 w, uint32 h, DPixelFormat colorFmt) = 0;
-// 		virtual	void			destroyFrameBuffer(DFrameBuffer* buf) = 0;
 
 		// bind frame buffer for rendering.
 		virtual	void			bindFrameBuffer(DFrameBuffer* buf) = 0;
 		virtual	DFrameBuffer*	getCurrentFrameBuffer() = 0;
 
-
-		// TODO:
-		// 加入参数抽象化
-		// sub-class should set state depends on render api.
-		virtual	void			setRasterizerState(DRasterizerStateObject* rs) = 0;
-		virtual void			setDepthStencilState(DDepthStencilStateObject* dss, uint32 frontStencilRef = 0, uint32 backStencilRef = 0) = 0;
-
-		//  [3/25/2013 OMEGA] 新版本要加上的东西:
-		// set blend state for specified render target, including main window(usually with index 0);
-		virtual	void			setBlendState(DBlendStateObject* sbs, const DColor& blendFactor) = 0;
 
 	
 		//  [7/27/2013 OMEGA] removed. used state object instead.
@@ -81,11 +61,17 @@ namespace Duel {
 
 		virtual	void						bindShaderObject(DShaderObject* so) = 0;
 
-		// TODO: 添加参数
+		// sub-class should set state depends on render api.
+		virtual	void		setRasterizerState(DRasterizerStateObject* rs) = 0;
+		virtual void		setDepthStencilState(DDepthStencilStateObject* dss, uint32 frontStencilRef = 0, uint32 backStencilRef = 0) = 0;
+
+		//  [3/25/2013 OMEGA] 新版本要加上的东西:
+		// set blend state for specified render target, including main window(usually with index 0);
+		virtual	void		setBlendState(DBlendStateObject* sbs, const DColor& blendFactor) = 0;
+
 		// render an object
 		virtual void		render(DRenderLayout* layout) = 0;
 		
-
 
 		// render system capbilities---------------------
 		virtual	void		fillDeviceCaps() = 0;

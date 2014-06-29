@@ -360,7 +360,7 @@ namespace Duel
 			while(vbdi.hasMoreElements())
 			{
 				totalSize += headerSize + sizeof(uint32)*2 + sizeof(uint16); // DM_VERTEX
-				totalSize += headerSize + vbdi.current()->second->getVertexSize() * vbdi.current()->second->getVerticesCount(); // DM_VERTEX_BUFFER
+				totalSize += headerSize + vbdi.current()->second->getVertexSize() * vbdi.current()->second->getVertexCount(); // DM_VERTEX_BUFFER
 				vbdi.moveNext();
 			}
 			// subskeleton

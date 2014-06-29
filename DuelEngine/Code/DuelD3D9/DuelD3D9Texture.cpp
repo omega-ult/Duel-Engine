@@ -95,14 +95,14 @@ namespace Duel
 
 	void D3D9Texture::releaseHardwareResource()
 	{
+		if (mSurfaceList.size() != 0)
+		{
+			mSurfaceList.clear();
+		}
 		if (mTextureConstant != NULL)
 		{
 			mTextureConstant->getAs<D3D9GpuTextureConstant>()->discard();
 			mTextureConstant = DGpuTextureConstantPtr();
-		}
-		if (mSurfaceList.size() != 0)
-		{
-			mSurfaceList.clear();
 		}
 		// release HardwareBuffer resources.
 		// ..............
@@ -130,104 +130,28 @@ namespace Duel
 		mMipMapCount = level - 1;
 		size_t surfaceCount = level * faceCount;
 		D3D9PixelBuffer* buf = NULL;
-		for (size_t i = 0; i < faceCount; ++i)
+		for (size_t face = 0; face < faceCount; ++face)
 		{
 			// '<=' means main surface will also be taken into consideration
-			for (uint32 j = 0; j <= mMipMapCount; ++j)
+			for (uint32 mip = 0; mip <= mMipMapCount; ++mip)
 			{
 				buf = new D3D9PixelBuffer(mType,mFormat,mUsage);
+				if (mType == TT_1D || mType == TT_2D)
+				{
+					buf->bind(mip, mTexture.p2DTexture);
+				}
+				if (mType == TT_3D)
+				{
+					buf->bind(mip, mTexture.p3DTexture);
+				}
+				if (mType == TT_Cube)
+				{
+					buf->bind(face, mip, mTexture.pCubeTexture);
+				}				
 				mSurfaceList.push_back(DPixelBufferPtr(buf));
 			}
 		}
 
-
-		IDirect3DSurface9 *surface = NULL;
-		IDirect3DVolume9 *volume = NULL;
-		if (mType == TT_1D || mType == TT_2D)
-		{
-			assert(mTexture.p2DTexture != NULL);
-			// '<=' means main surface will also be taken into consideration
-			for(uint32 i = 0; i <=mMipMapCount; ++i)
-			{
-				// this method will increase a ref count to the surface, then we will
-				// remove it later
-				if (FAILED(mTexture.p2DTexture->GetSurfaceLevel(i,&surface)))
-				{
-					DUEL_EXCEPT_BRIEF(DException::ET_InternalError,
-						"Texture creation failed, check parameters",
-						"Duel::D3D9Texture::createSufaceList")
-				}
-				D3D9PixelBuffer* curBuf = mSurfaceList[i]->getAs<D3D9PixelBuffer>();
-				curBuf->bind(surface);
-				// decrease reference 
-				surface->Release();
-			}
-		}
-		else if (mType == TT_3D)
-		{
-			assert(mTexture.p3DTexture != NULL);
-			// '<=' means main surface will also be taken into consideration
-			for(uint32 i = 0; i <=mMipMapCount; ++i)
-			{
-				// this method will increase a ref count to the surface, then we will
-				// remove it later
-				if (FAILED(mTexture.p3DTexture->GetVolumeLevel(i,&volume)))
-				{
-					DUEL_EXCEPT_BRIEF(DException::ET_InternalError,
-						"Texture creation failed, check parameters",
-						"Duel::D3D9Texture::createSufaceList")
-				}
-				D3D9PixelBuffer* curBuf = mSurfaceList[i]->getAs<D3D9PixelBuffer>();
-				curBuf->bind(volume);
-				// decrease reference 
-				volume->Release();
-			}
-		}
-		else //TT_CUBE
-		{
-			assert(mTexture.pCubeTexture != NULL);
-			// '<=' means main surface will also be taken into consideration
-			for(uint32 face = 0; face < 6; ++face)
-			{
-				D3DCUBEMAP_FACES d3dFace;
-				switch(face)
-				{
-				case 0:
-					d3dFace = D3DCUBEMAP_FACE_POSITIVE_X;
-					break;
-				case 1:
-					d3dFace = D3DCUBEMAP_FACE_NEGATIVE_X;
-					break;
-				case 2:
-					d3dFace = D3DCUBEMAP_FACE_POSITIVE_Y;
-					break;
-				case 3:
-					d3dFace = D3DCUBEMAP_FACE_NEGATIVE_Y;
-					break;
-				case 4:
-					d3dFace = D3DCUBEMAP_FACE_POSITIVE_Z;
-					break;
-				case 5:
-					d3dFace = D3DCUBEMAP_FACE_NEGATIVE_Z;
-					break;
-				}
-				for(uint32 i = 0; i <=mMipMapCount; ++i)
-				{
-					// this method will increase a ref count to the surface, then we will
-					// remove it later
-					if (FAILED(mTexture.pCubeTexture->GetCubeMapSurface(d3dFace,i,&surface)))
-					{
-						DUEL_EXCEPT_BRIEF(DException::ET_InternalError,
-							"Texture creation failed, check parameters",
-							"Duel::D3D9Texture::createSufaceList")
-					}
-					D3D9PixelBuffer* curBuf = mSurfaceList[face* 6 + i]->getAs<D3D9PixelBuffer>();
-					curBuf->bind(surface);
-					// decrease reference 
-					surface->Release();
-				}
-			}
-		}
 	}
 
 }

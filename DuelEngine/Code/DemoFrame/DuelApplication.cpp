@@ -121,9 +121,9 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		{
 			DInputManager::getSingleton().captureEvent();
 			mStateManager->transactionStart();
+			mStateManager->render();
 			mStateManager->parseInput();
 			mStateManager->update();
-			mStateManager->render();
 			mStateManager->present();
 			mStateManager->transactionFinish();
 		}
@@ -136,9 +136,9 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 	void DApplication::shutdown()
 	{
-		// default
-		DInputManager::getSingleton().unregisterWindow(mMainWindow);
-		PostQuitMessage(0);
+		Duel::DInputManager::getSingleton().unregisterWindow(mMainWindow);
+		mStateManager->shutdown();
+		delete mTestState;
 	}
 
 	void DApplication::initialize(const DString& appCfgFile)

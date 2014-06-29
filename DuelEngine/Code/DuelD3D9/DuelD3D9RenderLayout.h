@@ -14,14 +14,16 @@ namespace Duel
 		DUEL_DECLARE_RTTI(D3D9RenderLayout)
 	public:
 		D3D9RenderLayout(DRenderResourceFactory* creator);
-
+		~D3D9RenderLayout();
 		void		seal();
 
+		uint32		getVertexCount() { return mVertexCount; }
 		IDirect3DVertexDeclaration9*	getD3DVertexDeclaration();
 		D3DPRIMITIVETYPE	getD3DPrimitiveType() { return mD3DPrimitiveType; }
 	protected:
 		IDirect3DVertexDeclaration9*	mVDecl;
 		D3DPRIMITIVETYPE	mD3DPrimitiveType;
+		uint32		mVertexCount;
 	};
 
 }

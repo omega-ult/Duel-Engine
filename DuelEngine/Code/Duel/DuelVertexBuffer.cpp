@@ -12,11 +12,11 @@ namespace Duel
 		HardwareBufferUsage usage, bool useShadow, VertexBufferType type/* = VBT_GEOMETRY */) :
 		DHardwareBuffer(usage),
 		mVertexSize(vertexSize),
-		mVerticesCount(verticesCount),
+		mVertexCount(verticesCount),
 		mbUseShadow(useShadow),
 		mType(type)
 	{
-		mByteSize = mVertexSize*mVerticesCount;
+		mByteSize = mVertexSize*mVertexCount;
 	}
 
 	DVertexBuffer::~DVertexBuffer()
