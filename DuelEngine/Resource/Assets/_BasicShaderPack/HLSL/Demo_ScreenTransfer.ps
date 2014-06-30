@@ -1,0 +1,12 @@
+struct PS_Input
+{
+	float4 pos : POSITION;
+	float2 texcoord : TEXCOORD0;
+};
+
+sampler srcTex;
+
+float4 main(in PS_Input psin) : COLOR0
+{
+	return tex2D(srcTex, psin.texcoord);
+}

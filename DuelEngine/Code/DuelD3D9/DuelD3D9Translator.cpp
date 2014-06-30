@@ -456,7 +456,7 @@ namespace Duel
 		retMap.insert(std::make_pair(PF_G16R16_Float, D3DFMT_G16R16F));
 
 		retMap.insert(std::make_pair(PF_R32, D3DFMT_INDEX32));
-		retMap.insert(std::make_pair(PF_D32_Float, D3DFMT_D32F_LOCKABLE));
+		retMap.insert(std::make_pair(PF_D32_Float, D3DFMT_D32));
 		retMap.insert(std::make_pair(PF_R32_Float, D3DFMT_R32F));
 
 		retMap.insert(std::make_pair(PF_A8B8G8R8, D3DFMT_A8B8G8R8));

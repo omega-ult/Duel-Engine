@@ -31,7 +31,7 @@
 		  <Type>folder</Type>
 		</Archive>
 		<Archive>
-		  <Name>Assets\_BasicShaderPack\GLSL</Name>
+		  <Name>Assets\_BasicShaderPack\HLSL</Name>
 		  <Type>folder</Type>
 		</Archive>
 		
@@ -68,30 +68,30 @@
 	<GroupDescription>
 		<!-- shaderPack-->
 		<Group name = '_BasicShaderPack'>
-			<LocationList>
-				<Location>Assets\_BasicShaderPack</Location>
-				<Location>Assets\_BasicShaderPack\DRE</Location>
-				<!-- shaderPack for glsl -->
-				<Location>Assets\_BasicShaderPack\GLSL</Location>
-			</LocationList>
+			<ArchiveList>
+				<Archive>Assets\_BasicShaderPack</Archive>
+				<Archive>Assets\_BasicShaderPack\DRE</Archive>
+				<!-- shaderPack for hlsl -->
+				<Archive>Assets\_BasicShaderPack\HLSL</Archive>
+			</ArchiveList>
 		</Group>
 		
 		<!-- mediaPack-->
 		<Group name = '_BasicMediaPack'>
-			<LocationList>
-				<Location>Assets\_BasicMediaPack</Location>
-				<Location>Assets\_BasicMediaPack\Mesh</Location>
-				<Location>Assets\_BasicMediaPack\Skeleton</Location>
-				<Location>Assets\_BasicMediaPack\Texture</Location>
-				<Location>Assets\_BasicMediaPack\Font</Location>
-			</LocationList>
+			<ArchiveList>
+				<Archive>Assets\_BasicMediaPack</Archive>
+				<Archive>Assets\_BasicMediaPack\Mesh</Archive>
+				<Archive>Assets\_BasicMediaPack\Skeleton</Archive>
+				<Archive>Assets\_BasicMediaPack\Texture</Archive>
+				<Archive>Assets\_BasicMediaPack\Font</Archive>
+			</ArchiveList>
 		</Group>
 		
 		<!-- GUIShowcasePack-->
 		<Group name = '_ShowcasePack'>
-			<LocationList>
-				<Location>Assets\_BasicMediaPack\ShowcaseTexture</Location>
-			</LocationList>
+			<ArchiveList>
+				<Archive>Assets\_BasicMediaPack\ShowcaseTexture</Archive>
+			</ArchiveList>
 		</Group>
 		
 		

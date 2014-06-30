@@ -1,0 +1,15 @@
+
+struct PS_Input
+{
+	float4 pos : POSITION;
+	float2 texcoord : TEXCOORD0;
+};
+
+sampler albedoMap;
+sampler lightAccumMap;
+
+
+float4 main(in PS_Input psin) : COLOR0
+{
+	return tex2D(albedoMap, psin.texcoord);
+}

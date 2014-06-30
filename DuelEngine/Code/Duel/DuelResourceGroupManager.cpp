@@ -480,16 +480,16 @@ namespace Duel
 			nameAttr = recordNode->first_attribute("name");
 			name = DXMLTool::readValue(nameAttr);
 			createGroup(name);
-			contentNode = recordNode->first_node("LocationList");
+			contentNode = recordNode->first_node("ArchiveList");
 			if (contentNode != NULL)
 			{
-				contentNode = contentNode->first_node("Location");
+				contentNode = contentNode->first_node("Archive");
 				while(contentNode != NULL)
 				{
 					location = DXMLTool::readValue(contentNode);
 					// just add it.
 					addLocation(name, location);
-					contentNode = contentNode->next_sibling("Location");
+					contentNode = contentNode->next_sibling("Archive");
 				}
 			}
 			recordNode = recordNode->next_sibling("Group");

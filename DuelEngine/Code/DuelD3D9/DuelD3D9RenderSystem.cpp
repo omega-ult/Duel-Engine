@@ -80,12 +80,12 @@ namespace Duel
 		mBlitQuadIndx->Unlock();
 		DString vsCode = "struct VS_INPUT\
 						 {\
-						 float4 Position   : POSITION;\
+						 float4 Position   : POSITION0;\
 						 float2 Texcoord   : TEXCOORD0;\
 						 };\
 						 struct VS_OUTPUT \
 						 {\
-						 float4 Position   : POSITION;\
+						 float4 Position   : POSITION0;\
 						 float2 Texcoord   : TEXCOORD0;\
 						 };\
 						 VS_OUTPUT main(in VS_INPUT Input)\
@@ -96,10 +96,10 @@ namespace Duel
 		D3DXCompileShader(vsCode.c_str(), vsCode.length(),NULL,NULL,"main","vs_2_0",0, &vsCodeBuf, NULL, NULL);
 		HRESULT hr = mDevice->CreateVertexShader(static_cast<DWORD*>(vsCodeBuf->GetBufferPointer()), &mBlitVShader);
 		vsCodeBuf->Release();
-
+		
 		DString psCode = "struct PS_INPUT\
 						 {\
-						 float4 Position   : POSITION;\
+						 float4 Position   : POSITION0;\
 						 float2 Texcoord   : TEXCOORD0;\
 						 };\
 						 sampler srcTex : register(s0);\

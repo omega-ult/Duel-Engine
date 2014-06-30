@@ -1,0 +1,96 @@
+sampler normalTexture;
+sampler diffuseTexture;
+sampler specularTexture;
+sampler roughnessTexture;
+
+struct PS_Input
+{	
+	float4	vpos;	// view space
+	float2	texcoord;
+	float3	vnormal;
+	float2	hdepth; // homogeneous space
+};
+
+struct PS_Output
+{
+	float4	vnormal : COLOR0;
+	float4 albedo : COLOR1;
+	float4 depth : COLOR3;
+};
+// http://www.thetenthplanet.de/archives/1180
+// Christian Schuler, ShaderX5 2.6, "Normal Mapping Without Precomputed Tangents"
+float3x3 cotangent_frame(float3 N, float3 p, float2 uv)
+{
+    // get edge floattors of the pixel triangle
+    float3 dp1 = ddx( p );
+    float3 dp2 = ddy( p );
+    float2 duv1 = ddx( uv );
+    float2 duv2 = ddy( uv );
+ 
+    // solve the linear system
+    float3 dp2perp = cross( dp2, N );
+    float3 dp1perp = cross( N, dp1 );
+    float3 T = dp2perp * duv1.x + dp1perp * duv2.x;
+    float3 B = dp2perp * duv1.y + dp1perp * duv2.y;
+ 
+    // construct a scale-invariant frame 
+    float invmax = inversesqrt( max( dot(T,T), dot(B,B) ) );
+    return float3x3( T * invmax, B * invmax, N );
+}
+
+// encode a normal value to rgb color
+float3 encodeNormal(float3 norm)
+{
+	return (norm * 127.0f + 128.0f)*0.00392156; // 1/255.0f;
+}
+
+// decode a normal value from rgb color
+float3 decodeNormal(float3 color)
+{
+	return (color * 255.0f - 128.0f)*0.00787401; // 1/127.0f;
+}
+
+float3 depth_to_color( float f)
+{
+	float3 color;
+	f *= 256;
+	color.x = floor(f);
+	f = (f-color.x)*256;
+	color.y = floor(f);
+	color.z = f-color.y;
+	color.xy *= 0.00390625; // *= 1.0/256
+	return color;
+}
+
+float color_to_depth(float3 color)
+{
+	const float3 byte_to_float = float3(1.0,1.0/256,1.0/(256*256));
+	return dot(color,byte_to_float);
+}
+
+PS_Output main(in PS_Input psin)
+{
+	PS_Output psout;
+	
+	////////
+	// for normal in the view space.
+	float3 N = normalize(psin.vnormal);
+	float3 vP = normalize(psin.vpos.xyz);
+	float3x3 TBN = cotangent_frame(N, vP, psin.texcoord);
+	
+	float3 normColor = tex2D(normalTexture, psin.texcoord).xyz;
+	// decode the normal 
+	float3 norm = decodeNormal(normColor);
+	// debug vnormal = float4(encodeNormal(norm), 1.0f);
+	// debug depth.
+	// vnormal.xyz = depth_to_color(psin.hdepth.x / psin.hdepth.y); 
+	// vnormal.w = 1.0f;
+	psout.vnormal = float4(encodeNormal(normalize(TBN * norm)), 1.0f);
+	
+	// for albedo.
+	psout.albedo = float4(float3(1.0f, 1.0f, 1.0f) - vnormal.xyz,1.0);
+	
+	// for depth
+	psout.depth.xyz = depth_to_color(psin.hdepth.x / psin.hdepth.y); 
+	psout.depth.w = 1.0f;
+}
