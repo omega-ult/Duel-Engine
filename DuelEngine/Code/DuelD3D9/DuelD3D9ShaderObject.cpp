@@ -168,6 +168,9 @@ namespace Duel
 		D3D9GpuProgram* ps = pass->getPixelProgram()->getAs<D3D9GpuProgram>();
 		if (vs->hasCompileError() || ps->hasCompileError())
 		{
+			std::cout<< vs->getName() + " : " + vs->getCompileError() << std::endl;
+			std::cout<< ps->getName() + " : " + ps->getCompileError() << std::endl;
+
 			return;
 		}
 		mCreator->getMainDevice()->CreateVertexShader(
@@ -194,7 +197,7 @@ namespace Duel
 		for (uint32 i = 0; i < desc.Constants; ++i)
 		{
 			// Recursively descend through the structure levels
-			processParam(mVSParameter, PSConstTable, NULL, "", i);
+			processParam(mPSParameter, PSConstTable, NULL, "", i);
 		}
 	}
 
@@ -241,7 +244,6 @@ namespace Duel
 			{
 				getDefinition(desc, def);
 				def.logicalIndex = desc.RegisterIndex;
-				param.addConstant(paramName,def);
 			}
 			else
 			{
@@ -267,6 +269,7 @@ namespace Duel
 					break;
 				}
 			}
+			param.addConstant(paramName,def);
 		}
 	}
 

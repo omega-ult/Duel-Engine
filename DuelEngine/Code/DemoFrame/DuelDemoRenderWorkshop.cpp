@@ -53,10 +53,8 @@ namespace Duel
 		DShaderObject* so = pass->getShaderObject().get();
 		if (target != NULL && so != NULL && so->isValid())
 		{
-			if(rsys->getCurrentFrameBuffer() != target)
-			{
-				rsys->bindFrameBuffer(target);
-			}
+			rsys->bindFrameBuffer(target);
+
 			rendObj->preRender();
 			rendObj->updateAutoGpuParameter(so);
 			rendObj->updateCustomGpuParameter(so);
@@ -78,8 +76,6 @@ namespace Duel
 			return;
 		}
 		// we use the present target's depth stencil buffer, 
-		DRenderDepthStencilView* cacheDepthStencil = mPresentTarget->getRenderDepthStencilView();
-		mPresentTarget->detachRenderDepthStencilView();
 		DAutoGpuParameter::getSingleton().setParameterDelegate(queue);
 		DRenderQueue::RenderGroupIterator ri = queue->getRenderGroupIterator();;
 		// for defer stage.
@@ -101,12 +97,7 @@ namespace Duel
 			DeferLayer* deferlayer = gi->second;
 			if (deferlayer != NULL)
 			{
-				deferlayer->getFrameBuffer()->resize(mPresentTarget->getWidth(), mPresentTarget->getHeight());
-				deferlayer->getFrameBuffer()->detachRenderDepthStencilView();
-				if (cacheDepthStencil != NULL)
-				{
-					deferlayer->getFrameBuffer()->attachRenderDepthStencilView(cacheDepthStencil);
-				}
+				deferlayer->getGeoStageFrameBuffer()->resize(mPresentTarget->getWidth(), mPresentTarget->getHeight());
 				// GBuffer---------------------------------------------
 				deferlayer->prepareGBufferStage();
 				ri = queue->getRenderGroupIterator();
@@ -121,72 +112,68 @@ namespace Duel
 			 			for (i = mRenderList.begin(); i != iend; ++i)
 			 			{
 			 				RenderElement& e = *i;
-			 				renderSingleObject(deferlayer->getFrameBuffer(), e.renderable, e.renderPass);
+			 				//renderSingleObject(deferlayer->getGeoStageFrameBuffer(), e.renderable, e.renderPass);
+							renderSingleObject(mPresentTarget, e.renderable, e.renderPass);
 			 			}
 			 			signalGroupFinishRender(queue, rgrp);
 			 		}
 				}
-				if (deferProcessing)
-				{
-			 		// light accumulation.-------------------------------	
-					deferlayer->prepareLightingStage();
-					DRenderQueue::LightIterator li = queue->getLightIterator();
-					while (li.hasMoreElements())
-					{
-						DLightSource* l = li.getNext();
-					}
-					// merge---------------------------------------------
-					deferlayer->prepareMergeStage();
-					{
-						mMergeHelper.setInputAlbedo(deferlayer->getAlbedoMap()->
-							getGpuTexutureConstant());
-						mMergeHelper.setInputLightAccumulationMap(deferlayer->getLightAccumulationMap()->
-							getGpuTexutureConstant());
-						mMergeHelper.setInputDepth(deferlayer->getDepthMap()->
-							getGpuTexutureConstant());
-						DRenderTechnique* mergetTech = mMergeHelper.getRenderTechnique(
-							DDemoMergeHelper::RS_DeferMerge, queue->getRenderCamera(), queue->getLightIterator());
-						if (mergetTech)
-						{
-							DRenderTechnique::RenderPassIterator p = mergetTech->getRenderPassIterator();
-							while (p.hasMoreElements())
-							{
-								DRenderPass* pass = p.getNext().get();
-								renderSingleObject(deferlayer->getFrameBuffer(), &mMergeHelper, pass);
-							}
-						}
-					}
-				}
-				deferlayer->getFrameBuffer()->detachAllRenderColorViews();
-				deferlayer->getFrameBuffer()->detachRenderDepthStencilView();
-				// transfer color to the present target.
-				if (deferProcessing)
-				{
-					mMergeHelper.setTransferSource(deferlayer->getMergedColorMap()->
-						getGpuTexutureConstant());
-					DRenderTechnique* transTech = mMergeHelper.getRenderTechnique(
-						DDemoMergeHelper::RS_ScreenTransfer, queue->getRenderCamera(), queue->getLightIterator());
-					if (transTech)
-					{
-						DRenderTechnique::RenderPassIterator p = transTech->getRenderPassIterator();
-						while (p.hasMoreElements())
-						{
-							DRenderPass* pass = p.getNext().get();
-							mPresentTarget->attachRenderDepthStencilView(cacheDepthStencil);
-							renderSingleObject(mPresentTarget, &mMergeHelper, pass);
-						}
-					}
-				}
+// 				if (deferProcessing)
+// 				{
+// 					// light accumulation.-------------------------------	
+// 					deferlayer->getLightStageFrameBuffer()->resize(mPresentTarget->getWidth(), mPresentTarget->getHeight());					
+// 					deferlayer->prepareLightingStage();
+// 					DRenderQueue::LightIterator li = queue->getLightIterator();
+// 					while (li.hasMoreElements())
+// 					{
+// 						DLightSource* l = li.getNext();
+// 					}
+// 					// merge---------------------------------------------
+// 					deferlayer->getMergeStageFrameBuffer()->resize(mPresentTarget->getWidth(), mPresentTarget->getHeight());
+// 					deferlayer->prepareMergeStage();
+// 					{
+// 						mMergeHelper.setInputAlbedo(deferlayer->getAlbedoMap()->
+// 							getGpuTexutureConstant());
+// 						mMergeHelper.setInputLightAccumulationMap(deferlayer->getLightAccumulationMap()->
+// 							getGpuTexutureConstant());
+// 						mMergeHelper.setInputDepth(deferlayer->getDepthMap()->
+// 							getGpuTexutureConstant());
+// 						DRenderTechnique* mergetTech = mMergeHelper.getRenderTechnique(
+// 							DDemoMergeHelper::RS_DeferMerge, queue->getRenderCamera(), queue->getLightIterator());
+// 						if (mergetTech)
+// 						{
+// 							DRenderTechnique::RenderPassIterator p = mergetTech->getRenderPassIterator();
+// 							while (p.hasMoreElements())
+// 							{
+// 								DRenderPass* pass = p.getNext().get();
+// 								renderSingleObject(deferlayer->getMergeStageFrameBuffer(), &mMergeHelper, pass);
+// 							}
+// 						}
+// 					}
+// 				}
+// 				// transfer color to the present target.
+// 				if (deferProcessing)
+// 				{
+// 					mMergeHelper.setTransferSource(deferlayer->getMergedColorMap()->
+// 						getGpuTexutureConstant());
+// 					DRenderTechnique* transTech = mMergeHelper.getRenderTechnique(
+// 						DDemoMergeHelper::RS_ScreenTransfer, queue->getRenderCamera(), queue->getLightIterator());
+// 					if (transTech)
+// 					{
+// 						DRenderTechnique::RenderPassIterator p = transTech->getRenderPassIterator();
+// 						while (p.hasMoreElements())
+// 						{
+// 							DRenderPass* pass = p.getNext().get();
+// 							renderSingleObject(mPresentTarget, &mMergeHelper, pass);
+// 						}
+// 					}
+// 				}
 			}
 
 		}
 		// forward stage now;
 		// re-attach depth stencil view to the present target, the drawing result
 		// in the defer stage will be re-used.
-		if (cacheDepthStencil != NULL && mPresentTarget->getRenderDepthStencilView() == NULL)
-		{
-			mPresentTarget->attachRenderDepthStencilView(cacheDepthStencil);
-		}
 		rsys->bindFrameBuffer(mPresentTarget);
 		ri = queue->getRenderGroupIterator();
 		while (ri.hasMoreElements())
@@ -224,7 +211,7 @@ namespace Duel
 		for (i = mDeferLayerMap.begin(); i != iend; ++i)
 		{
 			DeferLayer* ly = i->second;
-			if (ly->getFrameBuffer() == target)
+			if (ly->getGeoStageFrameBuffer() == target)
 			{
 				isInDeferLayer = true;
 				break;
@@ -285,12 +272,15 @@ namespace Duel
 
 
 	DDemoRenderWorkshop::DeferLayer::DeferLayer() : 
-		mFrameBuffer(NULL),
-		mAlbedo(NULL),
-		mDepth(NULL),
-		mViewSpaceNormal(NULL),
-		mLightAccum(NULL),
-		mMergeView(NULL)
+		mGeoFrameBuffer(NULL),
+		mLightFrameBuffer(NULL),
+		mMergeFrameBuffer(NULL),
+		mAlbedoRT(NULL),
+		mDepthRT(NULL),
+		mViewSpaceNormalRT(NULL),
+		mGeoDepthStencil(NULL),
+		mLightAccumRT(NULL),
+		mMergeRT(NULL)
 	{
 
 	}
@@ -305,101 +295,133 @@ namespace Duel
 		assert(w != 0 && h != 0);
 		shutdown();
 		DRenderResourceManager* rm = DRenderResourceManager::getSingletonPtr();
-		mFrameBuffer = rm->createFrameBuffer(w, h, 32);
-		mAlbedo = rm->createRenderColorView(PF_A8R8G8B8);
-		mDepth = rm->createRenderColorView(PF_A8R8G8B8);
-		mViewSpaceNormal = rm->createRenderColorView(PF_A8R8G8B8);
-		mLightAccum = rm->createRenderColorView(PF_A8R8G8B8);
-		mMergeView = rm->createRenderColorView(PF_A8R8G8B8);
-		}
+		mGeoFrameBuffer = rm->createFrameBuffer(w, h, 32);
+		mLightFrameBuffer = rm->createFrameBuffer(w, h, 32);
+		mMergeFrameBuffer = rm->createFrameBuffer(w, h, 32);
+
+		mAlbedoRT = rm->createRenderColorView(PF_A8R8G8B8);
+		mDepthRT = rm->createRenderColorView(PF_A8R8G8B8);
+		mViewSpaceNormalRT = rm->createRenderColorView(PF_A8R8G8B8);
+		mGeoDepthStencil = rm->createRenderDepthStencilView();
+
+		mLightAccumRT = rm->createRenderColorView(PF_A8R8G8B8);
+		mMergeRT = rm->createRenderColorView(PF_A8R8G8B8);
+
+		mGeoFrameBuffer->attachRenderColorView(EA_Color0, mAlbedoRT);
+		mGeoFrameBuffer->attachRenderColorView(EA_Color1, mViewSpaceNormalRT);
+		mGeoFrameBuffer->attachRenderColorView(EA_Color2, mDepthRT);
+		mGeoFrameBuffer->attachRenderDepthStencilView(mGeoDepthStencil);
+
+		mLightFrameBuffer->attachRenderColorView(EA_Color0, mLightAccumRT);
+		
+		mMergeFrameBuffer->attachRenderColorView(EA_Color0, mMergeRT);
+	}
 
 	void DDemoRenderWorkshop::DeferLayer::prepareGBufferStage()
 	{
-		mFrameBuffer->detachAllRenderColorViews();
-		mFrameBuffer->attachRenderColorView(EA_Color0, mAlbedo);
-		mFrameBuffer->attachRenderColorView(EA_Color1, mViewSpaceNormal);
-		mFrameBuffer->attachRenderColorView(EA_Color2, mDepth);
-		mFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
+		mGeoFrameBuffer->clear(CBM_Color|CBM_Depth|CBM_Stencil, DColor::ZERO, 1.0f, 0);
 	}
 
 	void DDemoRenderWorkshop::DeferLayer::prepareLightingStage()
 	{
-		mFrameBuffer->detachAllRenderColorViews();
-		mFrameBuffer->attachRenderColorView(EA_Color0, mLightAccum);
-		mFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
+		mGeoFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
 	}
 
 	void DDemoRenderWorkshop::DeferLayer::prepareMergeStage()
 	{
-		mFrameBuffer->detachAllRenderColorViews();
-		mFrameBuffer->attachRenderColorView(EA_Color0, mMergeView);
-		mFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
+		mGeoFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
 	}
 
-	DFrameBuffer* DDemoRenderWorkshop::DeferLayer::getFrameBuffer()
+	DFrameBuffer* DDemoRenderWorkshop::DeferLayer::getGeoStageFrameBuffer()
 	{
-		return mFrameBuffer;
+		return mGeoFrameBuffer;
 	}
 
+	DFrameBuffer* DDemoRenderWorkshop::DeferLayer::getLightStageFrameBuffer()
+	{
+		return mLightFrameBuffer;
+	}
+
+	DFrameBuffer* DDemoRenderWorkshop::DeferLayer::getMergeStageFrameBuffer()
+	{
+		return mMergeFrameBuffer;
+	}
 
 	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getAlbedoMap()
 	{
-		return mAlbedo;
+		return mAlbedoRT;
 	}
 
 	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getDepthMap()
 	{
-		return mDepth;
+		return mDepthRT;
 	}
 
 	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getViewSpaceNormalMap()
 	{
-		return mViewSpaceNormal;
+		return mViewSpaceNormalRT;
 	}
 
 	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getLightAccumulationMap()
 	{
-		return mLightAccum;
+		return mLightAccumRT;
 	}
 
 	DRenderColorView* DDemoRenderWorkshop::DeferLayer::getMergedColorMap()
 	{
-		return mMergeView;
+		return mMergeRT;
 	}
 
 
 	void DDemoRenderWorkshop::DeferLayer::shutdown()
 	{
 		DRenderResourceManager* rm = DRenderResourceManager::getSingletonPtr();
-		if (mFrameBuffer != NULL)
+		if (mGeoFrameBuffer != NULL)
 		{
-			rm->destroyFrameBuffer(mFrameBuffer);
-			mFrameBuffer = NULL;
+			rm->destroyFrameBuffer(mGeoFrameBuffer);
+			mGeoFrameBuffer = NULL;
 		}
-		if (mAlbedo != NULL)
+		if (mLightFrameBuffer != NULL)
 		{
-			rm->destroyRenderColorView(mAlbedo);
-			mAlbedo = NULL;
+			rm->destroyFrameBuffer(mLightFrameBuffer);
+			mLightFrameBuffer = NULL;
 		}
-		if (mDepth != NULL)
+		if (mMergeFrameBuffer != NULL)
 		{
-			rm->destroyRenderColorView(mDepth);
-			mDepth = NULL;
+			rm->destroyFrameBuffer(mMergeFrameBuffer);
+			mMergeFrameBuffer = NULL;
 		}
-		if (mViewSpaceNormal != NULL)
+		
+		if (mAlbedoRT != NULL)
 		{
-			rm->destroyRenderColorView(mViewSpaceNormal);
-			mViewSpaceNormal = NULL;
+			rm->destroyRenderColorView(mAlbedoRT);
+			mAlbedoRT = NULL;
 		}
-		if (mLightAccum != NULL)
+		if (mDepthRT != NULL)
 		{
-			rm->destroyRenderColorView(mLightAccum);
-			mLightAccum = NULL;
+			rm->destroyRenderColorView(mDepthRT);
+			mDepthRT = NULL;
 		}
-		if (mMergeView != NULL)
+		if (mViewSpaceNormalRT != NULL)
 		{
-			rm->destroyRenderColorView(mMergeView);
-			mMergeView = NULL;
+			rm->destroyRenderColorView(mViewSpaceNormalRT);
+			mViewSpaceNormalRT = NULL;
+		}
+		if (mGeoDepthStencil != NULL)
+		{
+			rm->destroyRenderDepthStencilView(mGeoDepthStencil);
+			mGeoDepthStencil = NULL;
+		}
+		
+		if (mLightAccumRT != NULL)
+		{
+			rm->destroyRenderColorView(mLightAccumRT);
+			mLightAccumRT = NULL;
+		}
+		if (mMergeRT != NULL)
+		{
+			rm->destroyRenderColorView(mMergeRT);
+			mMergeRT = NULL;
 		}
 
 	}

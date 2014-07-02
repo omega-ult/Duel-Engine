@@ -2,6 +2,7 @@
 
 #include "DuelD3D9Common.h"
 #include "DuelD3D9GpuProgramManager.h"
+#include "DuelD3D9GpuProgram.h"
 
 namespace Duel
 {
@@ -11,7 +12,11 @@ namespace Duel
 
 	DResource* D3D9GpuProgramManger::createImpl( DResourceDescription* createParam )
 	{
-		throw std::exception("The method or operation is not implemented.");
+		DGpuProgramDescription* desc = createParam->getAs<DGpuProgramDescription>();
+		D3D9GpuProgram* ret = new D3D9GpuProgram(this, desc->getName(), desc->getGroupName());
+		ret->setProfile(desc->profile);
+		ret->setEntry(desc->entry);
+		return ret;
 	}
 
 }

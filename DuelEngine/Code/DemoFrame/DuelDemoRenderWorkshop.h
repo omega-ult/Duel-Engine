@@ -26,7 +26,9 @@ namespace Duel
 			void	prepareGBufferStage();
 			void	prepareLightingStage();
 			void	prepareMergeStage();
-			DFrameBuffer*		getFrameBuffer();
+			DFrameBuffer*		getGeoStageFrameBuffer();
+			DFrameBuffer*		getLightStageFrameBuffer();
+			DFrameBuffer*		getMergeStageFrameBuffer();
 			DRenderColorView*	getAlbedoMap();
 			DRenderColorView*	getDepthMap();
 			DRenderColorView*	getViewSpaceNormalMap();
@@ -34,12 +36,16 @@ namespace Duel
 			DRenderColorView*	getMergedColorMap();
 			void	shutdown();
 		private:
-			DFrameBuffer*		mFrameBuffer;
-			DRenderColorView*	mAlbedo;
-			DRenderColorView*	mDepth;
-			DRenderColorView*	mViewSpaceNormal;
-			DRenderColorView*	mLightAccum;
-			DRenderColorView*	mMergeView;
+			DFrameBuffer*		mGeoFrameBuffer;
+			DFrameBuffer*		mLightFrameBuffer;
+			DFrameBuffer*		mMergeFrameBuffer;
+
+			DRenderColorView*	mAlbedoRT;
+			DRenderColorView*	mDepthRT;
+			DRenderColorView*	mViewSpaceNormalRT;
+			DRenderDepthStencilView*	mGeoDepthStencil;
+			DRenderColorView*	mLightAccumRT;
+			DRenderColorView*	mMergeRT;
 		};
 		// get current present target's defer layer.
 		DeferLayer*		getCurrentDeferlayer();

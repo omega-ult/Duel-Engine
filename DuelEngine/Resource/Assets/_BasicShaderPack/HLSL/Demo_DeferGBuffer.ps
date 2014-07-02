@@ -5,17 +5,18 @@ sampler roughnessTexture;
 
 struct PS_Input
 {	
-	float4	vpos;	// view space
-	float2	texcoord;
-	float3	vnormal;
-	float2	hdepth; // homogeneous space
+	float4 hpos : POSITION0;
+	float2 texcoord : TEXCOORD0;
+	float3 vnormal : COLOR0; // vies space normal
+	float2 hdepth : COLOR1;
+	float4 vpos : COLOR2; // view space
 };
 
 struct PS_Output
 {
 	float4	vnormal : COLOR0;
 	float4 albedo : COLOR1;
-	float4 depth : COLOR3;
+	float4 depth : COLOR2;
 };
 // http://www.thetenthplanet.de/archives/1180
 // Christian Schuler, ShaderX5 2.6, "Normal Mapping Without Precomputed Tangents"
@@ -34,7 +35,7 @@ float3x3 cotangent_frame(float3 N, float3 p, float2 uv)
     float3 B = dp2perp * duv1.y + dp1perp * duv2.y;
  
     // construct a scale-invariant frame 
-    float invmax = inversesqrt( max( dot(T,T), dot(B,B) ) );
+    float invmax = 1.0f/sqrt( max( dot(T,T), dot(B,B) ) );
     return float3x3( T * invmax, B * invmax, N );
 }
 
@@ -85,12 +86,13 @@ PS_Output main(in PS_Input psin)
 	// debug depth.
 	// vnormal.xyz = depth_to_color(psin.hdepth.x / psin.hdepth.y); 
 	// vnormal.w = 1.0f;
-	psout.vnormal = float4(encodeNormal(normalize(TBN * norm)), 1.0f);
+	psout.vnormal = float4(encodeNormal(normalize(mul(norm, TBN))), 1.0f);
 	
 	// for albedo.
-	psout.albedo = float4(float3(1.0f, 1.0f, 1.0f) - vnormal.xyz,1.0);
+	psout.albedo = float4(float3(1.0f, 1.0f, 1.0f) - psout.vnormal.xyz,1.0);
 	
 	// for depth
 	psout.depth.xyz = depth_to_color(psin.hdepth.x / psin.hdepth.y); 
 	psout.depth.w = 1.0f;
+	return psout;
 }

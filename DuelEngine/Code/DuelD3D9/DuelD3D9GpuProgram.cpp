@@ -110,6 +110,10 @@ namespace Duel
 			mbFailed = true;
 			ReleaseCOM(err);
 		}
+		else
+		{
+			mbFailed = false;
+		}
 	}
 
 	size_t D3D9GpuProgram::calculateSize()
@@ -142,5 +146,11 @@ namespace Duel
 		ReleaseCOM(mConstTable);
 		DGpuProgram::unloadImpl();
 	}
+
+	const DString& D3D9GpuProgram::getCompileError() const
+	{
+		return mCompileError;
+	}
+
 
 }

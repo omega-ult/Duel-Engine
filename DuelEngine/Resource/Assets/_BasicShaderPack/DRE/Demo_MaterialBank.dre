@@ -7,6 +7,8 @@
 	<!--Lambert-->
 	<Technique name="Lambert_Defer_GBuffer">
 		<Pass name="Lambert_Defer_GBuffer">
+			<RasterizerState>
+			</RasterizerState>
 			<VertexProgram group="_BasicShaderPack">Demo_DeferGBuffer.vs</VertexProgram>
 			<PixelProgram group="_BasicShaderPack">Demo_DeferGBuffer.ps</PixelProgram>
 		</Pass>

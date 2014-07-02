@@ -1,3 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ResourceParameters type="GpuProgram">
+  <GpuResourceParameter>
+	  <Name>Demo_DeferMerge.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>vs_3_0</Profile>	
+	  <Language>hlsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Demo_DeferMerge.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>ps_3_0</Profile>	
+	  <Language>hlsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Demo_ScreenTransfer.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>vs_3_0</Profile>	
+	  <Language>hlsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Demo_ScreenTransfer.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>ps_3_0</Profile>	
+	  <Language>hlsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  
+  
+  <GpuResourceParameter>
+	  <Name>Demo_DeferGBuffer.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>vs_3_0</Profile>	
+	  <Language>hlsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Demo_DeferGBuffer.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>ps_3_0</Profile>	
+	  <Language>hlsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
 </ResourceParameters>

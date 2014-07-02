@@ -19,6 +19,7 @@ namespace Duel
 		{
 			mViewList.push_back(NULL);
 		}
+		mCurViewport.reset(0,0, w, h);
 	}
 
 	void D3D9FrameBuffer::resize( uint32 width, uint32 height )

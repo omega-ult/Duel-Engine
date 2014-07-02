@@ -22,11 +22,15 @@ namespace Duel
 		virtual size_t	calculateSize();
 		INTERNAL void	setCompileError(const DString& err) { mCompileError = err; }
 
+		virtual const DString& getCompileError() const;
+
 		ID3DXBuffer*	getCodeBuffer() { return mCodeBuf; }
 		ID3DXConstantTable*	getConstantTable() { return mConstTable; }
 	protected:		
 		virtual void	loadFromSource();
 		virtual void	unloadImpl();
+
+
 
 
 		static DString		msLanguage;

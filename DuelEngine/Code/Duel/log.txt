@@ -548,3 +548,9 @@ Dx:out Depth), stack overflowµÄÅóÓÑ¸øÁË¸ö½¨Òé, ²»ÒªÊ¹ÓÃcacheFBOµÄº¯Êý, Ê¹ÓÃÒ»¸ö×
 
 6.21
 ÎÒcaocaocaocao! °²×°ÁËDXSDKÖ®ºóVS2010 Redistributable °æ±¾±ä³É10.0.3,Õâ¸öÊ±ºòdx9³ÌÐò»áÖ±½Ó±Àµô(°²×°¹ý¸ß°æ±¾µÄ10.0.4µÄ»úÆ÷½µ¼¶Çé¿ö), ÁíÍâ, Á´½ÓÉú³ÉdebugÐÅÏ¢ÓÃµÄvc110.pdb±ØÐëÒªÑÏ¸ñºÍÏîÄ¿Êä³ö¶ÔÓ¦,Ê¹ÆäÄÜ¹»Á´½ÓÉÏ,·ñÔòÎÞ·¨¶Ïµã.
+
+7.1
+×î½ü¿´ÁËÏÂunity, ÓÐµãÐÄµÃ¼ÇÏÂÀ´
+ÓÉÓÚunityÓÐ·Ç³£ºÃµÄ½Å±¾ÏµÍ³,Òò´Ë¿ÉÒÔÖ±½Ó´Ó½Å±¾ÖÐÄÃµ½²ÎÊý, ÕâµãºÜºÃ, ÊÇ·ñÓ¦¸Ã½¨Á¢Ò»¸öprefabÖ®Àà, È»ºóÔÚÆäÖÐ¼ÓÈë²ÎÊýµÄ°ó¶¨¹ÜµÀ?
+shaderÇø·ÖhlslºÍglslÕæÊÇ¸öÍ·ÌÛµÄÎÊÌâ,ÊÇ·ñÓÐ°ì·¨ÄÜ¹»Ê¹ÓÃÖÐ¼ä²ãÍê³ÉÁ½ÕßµÄ¹²Í¨, ÀýÈç shaderlab? ÕâÑù²ÎÊýÒ²ÄÜ±©Â¶¸ø½Å±¾²ã.
+materialÊÇ·ñÓ¦¸ÃºÍrenderworkshop·Ö¿ª? äÖÈ¾ÅÅÐòÓ¦¸Ã»ùÓÚmaterial¶ø²»ÊÇrenderable(ÀýÈçÍ¸Ã÷²ã). Ë®Ìå·´ÉäÎÆÀí, ÊÇ·ñÓ¦¸ÃÌØÊâ´¦Àí?

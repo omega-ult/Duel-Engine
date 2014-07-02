@@ -10,18 +10,23 @@ struct VS_Input
 };
 struct VS_Output
 {
-	float4 vpos : POSITION0; // view space
+	float4 hpos : POSITION0;
 	float2 texcoord : TEXCOORD0;
 	float3 vnormal : COLOR0;
 	float2 hdepth : COLOR1;
+	float4 vpos : COLOR2; // view space
 };
 
 VS_Output main(in VS_Input vsin)
 {
 	VS_Output vsout;
 	
-	vsout.vpos = Auto_WorldViewMatrix * vsin.pos;
+	vsout.hpos = mul(Auto_WorldViewProjMatrix, vsin.pos);
+	
+	vsout.vpos = mul(Auto_WorldViewMatrix, vsin.pos);
 	vsout.texcoord = vsin.texcoord;
-	vsout.vnormal = (Auto_WorldViewMatrix * float4(vsin.norm, 0.0f)).xyz;
-	vsout.hdepth = vsin.pos.zw;
+	vsout.vnormal = mul(Auto_WorldViewMatrix, float4(vsin.norm, 0.0f)).xyz;
+	vsout.hdepth = vsout.hpos.zw;
+	
+	return vsout;
 }

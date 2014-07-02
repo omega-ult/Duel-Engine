@@ -5,23 +5,25 @@
 	<Technique name="UI_StdCursor_t0">
 		<Pass name="UI_StdCursor_t0_p0">
 			<RasterizerState>
-				<state name="PolygonMode">Solid</state>
-				<state name="DepthClipEnable">false</state>
+				<PolygonMode>Solid</PolygonMode>
+				<CullingMode>None</CullingMode>
+				<DepthClipEnable>false</DepthClipEnable>
 			</RasterizerState>
 			
 			<DepthStencilState>
-				<state name="DepthEnable">false</state>
+				<DepthEnable>false</DepthEnable>
 			</DepthStencilState>
 			
 			<BlendState>
+				<!--you can rely on this blend mode to blend textures without affecting luminance -->
 				<RenderTargetBlendState	index = "0">
-					<state name="BlendEnable">true</state>
-					<state name="ColorBlendOpeartion">Add</state>
-					<state name="ColorSrcFactor">SrcAlpha</state>
-					<state name="ColorDstFactor">InvSrcAlpha</state>
-					<state name="AlphaBlendOpeartion">Max</state>
-					<state name="AlphaSrcFactor">One</state>
-					<state name="AlphaDstFactor">One</state>
+					<BlendEnable>true</BlendEnable>
+					<ColorBlendOpeartion>Add</ColorBlendOpeartion>
+					<ColorSrcFactor>SrcAlpha</ColorSrcFactor>
+					<ColorDstFactor>InvSrcAlpha</ColorDstFactor>
+					<AlphaBlendOpeartion>Max</AlphaBlendOpeartion>
+					<AlphaSrcFactor>One</AlphaSrcFactor>
+					<AlphaDstFactor>One</AlphaDstFactor>
 				</RenderTargetBlendState>
 			</BlendState>
 			
@@ -34,24 +36,25 @@
 	<Technique name="UI_ShowcasePictureBox_t0">
 		<Pass name="UI_ShowcasePictureBox_t0_p0">
 			<RasterizerState>
-				<state name="PolygonMode">Solid</state>
-				<state name="CullingMode">None</state>
-				<state name="DepthClipEnable">false</state>
+				<PolygonMode>Solid</PolygonMode>
+				<CullingMode>None</CullingMode>
+				<DepthClipEnable>false</DepthClipEnable>
 			</RasterizerState>
 			
 			<DepthStencilState>
-				<state name="DepthEnable">false</state>
+				<DepthEnable>false</DepthEnable>
 			</DepthStencilState>
 			
 			<BlendState>
+				<!--you can rely on this blend mode to blend textures without affecting luminance -->
 				<RenderTargetBlendState	index = "0">
-					<state name="BlendEnable">true</state>
-					<state name="ColorBlendOpeartion">Add</state>
-					<state name="ColorSrcFactor">SrcAlpha</state>
-					<state name="ColorDstFactor">InvSrcAlpha</state>
-					<state name="AlphaBlendOpeartion">Max</state>
-					<state name="AlphaSrcFactor">One</state>
-					<state name="AlphaDstFactor">One</state>
+					<BlendEnable>true</BlendEnable>
+					<ColorBlendOpeartion>Add</ColorBlendOpeartion>
+					<ColorSrcFactor>SrcAlpha</ColorSrcFactor>
+					<ColorDstFactor>InvSrcAlpha</ColorDstFactor>
+					<AlphaBlendOpeartion>Max</AlphaBlendOpeartion>
+					<AlphaSrcFactor>One</AlphaSrcFactor>
+					<AlphaDstFactor>One</AlphaDstFactor>
 				</RenderTargetBlendState>
 			</BlendState>
 			

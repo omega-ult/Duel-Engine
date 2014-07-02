@@ -6,18 +6,18 @@
 		<Pass name="ScreenTransfer_p0">
 			
 			<DepthStencilState>
-				<state name="DepthEnable">false</state>
+				<DepthEnable>false</DepthEnable>
 			</DepthStencilState>
 			
 			<BlendState>
 				<RenderTargetBlendState	index = "0">
-					<state name="BlendEnable">true</state>
-					<state name="ColorBlendOpeartion">Add</state>
-					<state name="ColorSrcFactor">SrcAlpha</state>
-					<state name="ColorDstFactor">InvSrcAlpha</state>
-					<state name="AlphaBlendOpeartion">Max</state>
-					<state name="AlphaSrcFactor">One</state>
-					<state name="AlphaDstFactor">One</state>
+					<BlendEnable>true</BlendEnable>
+					<ColorBlendOpeartion>Add</ColorBlendOpeartion>
+					<ColorSrcFactor>SrcAlpha</ColorSrcFactor>
+					<ColorDstFactor>InvSrcAlpha</ColorDstFactor>
+					<AlphaBlendOpeartion>Max</AlphaBlendOpeartion>
+					<AlphaSrcFactor>One</AlphaSrcFactor>
+					<AlphaDstFactor>One</AlphaDstFactor>
 				</RenderTargetBlendState>
 			</BlendState>
 			<VertexProgram group="_BasicShaderPack">Demo_ScreenTransfer.vs</VertexProgram>
@@ -35,13 +35,13 @@
 			
 			<BlendState>
 				<RenderTargetBlendState	index = "0">
-					<state name="BlendEnable">true</state>
-					<state name="ColorBlendOpeartion">Add</state>
-					<state name="ColorSrcFactor">SrcAlpha</state>
-					<state name="ColorDstFactor">InvSrcAlpha</state>
-					<state name="AlphaBlendOpeartion">Max</state>
-					<state name="AlphaSrcFactor">One</state>
-					<state name="AlphaDstFactor">One</state>
+					<BlendEnable>true</BlendEnable>
+					<ColorBlendOpeartion>Add</ColorBlendOpeartion>
+					<ColorSrcFactor>SrcAlpha</ColorSrcFactor>
+					<ColorDstFactor>InvSrcAlpha</ColorDstFactor>
+					<AlphaBlendOpeartion>Max</AlphaBlendOpeartion>
+					<AlphaSrcFactor>One</AlphaSrcFactor>
+					<AlphaDstFactor>One</AlphaDstFactor>
 				</RenderTargetBlendState>
 			</BlendState>
 			<VertexProgram group="_BasicShaderPack">Demo_DeferMerge.vs</VertexProgram>

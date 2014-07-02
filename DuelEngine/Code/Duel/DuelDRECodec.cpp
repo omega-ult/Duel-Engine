@@ -281,147 +281,6 @@ namespace Duel
 		return FO_Anistropic;
 	}
 
-	// internal method used for parsing val
-	void	parseState(const DString& type, const DString& name, const DString& val, DRenderPass* targetPass)
-	{
-		//RasterizerState----------------------------------------------
-		if ("RasterizerState" == type)
-		{
-			if ( "PolygonMode" == name)
-			{
-				targetPass->rasterizeState.polygonMode = getPolygonMode(val);
-			}
-			else if ( "ShadeMode" == name )
-			{
-				targetPass->rasterizeState.shadeMode = getShadeMode(val);
-			}
-			else if ( "CullingMode" == name )
-			{
-				targetPass->rasterizeState.cullingMode = getCullingMode(val);
-			}
-			else if ( "PolygonOffsetFactor" == name )
-			{
-				DStringTool::parseString(val, targetPass->rasterizeState.polygonOffsetFactor);
-			}
-			else if ( "PolygonOffsetUnit" == name )
-			{
-				DStringTool::parseString(val, targetPass->rasterizeState.polygonOffsetUnit);
-			}
-			else if ( "ScissorEnable" == name )
-			{
-				targetPass->rasterizeState.scissorEnable = getBool(val);
-			}
-			else if ( "MultisampleEnable" == name )
-			{
-				targetPass->rasterizeState.multisampleEnable = getBool(val);
-			}
-		}
-		//DepthStencilState--------------------------------------------
-		else if ("DepthStencilState" == type)
-		{
-			if ( "DepthEnable" == name )
-			{
-				targetPass->depthStencilState.depthEnable = getBool(val);
-			}
-			else if ( "DepthWriteEnable" == name )
-			{
-				targetPass->depthStencilState.depthWriteEnable = getBool(val);
-			}
-			else if ( "DepthComparison" == name )
-			{
-				targetPass->depthStencilState.depthComparison = getCompareFunction(val);
-			}
-			else if ( "FrontStencilEnable" == name )
-			{
-				targetPass->depthStencilState.frontStencilEnable = getBool(val);
-			}
-			else if ( "FrontStencilComparison" == name )
-			{
-				targetPass->depthStencilState.frontStencilComparison = getCompareFunction(val);
-			}
-			else if ( "FrontStencilReadMask" == name )
-			{
-				DStringTool::parseString(val, targetPass->depthStencilState.frontStencilReadMask);
-			}
-			else if ( "FrontStencilWriteMask" == name )
-			{
-				DStringTool::parseString(val, targetPass->depthStencilState.frontStencilWriteMask);
-			}
-			else if ( "FrontStencilFail" == name )
-			{
-				targetPass->depthStencilState.frontStencilFail = getStencilOperation(val);
-			}
-			else if ( "FrontStencilDepthFail" == name )
-			{
-				targetPass->depthStencilState.frontStencilDepthFail = getStencilOperation(val);
-			}
-			else if ( "FrontStencilPass" == name )
-			{
-				targetPass->depthStencilState.frontStencilPass = getStencilOperation(val);
-			}
-			else if ( "BackStencilEnable" == name )
-			{
-				targetPass->depthStencilState.backStencilEnable = getBool(val);
-			}
-			else if ( "BackStencilComparison" == name )
-			{
-				targetPass->depthStencilState.backStencilComparison = getCompareFunction(val);
-			}
-			else if ( "BackStencilReadMask" == name )
-			{
-				DStringTool::parseString(val, targetPass->depthStencilState.backStencilReadMask);
-			}
-			else if ( "BackStencilWriteMask" == name )
-			{
-				DStringTool::parseString(val, targetPass->depthStencilState.backStencilWriteMask);
-			}
-			else if ( "BackStencilFail" == name )
-			{
-				targetPass->depthStencilState.backStencilFail = getStencilOperation(val);
-			}
-			else if ( "BackStencilDepthFail" == name )
-			{
-				targetPass->depthStencilState.backStencilDepthFail = getStencilOperation(val);
-			}
-			else if ( "BackStencilPass" == name )
-			{
-				targetPass->depthStencilState.backStencilPass = getStencilOperation(val);
-			}
-		}
-		else if ("SceneBlendState" == type)
-		{
-			//  [4/2/2013 OMEGA]
-// 			if ("AlphaToCoverageEnable" == name)
-// 			{
-// 				targetPass->sceneBlendState.alphaToCoverageEnable = getBool(val);
-// 			}
-// 			else if ( "ColorBlendOpeartion" == name )
-// 			{
-// 				targetPass->sceneBlendState.colorBlendOpeartion = getSceneBlendOperation(val);
-// 			}
-// 			else if ( "ColorSrcFactor" == name )
-// 			{
-// 				targetPass->sceneBlendState.colorSrcBlend = getSceneBlendFactor(val);
-// 			}
-// 			else if ( "ColorDstFactor" == name )
-// 			{
-// 				targetPass->sceneBlendState.colorDestBlend = getSceneBlendFactor(val);
-// 			}
-// 			else if ( "AlphaBlendOpeartion" == name )
-// 			{
-// 				targetPass->sceneBlendState.alphaBlendOpeartion = getSceneBlendOperation(val);
-// 			}
-// 			else if ( "AlphaSrcFactor" == name )
-// 			{
-// 				targetPass->sceneBlendState.alphaSrcBlend = getSceneBlendFactor(val);
-// 			}
-// 			else if ( "AlphaDstFactor" == name )
-// 			{
-// 				targetPass->sceneBlendState.alphaDestBlend = getSceneBlendFactor(val);
-// 			}
-		}
-
-	}
 
 	uint8	readColorMask(const DString& value)
 	{
@@ -449,50 +308,6 @@ namespace Duel
 			return CWM_All;
 		}
 		return 0;
-	}
-	//////////////////////////////////////////////////////////////////////////
-	// v2.0
-	void	parseRTBlendState(const DString& name, const DString& val, DRenderTargetBlendState& blendState)
-	{
-		if ("BlendEnable" == name)
-		{
-			blendState.blendEnable = getBool(val);
-		}
-		else if ( "ColorBlendOpeartion" == name )
-		{
-			blendState.colorBlendOpeartion = getSceneBlendOperation(val);
-		}
-		else if ( "ColorSrcFactor" == name )
-		{
-			blendState.colorSrcFactor = getSceneBlendFactor(val);
-		}
-		else if ( "ColorDstFactor" == name )
-		{
-			blendState.colorDstFactor = getSceneBlendFactor(val);
-		}
-		else if ( "AlphaBlendOpeartion" == name )
-		{
-			blendState.alphaBlendOpeartion = getSceneBlendOperation(val);
-		}
-		else if ( "AlphaSrcFactor" == name )
-		{
-			blendState.alphaSrcFactor = getSceneBlendFactor(val);
-		}
-		else if ( "AlphaDstFactor" == name )
-		{
-			blendState.alphaDstFactor = getSceneBlendFactor(val);
-		}
-		else if ( "ColorWriteMask" == name)
-		{
-			uint8 msk = 0;
-			DStringVector maskValue = DStringTool::split(val, "|");
-			size_t len = maskValue.size();
-			for (uint32 i = 0; i < len; ++i)
-			{
-				msk |= readColorMask(maskValue[i]);
-			}
-			blendState.colorWriteMask = msk;
-		}
 	}
 	//////////////////////////////////////////////////////////////////////////
 	// v2.0
@@ -880,22 +695,130 @@ namespace Duel
 				//RasterizerState------------------------------
 				if (rasterizerNode)
 				{
-					stateNode = rasterizerNode->first_node("state");
-					while(stateNode)
+					stateNode = rasterizerNode->first_node("PolygonMode");
+					if (stateNode)
 					{
-						parseState("RasterizerState", DXMLTool::readValue(stateNode->first_attribute("name")), DXMLTool::readValue(stateNode), newPass.get());
-						stateNode = stateNode->next_sibling("state");
+						newPass->rasterizeState.polygonMode = getPolygonMode(DXMLTool::readValue(stateNode));
+					}
+					stateNode = rasterizerNode->first_node("ShadeMode");
+					if (stateNode)
+					{
+						newPass->rasterizeState.shadeMode = getShadeMode(DXMLTool::readValue(stateNode));
+					}
+					stateNode = rasterizerNode->first_node("CullingMode");
+					if (stateNode)
+					{
+						newPass->rasterizeState.cullingMode = getCullingMode(DXMLTool::readValue(stateNode));
+					}
+					stateNode = rasterizerNode->first_node("PolygonOffsetFactor");
+					if (stateNode)
+					{
+						DStringTool::parseString(DXMLTool::readValue(stateNode), newPass->rasterizeState.polygonOffsetFactor);
+					}
+					stateNode = rasterizerNode->first_node("PolygonOffsetUnit");
+					if (stateNode)
+					{
+						DStringTool::parseString(DXMLTool::readValue(stateNode), newPass->rasterizeState.polygonOffsetUnit);
+					}
+					stateNode = rasterizerNode->first_node("ScissorEnable");
+					if (stateNode)
+					{
+						newPass->rasterizeState.scissorEnable = getBool(DXMLTool::readValue(stateNode));
+					}
+					stateNode = rasterizerNode->first_node("MultisampleEnable");
+					if (stateNode)
+					{
+						newPass->rasterizeState.multisampleEnable = getBool(DXMLTool::readValue(stateNode));
 					}
 				}
 				//DepthStencil------------------------------------
 				DXMLNode* depthStencilNode = passNode->first_node("DepthStencilState");
 				if (depthStencilNode)
 				{
-					stateNode = depthStencilNode->first_node("state");
-					while(stateNode)
+					stateNode = depthStencilNode->first_node("DepthEnable");
+					if (stateNode)
 					{
-						parseState("DepthStencilState", DXMLTool::readValue(stateNode->first_attribute("name")), DXMLTool::readValue(stateNode), newPass.get());
-						stateNode = stateNode->next_sibling("state");
+						newPass->depthStencilState.depthEnable = getBool(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("DepthWriteEnable");
+					if (stateNode)
+					{
+						newPass->depthStencilState.depthWriteEnable = getBool(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("DepthComparison");
+					if (stateNode)
+					{
+						newPass->depthStencilState.depthComparison = getCompareFunction(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("FrontStencilEnable");
+					if (stateNode)
+					{
+						newPass->depthStencilState.frontStencilEnable = getBool(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("FrontStencilComparison");
+					if (stateNode)
+					{
+						newPass->depthStencilState.frontStencilComparison = getCompareFunction(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("FrontStencilReadMask");
+					if (stateNode)
+					{
+						DStringTool::parseString(DXMLTool::readValue(stateNode), newPass->depthStencilState.frontStencilReadMask);
+					}
+					stateNode = depthStencilNode->first_node("FrontStencilWriteMask");
+					if (stateNode)
+					{
+						DStringTool::parseString(DXMLTool::readValue(stateNode), newPass->depthStencilState.frontStencilWriteMask);
+					}
+					stateNode = depthStencilNode->first_node("FrontStencilFail");
+					if (stateNode)
+					{
+						newPass->depthStencilState.frontStencilFail = getStencilOperation(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("FrontStencilDepthFail");
+					if (stateNode)
+					{
+						newPass->depthStencilState.frontStencilDepthFail = getStencilOperation(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("FrontStencilPass");
+					if (stateNode)
+					{
+						newPass->depthStencilState.frontStencilPass = getStencilOperation(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("BackStencilEnable");
+					if (stateNode)
+					{
+						newPass->depthStencilState.backStencilEnable = getBool(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("BackStencilComparison");
+					if (stateNode)
+					{
+						newPass->depthStencilState.backStencilComparison = getCompareFunction(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("BackStencilReadMask");
+					if (stateNode)
+					{
+						DStringTool::parseString(DXMLTool::readValue(stateNode), newPass->depthStencilState.backStencilReadMask);
+					}
+					stateNode = depthStencilNode->first_node("BackStencilWriteMask");
+					if (stateNode)
+					{
+						DStringTool::parseString(DXMLTool::readValue(stateNode), newPass->depthStencilState.backStencilWriteMask);
+					}
+					stateNode = depthStencilNode->first_node("BackStencilFail");
+					if (stateNode)
+					{
+						newPass->depthStencilState.backStencilFail = getStencilOperation(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("BackStencilDepthFail");
+					if (stateNode)
+					{
+						newPass->depthStencilState.backStencilDepthFail = getStencilOperation(DXMLTool::readValue(stateNode));
+					}
+					stateNode = depthStencilNode->first_node("BackStencilPass");
+					if (stateNode)
+					{
+						newPass->depthStencilState.backStencilPass = getStencilOperation(DXMLTool::readValue(stateNode));
 					}
 				}
 				
@@ -905,13 +828,10 @@ namespace Duel
 				if (blendNode)
 				{
 
-					DXMLNode* alphaCov = blendNode->first_node("state");
+					DXMLNode* alphaCov = blendNode->first_node("AlphaToCoverageEnable");
 					if (alphaCov)
 					{
-						if (DXMLTool::readValue(alphaCov->first_attribute("name")) == "AlphaToCoverageEnable")
-						{
-							newPass->blendState.alphaToCoverageEnable = getBool(DXMLTool::readValue(alphaCov));
-						}
+						newPass->blendState.alphaToCoverageEnable = getBool(DXMLTool::readValue(alphaCov));
 					}
 					DXMLNode* rtBlendState = blendNode->first_node("RenderTargetBlendState");
 					while (rtBlendState)
@@ -925,12 +845,53 @@ namespace Duel
 								// 为了适应图形API的现状, 限定这个序号小于8, 
 								if (rtIndx < DUEL_MAX_BLEND_LAYERS)
 								{
-									stateNode = rtBlendState->first_node("state");
 									DRenderTargetBlendState	tmpState;
-									while (stateNode)
+									stateNode = rtBlendState->first_node("BlendEnable");
+									if (stateNode)
 									{
-										parseRTBlendState(DXMLTool::readValue(stateNode->first_attribute("name")), DXMLTool::readValue(stateNode), tmpState);
-										stateNode = stateNode->next_sibling("state");
+										tmpState.blendEnable = getBool(DXMLTool::readValue(stateNode));
+									}
+									stateNode = rtBlendState->first_node("ColorBlendOpeartion");
+									if (stateNode)
+									{
+										tmpState.colorBlendOpeartion = getSceneBlendOperation(DXMLTool::readValue(stateNode));
+									}
+									stateNode = rtBlendState->first_node("ColorSrcFactor");
+									if (stateNode)
+									{
+										tmpState.colorSrcFactor = getSceneBlendFactor(DXMLTool::readValue(stateNode));
+									}
+									stateNode = rtBlendState->first_node("ColorDstFactor");
+									if (stateNode)
+									{
+										tmpState.colorDstFactor = getSceneBlendFactor(DXMLTool::readValue(stateNode));
+									}
+									stateNode = rtBlendState->first_node("AlphaBlendOpeartion");
+									if (stateNode)
+									{
+										tmpState.alphaBlendOpeartion = getSceneBlendOperation(DXMLTool::readValue(stateNode));
+									}
+									stateNode = rtBlendState->first_node("AlphaSrcFactor");
+									if (stateNode)
+									{
+										tmpState.alphaSrcFactor = getSceneBlendFactor(DXMLTool::readValue(stateNode));
+									}
+									stateNode = rtBlendState->first_node("AlphaDstFactor");
+									if (stateNode)
+									{
+										tmpState.alphaDstFactor = getSceneBlendFactor(DXMLTool::readValue(stateNode));
+									}
+									stateNode = rtBlendState->first_node("ColorWriteMask");
+									if (stateNode)
+									{
+										uint8 msk = 0;
+										DStringVector maskValue = DStringTool::split(DXMLTool::readValue(stateNode), "|");
+										size_t len = maskValue.size();
+										for (uint32 i = 0; i < len; ++i)
+										{
+											msk |= readColorMask(maskValue[i]);
+										}
+										tmpState.colorWriteMask = msk;
 									}
 									newPass->blendState.targetStates[rtIndx] = tmpState;
 								}
@@ -1002,145 +963,87 @@ namespace Duel
  				DXMLNode* rasterizerNode = doc.allocate_node(DUEL_XML::node_element, "RaRasterizerState");
  				passNode->append_node(rasterizerNode);
 				//RasterizerState--------------------------------------
- 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parsePolygonMode(curPass->rasterizeState.polygonMode).c_str());
- 				stateNode->append_attribute(doc.allocate_attribute("name","PolygonMode"));
+ 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "PolygonMode", parsePolygonMode(curPass->rasterizeState.polygonMode).c_str());
  				rasterizerNode->append_node(stateNode);
  
- 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseShadeMode(curPass->rasterizeState.shadeMode).c_str());
- 				stateNode->append_attribute(doc.allocate_attribute("name","ShadeMode"));
+ 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "ShadeMode", parseShadeMode(curPass->rasterizeState.shadeMode).c_str());
  				rasterizerNode->append_node(stateNode);
  
- 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseCullingMode(curPass->rasterizeState.cullingMode).c_str());
- 				stateNode->append_attribute(doc.allocate_attribute("name","CullingMode"));
+ 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "CullingMode", parseCullingMode(curPass->rasterizeState.cullingMode).c_str());
  				rasterizerNode->append_node(stateNode);
  
- 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", DStringTool::toString(curPass->rasterizeState.polygonOffsetFactor).c_str());
- 				stateNode->append_attribute(doc.allocate_attribute("name","PolygonOffsetFactor"));
+ 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "PolygonOffsetFactor", DStringTool::toString(curPass->rasterizeState.polygonOffsetFactor).c_str());
  				rasterizerNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", DStringTool::toString(curPass->rasterizeState.polygonOffsetUnit).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","PolygonOffsetUnit"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "PolygonOffsetUnit", DStringTool::toString(curPass->rasterizeState.polygonOffsetUnit).c_str());
 				rasterizerNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseBool(curPass->rasterizeState.scissorEnable).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","ScissorEnable"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "ScissorEnable", parseBool(curPass->rasterizeState.scissorEnable).c_str());
 				rasterizerNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseBool(curPass->rasterizeState.multisampleEnable).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","MultisampleEnable"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "MultisampleEnable", parseBool(curPass->rasterizeState.multisampleEnable).c_str());
 				rasterizerNode->append_node(stateNode);
  
  
  				DXMLNode* depthStencilNode = doc.allocate_node(DUEL_XML::node_element, "DepthStencilState");
 				passNode->append_node(depthStencilNode);
 				//DepthStencilState-----------------------------------
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseBool(curPass->depthStencilState.depthEnable).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","DepthEnable"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "DepthEnable", parseBool(curPass->depthStencilState.depthEnable).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseBool(curPass->depthStencilState.depthWriteEnable).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","DepthWriteEnable"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "DepthWriteEnable", parseBool(curPass->depthStencilState.depthWriteEnable).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseCompareFunction(curPass->depthStencilState.depthComparison).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","DepthComparison"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "DepthComparison", parseCompareFunction(curPass->depthStencilState.depthComparison).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseBool(curPass->depthStencilState.frontStencilEnable).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","FrontStencilEnable"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "FrontStencilEnable", parseBool(curPass->depthStencilState.frontStencilEnable).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseCompareFunction(curPass->depthStencilState.frontStencilComparison).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","FrontStencilComparison"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "FrontStencilComparison", parseCompareFunction(curPass->depthStencilState.frontStencilComparison).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", DStringTool::toString(curPass->depthStencilState.frontStencilReadMask).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","FrontStencilReadMask"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "FrontStencilReadMask", DStringTool::toString(curPass->depthStencilState.frontStencilReadMask).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", DStringTool::toString(curPass->depthStencilState.frontStencilWriteMask).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","FrontStencilWriteMask"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "FrontStencilWriteMask", DStringTool::toString(curPass->depthStencilState.frontStencilWriteMask).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseStencilOperation(curPass->depthStencilState.frontStencilFail).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","FrontStencilFail"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "FrontStencilFail", parseStencilOperation(curPass->depthStencilState.frontStencilFail).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseStencilOperation(curPass->depthStencilState.frontStencilDepthFail).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","FrontStencilDepthFail"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "FrontStencilDepthFail", parseStencilOperation(curPass->depthStencilState.frontStencilDepthFail).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseStencilOperation(curPass->depthStencilState.frontStencilPass).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","FrontStencilPass"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "FrontStencilPass", parseStencilOperation(curPass->depthStencilState.frontStencilPass).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseBool(curPass->depthStencilState.backStencilEnable).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","BackStencilEnable"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "BackStencilEnable", parseBool(curPass->depthStencilState.backStencilEnable).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseCompareFunction(curPass->depthStencilState.backStencilComparison).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","BackStencilComparison"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "BackStencilComparison", parseCompareFunction(curPass->depthStencilState.backStencilComparison).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", DStringTool::toString(curPass->depthStencilState.backStencilReadMask).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","BackStencilReadMask"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "BackStencilReadMask", DStringTool::toString(curPass->depthStencilState.backStencilReadMask).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", DStringTool::toString(curPass->depthStencilState.backStencilWriteMask).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","BackStencilWriteMask"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "BackStencilWriteMask", DStringTool::toString(curPass->depthStencilState.backStencilWriteMask).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseStencilOperation(curPass->depthStencilState.backStencilFail).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","BackStencilFail"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "BackStencilFail", parseStencilOperation(curPass->depthStencilState.backStencilFail).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseStencilOperation(curPass->depthStencilState.backStencilDepthFail).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","BackStencilDepthFail"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "BackStencilDepthFail", parseStencilOperation(curPass->depthStencilState.backStencilDepthFail).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseStencilOperation(curPass->depthStencilState.backStencilPass).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name","BackStencilPass"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "BackStencilPass", parseStencilOperation(curPass->depthStencilState.backStencilPass).c_str());
 				depthStencilNode->append_node(stateNode);
 
-				//////////////////////////////////////////////////////////////////////////
-				// deprecated in v2.0
-// 				DXMLNode* sceneBlendNode = doc.allocate_node(DUEL_XML::node_element, "SceneBlendState");
-// 				passNode->append_node(sceneBlendNode);
-// 				//sceneBlendNode-----------------------------------------------
-// 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseBool(curPass->sceneBlendState.alphaToCoverageEnable).c_str());
-// 				stateNode->append_attribute(doc.allocate_attribute("name","AlphaToCoverageEnable"));
-// 				sceneBlendNode->append_node(stateNode);
-// 
-// 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendOperation(curPass->sceneBlendState.colorBlendOpeartion).c_str());
-// 				stateNode->append_attribute(doc.allocate_attribute("name","ColorBlendOpeartion"));
-// 				sceneBlendNode->append_node(stateNode);
-// 
-// 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->sceneBlendState.colorSrcBlend).c_str());
-// 				stateNode->append_attribute(doc.allocate_attribute("name","ColorSrcFactor"));
-// 				sceneBlendNode->append_node(stateNode);
-// 
-// 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->sceneBlendState.colorDestBlend).c_str());
-// 				stateNode->append_attribute(doc.allocate_attribute("name","ColorDstFactor"));
-// 				sceneBlendNode->append_node(stateNode);
-// 
-// 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendOperation(curPass->sceneBlendState.alphaBlendOpeartion).c_str());
-// 				stateNode->append_attribute(doc.allocate_attribute("name","AlphaBlendOpeartion"));
-// 				sceneBlendNode->append_node(stateNode);
-// 
-// 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->sceneBlendState.alphaSrcBlend).c_str());
-// 				stateNode->append_attribute(doc.allocate_attribute("name","AlphaSrcFactor"));
-// 				sceneBlendNode->append_node(stateNode);
-// 
-// 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->sceneBlendState.alphaDestBlend).c_str());
-// 				stateNode->append_attribute(doc.allocate_attribute("name","AlphaDstFactor"));
-// 				sceneBlendNode->append_node(stateNode);
-				//////////////////////////////////////////////////////////////////////////
 
 				//////////////////////////////////////////////////////////////////////////
 				// v2.0
 				DXMLNode* blendNode = doc.allocate_node(DUEL_XML::node_element, "BlendState");
-				stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseBool(curPass->blendState.alphaToCoverageEnable).c_str());
-				stateNode->append_attribute(doc.allocate_attribute("name", "AlphaToCoverageEnable"));
+				stateNode = doc.allocate_node(DUEL_XML::node_comment, "AlphaToCoverageEnable", parseBool(curPass->blendState.alphaToCoverageEnable).c_str());
 				blendNode->append_node(stateNode);
 
 				// we only encode those states that are not the default value.
@@ -1154,37 +1057,29 @@ namespace Duel
 							DXMLNode* rtbsNode = doc.allocate_node(DUEL_XML::node_comment, "RenderTargetBlendState");
 							rtbsNode->append_attribute(doc.allocate_attribute("index", DStringTool::toString(i).c_str()));
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseBool(curPass->blendState.targetStates[i].blendEnable).c_str());
-							stateNode->append_attribute(doc.allocate_attribute("name", "BlendEnable"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "BlendEnable", parseBool(curPass->blendState.targetStates[i].blendEnable).c_str());
 							rtbsNode->append_node(stateNode);
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendOperation(curPass->blendState.targetStates[i].colorBlendOpeartion).c_str());	
-							stateNode->append_attribute(doc.allocate_attribute("name","ColorBlendOpeartion"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "ColorBlendOpeartion", parseSceneBlendOperation(curPass->blendState.targetStates[i].colorBlendOpeartion).c_str());	
 							rtbsNode->append_node(stateNode);
 
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].colorSrcFactor).c_str());
-							stateNode->append_attribute(doc.allocate_attribute("name","ColorSrcFactor"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "ColorSrcFactor", parseSceneBlendFactor(curPass->blendState.targetStates[i].colorSrcFactor).c_str());
 							rtbsNode->append_node(stateNode);
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].colorDstFactor).c_str());
-							stateNode->append_attribute(doc.allocate_attribute("name","ColorDstFactor"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "ColorDstFactor", parseSceneBlendFactor(curPass->blendState.targetStates[i].colorDstFactor).c_str());
 							rtbsNode->append_node(stateNode);
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendOperation(curPass->blendState.targetStates[i].alphaBlendOpeartion).c_str());
-							stateNode->append_attribute(doc.allocate_attribute("name","AlphaBlendOpeartion"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "AlphaBlendOpeartion", parseSceneBlendOperation(curPass->blendState.targetStates[i].alphaBlendOpeartion).c_str());
 							rtbsNode->append_node(stateNode);
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].alphaSrcFactor).c_str());
-							stateNode->append_attribute(doc.allocate_attribute("name","AlphaSrcFactor"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "AlphaSrcFactor", parseSceneBlendFactor(curPass->blendState.targetStates[i].alphaSrcFactor).c_str());
 							rtbsNode->append_node(stateNode);
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", parseSceneBlendFactor(curPass->blendState.targetStates[i].alphaDstFactor).c_str());
-							stateNode->append_attribute(doc.allocate_attribute("name","AlphaDstFactor"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "AlphaDstFactor", parseSceneBlendFactor(curPass->blendState.targetStates[i].alphaDstFactor).c_str());
 							rtbsNode->append_node(stateNode);
 
-							stateNode = doc.allocate_node(DUEL_XML::node_comment, "state", DStringTool::toString(curPass->blendState.targetStates[i].colorWriteMask).c_str());
-							stateNode->append_attribute(doc.allocate_attribute("name","ColorWriteMask"));
+							stateNode = doc.allocate_node(DUEL_XML::node_comment, "ColorWriteMask", DStringTool::toString(curPass->blendState.targetStates[i].colorWriteMask).c_str());
 							rtbsNode->append_node(stateNode);
 
 							blendNode->append_node(rtbsNode);

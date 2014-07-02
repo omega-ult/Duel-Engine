@@ -18,18 +18,18 @@ namespace Duel
 	//		<Technique name="lalala">
 	//			<Pass name="lalala">
 	//				<RasterizerState>
-	//					<state name="PolygonMode">
+	//					<PolygonMode>
 	//						Points/Wireframe/Solid
-	//					</state>
-	//					<state name="ShadeMode">
+	//					</PolygonMode>
+	//					<ShadeMode>
 	//						FLAT/GOURAUD/PHONG
-	//					</state>
+	//					</ShadeMode>
 	//					........
 	//				</RasterizerState>
 	//				<DepthStencilState>
-	//					<state name="DepthEnable">
+	//					<DepthEnable>
 	//						false/true
-	//					</state>
+	//					</DepthEnable>
 	//					........ if not specified, use default value.
 	//					
 	//				</DepthStencilState>
@@ -37,17 +37,17 @@ namespace Duel
 	// v2.0: replace SceneBlendState with BlendState,
 	/*
 					<BlendState>
-						<state name="AlphaToCoverageEnable">
+						<AlphaToCoverageEnable>
 							false/true
-						</state>
+						</AlphaToCoverageEnable>
 						<RenderTargetBlendState	index = "0">
-							<state name="ColorBlendOpeartion">ADD</state>
-							<state name="ColorSrcBlend">ONE</state>
+							<ColorBlendOpeartion>ADD</ColorBlendOpeartion>
+							<ColorSrcBlend>ONE</ColorSrcBlend>
 							........
 						</RenderTargetBlendState>
 						<RenderTargetBlendState	index = "1">
-							<state name="ColorBlendOpeartion">ADD</state>
-							<state name="ColorSrcBlend">ONE</state>
+							<ColorBlendOpeartion>ADD</ColorBlendOpeartion>
+							<ColorSrcBlend>ONE</ColorSrcBlend>
 							........
 						</RenderTargetBlendState>
 						.....

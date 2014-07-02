@@ -136,6 +136,8 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 	void DApplication::shutdown()
 	{
+		mEngineCore->setRenderWorkshop(NULL);
+		delete mRws;
 		Duel::DInputManager::getSingleton().unregisterWindow(mMainWindow);
 		mStateManager->shutdown();
 		delete mTestState;
@@ -184,13 +186,13 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		wndSetting.useGamma = false;
 		wndSetting.surfaceFormat = Duel::PF_A8R8G8B8;
 		mMainWindow = DRenderResourceManager::getSingleton().createRenderWindow(appCfgFile,wndSetting, (Duel::uint32)mHwnd );
-#ifdef GLPLUGIN_DEBUG
+
 		//////////////////////////////////////////////////////////////////////////
 		// basic resources.
-		if(rSys->getName() == "OpenGL")
+		DArchivePtr ShaderArchive = Duel::DArchiveManager::getSingleton().
+			getArchive("Assets\\_BasicShaderPack");
+		if(mEngineCore->getRenderSystem()->getName() == "OpenGL")
 		{
-			DArchivePtr ShaderArchive = Duel::DArchiveManager::getSingleton().
-				getArchive("Assets\\_BasicShaderPack");
 			if (ShaderArchive != NULL)
 			{		
 				// for shaders.
@@ -206,23 +208,41 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 						DResourceGroupManager::getSingleton().declareResource(*i);
 					}
 				}
-				// for render effects
-				descFilePtf = ShaderArchive->open("BasicDRE.xml");
+			}
+		}
+		else if (mEngineCore->getRenderSystem()->getName() == "Direct3D9")
+		{
+			if (ShaderArchive != NULL)
+			{		
+				// for shaders.
+				Duel::DDataStreamPtr descFilePtf = 
+					ShaderArchive->open("BasicShadersHLSL.xml");
 				if (descFilePtf != NULL)
 				{
 					ResourceDescriptionList resList =  DResourceGroupManager::getSingleton().
-						getResouceManager("RenderEffect")->parseParameter(descFilePtf.get());
+						getResouceManager("GpuProgram")->parseParameter(descFilePtf.get());
 					ResourceDescriptionList::iterator i, iend = resList.end();
 					for (i = resList.begin(); i != iend; ++i)
 					{
 						DResourceGroupManager::getSingleton().declareResource(*i);
 					}
-				}				
+				}
 			}
 		}
-#else
+		
+		// for render effects
+		Duel::DDataStreamPtr descFilePtf = ShaderArchive->open("BasicDRE.xml");
+		if (descFilePtf != NULL)
+		{
+			ResourceDescriptionList resList =  DResourceGroupManager::getSingleton().
+				getResouceManager("RenderEffect")->parseParameter(descFilePtf.get());
+			ResourceDescriptionList::iterator i, iend = resList.end();
+			for (i = resList.begin(); i != iend; ++i)
+			{
+				DResourceGroupManager::getSingleton().declareResource(*i);
+			}
+		}				
 
-#endif
 		Duel::DArchivePtr mediaArchive = Duel::DArchiveManager::getSingleton().
 			getArchive("Assets\\_BasicMediaPack");
 		if (mediaArchive != NULL)
@@ -286,13 +306,10 @@ LRESULT CALLBACK _DefaultWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		DResourceGroupManager::getSingleton().createDeclaredResource("_BasicShaderPack");
 		DResourceGroupManager::getSingleton().createDeclaredResource("_BasicMediaPack");
 
-//////////////////////////////////////////////////////////////////////////
-#ifdef GLPLUGIN_DEBUG
 		mRws = new DDemoRenderWorkshop();
 		mEngineCore->setRenderWorkshop(mRws);
 		new DDemoMaterialBank();
 		DDemoMaterialBank::getSingleton().init(mRws);
-#endif
 		//////////////////////////////////////////////////////////////////////////
  		DInputManager::getSingleton().registerWindow(mMainWindow, false);
 
