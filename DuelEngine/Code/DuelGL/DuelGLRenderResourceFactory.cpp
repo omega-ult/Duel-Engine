@@ -208,7 +208,7 @@ namespace Duel
 // 			}
 // 		}
 
-		glEnable(GL_FRAMEBUFFER_SRGB);
+//		glEnable(GL_FRAMEBUFFER_SRGB);
 	}
 
 	void GLRenderResourceFactory::shutdown()

@@ -33,18 +33,18 @@ namespace Duel
 
 	void GLGpuProgram::setProfile( const DString& profile )
 	{
-		if (mProfile == "GL_VERTEX_SHADER")
+		if (profile == "GL_VERTEX_SHADER")
 		{
 			mProgramType = GPT_Vertex;
 		}
-		else if (mProfile == "GL_FRAGMENT_SHADER")
+		else if (profile == "GL_FRAGMENT_SHADER")
 		{
 			mProgramType = GPT_Pixel;
 		}// ÔÝÊ±Ã»ÓÐgs
 		else
 		{
 			DUEL_EXCEPT_BRIEF(DException::ET_InvalidParameters,
-				"Unknown shader type: " + mProfile,
+				"Unknown shader type: " + profile,
 				"Duel::GLGpuProgram::setProfile")
 		}
 		DGpuProgram::setProfile(profile);
