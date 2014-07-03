@@ -16,7 +16,7 @@ namespace Duel
 	{
 		D3DPolygonMode = D3D9Translator::getD3DFillMode(state.polygonMode);
 		D3DShadeMode = D3D9Translator::getD3DShadeMode(state.shadeMode);
-		D3DCullMode = D3D9Translator::getD3DCullingMode(state.cullingMode);
+		D3DCullMode = D3D9Translator::getD3DCullingMode(state.cullMode);
 
 	}
 

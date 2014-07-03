@@ -52,7 +52,7 @@ namespace Duel
 		}
 		return SM_Gouraud;
 	}
-	CullingMode	getCullingMode(const DString& val)
+	CullMode	getCullMode(const DString& val)
 	{
 		DString value(val);
 		DStringTool::toUpperCase(value);
@@ -413,7 +413,7 @@ namespace Duel
 		}
 		return "Gouraoud";
 	}
-	DString	parseCullingMode(CullingMode val)
+	DString	parseCullMode(CullMode val)
 	{
 		if (CM_None == val)
 		{
@@ -705,10 +705,10 @@ namespace Duel
 					{
 						newPass->rasterizeState.shadeMode = getShadeMode(DXMLTool::readValue(stateNode));
 					}
-					stateNode = rasterizerNode->first_node("CullingMode");
+					stateNode = rasterizerNode->first_node("CullMode");
 					if (stateNode)
 					{
-						newPass->rasterizeState.cullingMode = getCullingMode(DXMLTool::readValue(stateNode));
+						newPass->rasterizeState.cullMode = getCullMode(DXMLTool::readValue(stateNode));
 					}
 					stateNode = rasterizerNode->first_node("PolygonOffsetFactor");
 					if (stateNode)
@@ -969,7 +969,7 @@ namespace Duel
  				stateNode = doc.allocate_node(DUEL_XML::node_comment, "ShadeMode", parseShadeMode(curPass->rasterizeState.shadeMode).c_str());
  				rasterizerNode->append_node(stateNode);
  
- 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "CullingMode", parseCullingMode(curPass->rasterizeState.cullingMode).c_str());
+ 				stateNode = doc.allocate_node(DUEL_XML::node_comment, "CullMode", parseCullMode(curPass->rasterizeState.cullMode).c_str());
  				rasterizerNode->append_node(stateNode);
  
  				stateNode = doc.allocate_node(DUEL_XML::node_comment, "PolygonOffsetFactor", DStringTool::toString(curPass->rasterizeState.polygonOffsetFactor).c_str());

@@ -2,7 +2,7 @@
 <CoreConfig DuelVersion = '1.0.0'>
 	<PluginList>
 		<Plugin>
-			DuelGL_d.dll
+			DuelD3D9_d.dll
 		</Plugin>
 		<Plugin>
 			DuelQuadtreeSceneManager_d.dll
@@ -31,7 +31,7 @@
 		  <Type>folder</Type>
 		</Archive>
 		<Archive>
-		  <Name>Assets\_BasicShaderPack\GLSL</Name>
+		  <Name>Assets\_BasicShaderPack\HLSL</Name>
 		  <Type>folder</Type>
 		</Archive>
 		
@@ -72,7 +72,7 @@
 				<Archive>Assets\_BasicShaderPack</Archive>
 				<Archive>Assets\_BasicShaderPack\DRE</Archive>
 				<!-- shaderPack for hlsl -->
-				<Archive>Assets\_BasicShaderPack\GLSL</Archive>
+				<Archive>Assets\_BasicShaderPack\HLSL</Archive>
 			</ArchiveList>
 		</Group>
 		

@@ -5,7 +5,6 @@ sampler roughnessTexture;
 
 struct PS_Input
 {	
-	float4 hpos : POSITION0;
 	float2 texcoord : TEXCOORD0;
 	float3 vnormal : COLOR0; // vies space normal
 	float2 hdepth : COLOR1;
@@ -82,10 +81,7 @@ PS_Output main(in PS_Input psin)
 	float3 normColor = tex2D(normalTexture, psin.texcoord).xyz;
 	// decode the normal 
 	float3 norm = decodeNormal(normColor);
-	// debug vnormal = float4(encodeNormal(norm), 1.0f);
-	// debug depth.
-	// vnormal.xyz = depth_to_color(psin.hdepth.x / psin.hdepth.y); 
-	// vnormal.w = 1.0f;
+
 	psout.vnormal = float4(encodeNormal(normalize(mul(norm, TBN))), 1.0f);
 	
 	// for albedo.

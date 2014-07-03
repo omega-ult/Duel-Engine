@@ -151,7 +151,7 @@ namespace Duel
 		return D3DBLEND_ZERO;
 	}
 
-	D3DCULL D3D9Translator::getD3DCullingMode( CullingMode cm )
+	D3DCULL D3D9Translator::getD3DCullingMode( CullMode cm )
 	{
 		switch(cm)
 		{

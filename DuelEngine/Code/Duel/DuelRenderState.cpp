@@ -14,7 +14,7 @@ namespace Duel
 	DRasterizerState::DRasterizerState() :
 		polygonMode(PM_Solid),
 		shadeMode(SM_Gouraud),
-		cullingMode(CM_None),
+		cullMode(CM_None),
 		polygonOffsetFactor(0.0f),
 		polygonOffsetUnit(0.0f),
 		scissorEnable(false),
@@ -25,7 +25,7 @@ namespace Duel
 
 	bool DRasterizerState::operator==( const DRasterizerState& rs )
 	{
-		return (rs.cullingMode == cullingMode &&
+		return (rs.cullMode == cullMode &&
 				rs.multisampleEnable == multisampleEnable &&
 				rs.polygonMode == polygonMode &&
 				rs.polygonOffsetFactor == polygonOffsetFactor &&

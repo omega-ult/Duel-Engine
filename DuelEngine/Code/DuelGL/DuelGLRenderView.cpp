@@ -132,4 +132,16 @@ namespace Duel
 	}
 
 
+
+	GLFrameBufferCache::~GLFrameBufferCache()
+	{
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mCachedFBO);
+	}
+
+	GLFrameBufferCache::GLFrameBufferCache()
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER_BINDING, mCachedFBO);
+	}
+
+
 }

@@ -22,7 +22,7 @@ namespace Duel
 		static	D3DSHADEMODE		getD3DShadeMode(ShadeMode sm);
 		static	D3DBLENDOP			getD3DBlendOperation(BlendOperation bo);
 		static	D3DBLEND			getD3DBlendFactor(BlendFactor bf);
-		static	D3DCULL				getD3DCullingMode(CullingMode cm);
+		static	D3DCULL				getD3DCullingMode(CullMode cm);
 		static	D3DTEXTUREADDRESS	getD3DTextureAddressMode(TextureAddressMode tam);
 		static	D3DTEXTUREFILTERTYPE	getD3DTextureFilterMode(FilterOption fo);
 		static	D3DCOLOR			getD3DColor(DColor c);

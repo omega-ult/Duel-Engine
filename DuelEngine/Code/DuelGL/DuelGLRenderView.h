@@ -9,6 +9,14 @@
 
 namespace Duel
 {
+	class GLFrameBufferCache
+	{
+	public:
+		GLFrameBufferCache();
+		~GLFrameBufferCache();
+	private:
+		GLint	mCachedFBO;
+	};
 	class DUELGL_API GLRenderColorView : public DRenderColorView
 	{
 	DUEL_DECLARE_RTTI(GLRenderColorView)

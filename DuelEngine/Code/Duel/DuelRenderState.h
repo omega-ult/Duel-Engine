@@ -34,10 +34,9 @@ namespace Duel
 		SM_Phong
 	};
 
-
 	/** Hardware culling modes based on vertex winding.
         This setting applies to how the hardware API culls triangles it is sent. */
-    enum CullingMode
+    enum CullMode
     {
         /// Hardware never culls triangles and renders everything it receives.
         CM_None = 1,
@@ -133,7 +132,7 @@ namespace Duel
 		// DRasterizerState-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		PolygonMode		polygonMode;			// default:PM_Solid	
 		ShadeMode		shadeMode;				// default:SM_Gouraud	
-		CullingMode		cullingMode;			// default:CM_Clockwise	
+		CullMode		cullMode;			// default:CM_Clockwise	
 		// solving z-fighting-=-=-=-=-=-=-=-=--=-=-=-=-=-
 		float			polygonOffsetFactor;	// default:0.0f
 		float			polygonOffsetUnit;		// default:0.0f

@@ -114,7 +114,7 @@ namespace Duel
 		psCodeBuf->Release();
 
 		DRasterizerState rasState;
-		rasState.cullingMode = CM_ClockWise;
+		rasState.cullMode = CM_ClockWise;
 		rasState.polygonMode = PM_Solid;
 		rasState.multisampleEnable = false;
 		rasState.shadeMode = SM_Flat;
@@ -141,7 +141,7 @@ namespace Duel
 		// with an non-default value to force it to init with default value.
 		mCurRasState.polygonMode = PM_Wireframe;
 		mCurRasState.shadeMode = SM_Flat;
-		mCurRasState.cullingMode = CM_None;
+		mCurRasState.cullMode = CM_None;
 		mCurRasState.polygonOffsetFactor = 1.0f;
 		mCurRasState.polygonOffsetUnit = 1.0f;
 		mCurRasState.scissorEnable = true;
@@ -628,9 +628,9 @@ namespace Duel
 		{
 			mDevice->SetRenderState(D3DRS_SHADEMODE, stateObj->D3DShadeMode);			
 		}
-		if (mCurRasState.cullingMode != newState.cullingMode)
+		if (mCurRasState.cullMode != newState.cullMode)
 		{
-			mDevice->SetRenderState(D3DRS_CULLMODE, stateObj->D3DShadeMode);
+			mDevice->SetRenderState(D3DRS_CULLMODE, stateObj->D3DCullMode);
 		}
 		if (mCurRasState.polygonOffsetFactor != newState.polygonOffsetFactor)
 		{

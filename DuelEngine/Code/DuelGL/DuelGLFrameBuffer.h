@@ -35,9 +35,6 @@ namespace Duel
 		//////////////////////////////////////////////////////////////////////////
 
 	protected:
-		GLuint			cacheFBO();
-
-
 
 		//GLRenderSystem*	mTargetRSys;
 		GLuint			mFBO;

@@ -22,7 +22,7 @@ namespace Duel
 	{
 		mGLPolygonMode	= GLTranslator::getGLPolygonMode(state.polygonMode);
 		mGLShadeMode	= GLTranslator::getGLShadeMode(state.shadeMode);
-		if (state.cullingMode == CM_None)
+		if (state.cullMode == CM_None)
 		{
 			mbCulling = false;
 			// not used
@@ -31,7 +31,7 @@ namespace Duel
 		else
 		{		
 			mbCulling = true;
-			mGLFrontFace	= state.cullingMode == CM_AntiClockWise ? GL_CCW : GL_CW;
+			mGLFrontFace	= state.cullMode == CM_AntiClockWise ? GL_CCW : GL_CW;
 		}
 		mState = state;
 	}

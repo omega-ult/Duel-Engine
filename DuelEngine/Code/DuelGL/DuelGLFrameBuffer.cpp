@@ -73,7 +73,7 @@ namespace Duel
 			mCurDepthView->resize(width, height);
 		}
 		// cache the old fbo. so that we can make no effect on the pipe line.
-		GLuint	oldFbo = cacheFBO();
+		GLFrameBufferCache cacheFBO;
 
 		// set the rendering destination to FBO
 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
@@ -102,13 +102,12 @@ namespace Duel
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0);
 		}		
-		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 
 	}
 
 	void GLFrameBuffer::clear( uint32 flags, const DColor& clr, DReal depth, int32 stencil )
 	{
-		GLuint	oldFbo = cacheFBO();
+		GLFrameBufferCache cacheFBO;
 
 
 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
@@ -130,16 +129,8 @@ namespace Duel
 		}
 		glClear(ogl_flags);
 
-		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
-
 	}
 
-	GLuint GLFrameBuffer::cacheFBO()
-	{
-		GLint	oldFbo = 0;
-		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &oldFbo);/*= mTargetRSys->getCurGLFBO();*/
-		return (GLuint)oldFbo;
-	}
 
 	DRenderDepthStencilView* GLFrameBuffer::getRenderDepthStencilView()
 	{
@@ -182,40 +173,38 @@ namespace Duel
 			return;
 		}
 		rv->resize(mWidth, mHeight);
-		GLuint	oldFbo = cacheFBO();
+		GLFrameBufferCache cacheFBO;
 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);			
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, rv->getTextureID(), 0);
 		mViewList[(uint32)(elem)] = rv;
 		rv->setAttachFrameBuffer(this);
 		rv->setAttachElement(elem);
-		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 	}
 
 	void GLFrameBuffer::detachRenderColorView( ElementAttachment elem )
 	{
 		if (mViewList[(uint32)(elem)] != NULL)
 		{
-			GLuint	oldFbo = cacheFBO();
+			GLFrameBufferCache cacheFBO;
 			glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 			mViewList[(uint32)(elem)]->setAttachFrameBuffer(NULL);
 			mViewList[(uint32)(elem)]->setAttachElement(EA_Color0);
 			mViewList[(uint32)(elem)] = NULL;
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + (uint32)elem, GL_TEXTURE_2D, 0, 0);
-			glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+			
 		}
 
 	}
 
 	void GLFrameBuffer::detachAllRenderColorViews()
 	{
-		GLuint	oldFbo = cacheFBO();
+		GLFrameBufferCache cacheFBO;
 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 		for (uint32 i = 0; i < 8; ++i)
 		{
 			mViewList[i] = NULL;
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, 0, 0);
 		}
-		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 		
 	}
 
@@ -242,11 +231,11 @@ namespace Duel
 		rv->resize(mWidth, mHeight);
 		mCurDepthView = rv;
 		mCurDepthView->setAttachFrameBuffer(this);
-		GLuint	oldFbo = cacheFBO();
+		GLFrameBufferCache cacheFBO;
 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rv->getRBO());
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rv->getRBO());
-		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
+		
 	}
 
 	void GLFrameBuffer::detachRenderDepthStencilView()
@@ -257,11 +246,10 @@ namespace Duel
 		}
 		mCurDepthView->setAttachFrameBuffer(NULL);
 		mCurDepthView = NULL;
-		GLuint	oldFbo = cacheFBO();
+		GLFrameBufferCache cacheFBO;
 		glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0);
-		glBindFramebuffer(GL_FRAMEBUFFER, oldFbo);
 
 	}
 

@@ -239,7 +239,7 @@ namespace Duel
 		// with an non-default value to force it to init with default value.
 		mCurRasState.polygonMode = PM_Wireframe;
 		mCurRasState.shadeMode = SM_Flat;
-		mCurRasState.cullingMode = CM_None;
+		mCurRasState.cullMode = CM_None;
 		mCurRasState.polygonOffsetFactor = 1.0f;
 		mCurRasState.polygonOffsetUnit = 1.0f;
 		mCurRasState.scissorEnable = true;
@@ -312,7 +312,7 @@ namespace Duel
 		{
 			glShadeModel(stateObj->mGLShadeMode);
 		}
-		if (stateObj->mState.cullingMode != mCurRasState.cullingMode)
+		if (stateObj->mState.cullMode != mCurRasState.cullMode)
 		{
 			if (stateObj->mbCulling)
 			{

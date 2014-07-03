@@ -21,9 +21,10 @@ VS_Output main(in VS_Input vsin)
 {
 	VS_Output vsout;
 	
-	vsout.hpos = mul(Auto_WorldViewProjMatrix, vsin.pos);
+	float4 wpos = float4(vsin.pos.xyz, 1.0f);
+	vsout.hpos = mul(Auto_WorldViewProjMatrix, wpos);
 	
-	vsout.vpos = mul(Auto_WorldViewMatrix, vsin.pos);
+	vsout.vpos = mul(Auto_WorldViewMatrix, wpos);
 	vsout.texcoord = vsin.texcoord;
 	vsout.vnormal = mul(Auto_WorldViewMatrix, float4(vsin.norm, 0.0f)).xyz;
 	vsout.hdepth = vsout.hpos.zw;
