@@ -211,6 +211,10 @@ namespace Duel
 
 	void D3D9RenderSystem::bindFrameBuffer( DFrameBuffer* buf )
 	{
+		if (mCurFrameBuffer == buf)
+		{
+			return;
+		}
 		mCurFrameBuffer = buf;
 		if (buf == NULL)
 		{
@@ -224,6 +228,7 @@ namespace Duel
 				D3D9RenderColorView* d3dView = v->getAs<D3D9RenderColorView>();
 				IDirect3DSurface9* suf = d3dView->getRenderSurface();
 				mDevice->SetRenderTarget(i, suf);
+				ReleaseCOM(suf);
 			}
 		}
 		DRenderDepthStencilView* dsView = buf->getRenderDepthStencilView();
@@ -400,7 +405,12 @@ namespace Duel
 			else if (constdef.isTexture())
 			{
 				DGpuTextureConstantPtr tex = vsParam->getTextureConstant(paramName);
-				setTextureSampler(dev, constdef.logicalIndex, tex);
+				DTextureSamplerObjectPtr samp = vsParam->getSamplerConstant(paramName + "Samp");
+				if (tex != NULL)
+				{
+					tex->setSamplerObject(samp);
+					setTextureSampler(dev, constdef.logicalIndex, tex);
+				}
 			}
 		}
 		ci = vsParam->getCustomGpuConstantIterator();
@@ -431,7 +441,12 @@ namespace Duel
 			else if (constdef.isTexture())
 			{
 				DGpuTextureConstantPtr tex = vsParam->getTextureConstant(paramName);
-				setTextureSampler(dev, constdef.logicalIndex, tex);
+				DTextureSamplerObjectPtr samp = vsParam->getSamplerConstant(paramName + "Samp");
+				if (tex != NULL)
+				{
+					tex->setSamplerObject(samp);
+					setTextureSampler(dev, constdef.logicalIndex, tex);
+				}
 			}
 		}
 	}
@@ -466,7 +481,13 @@ namespace Duel
 			else if (constdef.isTexture())
 			{
 				DGpuTextureConstantPtr tex = psParam->getTextureConstant(paramName);
-				setTextureSampler(dev, constdef.logicalIndex, tex);
+				DTextureSamplerObjectPtr samp = psParam->getSamplerConstant(paramName + "Samp");
+				if (tex != NULL)
+				{
+					tex->setSamplerObject(samp);
+					setTextureSampler(dev, constdef.logicalIndex, tex);
+				}
+				
 			}
 		}
 		ci = psParam->getCustomGpuConstantIterator();
@@ -497,7 +518,12 @@ namespace Duel
 			else if (constdef.isTexture())
 			{
 				DGpuTextureConstantPtr tex = psParam->getTextureConstant(paramName);
-				setTextureSampler(dev, constdef.logicalIndex, tex);
+				DTextureSamplerObjectPtr samp = psParam->getSamplerConstant(paramName + "Samp");
+				if (tex != NULL)
+				{
+					tex->setSamplerObject(samp);
+					setTextureSampler(dev, constdef.logicalIndex, tex);
+				}
 			}
 		}
 	}
@@ -539,21 +565,39 @@ namespace Duel
 
 	void D3D9RenderSystem::clearFrameBuffer( DFrameBuffer* fb, uint32 flags, const DColor& clr, DReal depth, int32 stencil )
 	{
+		if (fb == NULL)
+		{
+			return;
+		}		
 		D3D9FrameBufferCache cache(this, mCurFrameBuffer);
 		bindFrameBuffer(fb);
 
 		DWORD  d3dClearFlag = 0;
-		if (flags & CBM_Color)
-		{
-			d3dClearFlag |= D3DCLEAR_TARGET;
-		}
 		if ((flags & CBM_Depth) || (flags & CBM_Stencil))
 		{
 			d3dClearFlag |= D3DCLEAR_ZBUFFER;
 			d3dClearFlag |= D3DCLEAR_STENCIL;
 		}
 		D3DCOLOR d3dColor = D3D9Translator::getD3DColor(clr);
-		mDevice->Clear(0, NULL, d3dClearFlag, d3dColor, depth, stencil);
+		if (d3dClearFlag != 0)
+		{
+			mDevice->Clear(0, NULL, d3dClearFlag, d3dColor, depth, stencil);
+		}
+		if (flags & CBM_Color)
+		{
+			for (uint32 i = 0; i < 8; ++i)
+			{
+				DRenderColorView* cv = fb->getRenderColorView((ElementAttachment)i);
+				if (cv != NULL)
+				{
+					D3D9RenderColorView* txc = cv->getAs<D3D9RenderColorView>();
+					IDirect3DSurface9* suf = txc->getRenderSurface();
+					mDevice->ColorFill(suf, NULL, d3dColor);
+					ReleaseCOM(suf);
+				}
+			}
+		}
+		
 	}
 
 	void D3D9RenderSystem::blitTexture( IDirect3DBaseTexture9* input, IDirect3DSurface9* output, DViewport outputVP )
@@ -634,19 +678,19 @@ namespace Duel
 		}
 		if (mCurRasState.polygonOffsetFactor != newState.polygonOffsetFactor)
 		{
-			mDevice->SetRenderState(D3DRS_DEPTHBIAS, (DWORD)newState.polygonOffsetFactor);
+			mDevice->SetRenderState(D3DRS_DEPTHBIAS, (newState.polygonOffsetFactor ? TRUE : FALSE));
 		}
 		if (mCurRasState.polygonOffsetUnit != newState.polygonOffsetUnit)
 		{
-			mDevice->SetRenderState(D3DRS_SLOPESCALEDEPTHBIAS, (DWORD)newState.polygonOffsetUnit);
+			mDevice->SetRenderState(D3DRS_SLOPESCALEDEPTHBIAS, (newState.polygonOffsetUnit ? TRUE : FALSE));
 		}
 		if (mCurRasState.scissorEnable != newState.scissorEnable)
 		{
-			mDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, (DWORD)newState.scissorEnable);
+			mDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, (newState.scissorEnable ? TRUE : FALSE));
 		}
 		if (mCurRasState.multisampleEnable != newState.multisampleEnable)
 		{
-			mDevice->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, (DWORD)newState.multisampleEnable);
+			mDevice->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, (newState.multisampleEnable ? TRUE : FALSE));
 		}
 		mCurRasState = newState;
 	}
@@ -662,11 +706,11 @@ namespace Duel
 		stateObj->getDepthStencilState(newState);
 		if (mCurDepState.depthEnable != newState.depthEnable)
 		{
-			mDevice->SetRenderState(D3DRS_ZENABLE, (DWORD)newState.depthEnable);
+			mDevice->SetRenderState(D3DRS_ZENABLE, (newState.depthEnable ? TRUE : FALSE));
 		}
 		if (mCurDepState.depthWriteEnable != newState.depthWriteEnable)
 		{
-			mDevice->SetRenderState(D3DRS_ZWRITEENABLE, (DWORD)newState.depthWriteEnable);
+			mDevice->SetRenderState(D3DRS_ZWRITEENABLE, (newState.depthWriteEnable ? TRUE : FALSE));
 		}
 		if (mCurDepState.depthComparison != newState.depthComparison)
 		{
@@ -675,7 +719,7 @@ namespace Duel
 		// front stencil
 		if (mCurDepState.frontStencilEnable != newState.frontStencilEnable)
 		{
-			mDevice->SetRenderState(D3DRS_STENCILENABLE, (DWORD)newState.frontStencilEnable);
+			mDevice->SetRenderState(D3DRS_STENCILENABLE, (newState.frontStencilEnable ? TRUE : FALSE));
 		}
 		if (mCurDepState.frontStencilComparison != newState.frontStencilComparison)
 		{
@@ -704,7 +748,7 @@ namespace Duel
 		// back stencil
 		if (mCurDepState.backStencilEnable != newState.backStencilEnable)
 		{
-			mDevice->SetRenderState(D3DRS_TWOSIDEDSTENCILMODE, (DWORD)newState.backStencilEnable);
+			mDevice->SetRenderState(D3DRS_TWOSIDEDSTENCILMODE, (newState.backStencilEnable ? TRUE : FALSE));
 		}
 		if (mCurDepState.backStencilComparison != newState.backStencilComparison)
 		{
@@ -761,7 +805,7 @@ namespace Duel
 		// dx9 only support single blend function.
 		if (mCurBlendState.targetStates[0].blendEnable != newState.targetStates[0].blendEnable)
 		{
-			mDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, (DWORD)newState.targetStates[0].blendEnable);
+			mDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, (newState.targetStates[0].blendEnable ? TRUE : FALSE));
 		}
 		// color
 		if (mCurBlendState.targetStates[0].colorBlendOpeartion != newState.targetStates[0].colorBlendOpeartion)

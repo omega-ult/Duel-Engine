@@ -34,7 +34,7 @@ float3x3 cotangent_frame(float3 N, float3 p, float2 uv)
     float3 B = dp2perp * duv1.y + dp1perp * duv2.y;
  
     // construct a scale-invariant frame 
-    float invmax = 1.0f/sqrt( max( dot(T,T), dot(B,B) ) );
+    float invmax = -1.0f/sqrt( max( dot(T,T), dot(B,B) ) );
     return float3x3( T * invmax, B * invmax, N );
 }
 

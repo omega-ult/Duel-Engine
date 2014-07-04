@@ -251,16 +251,10 @@ namespace Duel
 				switch (desc.Type)
 				{
 				case D3DXPT_SAMPLER1D:
-					def.constType = GCT_Texture1D;
-					break;
 				case D3DXPT_SAMPLER2D:
-					def.constType = GCT_Texture2D;
-					break;
 				case D3DXPT_SAMPLER3D:
-					def.constType = GCT_Texture3D;
-					break;
 				case D3DXPT_SAMPLERCUBE:
-					def.constType = GCT_TextureCube;
+					def.constType = GCT_Texture;
 					break;
 				default:
 					DUEL_EXCEPT_BRIEF(DException::ET_InternalError,
@@ -268,6 +262,9 @@ namespace Duel
 						"Duel::D3D9ShaderObject::processParam")
 					break;
 				}
+				GpuConstantDefinition sampDef = def;
+				sampDef.constType = GCT_Sampler;
+				param.addConstant(paramName + "Samp", sampDef);
 			}
 			param.addConstant(paramName,def);
 		}

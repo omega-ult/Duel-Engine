@@ -22,6 +22,7 @@ namespace Duel
 		ret[MPT_Bool] = "bool";
 		ret[MPT_Color] = "color";
 		ret[MPT_Texture] = "texture";
+		ret[MPT_Sampler] = "sampler";
 		ret[MPT_Int1] = "int1";
 		ret[MPT_Int2] = "int2";
 		ret[MPT_Int3] = "int3";
@@ -133,11 +134,24 @@ namespace Duel
 		return type == MPT_Texture;
 	}
 
+	bool DMaterialParameter::isSampler()
+	{
+		return isSampler(paramType);
+	}
+
+	bool DMaterialParameter::isSampler( MaterialParameterType type )
+	{
+		return type == MPT_Sampler;
+	}
+
+
+
 	Duel::uint32 DMaterialParameter::getElementSize( MaterialParameterType type )
 	{
 		switch (type)
 		{
 		case Duel::MPT_Texture:
+		case Duel::MPT_Sampler:
 			return 0;
 		case Duel::MPT_Bool:
 		case Duel::MPT_Int1:
@@ -313,6 +327,17 @@ namespace Duel
 		}
 	}
 
+	void DMaterialInstance::setValue( const DString& paramName, DTextureSamplerObjectPtr samp )
+	{
+		ParameterMap::iterator i = mParamMap.find(paramName);
+		if (i != mParamMap.end())
+		{
+			mSamplerMap.insert(SamplerConstantMap::value_type(paramName, samp));
+		}
+		
+	}
+
+
 	void DMaterialInstance::setValue( const DString& name, int val )
 	{
 		ParameterMap::iterator i = mParamMap.find(name);
@@ -473,6 +498,17 @@ namespace Duel
 	}
 
 
+	Duel::DTextureSamplerObjectPtr DMaterialInstance::getSamplerValue( const DString& paramName )
+	{
+		SamplerConstantMap::iterator i = mSamplerMap.find(paramName);
+		if (i != mSamplerMap.end())
+		{
+			return i->second;
+		}
+		return DTextureSamplerObjectPtr();
+	}
+
+
 	void DMaterialInstance::copyTo( DMaterialInstance* inst )
 	{
 		if (inst != NULL)
@@ -551,6 +587,11 @@ namespace Duel
 				DMaterialInstance::TextureConstantCache c = inst->getTextureValue(p.paramName);
 				gpuParam->setValue(p.targetGpuParam, c.second);
 			}
+			else if (p.isSampler())
+			{
+				DTextureSamplerObjectPtr s = inst->getSamplerValue(p.paramName);
+				gpuParam->setValue(p.targetGpuParam, s);
+			}
 		}
 
 		// for pixel shader
@@ -575,6 +616,11 @@ namespace Duel
 			{
 				DMaterialInstance::TextureConstantCache c = inst->getTextureValue(p.paramName);
 				gpuParam->setValue(p.targetGpuParam, c.second);
+			}
+			else if (p.isSampler())
+			{
+				DTextureSamplerObjectPtr s = inst->getSamplerValue(p.paramName);
+				gpuParam->setValue(p.targetGpuParam, s);
 			}
 		}
 	}

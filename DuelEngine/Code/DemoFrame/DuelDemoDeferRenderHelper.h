@@ -98,6 +98,8 @@ namespace Duel
 
 		DRenderTechniquePtr		mMergeTech;
 		DRenderTechniquePtr		mScrnTransTech;
+
+		DTextureSamplerObjectPtr	mTextureSampler;
 	};
 
 

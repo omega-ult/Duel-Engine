@@ -12,6 +12,7 @@ namespace Duel
 		//MPT_Bool,
 		MPT_Color,
 		MPT_Texture,
+		MPT_Sampler,
 		MPT_Bool,
 		MPT_Int1,
 		MPT_Int2,
@@ -29,7 +30,7 @@ namespace Duel
 		MPT_Matrix3x4,
 		MPT_Matrix4x2,
 		MPT_Matrix4x3,
-		MPT_Matrix4x4,
+		MPT_Matrix4x4
 	};
 
 	struct DMaterialParameter
@@ -67,6 +68,8 @@ namespace Duel
 		static bool				isColor(MaterialParameterType type);
 		bool					isTexture();
 		static bool				isTexture(MaterialParameterType type);
+		bool					isSampler();
+		static bool				isSampler(MaterialParameterType type);
 		static uint32			getElementSize(MaterialParameterType type);
 		const DString&			getParameterTypeName();
 		// query the string for specified type.
@@ -144,7 +147,7 @@ namespace Duel
 		typedef std::pair<TextureConstant, DGpuTextureConstantPtr>	TextureConstantCache;
 		// aserious of function overloading for setting values.
 		void	setValue(const DString& paramName, TextureConstant tex);
-
+		void	setValue(const DString& paramName, DTextureSamplerObjectPtr samp);
 		float*	getFloatValuePtr(uint32 physicalIndex);
 		int32*	getIntValuePtr(uint32 physicalIndex);
 		int32*	getBoolValuePtr(uint32 physicalIndex);
@@ -157,7 +160,7 @@ namespace Duel
 		DRenderTechnique*	getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li); 
 		// use this function to map parameters into the gpu parameter.
 		void	updateGpuParameter(DShaderObject* so);
-
+		DTextureSamplerObjectPtr	getSamplerValue(const DString& paramName);
 		// copy the parameter definitions and the values to another instance.
 		// also the material parent will be reset to the current one.
 		void	copyTo(DMaterialInstance* inst);
@@ -169,10 +172,12 @@ namespace Duel
 		typedef	std::vector<int32>	IntConstantList;
 		typedef std::vector<int32>	BoolConstantList;
 		typedef std::map<DString, TextureConstantCache>	TextureConstantCacheMap;
+		typedef std::map<DString, DTextureSamplerObjectPtr> SamplerConstantMap;
 		FloatConstantList	mFloatConstants;
 		IntConstantList		mIntConstants;
 		BoolConstantList	mBoolConstants;
 		TextureConstantCacheMap	mTextureMap;
+		SamplerConstantMap	mSamplerMap;
 
 	};   
 	// 其实吧.. 在我这里看来, 材质系统就是对应一个shader文件, 然后指定使用的参数列表以及渲染状态,

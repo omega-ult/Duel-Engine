@@ -7,6 +7,7 @@
 			
 			<DepthStencilState>
 				<DepthEnable>false</DepthEnable>
+				<DepthWriteEnable>false</DepthWriteEnable>
 			</DepthStencilState>
 			
 			<BlendState>
@@ -15,9 +16,9 @@
 					<ColorBlendOpeartion>Add</ColorBlendOpeartion>
 					<ColorSrcFactor>SrcAlpha</ColorSrcFactor>
 					<ColorDstFactor>InvSrcAlpha</ColorDstFactor>
-					<AlphaBlendOpeartion>Max</AlphaBlendOpeartion>
-					<AlphaSrcFactor>One</AlphaSrcFactor>
-					<AlphaDstFactor>One</AlphaDstFactor>
+					<AlphaBlendOpeartion>Add</AlphaBlendOpeartion>
+					<AlphaSrcFactor>SrcAlpha</AlphaSrcFactor>
+					<AlphaDstFactor>InvSrcAlpha</AlphaDstFactor>
 				</RenderTargetBlendState>
 			</BlendState>
 			<VertexProgram group="_BasicShaderPack">Demo_ScreenTransfer.vs</VertexProgram>
@@ -28,9 +29,9 @@
 	<!--Compose-->
 	<Technique name="DeferMerge">
 		<Pass name="DeferMerge_p0">
-			
 			<DepthStencilState>
-				<state name="DepthEnable">false</state>
+				<DepthEnable>false</DepthEnable>
+				<DepthWriteEnable>false</DepthWriteEnable>
 			</DepthStencilState>
 			
 			<BlendState>
@@ -39,9 +40,9 @@
 					<ColorBlendOpeartion>Add</ColorBlendOpeartion>
 					<ColorSrcFactor>SrcAlpha</ColorSrcFactor>
 					<ColorDstFactor>InvSrcAlpha</ColorDstFactor>
-					<AlphaBlendOpeartion>Max</AlphaBlendOpeartion>
-					<AlphaSrcFactor>One</AlphaSrcFactor>
-					<AlphaDstFactor>One</AlphaDstFactor>
+					<AlphaBlendOpeartion>Add</AlphaBlendOpeartion>
+					<AlphaSrcFactor>SrcAlpha</AlphaSrcFactor>
+					<AlphaDstFactor>InvSrcAlpha</AlphaDstFactor>
 				</RenderTargetBlendState>
 			</BlendState>
 			<VertexProgram group="_BasicShaderPack">Demo_DeferMerge.vs</VertexProgram>

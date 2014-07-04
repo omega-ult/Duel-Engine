@@ -112,62 +112,55 @@ namespace Duel
 			 			for (i = mRenderList.begin(); i != iend; ++i)
 			 			{
 			 				RenderElement& e = *i;
-			 				//renderSingleObject(deferlayer->getGeoStageFrameBuffer(), e.renderable, e.renderPass);
-							renderSingleObject(mPresentTarget, e.renderable, e.renderPass);
+			 				renderSingleObject(deferlayer->getGeoStageFrameBuffer(), e.renderable, e.renderPass);
 			 			}
 			 			signalGroupFinishRender(queue, rgrp);
 			 		}
 				}
-// 				if (deferProcessing)
-// 				{
-// 					// light accumulation.-------------------------------	
-// 					deferlayer->getLightStageFrameBuffer()->resize(mPresentTarget->getWidth(), mPresentTarget->getHeight());					
-// 					deferlayer->prepareLightingStage();
-// 					DRenderQueue::LightIterator li = queue->getLightIterator();
-// 					while (li.hasMoreElements())
-// 					{
-// 						DLightSource* l = li.getNext();
-// 					}
-// 					// merge---------------------------------------------
-// 					deferlayer->getMergeStageFrameBuffer()->resize(mPresentTarget->getWidth(), mPresentTarget->getHeight());
-// 					deferlayer->prepareMergeStage();
-// 					{
-// 						mMergeHelper.setInputAlbedo(deferlayer->getAlbedoMap()->
-// 							getGpuTexutureConstant());
-// 						mMergeHelper.setInputLightAccumulationMap(deferlayer->getLightAccumulationMap()->
-// 							getGpuTexutureConstant());
-// 						mMergeHelper.setInputDepth(deferlayer->getDepthMap()->
-// 							getGpuTexutureConstant());
-// 						DRenderTechnique* mergetTech = mMergeHelper.getRenderTechnique(
-// 							DDemoMergeHelper::RS_DeferMerge, queue->getRenderCamera(), queue->getLightIterator());
-// 						if (mergetTech)
-// 						{
-// 							DRenderTechnique::RenderPassIterator p = mergetTech->getRenderPassIterator();
-// 							while (p.hasMoreElements())
-// 							{
-// 								DRenderPass* pass = p.getNext().get();
-// 								renderSingleObject(deferlayer->getMergeStageFrameBuffer(), &mMergeHelper, pass);
-// 							}
-// 						}
-// 					}
-// 				}
-// 				// transfer color to the present target.
-// 				if (deferProcessing)
-// 				{
-// 					mMergeHelper.setTransferSource(deferlayer->getMergedColorMap()->
-// 						getGpuTexutureConstant());
-// 					DRenderTechnique* transTech = mMergeHelper.getRenderTechnique(
-// 						DDemoMergeHelper::RS_ScreenTransfer, queue->getRenderCamera(), queue->getLightIterator());
-// 					if (transTech)
-// 					{
-// 						DRenderTechnique::RenderPassIterator p = transTech->getRenderPassIterator();
-// 						while (p.hasMoreElements())
-// 						{
-// 							DRenderPass* pass = p.getNext().get();
-// 							renderSingleObject(mPresentTarget, &mMergeHelper, pass);
-// 						}
-// 					}
-// 				}
+ 				// light accumulation.-------------------------------	
+				deferlayer->getLightStageFrameBuffer()->resize(mPresentTarget->getWidth(), mPresentTarget->getHeight());					
+				deferlayer->prepareLightStage();
+				DRenderQueue::LightIterator li = queue->getLightIterator();
+				while (li.hasMoreElements())
+				{
+					DLightSource* l = li.getNext();
+				}
+				// merge---------------------------------------------
+				deferlayer->getMergeStageFrameBuffer()->resize(mPresentTarget->getWidth(), mPresentTarget->getHeight());
+				deferlayer->prepareMergeStage();
+				{
+					mMergeHelper.setInputAlbedo(deferlayer->getAlbedoMap()->
+						getGpuTexutureConstant());
+					mMergeHelper.setInputLightAccumulationMap(deferlayer->getLightAccumulationMap()->
+						getGpuTexutureConstant());
+					mMergeHelper.setInputDepth(deferlayer->getDepthMap()->
+						getGpuTexutureConstant());
+					DRenderTechnique* mergetTech = mMergeHelper.getRenderTechnique(
+						DDemoMergeHelper::RS_DeferMerge, queue->getRenderCamera(), queue->getLightIterator());
+					if (mergetTech)
+					{
+						DRenderTechnique::RenderPassIterator p = mergetTech->getRenderPassIterator();
+						while (p.hasMoreElements())
+						{
+							DRenderPass* pass = p.getNext().get();
+							renderSingleObject(deferlayer->getMergeStageFrameBuffer(), &mMergeHelper, pass);
+						}
+					}
+				}
+				// transfer color to the present target.
+				mMergeHelper.setTransferSource(deferlayer->getMergedColorMap()->
+					getGpuTexutureConstant());
+				DRenderTechnique* transTech = mMergeHelper.getRenderTechnique(
+					DDemoMergeHelper::RS_ScreenTransfer, queue->getRenderCamera(), queue->getLightIterator());
+				if (transTech)
+				{
+					DRenderTechnique::RenderPassIterator p = transTech->getRenderPassIterator();
+					while (p.hasMoreElements())
+					{
+						DRenderPass* pass = p.getNext().get();
+						renderSingleObject(mPresentTarget, &mMergeHelper, pass);
+					}
+				}
 			}
 
 		}
@@ -322,14 +315,14 @@ namespace Duel
 		mGeoFrameBuffer->clear(CBM_Color|CBM_Depth|CBM_Stencil, DColor::ZERO, 1.0f, 0);
 	}
 
-	void DDemoRenderWorkshop::DeferLayer::prepareLightingStage()
+	void DDemoRenderWorkshop::DeferLayer::prepareLightStage()
 	{
-		mGeoFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
+		mLightFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
 	}
 
 	void DDemoRenderWorkshop::DeferLayer::prepareMergeStage()
 	{
-		mGeoFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
+		mMergeFrameBuffer->clear(CBM_Color, DColor::ZERO, 1.0f, 0);
 	}
 
 	DFrameBuffer* DDemoRenderWorkshop::DeferLayer::getGeoStageFrameBuffer()

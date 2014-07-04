@@ -503,10 +503,7 @@ namespace Duel
 			case GCT_Bool:
 			case GCT_Float1:
 			case GCT_Int1:
-			case GCT_Texture1D:
-			case GCT_Texture2D:
-			case GCT_Texture3D:
-			case GCT_TextureCube:
+			case GCT_Texture:
 			case GCT_Float2:
 			case GCT_Int2:
 			case GCT_Float3:
@@ -537,10 +534,7 @@ namespace Duel
 			case GCT_Bool:
 			case GCT_Float1:
 			case GCT_Int1:
-			case GCT_Texture1D:
-			case GCT_Texture2D:
-			case GCT_Texture3D:
-			case GCT_TextureCube:
+			case GCT_Texture:
 				return 4;
 			case GCT_Float2:
 			case GCT_Int2:
@@ -594,16 +588,7 @@ namespace Duel
 
 	bool GpuConstantDefinition::isTexture( GpuConstantType c )
 	{
-		switch(c)
-		{
-		case GCT_Texture1D:
-		case GCT_Texture2D:
-		case GCT_Texture3D:
-		case GCT_TextureCube:
-			return true;
-		default:
-			return false;
-		};
+		return c == GCT_Texture;
 	}
 
 	bool GpuConstantDefinition::isTexture() const
@@ -674,10 +659,7 @@ namespace Duel
 		case GCT_Int2:
 		case GCT_Int3:
 		case GCT_Int4:
-		case GCT_Texture1D:
-		case GCT_Texture2D:
-		case GCT_Texture3D:
-		case GCT_TextureCube:
+		case GCT_Texture:
 		case GCT_Sampler:
 			return false;
 		default:

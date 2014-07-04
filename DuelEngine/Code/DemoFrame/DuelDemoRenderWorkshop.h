@@ -24,7 +24,7 @@ namespace Duel
 			~DeferLayer();
 			void	initialize(uint32 w, uint32 h);
 			void	prepareGBufferStage();
-			void	prepareLightingStage();
+			void	prepareLightStage();
 			void	prepareMergeStage();
 			DFrameBuffer*		getGeoStageFrameBuffer();
 			DFrameBuffer*		getLightStageFrameBuffer();

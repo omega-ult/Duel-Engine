@@ -126,6 +126,8 @@ namespace Duel
 		mRenderLayout->setIndexData(DIndexData(vi));
 		mRenderLayout->setVertexData(DVertexData(vs, vd));
 		mRenderLayout->seal();
+
+		mTextureSampler = re->createTextureSamplerObject(DTextureSampler());
 	}
 
 	DRenderTechnique* DDemoMergeHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
@@ -146,11 +148,14 @@ namespace Duel
 		if (so->getPassName() == "DeferMerge_p0")
 		{
 			so->getPixelProgramParameters()->setValue("albedoMap", mAlbedoTex);
+			so->getPixelProgramParameters()->setValue("albedoMapSamp", mTextureSampler);
 			so->getPixelProgramParameters()->setValue("lightAccumMap", mLightAccumTex);
+			so->getPixelProgramParameters()->setValue("lightAccumMapSamp", mTextureSampler);
 		}
 		if (so->getPassName() == "ScreenTransfer_p0")
 		{
 			so->getPixelProgramParameters()->setValue("srcTex", mTransSrc);
+			so->getPixelProgramParameters()->setValue("srcTexSamp", mTextureSampler);
 		}
 	}
 

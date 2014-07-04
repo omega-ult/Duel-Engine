@@ -54,17 +54,14 @@ namespace Duel
 				case GCT_Float4:
 					glUniform4fv(loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
 					break;
-				case GCT_Texture1D:
-				case GCT_Texture2D:
-				case GCT_Texture3D:
-				case GCT_TextureCube:
+				case GCT_Texture:
 					tex = params->getTextureConstant(pi.current()->first);
 					if (tex != NULL && tex->isValid())
 					{
 						glActiveTexture(GL_TEXTURE0 + texUnit);
 						texUnit++;
 						GLGpuTextureConstant* glTexPtr = tex->getAs<GLGpuTextureConstant>();
-						glTexPtr->setSamplerObject(params->getSamplerConstant(pi.current()->first));
+						glTexPtr->setSamplerObject(params->getSamplerConstant(pi.current()->first + "Samp"));
 						glBindTexture(glTexPtr->getGLTextureTarget(), glTexPtr->getTextureID());
 						glUniform1ui(loc, glTexPtr->getTextureID());
 					}
@@ -141,17 +138,14 @@ namespace Duel
 				case GCT_Float4:
 					glUniform4fv(loc, def.arraySize, params->getFloatValuePtr(def.physicalIndex));
 					break;
-				case GCT_Texture1D:
-				case GCT_Texture2D:
-				case GCT_Texture3D:
-				case GCT_TextureCube:
+				case GCT_Texture:
 					tex = params->getTextureConstant(pi.current()->first);
 					if (tex != NULL && tex->isValid())
 					{
 						glActiveTexture(GL_TEXTURE0 + texUnit);
 						texUnit++;
 						GLGpuTextureConstant* glTexPtr = tex->getAs<GLGpuTextureConstant>();
-						glTexPtr->setSamplerObject(params->getSamplerConstant(pi.current()->first));
+						glTexPtr->setSamplerObject(params->getSamplerConstant(pi.current()->first + "Samp"));
 						glBindTexture(glTexPtr->getGLTextureTarget(), glTexPtr->getTextureID());
 						glUniform1ui(loc, glTexPtr->getTextureID());
 					}

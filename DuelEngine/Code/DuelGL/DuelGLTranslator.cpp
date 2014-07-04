@@ -603,13 +603,10 @@ namespace Duel
 		case GL_FLOAT_MAT4x3:
 			return GCT_Matrix4x3;
 		case GL_SAMPLER_1D:
-			return GCT_Texture1D;
 		case GL_SAMPLER_2D:
-			return GCT_Texture2D;
 		case GL_SAMPLER_3D:
-			return GCT_Texture3D;
 		case GL_SAMPLER_CUBE:
-			return GCT_TextureCube;
+			return GCT_Texture;
 		default:
 			return GCT_Unknown;
 			break;
