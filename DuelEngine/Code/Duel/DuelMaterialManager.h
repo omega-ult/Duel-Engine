@@ -24,6 +24,9 @@ namespace Duel
 		void				unregisterMaterial(const DString& name);
 		// create a material instance, may return NULL if no specified material resource registered.
 		DMaterialInstancePtr	createMaterialInstance(const DString& name);
+		// use an existing instance to create another one, this function will copy the
+		// parameters of specified instance to the resulting one.
+		DMaterialInstancePtr	copyMaterialInstance(DMaterialInstancePtr inst);
 
 	protected:
 		MaterialMap	mMatMap;

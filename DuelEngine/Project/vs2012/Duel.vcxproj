@@ -204,7 +204,6 @@
     <ClInclude Include="..\..\Code\Duel\DuelResultCode.h" />
     <ClInclude Include="..\..\Code\Duel\DuelRotator.h" />
     <ClInclude Include="..\..\Code\Duel\DuelRTTI.h" />
-    <ClInclude Include="..\..\Code\Duel\DuelScene.h" />
     <ClInclude Include="..\..\Code\Duel\DuelSceneInstance.h" />
     <ClInclude Include="..\..\Code\Duel\DuelSceneManager.h" />
     <ClInclude Include="..\..\Code\Duel\DuelSceneManagerEnumerator.h" />
@@ -215,6 +214,7 @@
     <ClInclude Include="..\..\Code\Duel\DuelSingleton.h" />
     <ClInclude Include="..\..\Code\Duel\DuelSkeleton.h" />
     <ClInclude Include="..\..\Code\Duel\DuelSkeletonManager.h" />
+    <ClInclude Include="..\..\Code\Duel\DuelSkyDome.h" />
     <ClInclude Include="..\..\Code\Duel\DuelSocket.h" />
     <ClInclude Include="..\..\Code\Duel\DuelSphere.h" />
     <ClInclude Include="..\..\Code\Duel\DuelSpline.h" />
@@ -356,6 +356,7 @@
     <ClCompile Include="..\..\Code\Duel\DuelShaderObject.cpp" />
     <ClCompile Include="..\..\Code\Duel\DuelSkeleton.cpp" />
     <ClCompile Include="..\..\Code\Duel\DuelSkeletonManager.cpp" />
+    <ClCompile Include="..\..\Code\Duel\DuelSkyDome.cpp" />
     <ClCompile Include="..\..\Code\Duel\DuelSocket.cpp" />
     <ClCompile Include="..\..\Code\Duel\DuelSphere.cpp" />
     <ClCompile Include="..\..\Code\Duel\DuelSpline.cpp" />

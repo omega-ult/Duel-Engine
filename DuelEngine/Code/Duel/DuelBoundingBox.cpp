@@ -344,7 +344,7 @@ namespace Duel
 				return diff.x*diff.y*diff.z;
 			}
 		case BBE_Infinite:
-			return DMath::POS_INFINITY;
+			return DMath::REAL_POS_INFINITY;
 		default:
 			return 0.0f;
 		}
@@ -359,7 +359,7 @@ namespace Duel
 		case BBE_Finite:
 			return mMaximum-mMinimum;
 		case BBE_Infinite:
-			return DVector3(DMath::POS_INFINITY,DMath::POS_INFINITY,DMath::POS_INFINITY);
+			return DVector3(DMath::REAL_POS_INFINITY,DMath::REAL_POS_INFINITY,DMath::REAL_POS_INFINITY);
 		default:
 			return DVector3::ZERO;
 		}
@@ -378,9 +378,9 @@ namespace Duel
 
 		case BBE_Infinite:
 			return DVector3(
-				DMath::POS_INFINITY,
-				DMath::POS_INFINITY,
-				DMath::POS_INFINITY);
+				DMath::REAL_POS_INFINITY,
+				DMath::REAL_POS_INFINITY,
+				DMath::REAL_POS_INFINITY);
 
 		default: // shut up compiler
 			assert( false && "Never reached" );

@@ -154,8 +154,8 @@ namespace Duel
 		{
 			return;
 		}
-		if ((pass->getVertexProgram() == NULL && !pass->getVertexProgram()->isLoaded())
-			|| (pass->getPixelProgram() == NULL && !pass->getPixelProgram()->isLoaded()))
+		if ((pass->getVertexProgram() == NULL || !pass->getVertexProgram()->isLoaded())
+			|| (pass->getPixelProgram() == NULL || !pass->getPixelProgram()->isLoaded()))
 		{
 			return;
 		}

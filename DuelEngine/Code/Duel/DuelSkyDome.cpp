@@ -1,56 +1,30 @@
-//  [12/22/2012 OMEGA] created
+//  [7/6/2014 OMEGA] created
 
 #include "DuelCommon.h"
-#include "DuelEntity.h"
-#include "DuelSubEntity.h"
-#include "DuelSubMesh.h"
-#include "DuelSkeleton.h"
-#include "DuelCore.h"
-#include "DuelResourceGroupManager.h"
+#include "DuelSkyDome.h"
 #include "DuelMaterial.h"
 #include "DuelMaterialManager.h"
-#include "DuelVertexDeclaration.h"
-#include "DuelVertexData.h"
 #include "DuelRenderResourceManager.h"
+#include "DuelRenderQueue.h"
+#include "DuelMesh.h"
 
 namespace Duel
 {
-	DUEL_IMPLEMENT_RTTI_1(DSubEntity, DRenderable);
+
+	DUEL_IMPLEMENT_RTTI_1(DSkyComponent, DRenderable);
+	DUEL_IMPLEMENT_RTTI_1(DSkyDome, DObject);
 
 
-	DSubEntity::DSubEntity( DEntity* parent, DSubMeshPtr subMesh ) :
+	DSkyComponent::DSkyComponent(DSkyDome* parent, DSubMeshPtr subMesh ) :
 		mParent(parent),
 		mTargetSubMesh(subMesh),
-		mbVisible(true),
-		mBoundingBox(DAxisAlignedBox::AAB_NULL)
+		mCamPos(DVector3::ZERO)
 	{
 		mName = subMesh->getName();
-
-		DString skelName = subMesh->getParent()->getSkeleton();
-		// split group name and the res name with "/"
-		DStringVector tmp = DStringTool::split(skelName, "/");
-		DString skelGrpName;
-		DString skelResName;
-		if (tmp.size() == 2) // meanning the result contains the group name.
-		{
-			skelGrpName = tmp[0];
-			skelResName = tmp[1];
-		}
-		else if (tmp.size() == 1) // meaning the result only contains res name, try to 
-		{
-			skelGrpName = subMesh->getParent()->getGroupName();
-			skelResName = tmp[0];
-		}
-		DResourcePtr skelRes = DResourceGroupManager::getSingletonPtr()->getResouceManager("Skeleton")->getResource(skelGrpName, skelResName);
-		if (skelRes != NULL && skelRes->isLoaded())
-		{
-			mSkelInst = skelRes->getAs<DSkeleton>()->createSkeltonInstance(mName);
-		}
 		if (subMesh->getMaterialInstance() != NULL)
 		{
 			mMtlInst = DMaterialManager::getSingleton().copyMaterialInstance(subMesh->getMaterialInstance());
 		}
-		
 		// now go for the vertex data and index data.
 		// first copy the index data and the vertex data.
 		mIData = subMesh->getIndices();
@@ -97,29 +71,6 @@ namespace Duel
 				posBuf->readData(0, posBuf->getSize(), newBufPtr);
 				newBuf->unlock();
 				vstream.setStream(posSrc, newBuf);
-				// construct bounding box.
-				if(posElem.getElementType() == VET_Float3)
-				{
-					char* buf = (char*)newBuf->lock(HBL_ReadOnly);
-					buf += posElem.getOffset();
-					uint32 vcount = newBuf->getVertexCount();
-					DReal min[3] = { DMath::REAL_POS_INFINITY };
-					DReal max[3] = { DMath::REAL_NEG_INFINITY };
-					for (uint32 i = 0; i < vcount; ++i)
-					{
-						float* fPtr = (float*)buf;
-						min[0] = DMath::Min<DReal>(*fPtr, min[0]);
-						min[1] = DMath::Min<DReal>(*(fPtr+1), min[1]);
-						min[2] = DMath::Min<DReal>(*(fPtr+2), min[2]);
-						max[0] = DMath::Max<DReal>(*fPtr, max[0]);
-						max[1] = DMath::Max<DReal>(*(fPtr+1), max[1]);
-						max[2] = DMath::Max<DReal>(*(fPtr+2), max[2]);
-						buf += posElem.getSize();
-					}
-					newBuf->unlock();
-					mBoundingBox.setExtent(min[0],min[1],min[2],
-						max[0],max[1],max[2]);
-				}
 			}
 			if (normBuf != NULL && posBuf.get() != normBuf.get())
 			{
@@ -140,36 +91,37 @@ namespace Duel
 		mRenderLayout->seal();
 	}
 
-	DSubEntity::~DSubEntity()
-	{
 
-	}
-
-	const DString& DSubEntity::getName()
+	const DString& DSkyComponent::getName()
 	{
 		return mName;
 	}
 
-	DSubMeshPtr DSubEntity::getTargetSubMesh()
+	Duel::DMaterialInstancePtr DSkyComponent::getMaterialInstance()
 	{
-		return mTargetSubMesh;
+		return mMtlInst;
 	}
 
-	DEntity* DSubEntity::getParent() const
+	void DSkyComponent::setCameraPosition( DVector3 pos )
 	{
-		return mParent;
+		mCamPos = pos;
 	}
 
-	bool DSubEntity::isVisible() const
+
+	Duel::DReal DSkyComponent::getSquaredViewDepthToCamera( const DCamera* cam )
 	{
-		return mbVisible;
+		return DMath::REAL_POS_INFINITY;
 	}
 
-	void DSubEntity::setVisible( bool visible )
+	void DSkyComponent::getWorldTransform( DMatrix4& outMat )
 	{
-		mbVisible = visible;
+		outMat = DMatrix4::IDENTITY;
+		DVector3 camRelativeMove = mCamPos/mParent->getSkyCompacity();
+		outMat.setTranslate(mCamPos-camRelativeMove);
 	}
-	DRenderTechnique* DSubEntity::getRenderTechnique( uint32 stage, DCamera* cam, LightIterator li )
+
+
+	DRenderTechnique* DSkyComponent::getRenderTechnique( uint32 stage, DCamera* cam, LightIterator li )
 	{
 		if (mMtlInst != NULL)
 		{
@@ -178,12 +130,7 @@ namespace Duel
 		return NULL;
 	}
 
-	Duel::DAxisAlignedBox DSubEntity::getBoundingBox() const
-	{
-		return mBoundingBox;
-	}
-
-	void DSubEntity::updateCustomGpuParameter( DShaderObject* so )
+	void DSkyComponent::updateCustomGpuParameter( DShaderObject* so )
 	{
 		if (mMtlInst != NULL)
 		{
@@ -191,10 +138,67 @@ namespace Duel
 		}
 	}
 
-	Duel::DMaterialInstancePtr DSubEntity::getMaterialInstance()
+	DSkyDome::DSkyDome() : 
+		mSkyCompacity(10000.0f)
 	{
-		return mMtlInst;
+
 	}
 
+	void DSkyDome::setSkyCompacity( DReal comp )
+	{
+		mSkyCompacity = comp;
+	}
+
+	Duel::DReal DSkyDome::getSkyCompacity()
+	{
+		return mSkyCompacity;
+	}
+
+	void DSkyDome::loadFromMesh( DResourcePtr mesh )
+	{
+		SkyComponentList::iterator i, iend = mCompList.end();
+		for (i = mCompList.begin(); i != iend; ++i)
+		{
+			delete (*i);
+		}
+		mCompList.clear();
+		DMesh* meshPtr = mesh->getAs<DMesh>(false);
+		if (meshPtr != NULL && meshPtr->isLoaded())
+		{
+			mMeshTarget = mesh;
+			DMesh::SubMeshIterator sbi = meshPtr->getSubMeshIterator();
+			while (sbi.hasMoreElements())
+			{
+				DSubMeshPtr sb = sbi.getNext();
+				DSkyComponent* newComp = new DSkyComponent(this, sb);
+				mCompList.push_back(newComp);
+			}
+		}
+	}
+
+	void DSkyDome::applyToRenderQueue( DRenderQueue* destQueue, DCamera* cam )
+	{
+		if (destQueue != NULL)
+		{
+			for(uint32 i = 0; i < mCompList.size(); ++i)
+			{
+				mCompList[i]->setCameraPosition(cam->getEyePosition());
+				destQueue->addRenderable(RG_Sky, mCompList[i]);
+			}
+		}
+	}
+
+	DSkyComponent* DSkyDome::getSkyComponent( const DString& name )
+	{
+		SkyComponentList::iterator i, iend = mCompList.end();
+		for (i = mCompList.begin(); i != iend; ++i)
+		{
+			if ((*i)->getName() == name)
+			{
+				return (*i);
+			}
+		}
+		return NULL;
+	}
 
 }

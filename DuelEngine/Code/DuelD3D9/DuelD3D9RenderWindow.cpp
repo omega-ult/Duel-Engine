@@ -275,7 +275,6 @@ namespace Duel
 	void D3D9RenderWindow::onDeviceLost()
 	{
 		ReleaseCOM(mSwapChain);
-		mSwapChain = NULL;
 	}
 
 	void D3D9RenderWindow::onDeviceReset(IDirect3DDevice9* dev)

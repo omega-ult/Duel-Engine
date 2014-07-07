@@ -21,7 +21,7 @@ namespace Duel
 	protected:
 		GLenum	mGLPolygonMode;
 		GLenum	mGLShadeMode;
-		GLenum	mGLFrontFace;
+		GLenum	mGLCullFace;
 		bool	mbCulling;
 		// just a copy.
 		DRasterizerState	mState;

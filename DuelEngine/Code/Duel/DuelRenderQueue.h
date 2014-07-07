@@ -58,7 +58,7 @@ namespace Duel
 		void			clearAllLights();
 
 		// if specified groupID does not exist, the queue will create one.
-		void			addRenderale(uint32 groupID, DRenderable* rend);
+		void			addRenderable(uint32 groupID, DRenderable* rend);
 		// create a new render group with specified id, if there was an existed group, it will be returned.
 		DRenderGroup*	createRenderGroup(uint32 groupID);
 		// get the group by ID, a NULL pointer will be returned if specified

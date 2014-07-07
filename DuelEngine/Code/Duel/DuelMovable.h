@@ -62,7 +62,7 @@ namespace Duel
 
 		// apply the renderables to the render queue, it is designed as an internal method,
 		// DO NOT call it directly.
-		INTERNAL virtual void	applyToRenderQueue(DRenderQueue* destQueue) {}
+		INTERNAL virtual void applyToRenderQueue(DRenderQueue* destQueue, DCamera* cam) {}
 
 
 

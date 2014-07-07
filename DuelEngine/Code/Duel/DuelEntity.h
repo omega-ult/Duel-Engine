@@ -41,7 +41,7 @@ namespace Duel
 		// override : DMovable--------------------------
 		virtual DString		getTypeName() const;
 		// override : DMovable--------------------------
-		virtual void		applyToRenderQueue(DRenderQueue* destQueue);
+		virtual void		applyToRenderQueue(DRenderQueue* destQueue, DCamera* cam);
 
 	protected:
 		SubEntityList		mSubEntities;

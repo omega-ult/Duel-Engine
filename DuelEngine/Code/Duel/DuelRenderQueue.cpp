@@ -31,7 +31,7 @@ namespace Duel
 		return mRenderCamera;
 	}
 
-	void DRenderQueue::addRenderale( uint32 groupID, DRenderable* rend )
+	void DRenderQueue::addRenderable( uint32 groupID, DRenderable* rend )
 	{
 		RenderGroupMap::iterator i = mGroupMap.find(groupID);
 		if (i == mGroupMap.end())

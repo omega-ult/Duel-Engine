@@ -1,0 +1,40 @@
+sampler skyTexture;
+
+struct PS_Input
+{	
+	float2 texcoord : TEXCOORD0;
+};
+
+struct PS_Output
+{
+	float4	albedo: COLOR0;
+};
+
+float3 depth_to_color( float f)
+{
+	float3 color;
+	f *= 256;
+	color.x = floor(f);
+	f = (f-color.x)*256;
+	color.y = floor(f);
+	color.z = f-color.y;
+	color.xy *= 0.00390625; // *= 1.0/256
+	return color;
+}
+
+float color_to_depth(float3 color)
+{
+	const float3 byte_to_float = float3(1.0,1.0/256,1.0/(256*256));
+	return dot(color,byte_to_float);
+}
+
+PS_Output main(in PS_Input psin)
+{
+	PS_Output psout;
+	
+	float4 skyColor = tex2D(skyTexture, psin.texcoord);
+	// for albedo.
+	psout.albedo = float4(skyColor.xyz,1.0f);
+
+	return psout;
+}

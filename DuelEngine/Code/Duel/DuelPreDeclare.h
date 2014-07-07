@@ -141,6 +141,8 @@ namespace Duel
 
 	class	DLightSource;
 
+	class	DSkyDome;
+
 	class	DSceneInstance;
 	class	DSceneManagerEnumerator;
 	class	DSceneManagerFactory;

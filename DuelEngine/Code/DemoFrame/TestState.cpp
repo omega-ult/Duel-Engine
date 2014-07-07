@@ -50,7 +50,7 @@ namespace DemoKit
 		mStartTime = mTimer->getMilliseconds();
 		mLastFrameTime = mStartTime;
 		mRenderWindow = DApplication::getSingleton().getMainWindow();
-#ifdef GLPLUGIN_DEBUG
+#ifdef GUI_DEBUG
 		mGManager = DGUISystem::getSingleton().createGUIManager(mRenderWindow);
 		mGManager->setInputEventQueue(DInputManager::getSingleton().registerWindow(mRenderWindow, false));
 
@@ -74,23 +74,6 @@ namespace DemoKit
 			Duel::DResourceGroupManager::getSingleton().createDeclaredResource("_ShowcasePack");
 		}
 
-
-		Duel::DResourcePtr aTestMesh = Duel::DResourceGroupManager::getSingleton().
-			getResouceManager("Mesh")->getResource("_BasicMediaPack", "M_PointLightSphereModel.dm");
-		aTestMesh->touch();
-
-		Duel::DResourcePtr aTestSkel = Duel::DResourceGroupManager::getSingleton().
-			getResouceManager("Skeleton")->getResource("_BasicMediaPack", "a test.ds");
-		aTestSkel->touch();
-
-
-		Duel::DResourcePtr reimuTex = Duel::DResourceGroupManager::getSingleton().
-			getResouceManager("Texture")->getResource("_ShowcasePack", "reimu.dds");
-		reimuTex->touch();
-
-		Duel::DResourcePtr testNormal = Duel::DResourceGroupManager::getSingleton().
-			getResouceManager("Texture")->getResource("_BasicMediaPack", "T_Test_Normal.dds");
-		testNormal->touch();
 
 		Duel::DTerrainPageData data;
 		data.pageScale = 1.0f;
@@ -140,7 +123,8 @@ namespace DemoKit
 		
 
 
-#else
+#endif // GUI_DEBUG
+
 		Duel::DArchivePtr mediaArchive = Duel::DArchiveManager::getSingleton().
 			getArchive("Assets\\_BasicMediaPack");
 		if (mediaArchive != NULL)
@@ -166,6 +150,10 @@ namespace DemoKit
 			getResouceManager("Mesh")->getResource("_BasicMediaPack", "M_PointLightSphereModel.dm");
 		aTestMesh->touch();
 
+		Duel::DResourcePtr skyDomeMesh = Duel::DResourceGroupManager::getSingleton().
+			getResouceManager("Mesh")->getResource("_BasicMediaPack", "M_SkyDome.dm");
+		skyDomeMesh->touch();
+
 		Duel::DResourcePtr aTestSkel = Duel::DResourceGroupManager::getSingleton().
 			getResouceManager("Skeleton")->getResource("_BasicMediaPack", "a test.ds");
 		aTestSkel->touch();
@@ -179,7 +167,6 @@ namespace DemoKit
 			getResouceManager("Texture")->getResource("_BasicMediaPack", "T_Test_Normal.dds");
 		testNormal->touch();
 
-#endif // GLPLUGIN_DEBUG
 
 		Duel::DMesh::SubMeshIterator sbi = aTestMesh->getAs<Duel::DMesh>()->getSubMeshIterator();
 		while (sbi.hasMoreElements())
@@ -188,9 +175,32 @@ namespace DemoKit
 			Duel::DMaterialInstancePtr mtl = Duel::DMaterialManager::getSingleton().createMaterialInstance("Lambert");
 			sb->setMaterialInstance(mtl);
 		}
+		sbi = skyDomeMesh->getAs<Duel::DMesh>()->getSubMeshIterator();
+		while (sbi.hasMoreElements())
+		{
+			Duel::DSubMeshPtr sb = sbi.getNext();
+			Duel::DMaterialInstancePtr mtl = Duel::DMaterialManager::getSingleton().createMaterialInstance("SkyDome");
+			sb->setMaterialInstance(mtl);
+		}
+
+
 		mSceneInstance->initialize(Duel::DAxisAlignedBox(-10.0f, -10.0f, -10.0f, 10.0f, 10.0f, 10.0f), 5.0f);
 		mSceneInstance->getSceneCamera()->setEyePosition(0.0f,5.0f, -10.0f);
 		mSceneInstance->getSceneCamera()->lookAt(0.0f,0.0f, 0.0f);
+
+		mSceneInstance->getSkyDome()->loadFromMesh(skyDomeMesh);
+		Duel::DSkyDome::SkyComponentIterator si = mSceneInstance->getSkyDome()->getSkyComponentIterator();
+		while (si.hasMoreElements())
+		{
+			Duel::DSkyComponent* skyobj = si.getNext();
+			Duel::DMaterialInstance::TextureConstant texConst;
+			texConst.first = reimuTex->getGroupName();
+			texConst.second = reimuTex->getName();
+			if (skyobj->getMaterialInstance() != NULL)
+			{
+				skyobj->getMaterialInstance()->setValue("SkyTexture", texConst);
+			}
+		}
 
 		mTestEntity = new Duel::DEntity("yooooooo");
 		mTestEntity->loadFromMesh(aTestMesh);
@@ -206,31 +216,28 @@ namespace DemoKit
 		Duel::DSceneNode* anode = mSceneInstance->getSceneManager()->createSceneNode("yoooooNode");
 		anode->attachMovable(mTestEntity);
 
-		// debug
-		signalGKeyPressed.connect(DBind(&Duel::DDemoMaterialBank::debugReload, Duel::DDemoMaterialBank::getSingletonPtr()));
 	}
 
 	void TestState::release()
 	{
-		signalGKeyPressed.disconnect(DBind(&Duel::DDemoMaterialBank::debugReload, Duel::DDemoMaterialBank::getSingletonPtr()));
 
 		mSceneInstance->getSceneManager()->clearScene();
 		delete mTestEntity;
 		DGUISystem::getSingleton().destroyGUIManager(mRenderWindow);
 		mGManager->setInputEventQueue(NULL);
 
-#ifdef GLPLUGIN_DEBUG
+#ifdef GUI_DEBUG
 
 
 		mGManager->removeWidget(mTestBox);
 		delete mSubTestBox;
 		delete mTestBox;
-#endif // GLPLUGIN_DEBUG
+#endif // GUI_DEBUG
 	}
 
 	void TestState::parseInput()
 	{
-#ifdef GLPLUGIN_DEBUG
+#ifdef GUI_DEBUG
 		mGManager->processInputEvent();
 #endif
 		// now there is no logic layer. pop all events.
@@ -310,7 +317,7 @@ namespace DemoKit
 		if ((mCurTime - mLastFrameTime) > 13 )
 		{
 			mSceneInstance->update(mRenderWindow->getViewport());
-#ifdef GLPLUGIN_DEBUG
+#ifdef GUI_DEBUG
 			mGManager->update();
 #endif
 			mLastFrameTime = mCurTime;
@@ -323,10 +330,10 @@ namespace DemoKit
 			// just write to final window.
 			ws->setPresentTarget(mRenderWindow);
 			ws->render(mSceneInstance->getRenderQueue());
-#ifdef GLPLUGIN_DEBUG
+#ifdef GUI_DEBUG
 			ws->render(mGManager->getRenderQueue());
 
-#endif // GLPLUGIN_DEBUG
+#endif // GUI_DEBUG
 
 		}
 		

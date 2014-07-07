@@ -137,9 +137,8 @@ namespace Duel {
 		// intersection between plane and aabb.
 		static bool		intersect(const DPlane& p, const DAxisAlignedBox& b);
 
-
-		static const DReal POS_INFINITY;
-		static const DReal NEG_INFINITY;
+		static const DReal REAL_POS_INFINITY;
+		static const DReal REAL_NEG_INFINITY;
 		static const DReal PI;
 		static const DReal TWO_PI;
 		static const DReal HALF_PI;

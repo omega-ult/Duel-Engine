@@ -60,15 +60,15 @@ namespace Duel
 		{
 			return CM_None;
 		}
-		else if ("CLOCKWISE" == value)
+		else if ("FRONT" == value)
 		{
-			return CM_ClockWise;
+			return CM_Front;
 		}
-		else if ("ANTICLOCKWISE" == value)
+		else if ("BACK" == value)
 		{
-			return CM_AntiClockWise;
+			return CM_Back;
 		}
-		return CM_ClockWise;
+		return CM_Back;
 	}
 	bool		getBool(const DString& val)
 	{
@@ -419,15 +419,15 @@ namespace Duel
 		{
 			return "None";
 		}
-		else if (CM_ClockWise == val)
+		else if (CM_Front == val)
 		{
-			return "ClockWise";
+			return "Front";
 		}
-		else if (CM_AntiClockWise == val)
+		else if (CM_Back == val)
 		{
-			return "AntiClockWise";
+			return "Back";
 		}
-		return "ClockWise";
+		return "Back";
 	}
 	DString	parseBool(bool val)
 	{

@@ -115,7 +115,7 @@ namespace Duel
 		{
 			if (!mbClipped)
 			{
-				queue->addRenderale(groupID, mPicLayer);
+				queue->addRenderable(groupID, mPicLayer);
 			}
 		}
 	}

@@ -11,6 +11,18 @@
 namespace Duel
 {
 
+	class DSkyDomeMaterial : public DMaterial
+	{
+		DUEL_DECLARE_RTTI(DSkyDomeMaterial)
+	public:
+		DSkyDomeMaterial();
+		virtual	DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
+
+	protected:
+		DRenderTechniquePtr	mSkyDomeTech;
+		DTextureSampler		mSkyColorSamp;
+	};
+
 	class DLambertMaterial : public DMaterial
 	{
 		DUEL_DECLARE_RTTI(DLambertMaterial)
@@ -18,10 +30,11 @@ namespace Duel
 		DLambertMaterial();
 
 		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
-		void	reload();
 	protected:
 		DRenderTechniquePtr	mDeferGBufferTech;
-		
+		DTextureSampler mAlbedoSamp;
+		DTextureSampler mNormalSamp;
+		DTextureSampler mRoughnessSamp;
 	};
 
 
@@ -31,9 +44,8 @@ namespace Duel
 		DDemoMaterialBank();
 		void	init(DDemoRenderWorkshop* rw);
 		void	shutdown();
-		// provide for debug;
-		void	debugReload();
 	protected:
+		DMaterialPtr	mSkyDomeMtl;
 		DMaterialPtr	mLambertMtl;
 	};
 

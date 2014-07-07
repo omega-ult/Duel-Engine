@@ -171,7 +171,7 @@ namespace Duel
 
 	void DGStdCursorRD::applyToRenderQueue( DRenderQueue* queue, uint32 groupID )
 	{
-		queue->addRenderale(groupID, mPicLayer);
+		queue->addRenderable(groupID, mPicLayer);
 	}
 
 	DGWidget* DGStdCursorRD::getParent()

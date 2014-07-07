@@ -24,7 +24,7 @@ namespace Duel
 		return "Entity";
 	}
 
-	void DEntity::applyToRenderQueue( DRenderQueue* destQueue )
+	void DEntity::applyToRenderQueue( DRenderQueue* destQueue, DCamera* cam )
 	{
 		SubEntityIterator sei = getSubEntityIterator();
 		while (sei.hasMoreElements())
@@ -32,7 +32,7 @@ namespace Duel
 			DSubEntityPtr se = sei.getNext();
 			if (se->isVisible())
 			{
-				destQueue->addRenderale(mRenderGroupID, se.get());
+				destQueue->addRenderable(mRenderGroupID, se.get());
 			}
 		}
 	}

@@ -114,7 +114,7 @@ namespace Duel
 		psCodeBuf->Release();
 
 		DRasterizerState rasState;
-		rasState.cullMode = CM_ClockWise;
+		rasState.cullMode = CM_Back;
 		rasState.polygonMode = PM_Solid;
 		rasState.multisampleEnable = false;
 		rasState.shadeMode = SM_Flat;
@@ -622,6 +622,14 @@ namespace Duel
 		mDevice->SetVertexShader(mBlitVShader);
 		mDevice->SetPixelShader(mBlitPShader);
 		mDevice->SetTexture(0, input);
+		mDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
+		mDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
+		mDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+		mDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+		mDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+		mDevice->SetSamplerState(0, D3DSAMP_MAXMIPLEVEL , 0);
+		mDevice->SetSamplerState(0, D3DSAMP_MAXANISOTROPY , 1);
+		
 
 		setRasterizerState(mBlitRasState.get());
 		setDepthStencilState(mBlitDepthState.get());

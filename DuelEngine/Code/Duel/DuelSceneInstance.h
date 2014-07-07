@@ -5,7 +5,7 @@
 
 #include "DuelCommon.h"
 #include "DuelTerrain.h"
-
+#include "DuelSkyDome.h"
 
 namespace Duel
 {
@@ -36,6 +36,8 @@ namespace Duel
 		DSceneManager*	getSceneManager();
 
 		DTerrainPage*	getTerrain();
+
+		DSkyDome*		getSkyDome();
 
 		// camera operations. you can only get/destroy a camera from a scene manager.
 		typedef	std::map<DString, DCamera*>	CameraMap;
@@ -74,12 +76,14 @@ namespace Duel
 
 		DString			mName;
 		DTerrainPage*	mTerrain;
+		DSkyDome*		mSkyDome;
 		// DTerrainManager* mTerrainMgr;
 		DSceneManager*	mSceneMgr;
 
 		CameraMap		mCameraMap;
 		LightMap		mLightMap;
 		DCamera*		mSceneCamera;
+
 
 		DRenderQueue*	mRenderQueue;
 	};

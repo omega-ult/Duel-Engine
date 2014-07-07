@@ -50,4 +50,21 @@
 	  <Language>hlsl</Language>
 	  <Compiled>false</Compiled>
   </GpuResourceParameter>
+  
+  <GpuResourceParameter>
+	  <Name>Demo_SkyDome.vs</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>vs_3_0</Profile>	
+	  <Language>hlsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
+  <GpuResourceParameter>
+	  <Name>Demo_SkyDome.ps</Name>
+	  <Group>_BasicShaderPack</Group>
+	  <Entry>main</Entry>
+	  <Profile>ps_3_0</Profile>	
+	  <Language>hlsl</Language>
+	  <Compiled>false</Compiled>
+  </GpuResourceParameter>
 </ResourceParameters>

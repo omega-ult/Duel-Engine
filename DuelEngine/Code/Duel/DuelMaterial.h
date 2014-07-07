@@ -4,12 +4,12 @@
 #define _DUELMATERIAL_H_
 
 #include "DuelCommon.h"
+#include "DuelRenderState.h"
 
 namespace Duel
 {
 	enum MaterialParameterType
 	{
-		//MPT_Bool,
 		MPT_Color,
 		MPT_Texture,
 		MPT_Sampler,
@@ -147,7 +147,7 @@ namespace Duel
 		typedef std::pair<TextureConstant, DGpuTextureConstantPtr>	TextureConstantCache;
 		// aserious of function overloading for setting values.
 		void	setValue(const DString& paramName, TextureConstant tex);
-		void	setValue(const DString& paramName, DTextureSamplerObjectPtr samp);
+		void	setValue(const DString& paramName, DTextureSampler samp);
 		float*	getFloatValuePtr(uint32 physicalIndex);
 		int32*	getIntValuePtr(uint32 physicalIndex);
 		int32*	getBoolValuePtr(uint32 physicalIndex);

@@ -13,7 +13,7 @@ struct DMHeader
 	uint32_t id;
 	uint32_t length;
 };
-void writeHeader(DMHeader header, fstream& fs)
+void writeDMHeader(DMHeader header, fstream& fs)
 {
 	fs.write((const char*)(&header.id),sizeof(uint32_t));
 	fs.write((const char*)(&header.length),sizeof(uint32_t));
@@ -584,7 +584,7 @@ void DMPDMExporter::writeToFile()
 	fileHeader.id = DM_Header;
 	string version = "1.0";
 	fileHeader.length = version.size();
-	writeHeader(fileHeader, mFstream);
+	writeDMHeader(fileHeader, mFstream);
 	mFstream.write(version.c_str(), version.length());
 	
 	// write mesh
@@ -592,7 +592,7 @@ void DMPDMExporter::writeToFile()
 	meshHeader.id = DM_Mesh;
 	string meshName = mMeshData.mesh.name;
 	meshHeader.length = meshName.length();
-	writeHeader(meshHeader, mFstream);
+	writeDMHeader(meshHeader, mFstream);
 	mFstream.write(meshName.c_str(), meshName.length());
 
 	for (unsigned int i = 0; i < mMeshData.mesh.subMeshes.size(); ++i)
@@ -604,7 +604,7 @@ void DMPDMExporter::writeToFile()
 			DMHeader subMeshHeader;
 			subMeshHeader.id = DM_SubMesh;
 			subMeshHeader.length = subMesh.name.length();
-			writeHeader(subMeshHeader, mFstream);
+			writeDMHeader(subMeshHeader, mFstream);
 			mFstream.write(subMesh.name.c_str(), subMesh.name.length());
 			// index
 			DMHeader indexHeader;
@@ -612,13 +612,13 @@ void DMPDMExporter::writeToFile()
 			uint32_t idxType = IT_32Bit;
 			uint32_t idxCount = subMesh.triangles.size() * 3;
 			indexHeader.length = sizeof(idxType) + sizeof(idxCount);
-			writeHeader(indexHeader, mFstream);
+			writeDMHeader(indexHeader, mFstream);
 			mFstream.write((const char*)&idxType, sizeof(idxType));
 			mFstream.write((const char*)&idxCount, sizeof(idxCount));
 			DMHeader indexBufHeader;
 			indexBufHeader.id = DM_IndexBuffer;
 			indexBufHeader.length = sizeof(uint32_t) * 3 * subMesh.triangles.size();
-			writeHeader(indexBufHeader, mFstream);
+			writeDMHeader(indexBufHeader, mFstream);
 			for (unsigned int j = 0; j < subMesh.triangles.size(); ++j)
 			{
 				DMPMeshData::TriangleStruct& tri = subMesh.triangles[j];
@@ -643,7 +643,7 @@ void DMPDMExporter::writeToFile()
 			uint32_t vSemantic = VES_Position;
 			uint16_t vIdx = 0;
 			vdHeader.length = sizeof(src) + sizeof(offset) + sizeof(vType) + sizeof(vSemantic) + sizeof(vIdx);
-			writeHeader(vdHeader, mFstream);
+			writeDMHeader(vdHeader, mFstream);
 				mFstream.write((const char*)&src, sizeof(src));
 				mFstream.write((const char*)&offset, sizeof(offset));
 				mFstream.write((const char*)&vType, sizeof(vType));
@@ -655,7 +655,7 @@ void DMPDMExporter::writeToFile()
 			vType = VET_Float3;
 			vSemantic = VES_Normal;
 			vIdx = 0;
-			writeHeader(vdHeader, mFstream);
+			writeDMHeader(vdHeader, mFstream);
 				mFstream.write((const char*)&src, sizeof(src));
 				mFstream.write((const char*)&offset, sizeof(offset));
 				mFstream.write((const char*)&vType, sizeof(vType));
@@ -671,7 +671,7 @@ void DMPDMExporter::writeToFile()
 					vType = VET_Float2;
 					vSemantic = VES_TexCoord + j;
 					vIdx = j;
-					writeHeader(vdHeader, mFstream);
+					writeDMHeader(vdHeader, mFstream);
 						mFstream.write((const char*)&src, sizeof(src));
 						mFstream.write((const char*)&offset, sizeof(offset));
 						mFstream.write((const char*)&vType, sizeof(vType));
@@ -687,7 +687,7 @@ void DMPDMExporter::writeToFile()
 				uint32_t vType = VET_Short4;
 				uint32_t vSemantic = VES_BlendIndices;
 				uint16_t vIdx = 0;
-				writeHeader(vdHeader, mFstream);
+				writeDMHeader(vdHeader, mFstream);
 					mFstream.write((const char*)&src, sizeof(src));
 					mFstream.write((const char*)&offset, sizeof(offset));
 					mFstream.write((const char*)&vType, sizeof(vType));
@@ -698,7 +698,7 @@ void DMPDMExporter::writeToFile()
 				vType = VET_Float4;
 				vSemantic = VES_BlendWeight;
 				vIdx = 0;
-				writeHeader(vdHeader, mFstream);
+				writeDMHeader(vdHeader, mFstream);
 					mFstream.write((const char*)&src, sizeof(src));
 					mFstream.write((const char*)&offset, sizeof(offset));
 					mFstream.write((const char*)&vType, sizeof(vType));
@@ -717,12 +717,12 @@ void DMPDMExporter::writeToFile()
 			uint32_t vSize = sizeof(float) * 3;
 			uint32_t vCount = subMesh.vertices.size(); 
 			vHeader.length = sizeof(vSrc) + sizeof(vSize) + sizeof(vCount);
-			writeHeader(vHeader, mFstream);
+			writeDMHeader(vHeader, mFstream);
 				mFstream.write((const char*)&vSrc, sizeof(vSrc));
 				mFstream.write((const char*)&vSize, sizeof(vSize));
 				mFstream.write((const char*)&vCount, sizeof(vCount));
 			vbHeader.length = vSize * vCount;
-			writeHeader(vbHeader, mFstream);
+			writeDMHeader(vbHeader, mFstream);
 				for (unsigned int k = 0 ; k < subMesh.vertices.size(); ++k)
 				{
 					DMPMeshData::VertexStruct& vtx = subMesh.vertices[k];
@@ -734,12 +734,12 @@ void DMPDMExporter::writeToFile()
 				}
 			// for normal
 			vSrc = 1;
-			writeHeader(vHeader, mFstream);
+			writeDMHeader(vHeader, mFstream);
 			mFstream.write((const char*)&vSrc, sizeof(vSrc));
 			mFstream.write((const char*)&vSize, sizeof(vSize));
 			mFstream.write((const char*)&vCount, sizeof(vCount));
 			vbHeader.length = vSize * vCount;
-			writeHeader(vbHeader, mFstream);
+			writeDMHeader(vbHeader, mFstream);
 			for (unsigned int k = 0 ; k < subMesh.vertices.size(); ++k)
 			{
 				DMPMeshData::VertexStruct& vtx = subMesh.vertices[k];
@@ -755,12 +755,12 @@ void DMPDMExporter::writeToFile()
 				vSrc = 2;
 				vSize = sizeof(float) * 2 * (std::min<unsigned int>(8, subMesh.UVSets.size()));
 				vCount = subMesh.vertices.size(); 
-				writeHeader(vHeader, mFstream);
+				writeDMHeader(vHeader, mFstream);
 					mFstream.write((const char*)&vSrc, sizeof(vSrc));
 					mFstream.write((const char*)&vSize, sizeof(vSize));
 					mFstream.write((const char*)&vCount, sizeof(vCount));
 				vbHeader.length = vSize * vCount;
-				writeHeader(vbHeader, mFstream);
+				writeDMHeader(vbHeader, mFstream);
 				for (unsigned int k = 0; k < subMesh.vertices.size(); ++k)
 				{
 					DMPMeshData::VertexStruct& vtx = subMesh.vertices[k];
@@ -791,12 +791,12 @@ void DMPDMExporter::writeToFile()
 				vSrc = 3;
 				vSize = sizeof(unsigned short) * 4;
 				vCount = subMesh.vertices.size();
-				writeHeader(vHeader, mFstream);
+				writeDMHeader(vHeader, mFstream);
 					mFstream.write((const char*)&vSrc, sizeof(vSrc));
 					mFstream.write((const char*)&vSize, sizeof(vSize));
 					mFstream.write((const char*)&vCount, sizeof(vCount));
 				vbHeader.length = vSize * vCount;
-				writeHeader(vbHeader, mFstream);
+				writeDMHeader(vbHeader, mFstream);
 				for (unsigned int k = 0; k < subMesh.vertices.size(); ++k)
 				{
 					DMPMeshData::VertexStruct& vtx = subMesh.vertices[k];
@@ -822,12 +822,12 @@ void DMPDMExporter::writeToFile()
 				vSrc = 4;
 				vSize = sizeof(float) * 4;
 				vCount = subMesh.vertices.size();
-				writeHeader(vHeader, mFstream);
+				writeDMHeader(vHeader, mFstream);
 					mFstream.write((const char*)&vSrc, sizeof(vSrc));
 					mFstream.write((const char*)&vSize, sizeof(vSize));
 					mFstream.write((const char*)&vCount, sizeof(vCount));
 				vbHeader.length = vSize * vCount;
-				writeHeader(vbHeader, mFstream);
+				writeDMHeader(vbHeader, mFstream);
 				for (unsigned int k = 0; k < subMesh.vertices.size(); ++k)
 				{
 					DMPMeshData::VertexStruct& vtx = subMesh.vertices[k];
@@ -858,7 +858,7 @@ void DMPDMExporter::writeToFile()
 				uint32_t boneInfluence = 4;
 				string ts = subMesh.targetSubSkeleton;
 				tsHeader.length = sizeof(uint32_t) + ts.length();
-				writeHeader(tsHeader, mFstream);
+				writeDMHeader(tsHeader, mFstream);
 				mFstream.write((const char*)&boneInfluence, sizeof(boneInfluence));
 				mFstream.write(ts.c_str(), ts.length());
 				// bone adapter.
@@ -869,7 +869,7 @@ void DMPDMExporter::writeToFile()
 				{
 					uint16_t jid = jiI->second;
 					baHeader.length = sizeof(jid) + jiI->first.length();
-					writeHeader(baHeader, mFstream);
+					writeDMHeader(baHeader, mFstream);
 					mFstream.write((const char*)&jid, sizeof(uint16_t));
 					mFstream.write(jiI->first.c_str(), jiI->first.length());
 				}
@@ -892,7 +892,7 @@ void DMPDMExporter::writeToFile()
 						uvHeader.length = sizeof(ves) + 
 							sizeof(uvSetLength) +
 							setName.length();
-						writeHeader(uvHeader, mFstream);
+						writeDMHeader(uvHeader, mFstream);
 							mFstream.write((const char*)&ves, sizeof(ves));
 							mFstream.write((const char*)&uvSetLength, sizeof(uvSetLength));
 							mFstream.write(setName.c_str(), setName.length());
@@ -920,7 +920,7 @@ void DMPDMExporter::writeToFile()
 							bdTexHeader.length = sizeof(uvSetLength) +
 								setName.length() + sizeof(txNameLength) + txName.length();
 
-							writeHeader(bdTexHeader, mFstream);
+							writeDMHeader(bdTexHeader, mFstream);
 								mFstream.write((const char*)&uvSetLength, sizeof(uvSetLength));
 								mFstream.write(setName.c_str(), setName.length());
 								mFstream.write((const char*)&txNameLength, sizeof(txNameLength));
@@ -938,7 +938,7 @@ void DMPDMExporter::writeToFile()
 		DMHeader skelHeader;
 		skelHeader.id = DM_Skeleton;
 		skelHeader.length = mMeshData.mesh.targetSkeleton.length();
-		writeHeader(skelHeader, mFstream);
+		writeDMHeader(skelHeader, mFstream);
 			mFstream.write(mMeshData.mesh.targetSkeleton.c_str(), mMeshData.mesh.targetSkeleton.length());
 	}
 	if (mMeshData.mesh.animations.size() > 0)
@@ -952,7 +952,7 @@ void DMPDMExporter::writeToFile()
 			float length = anim.endTime - anim.startTime;
 			string name = anim.name;
 			animHeader.length = sizeof(float) + name.length();
-			writeHeader(animHeader, mFstream);
+			writeDMHeader(animHeader, mFstream);
 				mFstream.write((const char*)&length, sizeof(length));
 				mFstream.write(name.c_str(), name.length());
 			vector<DMPMeshData::MorphTrack>::iterator ti, tiend = anim.tracks.end();
@@ -962,7 +962,7 @@ void DMPDMExporter::writeToFile()
 				DMHeader tkHeader;
 				tkHeader.id = DM_AnimationTrack;
 				tkHeader.length = track.targetSubMesh.length();
-				writeHeader(tkHeader, mFstream);
+				writeDMHeader(tkHeader, mFstream);
 					mFstream.write(track.targetSubMesh.c_str(), track.targetSubMesh.length());
 				vector<DMPMeshData::MorphKeyFrame>::iterator mi, miend = track.frames.end();
 				for (mi = track.frames.begin(); mi != miend; ++mi)
@@ -973,14 +973,14 @@ void DMPDMExporter::writeToFile()
 					float time = frame.time;
 					uint32_t vcnt = frame.positions.size();
 					mkHeader.length = sizeof(time) + sizeof(vcnt);
-					writeHeader(mkHeader, mFstream);
+					writeDMHeader(mkHeader, mFstream);
 						mFstream.write((const char*)&time, sizeof(float));
 						mFstream.write((const char*)&vcnt, sizeof(vcnt));
 					// posBuf
 					DMHeader bufHeader;
 					bufHeader.id = DM_AnimationMorphKeyframeBuffer;
 					bufHeader.length = vcnt * sizeof(float) * 3;
-					writeHeader(bufHeader, mFstream);
+					writeDMHeader(bufHeader, mFstream);
 					float fPos[3];
 					for (unsigned int n = 0; n < vcnt; ++n)
 					{
@@ -992,7 +992,7 @@ void DMPDMExporter::writeToFile()
 					// normBuf
 					bufHeader.id = DM_AnimationMorphKeyframeNormBuffer;
 					bufHeader.length = vcnt * sizeof(float) * 3;
-					writeHeader(bufHeader, mFstream);
+					writeDMHeader(bufHeader, mFstream);
 					for (unsigned int n = 0; n < vcnt; ++n)
 					{
 						fPos[0] = (float)frame.positions[n][0];

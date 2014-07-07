@@ -101,8 +101,14 @@ namespace Duel
 			while(ri.hasMoreElements())
 			{
 				DRenderPass* pass = ri.current()->get();
-				pass->getVertexProgram()->prepare();
-				pass->getPixelProgram()->prepare();
+				if (pass->getVertexProgram() != NULL)
+				{
+					pass->getVertexProgram()->prepare();
+				}
+				if (pass->getPixelProgram() != NULL)
+				{
+					pass->getPixelProgram()->prepare();
+				}
 				ri.moveNext();
 			}
 		}
@@ -127,8 +133,14 @@ namespace Duel
 				pass->setBlendStateStateObject(
 					HResMgr->createBlendStateObject(pass->blendState));
 
-				pass->getVertexProgram()->load();
-				pass->getPixelProgram()->load();
+				if (pass->getVertexProgram() != NULL)
+				{
+					pass->getVertexProgram()->load();
+				}
+				if (pass->getPixelProgram() != NULL)
+				{
+					pass->getPixelProgram()->load();
+				}
 
 				pass->setShaderObject(HResMgr->createShaderObject(pass));
 

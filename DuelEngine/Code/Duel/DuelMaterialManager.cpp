@@ -51,5 +51,17 @@ namespace Duel
 		return ret;
 	}
 
+	Duel::DMaterialInstancePtr DMaterialManager::copyMaterialInstance( DMaterialInstancePtr inst )
+	{
+		DMaterialInstancePtr ret;
+		if (inst != NULL)
+		{
+			ret = createMaterialInstance(inst->getParent()->getMaterialName());
+			inst->copyTo(ret.get());
+		}
+		return ret;		
+	}
+
+
 	
 }

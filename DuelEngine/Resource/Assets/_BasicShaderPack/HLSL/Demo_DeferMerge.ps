@@ -5,11 +5,11 @@ struct PS_Input
 	float2 texcoord : TEXCOORD0;
 };
 
-sampler albedoMap;
-sampler lightAccumMap;
-
+sampler albedoTexture;
+sampler lightAccumTexture;
+sampler depthTexture;
 
 float4 main(in PS_Input psin) : COLOR0
 {
-	return tex2D(albedoMap, psin.texcoord);
+	return tex2D(albedoTexture, psin.texcoord);
 }

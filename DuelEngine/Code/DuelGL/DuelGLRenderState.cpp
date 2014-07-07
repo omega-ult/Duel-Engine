@@ -25,13 +25,11 @@ namespace Duel
 		if (state.cullMode == CM_None)
 		{
 			mbCulling = false;
-			// not used
-			mGLFrontFace	= GL_CCW;
 		}
 		else
 		{		
 			mbCulling = true;
-			mGLFrontFace	= state.cullMode == CM_AntiClockWise ? GL_CCW : GL_CW;
+			mGLCullFace = state.cullMode == CM_Back ? GL_BACK : GL_FRONT;
 		}
 		mState = state;
 	}

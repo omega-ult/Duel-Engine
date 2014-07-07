@@ -47,8 +47,8 @@ namespace Duel
 	void Quadrant::setRegion( const DAxisAlignedBox& box )
 	{
 		mRegion = box;
-		mRegion.setMinY(DMath::NEG_INFINITY);
-		mRegion.setMaxY(DMath::POS_INFINITY);
+		mRegion.setMinY(DMath::REAL_NEG_INFINITY);
+		mRegion.setMaxY(DMath::REAL_POS_INFINITY);
 // 		float offset = box.getHalfSize().x/2;
 // 		DVector3 tMin = box.getMinimum();
 // 		DVector3 tMax = box.getMaximum();
@@ -132,8 +132,8 @@ namespace Duel
 		// 		{
 		// 			min.z = cent.z;
 		// 		}
-		min.y = DMath::NEG_INFINITY;
-		max.y = DMath::POS_INFINITY;
+		min.y = DMath::REAL_NEG_INFINITY;
+		max.y = DMath::REAL_POS_INFINITY;
 		region.setExtent(min, max);
 		nQuad->setRegion(region);
 		mChildren[x][z] = nQuad;

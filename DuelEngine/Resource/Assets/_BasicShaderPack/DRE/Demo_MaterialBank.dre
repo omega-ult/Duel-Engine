@@ -14,5 +14,20 @@
 		</Pass>
 	</Technique>
 	
+	<!--SkyDome-->
+	<Technique name="SkyDome_Defer_GBuffer">
+		<Pass name="SkyDome_Defer_GBuffer">
+			<RasterizerState>
+				<CullMode>Front</CullMode>
+			</RasterizerState>
+		
+			<DepthStencilState>
+				<DepthEnable>false</DepthEnable>
+				<DepthWriteEnable>false</DepthWriteEnable>
+			</DepthStencilState>
+			<VertexProgram group="_BasicShaderPack">Demo_SkyDome.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">Demo_SkyDome.ps</PixelProgram>
+		</Pass>
+	</Technique>
 	
 </RenderEffect>

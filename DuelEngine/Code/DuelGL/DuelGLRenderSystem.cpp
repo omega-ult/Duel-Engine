@@ -311,8 +311,8 @@ namespace Duel
 			if (stateObj->mbCulling)
 			{
 				glEnable(GL_CULL_FACE);
-				glCullFace(GL_BACK);
-				glFrontFace(stateObj->mGLFrontFace);
+				glFrontFace(GL_CCW);
+				glCullFace(stateObj->mGLCullFace);
 			}
 			else
 			{

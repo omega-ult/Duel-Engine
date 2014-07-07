@@ -25,4 +25,10 @@
 		<FileFormat>dm</FileFormat> 
 		<ShadowBuffer>false</ShadowBuffer> 
 	</MeshResourceParameter>
+	<MeshResourceParameter>
+		<Name>M_SkyDome.dm</Name>
+		<Group>_BasicMediaPack</Group>
+		<FileFormat>dm</FileFormat> 
+		<ShadowBuffer>false</ShadowBuffer> 
+	</MeshResourceParameter>
 </ResourceParameters>

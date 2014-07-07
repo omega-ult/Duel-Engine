@@ -3,12 +3,6 @@
 #ifndef _DUELMPMAYAINCLUDES_H_
 #define _DUELMPMAYAINCLUDES_H_
 
-#ifdef DUELMP_EXPORT
-#define DUELMP_API __declspec(dllexport) 
-#else
-#define DUELMP_API
-#endif
-
 #include <maya/MIOStream.h>
 
 #include <maya/MFnLight.h>
@@ -16,7 +10,6 @@
 #include <maya/MFnNurbsCurve.h>
 #include <maya/MFnNurbsSurface.h>
 #include <maya/MFnDagNode.h>
-#include <maya/MFnPlugin.h>
 #include <maya/MFnDependencyNode.h>
 #include <maya/MFnMesh.h>
 #include <maya/MFnUnitAttribute.h> 

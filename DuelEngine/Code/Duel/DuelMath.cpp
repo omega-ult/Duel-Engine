@@ -13,8 +13,8 @@
 namespace Duel {
 
 
-	const DReal DMath::POS_INFINITY = std::numeric_limits<DReal>::infinity();
-    const DReal DMath::NEG_INFINITY = -std::numeric_limits<DReal>::infinity();
+	const DReal DMath::REAL_POS_INFINITY = std::numeric_limits<DReal>::infinity();
+    const DReal DMath::REAL_NEG_INFINITY = -std::numeric_limits<DReal>::infinity();
     const DReal DMath::PI = DReal( 4.0 * atan( 1.0 ) );
     const DReal DMath::TWO_PI = DReal( 2.0 * PI );
     const DReal DMath::HALF_PI = DReal( 0.5 * PI );

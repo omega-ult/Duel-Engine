@@ -13,8 +13,8 @@ struct PS_Input
 
 struct PS_Output
 {
-	float4	vnormal : COLOR0;
-	float4 albedo : COLOR1;
+	float4	albedo : COLOR0;
+	float4 vnormal : COLOR1;
 	float4 depth : COLOR2;
 };
 // http://www.thetenthplanet.de/archives/1180
@@ -83,6 +83,7 @@ PS_Output main(in PS_Input psin)
 	float3 norm = decodeNormal(normColor);
 
 	psout.vnormal = float4(encodeNormal(normalize(mul(norm, TBN))), 1.0f);
+	//psout.vnormal = float4(norm, 1.0f);
 	
 	// for albedo.
 	psout.albedo = float4(float3(1.0f, 1.0f, 1.0f) - psout.vnormal.xyz,1.0);

@@ -342,7 +342,7 @@ struct DSHeader
 	uint32_t length;
 };
 
-void writeHeader(DSHeader& header, fstream& fs)
+void writeDSHeader(DSHeader& header, fstream& fs)
 {
 	fs.write((const char*)(&header.id),sizeof(uint32_t));
 	fs.write((const char*)(&header.length),sizeof(uint32_t));
@@ -366,14 +366,14 @@ void DMPDSExporter::writeToFile()
 	fileHeader.id = DS_Header;
 	string version = "1.0";
 	fileHeader.length = version.length();
-	writeHeader(fileHeader, mFstream);
+	writeDSHeader(fileHeader, mFstream);
 	mFstream.write(version.c_str(), version.length());
 
 	// write skel
 	DSHeader skelHeader;
 	skelHeader.id = DS_Skeleton;
 	skelHeader.length = mSkelData.skeleton.name.length();
-	writeHeader(skelHeader, mFstream);
+	writeDSHeader(skelHeader, mFstream);
 	mFstream.write(mSkelData.skeleton.name.c_str(), skelHeader.length);
 
 	// write subskelton
@@ -384,7 +384,7 @@ void DMPDSExporter::writeToFile()
 		DSHeader ssHeader;
 		ssHeader.id = DS_SubSkeleton;
 		ssHeader.length = subSkel.name.length();
-		writeHeader(ssHeader, mFstream);
+		writeDSHeader(ssHeader, mFstream);
 		mFstream.write(subSkel.name.c_str(), subSkel.name.length());
 
 		for (unsigned int j = 0; j < subSkel.bones.size(); ++j)
@@ -404,7 +404,7 @@ void DMPDSExporter::writeToFile()
 				sizeof(float) * 3 +
 				sizeof(float) * 3 +
 				sizeof(float) * 4;
-			writeHeader(bHeader, mFstream);
+			writeDSHeader(bHeader, mFstream);
 
 			pos[0] = (float)bone.translate[0];
 			pos[1] = (float)bone.translate[1];
@@ -433,7 +433,7 @@ void DMPDSExporter::writeToFile()
 				DSHeader rHeader;
 				rHeader.id = DS_Relation;
 				rHeader.length = sizeof(uint16_t) * 2;
-				writeHeader(rHeader, mFstream);
+				writeDSHeader(rHeader, mFstream);
 				// find the parent bone.
 				uint16_t cHandle = bone.boneHandle;
 				uint16_t pHandle = 0;
@@ -458,7 +458,7 @@ void DMPDSExporter::writeToFile()
 				animHeader.id = DS_Animation;
 				float length = anim.endTime - anim.startTime;
 				animHeader.length = sizeof(float) + anim.name.length();
-				writeHeader(animHeader, mFstream);
+				writeDSHeader(animHeader, mFstream);
 				mFstream.write((const char*)&length, sizeof(length));
 				mFstream.write(anim.name.c_str(), anim.name.length());
 				vector<DMPSkeletonData::TransformTrack>::iterator ti, tiend = anim.tracks.end();
@@ -477,7 +477,7 @@ void DMPDSExporter::writeToFile()
 					}
 					tHeader.id = DS_AnimationTrack;
 					tHeader.length = sizeof(targetHandle);
-					writeHeader(tHeader, mFstream);
+					writeDSHeader(tHeader, mFstream);
 					mFstream.write((const char*)&targetHandle, sizeof(targetHandle));
 					vector<DMPSkeletonData::TransformKeyFrame>::iterator fi, fiend = track.frames.end();
 					for (fi = track.frames.begin(); fi != fiend; ++fi)
@@ -504,7 +504,7 @@ void DMPDSExporter::writeToFile()
 						fOrient[1] = (float)frame.orientation[1];
 						fOrient[2] = (float)frame.orientation[2];
 						fOrient[3] = (float)frame.orientation[3];
-						writeHeader(fHeader, mFstream);
+						writeDSHeader(fHeader, mFstream);
 						mFstream.write((const char*)&timePos, sizeof(timePos));
 						mFstream.write((const char*)fPos, sizeof(float) * 3);
 						mFstream.write((const char*)fScale, sizeof(float) * 3);

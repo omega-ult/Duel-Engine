@@ -358,9 +358,6 @@
     <ClInclude Include="..\..\Code\Duel\DuelRTTI.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Code\Duel\DuelScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSceneInstance.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -488,6 +485,9 @@
       <Filter>Resource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\Duel\DuelSubEntity.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\Duel\DuelSkyDome.h">
       <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
@@ -881,6 +881,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Code\Duel\DuelTimer.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\Duel\DuelSkyDome.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

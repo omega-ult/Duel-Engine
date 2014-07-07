@@ -157,10 +157,10 @@ namespace Duel
 		{
 		case CM_None:
 			return D3DCULL_NONE;
-		case CM_ClockWise:
-			return D3DCULL_CW;
-		case CM_AntiClockWise:
+		case CM_Front:
 			return D3DCULL_CCW;
+		case CM_Back:
+			return D3DCULL_CW;
 		}
 		return D3DCULL_NONE;
 	}

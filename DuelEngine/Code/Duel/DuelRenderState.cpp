@@ -14,7 +14,7 @@ namespace Duel
 	DRasterizerState::DRasterizerState() :
 		polygonMode(PM_Solid),
 		shadeMode(SM_Gouraud),
-		cullMode(CM_None),
+		cullMode(CM_Back),
 		polygonOffsetFactor(0.0f),
 		polygonOffsetUnit(0.0f),
 		scissorEnable(false),
@@ -173,11 +173,11 @@ namespace Duel
 		addressW(TAM_Clamp),
 		minFilter(FO_Linear),
 		magFilter(FO_Linear),
-		mipFilter(FO_Linear),
+		mipFilter(FO_None),
 		samplerComparison(CF_AlwaysFail),
 		borderColor(DColor::BLACK),
-		minLod(DMath::NEG_INFINITY),
-		maxLod(DMath::POS_INFINITY),
+		minLod(DMath::REAL_NEG_INFINITY),
+		maxLod(DMath::REAL_POS_INFINITY),
 		maxAnisotropy(1),
 		mipLodBias(0.0f)
 	{

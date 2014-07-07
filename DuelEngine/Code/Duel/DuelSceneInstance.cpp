@@ -7,6 +7,7 @@
 #include "DuelRenderWorkshop.h"
 #include "DuelTerrainPage.h"
 #include "DuelSceneManagerEnumerator.h"
+#include "DuelSkyDome.h"
 
 namespace Duel
 {
@@ -22,6 +23,7 @@ namespace Duel
 		mSceneMgr = DSceneManagerEnumerator::getSingletonPtr()->createSceneManager("QuadtreeSceneManager", mName);
 		mRenderQueue = new DRenderQueue();
 		mTerrain = new DTerrainPage();
+		mSkyDome = new DSkyDome();
 		mSceneCamera = createCamera(mName + " DefaultCamera");
 		mRenderQueue->setRenderCamera(mSceneCamera);
 	}
@@ -32,6 +34,7 @@ namespace Duel
 		destroyAllCameras();
 		delete mRenderQueue;
 		DSceneManagerEnumerator::getSingletonPtr()->destroySceneManager(mSceneMgr);
+		delete mSkyDome;
 		delete mTerrain;
 	}
 
@@ -68,6 +71,10 @@ namespace Duel
 
 	void DSceneInstance::applyToRenderQueue( DViewport vp )
 	{
+		if (mSceneCamera)
+		{
+			mSkyDome->applyToRenderQueue(mRenderQueue, mSceneCamera);
+		}		
 		if (mTerrain && mSceneCamera)
 		{
 			mTerrain->applyToRenderQueue(mRenderQueue, mSceneCamera, vp);
@@ -183,6 +190,13 @@ namespace Duel
 	{
 		return mTerrain;
 	}
+
+	DSkyDome* DSceneInstance::getSkyDome()
+	{
+		return mSkyDome;
+	}
+
+	
 
 	DCamera* DSceneInstance::createCamera( const DString& name )
 	{

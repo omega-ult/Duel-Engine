@@ -78,10 +78,6 @@ namespace Duel
 		// method used for retrieving world transform matrix of the renderable.
 		virtual	void	getWorldTransform(DMatrix4& outMat) {}
 		
-		// NOTICE: sub-class must return true when they do additional render in the preRender() or postRender()
-		// to prevent infinite recursion.
-		virtual	bool	isAdditionalRenderRequested() { return false; }
-
 		// update auto GpuParameter, sub-class could omit this.
 		INTERNAL virtual void	updateAutoGpuParameter(DShaderObject* so);
 

@@ -272,7 +272,7 @@ namespace Duel
 			{
 				if(cam->isInside((*(ni.current()))->getBoundingBox()) != DCamera::FTS_Out)
 				{
-					(*(ni.current()))->applyToRenderQueue(queue);
+					(*(ni.current()))->applyToRenderQueue(queue, cam);
 				}
 				ni.moveNext();
 			}

@@ -361,7 +361,7 @@ namespace Duel
 		{
 			if (mRenderNode)
 			{
-				queue->addRenderale(groupID, mRenderNode);
+				queue->addRenderable(groupID, mRenderNode);
 			}
 		}
 		else
@@ -377,7 +377,7 @@ namespace Duel
 			{
 				if (mRenderNode)
 				{
-					queue->addRenderale(groupID, mRenderNode);
+					queue->addRenderable(groupID, mRenderNode);
 				}
 			}
 		}

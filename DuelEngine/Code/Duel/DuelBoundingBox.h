@@ -72,8 +72,8 @@ namespace Duel
 		void			setNull()
 		{ 
 			mExtent = BBE_Null; 
-			mMaximum = DVector3(DMath::NEG_INFINITY,DMath::NEG_INFINITY,DMath::NEG_INFINITY);
-			mMinimum = DVector3(DMath::POS_INFINITY,DMath::POS_INFINITY,DMath::POS_INFINITY);
+			mMaximum = DVector3(DMath::REAL_NEG_INFINITY,DMath::REAL_NEG_INFINITY,DMath::REAL_NEG_INFINITY);
+			mMinimum = DVector3(DMath::REAL_POS_INFINITY,DMath::REAL_POS_INFINITY,DMath::REAL_POS_INFINITY);
 		}
 		// set the box to a FINITE box.
 		void			setFinite() { mExtent = BBE_Finite; }

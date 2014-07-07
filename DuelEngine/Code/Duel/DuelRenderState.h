@@ -40,10 +40,10 @@ namespace Duel
     {
         /// Hardware never culls triangles and renders everything it receives.
         CM_None = 1,
-        /// Hardware culls triangles whose vertices are listed clockwise in the view (default).
-        CM_ClockWise = 2,
-        /// Hardware culls triangles whose vertices are listed anticlockwise in the view.
-        CM_AntiClockWise
+        /// Hardware culls triangles whose vertices are listed clockwise in the view.
+        CM_Front = 2,
+        /// Hardware culls triangles whose vertices are listed anticlockwise in the view (default).
+        CM_Back
     };
 
 	/** The polygon mode to use when rasterising. */
@@ -132,7 +132,7 @@ namespace Duel
 		// DRasterizerState-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		PolygonMode		polygonMode;			// default:PM_Solid	
 		ShadeMode		shadeMode;				// default:SM_Gouraud	
-		CullMode		cullMode;			// default:CM_Clockwise	
+		CullMode		cullMode;			// default:CM_Back	
 		// solving z-fighting-=-=-=-=-=-=-=-=--=-=-=-=-=-
 		float			polygonOffsetFactor;	// default:0.0f
 		float			polygonOffsetUnit;		// default:0.0f
@@ -260,7 +260,7 @@ namespace Duel
 		FilterOption		minFilter;			// default: FO_Linear
 		FilterOption		magFilter;			// default: FO_Linear
 		// mipmap filter
-		FilterOption		mipFilter;			// default: FO_Linear
+		FilterOption		mipFilter;			// default: FO_None
 // 		// A function that compares sampled data against existing sampled data-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  		CompareFunction		samplerComparison;	// default: CF_ALWAYS_FAIL
 		// border color, if address mode is set to be TAM_BORDER-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -147,10 +147,10 @@ namespace Duel
 	{
 		if (so->getPassName() == "DeferMerge_p0")
 		{
-			so->getPixelProgramParameters()->setValue("albedoMap", mAlbedoTex);
-			so->getPixelProgramParameters()->setValue("albedoMapSamp", mTextureSampler);
-			so->getPixelProgramParameters()->setValue("lightAccumMap", mLightAccumTex);
-			so->getPixelProgramParameters()->setValue("lightAccumMapSamp", mTextureSampler);
+			so->getPixelProgramParameters()->setValue("albedoTexture", mAlbedoTex);
+			so->getPixelProgramParameters()->setValue("albedoTextureSamp", mTextureSampler);
+			so->getPixelProgramParameters()->setValue("lightAccumTexture", mLightAccumTex);
+			so->getPixelProgramParameters()->setValue("lightAccumTextureSamp", mTextureSampler);
 		}
 		if (so->getPassName() == "ScreenTransfer_p0")
 		{

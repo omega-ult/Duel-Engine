@@ -3,9 +3,10 @@
 #include "DuelMPMayaIncludes.h"
 #include "DuelMPDMExporter.h"
 #include "DuelMPExporter.h"
+#include <maya/MFnPlugin.h>
 
 
-DUELMP_API MStatus initializePlugin( MObject obj )
+MStatus initializePlugin( MObject obj )
 { 
 	MFnPlugin plugin( obj, "DuelExporter", "1.0", "Any");
 	MStatus status;
@@ -23,7 +24,7 @@ DUELMP_API MStatus initializePlugin( MObject obj )
 	return status;
 }
 
-DUELMP_API MStatus uninitializePlugin( MObject obj)
+MStatus uninitializePlugin( MObject obj)
 {
 	MFnPlugin plugin( obj );
 	MStatus   status;

@@ -166,12 +166,12 @@ namespace Duel
 		return mBoundingBox;
 	}
 
-	void DSceneNode::applyToRenderQueue( DRenderQueue* destQueue)
+	void DSceneNode::applyToRenderQueue( DRenderQueue* destQueue, DCamera* cam)
 	{
 		MovableIterator i = getMovableMapIterator();
 		while(i.hasMoreElements())
 		{
-			i.getNext()->applyToRenderQueue(destQueue);
+			i.getNext()->applyToRenderQueue(destQueue, cam);
 		}
 	}
 

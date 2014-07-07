@@ -6,6 +6,7 @@
 #include "DuelGpuProgram.h"
 #include "DuelGpuParameter.h"
 #include "DuelResourceGroupManager.h"
+#include "DuelRenderResourceManager.h"
 #include "DuelTexture.h"
 #include "DuelMaterial.h"
 #include "DuelMaterialManager.h"
@@ -327,12 +328,13 @@ namespace Duel
 		}
 	}
 
-	void DMaterialInstance::setValue( const DString& paramName, DTextureSamplerObjectPtr samp )
+	void DMaterialInstance::setValue( const DString& paramName, DTextureSampler samp )
 	{
 		ParameterMap::iterator i = mParamMap.find(paramName);
 		if (i != mParamMap.end())
 		{
-			mSamplerMap.insert(SamplerConstantMap::value_type(paramName, samp));
+			DTextureSamplerObjectPtr s = DRenderResourceManager::getSingleton().createTextureSamplerObject(samp);
+			mSamplerMap.insert(SamplerConstantMap::value_type(paramName, s));
 		}
 		
 	}
