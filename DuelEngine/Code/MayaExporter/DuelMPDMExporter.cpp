@@ -452,7 +452,7 @@ void DMPDMExporter::fillSubMesh(DMPParameters* param, const MDagPath& subMeshDag
  								float2 uv;
  								int uvSetIndex = subMesh.getUVSetIndex(string(uvSetNames[m].asChar()));
  								polyIter.getUV(vtxIndexInPolygon, uv, &uvSetNames[m]);
- 								curVtx.texcoords[uvSetIndex] = DMPMeshData::TexCoord(2, uv[0], uv[1]);
+ 								curVtx.texcoords[uvSetIndex] = DMPMeshData::TexCoord(2, uv[0], 1.0 - uv[1]);
  							}
  						}
  					}
@@ -460,6 +460,8 @@ void DMPDMExporter::fillSubMesh(DMPParameters* param, const MDagPath& subMeshDag
 					vtxProcessed[vertexIndex] = true;
 				}
 			}
+			// maya use inverse triangle index, so we need to reverse that.
+			std::swap(triangle.vertexIndex[1], triangle.vertexIndex[2]);
 			// push triangle info
 			subMesh.triangles.push_back(triangle);
 		}

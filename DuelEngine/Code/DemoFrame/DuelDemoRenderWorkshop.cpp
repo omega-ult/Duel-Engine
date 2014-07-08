@@ -107,14 +107,12 @@ namespace Duel
 			 		populateRenderables(rgrp, RS_Defer_GBuffer);
 			 		if (!mRenderList.empty())
 			 		{
-			 			signalGroupStartRender(queue, rgrp);
 			 			RenderElementList::iterator i, iend = mRenderList.end();
 			 			for (i = mRenderList.begin(); i != iend; ++i)
 			 			{
 			 				RenderElement& e = *i;
 			 				renderSingleObject(deferlayer->getGeoStageFrameBuffer(), e.renderable, e.renderPass);
 			 			}
-			 			signalGroupFinishRender(queue, rgrp);
 			 		}
 				}
  				// light accumulation.-------------------------------	

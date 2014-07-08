@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ResourceParameters type="Mesh">
-	<!-- ¾ÞÓ²ÑÅºÚ -->
-	<MeshResourceParameter>
-		<Name>a test.dm</Name>
-		<Group>_BasicMediaPack</Group>
-		<FileFormat>dm</FileFormat> 
-		<ShadowBuffer>false</ShadowBuffer> 
-	</MeshResourceParameter>
 	<MeshResourceParameter>
 		<Name>M_DirectionalLightCylinderModel.dm</Name>
 		<Group>_BasicMediaPack</Group>
