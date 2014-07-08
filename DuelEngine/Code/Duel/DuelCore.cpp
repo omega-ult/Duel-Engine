@@ -27,7 +27,7 @@ namespace Duel
 
 	DUEL_IMPLEMENT_RTTI_1(DCore, DObject);
 
-	typedef void (*DLL_START_PLUGIN)(void);
+	typedef void (*DLL_START_PLUGIN)(const DString&);
 	typedef void (*DLL_STOP_PLUGIN)(void);
 
 
@@ -118,6 +118,13 @@ namespace Duel
 			DString pluginName;
 			while(pluginNode != NULL)
 			{
+				DString pluginConfig;
+				DXMLAttribute* confAttr = pluginNode->first_attribute("config");
+				if (confAttr)
+				{
+					pluginConfig = DXMLTool::readValue(confAttr);
+				}
+				
 				pluginName = DXMLTool::readValue(pluginNode);
 				bool failed = false;
 				try{
@@ -129,7 +136,7 @@ namespace Duel
 				}
 				if (!failed)
 				{
-					loadPlugin(pluginName);
+					loadPlugin(pluginName, pluginConfig);
 				}
 				
 				pluginNode = pluginNode->next_sibling();
@@ -147,38 +154,6 @@ namespace Duel
 			{
 				mResourceGroupManager->loadFromXML(resourceGroups);
 			}
-
-		}
-		else if(DUEL_WP8VERSION == fileVer)
-		{
-			DStringTool::setLocale("");
-			DXMLNode* pluginNode = rootNode->first_node("PluginList");
-			if (pluginNode != NULL)
-			{
-
-				pluginNode = pluginNode->first_node("Plugin");
-				DString pluginName;
-				while(pluginNode != NULL)
-				{
-					pluginName.assign(DXMLTool::readValue(pluginNode));
-					mDynLibManager->load(pluginName);
-					pluginNode = pluginNode->next_sibling();
-				}
-			}
-
-			// optional
-			DXMLNode* archiveListNode = rootNode->first_node("ArchiveList");
-			if (archiveListNode != NULL)
-			{
-				mArchiveManager->registerFromXML(archiveListNode);
-			}
-			// optional
-			DXMLNode* resourceGroups = rootNode->first_node("GroupDescription");
-			if (resourceGroups != NULL)
-			{
-				mResourceGroupManager->loadFromXML(resourceGroups);
-			}
-
 		}
 
 
@@ -250,7 +225,7 @@ namespace Duel
 	}
 
 
-	void DCore::installPlugin( DPlugin* plugin )
+	void DCore::installPlugin( DPlugin* plugin, const DString& config )
 	{
 		// if the plugin has installed. do nothing.
 		PluginSet::iterator i = mPluginSet.find(plugin);
@@ -258,7 +233,7 @@ namespace Duel
 		{
 			plugin->install();
 			mPluginSet.insert(plugin);
-			plugin->initialize();
+			plugin->initialize(config);
 		}
 	}
 
@@ -274,7 +249,7 @@ namespace Duel
 		}
 	}
 
-	void DCore::loadPlugin( const DString& pluginName )
+	void DCore::loadPlugin( const DString& pluginName, const DString& pluginConfig )
 	{
 		DDynLib* rSysLib;
 		try
@@ -294,7 +269,7 @@ namespace Duel
 			DUEL_EXCEPT_BRIEF(DException::ET_ItemNotFound,
 			"Cannot find symbol dllStartPlugin in library " + pluginName,
 			"Duel::loadPlugin");
-		pFunc();
+		pFunc(pluginConfig);
 	}
 
 

@@ -20,7 +20,7 @@ namespace Duel
 		// override : DPlugin-----------------------------
 		void			install();
 		// override : DPlugin-----------------------------
-		void			initialize();
+		void			initialize( const DString& config );
 		// override : DPlugin-----------------------------
 		void			shutdown();
 		// override : DPlugin-----------------------------

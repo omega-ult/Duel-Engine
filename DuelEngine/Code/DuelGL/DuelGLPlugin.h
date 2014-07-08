@@ -21,7 +21,7 @@ namespace Duel
 
 		virtual void install();
 
-		virtual void initialize();
+		virtual void initialize( const DString& config );
 
 		virtual void shutdown();
 

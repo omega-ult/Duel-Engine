@@ -40,7 +40,7 @@ namespace Duel
 		mTextureManager = new D3D9TextureManager(mRenderResFactory);
 	}
 
-	void D3D9Plugin::initialize()
+	void D3D9Plugin::initialize(const DString& config)
 	{
 		mRenderResFactory->initialize();
 		mRenderSystem->initialize();
@@ -92,13 +92,13 @@ namespace Duel
 	}
 
 
-	extern "C" void DUELD3D9_API dllStartPlugin( void )
+	extern "C" void DUELD3D9_API dllStartPlugin( const DString& config )
 	{
 		// Create new plugin
 		d3d9Plugin = new D3D9Plugin();
 
 		// Register
-		DCore::getSingleton().installPlugin(d3d9Plugin);
+		DCore::getSingleton().installPlugin(d3d9Plugin, config);
 
 	}
 	extern "C" void DUELD3D9_API dllStopPlugin( void )

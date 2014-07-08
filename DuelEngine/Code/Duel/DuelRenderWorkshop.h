@@ -19,17 +19,6 @@ namespace Duel
 	{
 	DUEL_DECLARE_RTTI(DRenderWorkshop)
 	public:
-		// make public, allowing external lock.
-		DUEL_AUTO_MUTEX
-		//////////////////////////////////////////////////////////////////////////
-		// signals block 
-		// use this function to adjust rendering operation.
-		// for example rendering gui may use another technique.
-		DSignal<void(DRenderQueue* queue, DRenderGroup* group)>
-			signalGroupStartRender;
-		DSignal<void(DRenderQueue* queue, DRenderGroup* group)>
-			signalGroupFinishRender;
-		/////////////////////////////////////////////////////////////////////////
 		DRenderWorkshop();
 		virtual ~DRenderWorkshop(); // destroy all render queues and render targets.
 

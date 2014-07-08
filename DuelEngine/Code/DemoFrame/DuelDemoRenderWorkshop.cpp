@@ -173,14 +173,12 @@ namespace Duel
 			populateRenderables(rgrp, RS_Forward);
 			if (!mRenderList.empty())
 			{
-				signalGroupStartRender(queue, rgrp);
 				RenderElementList::iterator i, iend = mRenderList.end();
 				for (i = mRenderList.begin(); i != iend; ++i)
 				{
 					RenderElement& e = *i;
 					renderSingleObject(mPresentTarget, e.renderable, e.renderPass);
 				}
-				signalGroupFinishRender(queue, rgrp);
 			}
 		}
 

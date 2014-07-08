@@ -34,7 +34,7 @@ namespace Duel
 		mhbManager = new DRenderResourceManager(mRenderResFactory);
 	}
 
-	void GLPlugin::initialize()
+	void GLPlugin::initialize( const DString& config )
 	{
 		mRenderResFactory->initialize();
 		mRenderSystem->initialize();
@@ -94,13 +94,13 @@ namespace Duel
 
 
 
-	extern "C" void DUELGL_API dllStartPlugin( void )
+	extern "C" void DUELGL_API dllStartPlugin( const DString& config )
 	{
 		// Create new plugin
 		glPlugin = new GLPlugin();
 
 		// Register
-		DCore::getSingleton().installPlugin(glPlugin);
+		DCore::getSingleton().installPlugin(glPlugin, config);
 
 	}
 	extern "C" void DUELGL_API dllStopPlugin( void )

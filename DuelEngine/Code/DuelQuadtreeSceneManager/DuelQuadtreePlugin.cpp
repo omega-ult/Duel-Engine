@@ -26,7 +26,7 @@ namespace Duel
 		mFactory = new QuadtreeSceneManagerFactory();
 	}
 
-	void QuadtreePlugin::initialize()
+	void QuadtreePlugin::initialize( const DString& config )
 	{
 		DSceneManagerEnumerator::getSingletonPtr()->registerSceneManagerFactory(mFactory);
 	}
@@ -44,13 +44,13 @@ namespace Duel
 
 	QuadtreePlugin* quadtreePlugin;
 
-	extern "C" void DUELQUADTREE_API dllStartPlugin( void )
+	extern "C" void DUELQUADTREE_API dllStartPlugin( const DString& config )
 	{
 		// Create new scene manager
 		quadtreePlugin = new QuadtreePlugin();
 
 		// Register
-		DCore::getSingleton().installPlugin(quadtreePlugin);
+		DCore::getSingleton().installPlugin(quadtreePlugin, config);
 
 	}
 	extern "C" void DUELQUADTREE_API dllStopPlugin( void )

@@ -143,7 +143,6 @@
     <ClInclude Include="..\..\Code\DuelD3D9\DuelD3D9Translator.h" />
     <ClInclude Include="..\..\Code\DuelD3D9\DuelD3D9VertexBuffer.h" />
     <ClInclude Include="..\..\Code\DuelD3D9\DuelD3D9VolatileResource.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Duel.vcxproj">

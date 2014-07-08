@@ -23,7 +23,7 @@ namespace Duel
 		virtual	void			install() = 0;
 
 		// initialize this plugin, call this after install();
-		virtual	void			initialize() = 0;
+		virtual	void			initialize(const DString& config) = 0;
 
 		// do clearup work before uninstall this plugin, call this:
 		virtual	void			shutdown() = 0;

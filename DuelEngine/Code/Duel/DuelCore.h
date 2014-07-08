@@ -32,7 +32,6 @@
 namespace Duel {
 
 #define DUEL_VERSION "1.0.0"
-#define DUEL_WP8VERSION "wp_1.0.0"
 
 	class DUEL_API DCore : public DObject, public DSingleton<DCore>
 	{
@@ -48,28 +47,12 @@ namespace Duel {
 				D3DXXXXXXX.dll
 		 </RenderSystem>
 		 <PluginList>
-				<DPlugin>
+				<DPlugin config="xxx.xxx"> <!-- indicate the config file name that used to initialize the plugin -->
 				xxxx.dll
 				</DPlugin>
-				<DPlugin>
+				<DPlugin config="xxx.xxx">
 				xxx.dll
 				</DPlugin>
-		 </PluginList>
-		 <ArchiveList> // optional. see ArchiveManager.
-		 </ArchiveList>
-		 <GroupDescription> // optional. see ResourceGroupManager.
-		 </GroupDescription>
-		 </CoreConfig>
-		 ---------------------------------
-		 在wp8模式下使用WP8VERSION定义, 并且配置文件改写为:
-		 <CoreConfig DuelVersion = 'wp_1.0.0'>
-		 <PluginList>	//可为空
-				<Plugin>
-				xxxx.dll
-				</Plugin>
-				<Plugin>
-				xxx.dll
-				</Plugin>
 		 </PluginList>
 		 <ArchiveList> // optional. see ArchiveManager.
 		 </ArchiveList>
@@ -91,11 +74,11 @@ namespace Duel {
 		DThreadPool*				getMainThreadPool();
 
 		// install a plugin.
-		void					installPlugin(DPlugin* plugin);
+		void					installPlugin(DPlugin* plugin, const DString& config);
 		// uninstall a plugin
 		void					uninstallPlugin(DPlugin* plugin);
 		// load a plugin
-		void					loadPlugin(const DString& pluginName);
+		void					loadPlugin(const DString& pluginName, const DString& pluginConfig);
 
 	private:
 		DRenderSystem*				mRenderSystem;

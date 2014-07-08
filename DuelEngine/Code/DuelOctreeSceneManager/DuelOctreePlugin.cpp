@@ -27,7 +27,7 @@ namespace Duel
 		mFactory = new OctreeSceneManagerFactory();
 	}
 
-	void OctreePlugin::initialize()
+	void OctreePlugin::initialize( const DString& config )
 	{
 		DSceneManagerEnumerator::getSingletonPtr()->registerSceneManagerFactory(mFactory);
 	}
@@ -46,13 +46,13 @@ namespace Duel
 
 	OctreePlugin* octreePlugin;
 
-	extern "C" void DUELOCTREE_API dllStartPlugin( void )
+	extern "C" void DUELOCTREE_API dllStartPlugin( const DString& config )
 	{
 		// Create new scene manager
 		octreePlugin = new OctreePlugin();
 
 		// Register
-		DCore::getSingleton().installPlugin(octreePlugin);
+		DCore::getSingleton().installPlugin(octreePlugin, config);
 
 	}
 	extern "C" void DUELOCTREE_API dllStopPlugin( void )
