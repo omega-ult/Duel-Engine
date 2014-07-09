@@ -4,6 +4,7 @@
 #define _DUELSCENEINSTANCE_H_
 
 #include "DuelCommon.h"
+#include "DuelLightSource.h"
 #include "DuelTerrain.h"
 #include "DuelSkyDome.h"
 
@@ -55,7 +56,7 @@ namespace Duel
 		typedef	std::map<DString, DLightSource*>	LightMap;
 		typedef	MapIterator<LightMap>				LightIterator;
 		LightIterator		getLightIterator() { return LightIterator(mLightMap); }
-		DLightSource*		createLight(const DString& name);
+		DLightSource*		createLight(LightType type, const DString& name);
 		DLightSource*		getLight(const DString& name);
 		uint32		getLightCount() const { return mLightMap.size(); }
 		bool		hasLight(const DString& name);

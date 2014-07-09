@@ -100,6 +100,18 @@ namespace Duel
 		return NULL;
 	}
 
+	void DDemoPointLightHelper::updateCustomGpuParameter( DShaderObject* so )
+	{
+
+	}
+
+
+	void DDemoPointLightHelper::setPointLightParameter( DLightSource* light )
+	{
+
+	}
+
+
 
 
 	DDemoDirectionalLightHelper::DDemoDirectionalLightHelper()
@@ -157,6 +169,18 @@ namespace Duel
 	{
 		return NULL;
 	}
+
+	void DDemoSpotlightHelper::updateCustomGpuParameter( DShaderObject* so )
+	{
+
+	}
+
+	void DDemoSpotlightHelper::setSpotlightParameter( DLightSource* light )
+	{
+
+	}
+
+
 
 	DDemoMergeHelper::DDemoMergeHelper()
 	{

@@ -100,16 +100,17 @@ namespace Duel
 			}
 			else if (t == LT_Directional)
 			{
+				DDirectionalLight* dl = light->getAs<DDirectionalLight>();
 				// do visibility testing
 				// basic algorithm: calculate the plane in directional light's abstract cylinder's
 				// local space p, calculate the perpendicular point p' toward origin, then testing
 				// whether p' is in the cylinder.
 				DOrientedBox ob;
-				DReal zExt = light->getDirectionalDistance();
-				DReal r = light->getDirectionalRadius();
+				DReal zExt = dl->getDistance();
+				DReal r = dl->getRadius();
 				ob.setMaximum(r, r, zExt);
 				ob.setMinimum(-r, -r, -zExt);
-				DVector3 cyDir = light->getDirection();
+				DVector3 cyDir = dl->getDirection();
 				cyDir.normalize();
 				DVector3 zToward = DVector3::UNIT_Z;
 				ob.setOrientation(zToward.getRotationTo(cyDir));
@@ -122,9 +123,9 @@ namespace Duel
 			}
 			else if (t == LT_Point)
 			{
-				DReal outRange;
-				light->getAttenuation(&outRange, NULL, NULL, NULL);
-				DSphere lightSphere(light->getPosition(), outRange);
+				DPointLight* pl = light->getAs<DPointLight>();
+				DReal r = pl->getRadius();
+				DSphere lightSphere(light->getPosition(), r);
 
 				if (cam->isInside(lightSphere) != DCamera::FTS_Out)
 				{
@@ -133,12 +134,13 @@ namespace Duel
 			}
 			else if (t == LT_Spotlight)
 			{
+				DSpotlight* sl = light->getAs<DSpotlight>();
 				// TODO: calculate visiblity.
 				// using common perpendicular line to calcu late intersection between camera
 				// view cone and spot light cone.
 				DReal cpLength;
 				DRay camRay(cam->getEyePosition(), cam->getDirection());
-				DRay spotRay(light->getPosition(), light->getDirection());
+				DRay spotRay(light->getPosition(), sl->getDirection());
 				DRay comPerp = camRay.getCommonPerpendicularTo(spotRay, &cpLength);
 
 				// ensure it is a valid result.
@@ -155,7 +157,7 @@ namespace Duel
 						DRadian r = DMath::arcCos(
 							camToSpot.dotProduct(spotRay.getDirection()) / 
 							(camToSpot.length() * spotRay.getDirection().length()));
-						if (r < light->getSpotlightOuterAngle()/2)
+						if (r < sl->getOuterAngle()/2)
 						{
 							isAffected = true;
 						}
@@ -165,7 +167,7 @@ namespace Duel
 						// calculate intersection between two cone
 						DReal camDist = (comPerp.getOrigin()-cam->getEyePosition()).length() * DMath::Tan(cam->getFOV()/2);
 						DReal spotDist = ((comPerp.getOrigin()+comPerp.getDirection()*cpLength)
-							- spotRay.getOrigin()).length() * DMath::Tan(light->getSpotlightOuterAngle()/2);
+							- spotRay.getOrigin()).length() * DMath::Tan(sl->getOuterAngle()/2);
 						if (camDist + spotDist > cpLength)
 						{
 							isAffected = true;
@@ -277,15 +279,44 @@ namespace Duel
 		return mRenderQueue;
 	}
 
-	DLightSource* DSceneInstance::createLight( const DString& name )
+	DLightSource* DSceneInstance::createLight( LightType type, const DString& name )
 	{
 		LightMap::iterator i = mLightMap.find(name);
 		if (i != mLightMap.end())
 		{
-			return i->second;
+			if (i->second->getLightType() != type)
+			{
+				delete i->second;
+				mLightMap.erase(i);
+			}
+			else
+			{
+				return i->second;
+			}
 		}
-		DLightSource* ret = new DLightSource(name);
-		mLightMap[name] = ret;
+		DLightSource* ret = NULL;;
+		switch (type)
+		{
+		case Duel::LT_Ambient:
+			ret = new DAmbientLight(name);
+			break;
+		case Duel::LT_Point:
+			ret = new DPointLight(name);
+			break;
+		case Duel::LT_Directional:
+			ret = new DDirectionalLight(name);
+			break;
+		case Duel::LT_Spotlight:
+			ret = new DSpotlight(name);
+			break;
+		case Duel::LT_SurfaceLight:
+		case Duel::LT_VolumeLight:
+			break;
+		}
+		if (ret != NULL)
+		{
+			mLightMap[name] = ret;
+		}
 		return ret;
 	}
 

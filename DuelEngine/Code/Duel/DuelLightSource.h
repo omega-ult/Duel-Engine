@@ -61,7 +61,7 @@ namespace Duel
 	public:
 		DAmbientLight(const DString& name);
 		virtual LightType	getLightType();
-		virtual virtual DString	getTypeName();
+		virtual DString	getTypeName() const;
 	};
 
 	class DUEL_API DPointLight : public DLightSource
@@ -70,7 +70,7 @@ namespace Duel
 	public:
 		DPointLight(const DString& name);
 		virtual LightType	getLightType();
-		virtual virtual DString	getTypeName();
+		virtual DString	getTypeName() const;
 
 		void		setRadius(DReal r);
 		DReal		getRadius() const;
@@ -84,7 +84,7 @@ namespace Duel
 	public:
 		DDirectionalLight(const DString& name);
 		virtual LightType	getLightType();
-		virtual virtual DString	getTypeName();
+		virtual DString	getTypeName() const;
 		// set/get direction of the light
 		void			setDirection(DReal x, DReal y, DReal z);
 		void			setDirection(const DVector3& dir);
@@ -111,7 +111,7 @@ namespace Duel
 	public:
 		DSpotlight(const DString& name);
 		virtual LightType	getLightType();
-		virtual virtual DString	getTypeName();
+		virtual DString	getTypeName() const;
 		// set/get direction of the light
 		void			setDirection(DReal x, DReal y, DReal z);
 		void			setDirection(const DVector3& dir);

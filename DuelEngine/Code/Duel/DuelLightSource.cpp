@@ -100,7 +100,7 @@ namespace Duel
 		return LT_Ambient;
 	}
 
-	Duel::DString DAmbientLight::getTypeName()
+	Duel::DString DAmbientLight::getTypeName() const
 	{
 		return "AmbientLight";
 	}
@@ -120,7 +120,7 @@ namespace Duel
 		return LT_Point;
 	}
 
-	Duel::DString DPointLight::getTypeName()
+	Duel::DString DPointLight::getTypeName() const
 	{
 		return "PointLight";
 	}
@@ -150,7 +150,7 @@ namespace Duel
 		return LT_Directional;
 	}
 
-	Duel::DString DDirectionalLight::getTypeName()
+	Duel::DString DDirectionalLight::getTypeName() const
 	{
 		return "DirectionalLight";
 	}
@@ -206,7 +206,7 @@ namespace Duel
 		return LT_Spotlight;
 	}
 
-	Duel::DString DSpotlight::getTypeName()
+	Duel::DString DSpotlight::getTypeName() const
 	{
 		return "Spotlight";
 	}
