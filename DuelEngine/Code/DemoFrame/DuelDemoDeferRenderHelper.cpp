@@ -12,17 +12,16 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(DDemoAmbientLightHelper, DRenderable);
 	DUEL_IMPLEMENT_RTTI_1(DDemoPointLightHelper, DRenderable);
 	DUEL_IMPLEMENT_RTTI_1(DDemoDirectionalLightHelper, DRenderable);
-	DUEL_IMPLEMENT_RTTI_1(DDemoSpotLightHelper, DRenderable);
+	DUEL_IMPLEMENT_RTTI_1(DDemoSpotlightHelper, DRenderable);
 
-	DDemoAmbientLightHelper::DDemoAmbientLightHelper()
+	DDemoAmbientLightHelper::DDemoAmbientLightHelper() :
+		mAmbientColor(DColor::GRAY)
 	{
 		DResourceGroupManager* rg = DResourceGroupManager::getSingletonPtr();
 		DRenderResourceManager* re = DRenderResourceManager::getSingletonPtr(); 
-		// 		DResourcePtr renderEffect = rg->getResouceManager("RenderEffect")->getResource("_BasicShaderPack", "Demo_RenderWorkshop.dre");
-		// 		renderEffect->touch();
-		// 		mCopyTexTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_CopyTexture");
-		// 		mComposeTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_DeferCompose");
-		// 		mGBufferTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DemoRenderWorkshop_DeferGBuffer");
+		DResourcePtr renderEffect = rg->getResouceManager("RenderEffect")->getResource("_BasicShaderPack", "Demo_RenderWorkshop.dre");
+		renderEffect->touch();
+		mAmbientLightTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DeferAmbientLight");
 		mRenderLayout = re->createRenderLayout();
 		DVertexDeclaration vd;
 		mRenderLayout->setTopologyType(PT_TriangleList);
@@ -55,39 +54,108 @@ namespace Duel
 
 	DRenderTechnique* DDemoAmbientLightHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
 	{
-		throw std::exception("The method or operation is not implemented.");
+		if (stage == RS_DeferAmbientLight)
+		{
+			return mAmbientLightTech.get();
+		}
+		return NULL;
 	}
+
+	void DDemoAmbientLightHelper::updateCustomGpuParameter( DShaderObject* so )
+	{
+
+	}
+
 
 	DDemoPointLightHelper::DDemoPointLightHelper()
 	{
+		DResourceGroupManager* rg = DResourceGroupManager::getSingletonPtr();
+		DRenderResourceManager* re = DRenderResourceManager::getSingletonPtr(); 
+		DResourcePtr renderEffect = rg->getResouceManager("RenderEffect")->getResource("_BasicShaderPack", "Demo_RenderWorkshop.dre");
+		renderEffect->touch();
+		mPointLightTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DeferAmbientLight");
 
+		mRenderLayout = re->createRenderLayout();
+
+		DResourcePtr meshModel = rg->getResouceManager("Mesh")->getResource("_BasicMediaPack", "M_PointLightSphereModel.dm");
+		if (meshModel != NULL)
+		{
+			DSubMeshPtr sbmesh = meshModel->getAs<DMesh>()->getSubMesh("PointLightSphereModel");
+			if (sbmesh != NULL)
+			{
+				mRenderLayout->setTopologyType(PT_TriangleList);
+				mRenderLayout->setVertexData(DVertexData(sbmesh->getVertexStreams(), sbmesh->getVertexDeclaration()));
+				mRenderLayout->setIndexData(DIndexData(sbmesh->getIndices()));
+				mRenderLayout->seal();
+			}
+		}
 	}
 
 	DRenderTechnique* DDemoPointLightHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
 	{
+		if (stage == RS_DeferPointLight)
+		{
+			return mPointLightTech.get();
+		}
 		return NULL;
 	}
 
 
-
-	DRenderTechnique* DDemoDirectionalLightHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
-	{
-		return NULL;
-	}
 
 	DDemoDirectionalLightHelper::DDemoDirectionalLightHelper()
 	{
+		DResourceGroupManager* rg = DResourceGroupManager::getSingletonPtr();
+		DRenderResourceManager* re = DRenderResourceManager::getSingletonPtr(); 
+		DResourcePtr renderEffect = rg->getResouceManager("RenderEffect")->getResource("_BasicShaderPack", "Demo_RenderWorkshop.dre");
+		renderEffect->touch();
+		mDirectionalLightTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DeferDirectionalLight");
+
+		mRenderLayout = re->createRenderLayout();
+
+		DResourcePtr meshModel = rg->getResouceManager("Mesh")->getResource("_BasicMediaPack", "M_DirectionalLightCylinderModel.dm");
+		if (meshModel != NULL)
+		{
+			DSubMeshPtr sbmesh = meshModel->getAs<DMesh>()->getSubMesh("DirectionalLightCylinderModel");
+			if (sbmesh != NULL)
+			{
+				mRenderLayout->setTopologyType(PT_TriangleList);
+				mRenderLayout->setVertexData(DVertexData(sbmesh->getVertexStreams(), sbmesh->getVertexDeclaration()));
+				mRenderLayout->setIndexData(DIndexData(sbmesh->getIndices()));
+				mRenderLayout->seal();
+			}
+		}
 	}
 
-
-	DRenderTechnique* DDemoSpotLightHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
+	DRenderTechnique* DDemoDirectionalLightHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
 	{
+		if (stage == RS_DeferDirectionalLight)
+		{
+			return mDirectionalLightTech.get();
+		}
 		return NULL;
 	}
 
-	DDemoSpotLightHelper::DDemoSpotLightHelper()
+	void DDemoDirectionalLightHelper::updateCustomGpuParameter( DShaderObject* so )
 	{
 
+	}
+
+	void DDemoDirectionalLightHelper::setDirectionalLightParameter( DLightSource* light )
+	{
+
+	}
+
+
+
+
+	DDemoSpotlightHelper::DDemoSpotlightHelper()
+	{
+
+	}
+
+	DRenderTechnique* DDemoSpotlightHelper::getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li)
+	{
+		return NULL;
 	}
 
 	DDemoMergeHelper::DDemoMergeHelper()

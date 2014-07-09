@@ -84,7 +84,7 @@ namespace Duel
 		while(ri.hasMoreElements())
 		{
 			DRenderGroup* rgrp = ri.getNext();
-			populateRenderables(rgrp, RS_Defer_GBuffer);
+			populateRenderables(rgrp, RS_Defer);
 			if(!mRenderList.empty())
 			{
 				deferProcessing = true;
@@ -104,7 +104,7 @@ namespace Duel
 				while (ri.hasMoreElements())
 				{
 			 		DRenderGroup* rgrp = ri.getNext();
-			 		populateRenderables(rgrp, RS_Defer_GBuffer);
+			 		populateRenderables(rgrp, RS_Defer);
 			 		if (!mRenderList.empty())
 			 		{
 			 			RenderElementList::iterator i, iend = mRenderList.end();

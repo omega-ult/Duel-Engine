@@ -7,30 +7,23 @@ namespace Duel
 {
 
 	DUEL_IMPLEMENT_RTTI_1(DLightSource, DMovable);
-
+	DUEL_IMPLEMENT_RTTI_1(DAmbientLight, DLightSource);
+	DUEL_IMPLEMENT_RTTI_1(DPointLight, DLightSource);
+	DUEL_IMPLEMENT_RTTI_1(DDirectionalLight, DLightSource);
+	DUEL_IMPLEMENT_RTTI_1(DSpotlight, DLightSource);
 
 	DLightSource::DLightSource( const DString& name ) :
 		DMovable(name),
-		mType(LT_Point),
 		mShadowProperty(SP_None),
 		mPos(DVector3::ZERO),
-		mDiffuse(DColor::WHITE),
-		mSpecular(DColor::BLACK),
-		mDirection(DVector3::UNIT_Z),
-		mDirectionalDist(100.0f),
-		mDirectionalRadius(100.0f),
-		mSpotOuter(DDegree(40.0f)),
-		mSpotInner(DDegree(30.0f)),
-		mSpotFalloff(1.0f),
-		mAttenuationRange(100000.0f),
-		mAttenuationConst(1.0f),
-		mAttenuationLinear(0.0f),
-		mAttenuationQuad(0.0f),
-		mPowerScale(1.0f)
+		mDiffuseColor(DColor::WHITE),
+		mSpecularColor(DColor::BLACK)
 	{
 		mBoundingBox.setFinite();
 		mBoundingBox.setExtent(-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f);
 	}
+
+
 
 	void DLightSource::setPosition( DReal x, DReal y, DReal z )
 	{
@@ -49,155 +42,41 @@ namespace Duel
 		return mPos;
 	}
 
-	void DLightSource::setDirection( DReal x, DReal y, DReal z )
-	{
-		mDirection.x = x;
-		mDirection.y = y;
-		mDirection.z = z;
-	}
-
-	void DLightSource::setDirection( const DVector3& dir )
-	{
-		mDirection = dir;
-	}
-
-	const DVector3& DLightSource::getDirection() const
-	{
-		return mDirection;
-	}
 
 	void DLightSource::setDiffuseColor( DReal red, DReal green, DReal blue )
 	{
-		mDiffuse.r = red;
-		mDiffuse.g = green;
-		mDiffuse.b = blue;
+		mDiffuseColor.r = red;
+		mDiffuseColor.g = green;
+		mDiffuseColor.b = blue;
 	}
 
 	void DLightSource::setDiffuseColor( const DColor& color )
 	{
-		mDiffuse = color;
+		mDiffuseColor = color;
 	}
 
 	const DColor& DLightSource::getDiffuseColor() const
 	{
-		return mDiffuse;
+		return mDiffuseColor;
 	}
 
 	void DLightSource::setSpecularColor( DReal red, DReal green, DReal blue )
 	{
-		mSpecular.r = red;
-		mSpecular.g = green;
-		mSpecular.b = blue;
+		mSpecularColor.r = red;
+		mSpecularColor.g = green;
+		mSpecularColor.b = blue;
 	}
 
 	void DLightSource::setSpecularColor( const DColor& color )
 	{
-		mSpecular = color;
+		mSpecularColor = color;
 	}
 
 	const DColor& DLightSource::getSpecularColor() const
 	{
-		return mSpecular;
+		return mSpecularColor;
 	}
-
-	void DLightSource::setAttenuation( DReal range, DReal constant, DReal linear, DReal quadratic )
-	{
-		mAttenuationRange = range;
-		mAttenuationConst = constant;
-		mAttenuationLinear = linear;
-		mAttenuationQuad = quadratic;
-	}
-
-	void DLightSource::getAttenuation( DReal* outRange, DReal* outConstant, DReal* outLinear, DReal* outQuadratic ) const
-	{
-		if (outRange != NULL)
-		{
-			*outRange = mAttenuationRange;
-		}
-		if (outConstant != NULL)
-		{
-			*outConstant = mAttenuationConst;
-		}
-		if (outLinear != NULL)
-		{
-			*outLinear = mAttenuationLinear;
-		}
-		if (outQuadratic != NULL)
-		{
-			*outQuadratic = mAttenuationQuad;
-		}
-	}
-
-	void DLightSource::setSpotlightRange( const DRadian& innerAngle, const DRadian& outerAngle )
-	{
-		mSpotInner = innerAngle;
-		mSpotOuter = outerAngle;
-	}
-
-	void DLightSource::setSpotlightInnerAngle( const DRadian& innerAngle )
-	{
-		mSpotInner = innerAngle;
-	}
-
-	void DLightSource::setSpotlightOuterAngle( const DRadian& outerAngle )
-	{
-		mSpotOuter = outerAngle;
-	}
-
-	const DRadian& DLightSource::getSpotlightInnerAngle() const
-	{
-		return mSpotInner;
-	}
-
-	const DRadian& DLightSource::getSpotlightOuterAngle() const
-	{
-		return mSpotOuter;
-	}
-
-	void DLightSource::setSpotlightFalloff( DReal falloff )
-	{
-		mSpotFalloff = falloff;
-	}
-
-	DReal DLightSource::getSpotLightFalloff() const
-	{
-		return mSpotFalloff;
-	}
-
-	void DLightSource::setPowerScale( DReal pow )
-	{
-		mPowerScale = pow;
-	}
-
-	DReal DLightSource::getPowerScale() const
-	{
-		return mPowerScale;
-	}
-
-	Duel::DString DLightSource::getTypeName() const
-	{
-		return "LightSource";
-	}
-
-	Duel::DReal DLightSource::getDirectionalRadius() const
-	{
-		return mDirectionalRadius;
-	}
-
-	Duel::DReal DLightSource::getDirectionalDistance() const
-	{
-		return mDirectionalDist;
-	}
-
-	void DLightSource::setDirectionalRadius( DReal r )
-	{
-		mDirectionalRadius = r;
-	}
-
-	void DLightSource::setDirectionalDistance( DReal dist )
-	{
-		mDirectionalDist = dist;
-	}
+	
 
 	Duel::ShadowProperty DLightSource::getShadowProperty() const
 	{
@@ -209,14 +88,191 @@ namespace Duel
 		mShadowProperty = sp;
 	}
 
-	Duel::LightType DLightSource::getLightType() const
+
+	DAmbientLight::DAmbientLight( const DString& name ) :
+		DLightSource(name)
 	{
-		return mType;
+
 	}
 
-	void DLightSource::setLightType( LightType type )
+	Duel::LightType DAmbientLight::getLightType()
 	{
-		mType = type;
+		return LT_Ambient;
 	}
+
+	Duel::DString DAmbientLight::getTypeName()
+	{
+		return "AmbientLight";
+	}
+
+
+
+
+	DPointLight::DPointLight( const DString& name ) : 
+		DLightSource(name),
+		mRadius(1.0f)
+	{
+
+	}
+
+	Duel::LightType DPointLight::getLightType()
+	{
+		return LT_Point;
+	}
+
+	Duel::DString DPointLight::getTypeName()
+	{
+		return "PointLight";
+	}
+
+	void DPointLight::setRadius( DReal r )
+	{
+		mRadius = r;
+	}
+
+	Duel::DReal DPointLight::getRadius() const
+	{
+		return mRadius;
+	}
+
+
+	DDirectionalLight::DDirectionalLight( const DString& name ) :
+		DLightSource(name),
+		mDirection(DVector3::UNIT_Z),
+		mDist(1.0f),
+		mRadius(1.0f)
+	{
+
+	}
+
+	Duel::LightType DDirectionalLight::getLightType()
+	{
+		return LT_Directional;
+	}
+
+	Duel::DString DDirectionalLight::getTypeName()
+	{
+		return "DirectionalLight";
+	}
+
+	void DDirectionalLight::setDirection( DReal x, DReal y, DReal z )
+	{
+		mDirection = DVector3(x,y,z).normalize();
+	}
+
+	void DDirectionalLight::setDirection( const DVector3& dir )
+	{
+		mDirection = dir;
+		mDirection.normalize();
+	}
+
+	const DVector3& DDirectionalLight::getDirection() const
+	{
+		return mDirection;
+	}
+
+	void DDirectionalLight::setDistance( DReal dist )
+	{
+		mDist = dist;
+	}
+
+	void DDirectionalLight::setRadius( DReal r )
+	{
+		mRadius = r;
+	}
+
+	Duel::DReal DDirectionalLight::getDistance() const
+	{
+		return mDist;
+	}
+
+	Duel::DReal DDirectionalLight::getRadius() const
+	{
+		return mRadius;
+	}
+
+	DSpotlight::DSpotlight( const DString& name ) :
+		DLightSource(name),
+		mDirection(DVector3::UNIT_Z),
+		mSpotInner(DMath::HALF_PI/2),
+		mSpotOuter(DMath::HALF_PI),
+		mSpotFalloff(1.0f)
+	{
+
+	}
+
+	Duel::LightType DSpotlight::getLightType()
+	{
+		return LT_Spotlight;
+	}
+
+	Duel::DString DSpotlight::getTypeName()
+	{
+		return "Spotlight";
+	}
+
+	void DSpotlight::setDirection( DReal x, DReal y, DReal z )
+	{
+		mDirection = DVector3(x,y,z).normalize();
+	}
+
+	void DSpotlight::setDirection( const DVector3& dir )
+	{
+		mDirection = dir;
+		mDirection.normalize();
+	}
+
+	const DVector3& DSpotlight::getDirection() const
+	{
+		return mDirection;
+	}
+
+	void DSpotlight::setRange( const DRadian& innerAngle, const DRadian& outerAngle )
+	{
+		mSpotInner = innerAngle <= outerAngle ? innerAngle : outerAngle;
+		mSpotOuter = innerAngle < outerAngle ? outerAngle : innerAngle;
+	}
+
+	void DSpotlight::setInnerAngle( const DRadian& innerAngle )
+	{
+		mSpotInner = innerAngle > mSpotOuter ? mSpotOuter : innerAngle;
+	}
+
+	void DSpotlight::setOuterAngle( const DRadian& outerAngle )
+	{
+		mSpotOuter = outerAngle < mSpotInner ? mSpotInner : outerAngle;
+	}
+
+	const DRadian& DSpotlight::getInnerAngle() const
+	{
+		return mSpotInner;
+	}
+
+	const DRadian& DSpotlight::getOuterAngle() const
+	{
+		return mSpotOuter;
+	}
+
+	void DSpotlight::setFalloff( DReal falloff )
+	{
+		mSpotFalloff = falloff;
+	}
+
+	Duel::DReal DSpotlight::getFalloff() const
+	{
+		return mSpotFalloff;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

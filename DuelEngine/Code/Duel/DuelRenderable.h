@@ -13,9 +13,8 @@ namespace Duel
 // 	// stages that a renderable can use,
 	enum RenderStage
 	{
-		RS_Defer_GBuffer,
-		RS_LightMapGeneration,
-		RS_Forward
+		RS_Defer	= 0x000e,
+		RS_Forward	= 0x000f
 	};
 
 	// flag that indicate which type of shadow this renderable prefer using

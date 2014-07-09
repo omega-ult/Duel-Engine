@@ -16,9 +16,20 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DDemoAmbientLightHelper)
 	public:
 		DDemoAmbientLightHelper();
+		enum 
+		{
+			RS_DeferAmbientLight	= 0xc100
+		};
+		// only accept RS_DeferAmbientLight as valid stage parameter
+		// override : DRenderable--------------------------
 		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
+		// override : DRenderable--------------------------
+		void	updateCustomGpuParameter(DShaderObject* so);
+
+		void	setAmbientColor(DColor c) { mAmbientColor = c; }
 	protected:
-		DRenderTechniquePtr	mAmbientAccumTech;
+		DRenderTechniquePtr	mAmbientLightTech;
+		DColor	mAmbientColor;
 	};
 
 
@@ -29,9 +40,26 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DDemoPointLightHelper)
 	public:
 		DDemoPointLightHelper();
+		enum 
+		{
+			RS_DeferPointLight	= 0xc110
+		};
+		// only accept RS_DeferPointLight as valid stage parameter
+		// override : DRenderable--------------------------
 		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
+		// override : DRenderable--------------------------
+		void	updateCustomGpuParameter(DShaderObject* so);
+
+		// use specified point light to upate parameter.
+		void	setPointLightParameter(DLightSource* light);
+
 	protected:
-		DRenderTechniquePtr	mPointLightAccumTech;
+		DRenderTechniquePtr	mPointLightTech;
+
+		DVector3	mLightPos;
+		DColor		mDiffuseColor;
+		DColor		mSpecularColor;
+
 	};
 
 
@@ -41,22 +69,44 @@ namespace Duel
 		DUEL_DECLARE_RTTI(DDemoDirectionalLightHelper)
 	public:
 		DDemoDirectionalLightHelper();
+		enum 
+		{
+			RS_DeferDirectionalLight	= 0xc120
+		};
+		// only accept RS_DeferDirectionalLight as valid stage parameter
+		// override : DRenderable--------------------------
 		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
+		// override : DRenderable--------------------------
+		void	updateCustomGpuParameter(DShaderObject* so);
+
+		// use specified directional light to upate parameter.
+		void	setDirectionalLightParameter(DLightSource* light);
 	protected:
-		DRenderTechniquePtr	mDirectionalLightAccumTech;
+		DRenderTechniquePtr	mDirectionalLightTech;
 	};
 
 
 
 	// helper class to render spot light to light accumulation map.
-	class DDemoSpotLightHelper : public DRenderable
+	class DDemoSpotlightHelper : public DRenderable
 	{
-		DUEL_DECLARE_RTTI(DDemoSpotLightHelper)
+		DUEL_DECLARE_RTTI(DDemoSpotlightHelper)
 	public:
-		DDemoSpotLightHelper();
+		DDemoSpotlightHelper();
+		enum 
+		{
+			RS_DeferSpotlight	= 0xc130
+		};
+		// only accept RS_DeferSpotlight as valid stage parameter
+		// override : DRenderable--------------------------
 		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
+		// override : DRenderable--------------------------
+		void	updateCustomGpuParameter(DShaderObject* so);
+
+		// use specified spot light to upate parameter.
+		void	setSpotlightParameter(DLightSource* light);
 	protected:
-		DRenderTechniquePtr	mSpotLightAccumTech;
+		DRenderTechniquePtr	mSpotlightTech;
 	};
 
 	// this class provide functionalities for DemoRenderWorkshop's defer rendering,
@@ -102,6 +152,27 @@ namespace Duel
 		DTextureSamplerObjectPtr	mTextureSampler;
 	};
 
+	class DDemoCopyTextureHelper : public DRenderable
+	{
+		DUEL_DECLARE_RTTI(DDemoCopyTextureHelper)
+	public:
+		DDemoCopyTextureHelper();
+		// for RS_ScreenTransfer only
+		void	setTransferSource(DGpuTextureConstantPtr tex);
+
+		// override : DRenderable--------------------------
+		// only RS_DeferMerge can return a valid render layout.
+		virtual DRenderTechnique* getRenderTechnique(uint32 stage, DCamera* cam, LightIterator li);
+
+		// override : DRenderable--------------------------
+		void	updateCustomGpuParameter(DShaderObject* so);
+	protected:
+
+		DGpuTextureConstantPtr	mSrcTex;
+		DRenderTechniquePtr		mCopyTech;
+		DTextureSamplerObjectPtr	mTextureSampler;
+
+	};
 
 }
 
