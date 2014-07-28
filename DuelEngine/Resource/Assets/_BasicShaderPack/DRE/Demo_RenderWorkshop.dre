@@ -50,6 +50,53 @@
 		</Pass>
 	</Technique>
 	
-		
+	<!--AmbientLight-->
+	<Technique name="DeferAmbientLight">
+		<Pass name="DeferAmbientLight_p0">
+			<DepthStencilState>
+				<DepthEnable>false</DepthEnable>
+				<DepthWriteEnable>false</DepthWriteEnable>
+			</DepthStencilState>
+			
+			<BlendState>
+				<RenderTargetBlendState	index = "0">
+					<BlendEnable>true</BlendEnable>
+					<ColorBlendOpeartion>Add</ColorBlendOpeartion>
+					<ColorSrcFactor>One</ColorSrcFactor>
+					<ColorDstFactor>One</ColorDstFactor>
+					<AlphaBlendOpeartion>Add</AlphaBlendOpeartion>
+					<AlphaSrcFactor>One</AlphaSrcFactor>
+					<AlphaDstFactor>One</AlphaDstFactor>
+				</RenderTargetBlendState>
+			</BlendState>
+			<VertexProgram group="_BasicShaderPack">Demo_DeferAmbientLight.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">Demo_DeferAmbientLight.ps</PixelProgram>
+		</Pass>
+	</Technique>
+	
+	<!--PointLight-->
+	<Technique name="DeferPointLight">
+		<Pass name="DeferPointLight_p0">
+			<DepthStencilState>
+				<DepthEnable>false</DepthEnable>
+				<DepthWriteEnable>false</DepthWriteEnable>
+			</DepthStencilState>
+			
+			<BlendState>
+				<RenderTargetBlendState	index = "0">
+					<BlendEnable>true</BlendEnable>
+					<ColorBlendOpeartion>Add</ColorBlendOpeartion>
+					<ColorSrcFactor>One</ColorSrcFactor>
+					<ColorDstFactor>One</ColorDstFactor>
+					<AlphaBlendOpeartion>Add</AlphaBlendOpeartion>
+					<AlphaSrcFactor>One</AlphaSrcFactor>
+					<AlphaDstFactor>One</AlphaDstFactor>
+				</RenderTargetBlendState>
+			</BlendState>
+			<VertexProgram group="_BasicShaderPack">Demo_DeferPointLight.vs</VertexProgram>
+			<PixelProgram group="_BasicShaderPack">Demo_DeferPointLight.ps</PixelProgram>
+		</Pass>
+	</Technique>
+	
 	
 </RenderEffect>

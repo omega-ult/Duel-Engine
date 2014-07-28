@@ -1,0 +1,21 @@
+float4 lightDiffuseColor;
+
+
+struct PS_Input
+{	
+	float2 texcoord : TEXCOORD0;
+};
+
+struct PS_Output
+{
+	float4	lightValue: COLOR0;
+};
+
+PS_Output main(in PS_Input psin)
+{
+	PS_Output psout;
+	
+	psout.lightValue = lightDiffuseColor;
+
+	return psout;
+}

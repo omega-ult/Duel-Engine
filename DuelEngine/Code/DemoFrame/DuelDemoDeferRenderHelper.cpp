@@ -15,7 +15,7 @@ namespace Duel
 	DUEL_IMPLEMENT_RTTI_1(DDemoSpotlightHelper, DRenderable);
 
 	DDemoAmbientLightHelper::DDemoAmbientLightHelper() :
-		mAmbientColor(DColor::GRAY)
+		mAmbientColor(DColor::ZERO)
 	{
 		DResourceGroupManager* rg = DResourceGroupManager::getSingletonPtr();
 		DRenderResourceManager* re = DRenderResourceManager::getSingletonPtr(); 
@@ -63,19 +63,45 @@ namespace Duel
 
 	void DDemoAmbientLightHelper::updateCustomGpuParameter( DShaderObject* so )
 	{
+		if (so->getPassName() == "DeferAmbientLight_p0")
+		{
+			so->getPixelProgramParameters()->setValue("lightDiffuseColor", mAmbientColor);
+		}
+	}
 
+	void DDemoAmbientLightHelper::setAmbientLightParameter( DLightSource* light )
+	{
+		if (light)
+		{
+			mAmbientColor = light->getDiffuseColor();
+		}
+		else
+		{
+			mAmbientColor = DColor::ZERO;
+		}
 	}
 
 
-	DDemoPointLightHelper::DDemoPointLightHelper()
+
+	DDemoPointLightHelper::DDemoPointLightHelper() :
+		mLightPos(DVector3::ZERO),
+		mLightRadius(0.0f),
+		mDiffuseColor(DColor::ZERO),
+		mSpecularColor(DColor::ZERO)
 	{
 		DResourceGroupManager* rg = DResourceGroupManager::getSingletonPtr();
 		DRenderResourceManager* re = DRenderResourceManager::getSingletonPtr(); 
 		DResourcePtr renderEffect = rg->getResouceManager("RenderEffect")->getResource("_BasicShaderPack", "Demo_RenderWorkshop.dre");
 		renderEffect->touch();
-		mPointLightTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DeferAmbientLight");
+		mPointLightTech = renderEffect->getAs<DRenderEffect>()->getTechnique("DeferPointLight");
 
 		mRenderLayout = re->createRenderLayout();
+
+		DTextureSampler depthSampler;
+		//...texture sampler.
+		mDepthSampler = re->createTextureSamplerObject(depthSampler);
+		DTextureSampler vnormSampler;
+		mVNormalSampler = re->createTextureSamplerObject(vnormSampler);
 
 		DResourcePtr meshModel = rg->getResouceManager("Mesh")->getResource("_BasicMediaPack", "M_PointLightSphereModel.dm");
 		if (meshModel != NULL)
@@ -102,14 +128,52 @@ namespace Duel
 
 	void DDemoPointLightHelper::updateCustomGpuParameter( DShaderObject* so )
 	{
+		if (so->getPassName() == "DeferPointLight_p0")
+		{
+			so->getPixelProgramParameters()->setValue("depthTexture", mDepthTexture);
+			so->getPixelProgramParameters()->setValue("depthTextureSamp", mDepthSampler);
+			so->getPixelProgramParameters()->setValue("normalTexture", mVNormalTexture);
+			so->getPixelProgramParameters()->setValue("normalTextureSamp", mVNormalSampler);
 
+			so->getPixelProgramParameters()->setValue("lightPos", mLightPos);
+			so->getPixelProgramParameters()->setValue("lightDiffuseColor", mDiffuseColor);
+			so->getPixelProgramParameters()->setValue("lightRadius", mLightRadius);
+		}
+		mVNormalTexture.reset();
+		mDepthTexture.reset();
 	}
 
 
 	void DDemoPointLightHelper::setPointLightParameter( DLightSource* light )
 	{
-
+		DPointLight* pLight = light->getAs<DPointLight>(false);
+		if (pLight)
+		{
+			mLightPos = pLight->getPosition();
+			mLightRadius = pLight->getRadius();
+			mDiffuseColor = pLight->getDiffuseColor();
+			mSpecularColor = pLight->getSpecularColor();
+		}
+		else
+		{
+			mLightPos = DVector3::ZERO;
+			mLightRadius = 0.0f;
+			mDiffuseColor = DColor::ZERO;
+			mSpecularColor = DColor::ZERO;
+		}
 	}
+
+	void DDemoPointLightHelper::setViewSpaceNormaTexture( DGpuTextureConstantPtr tex )
+	{
+		mVNormalTexture = tex;
+	}
+
+	void DDemoPointLightHelper::setDepthTexture( DGpuTextureConstantPtr tex )
+	{
+		mDepthTexture = tex;
+	}
+
+
 
 
 

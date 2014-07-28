@@ -26,7 +26,7 @@ namespace Duel
 		// override : DRenderable--------------------------
 		void	updateCustomGpuParameter(DShaderObject* so);
 
-		void	setAmbientColor(DColor c) { mAmbientColor = c; }
+		void	setAmbientLightParameter(DLightSource* light);
 	protected:
 		DRenderTechniquePtr	mAmbientLightTech;
 		DColor	mAmbientColor;
@@ -53,13 +53,23 @@ namespace Duel
 		// use specified point light to upate parameter.
 		void	setPointLightParameter(DLightSource* light);
 
+		// these texture constant will be reset as NULL after
+		// updateCustomGpuParameter() finished
+		void	setViewSpaceNormaTexture(DGpuTextureConstantPtr tex);
+		void	setDepthTexture(DGpuTextureConstantPtr tex);
+
 	protected:
 		DRenderTechniquePtr	mPointLightTech;
 
 		DVector3	mLightPos;
+		DReal		mLightRadius;
 		DColor		mDiffuseColor;
 		DColor		mSpecularColor;
 
+		DGpuTextureConstantPtr	mVNormalTexture;
+		DTextureSamplerObjectPtr	mVNormalSampler;
+		DGpuTextureConstantPtr	mDepthTexture;
+		DTextureSamplerObjectPtr	mDepthSampler;
 	};
 
 

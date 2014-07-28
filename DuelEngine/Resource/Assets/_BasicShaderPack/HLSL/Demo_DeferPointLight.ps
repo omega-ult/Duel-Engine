@@ -1,0 +1,63 @@
+sampler depthTexture;
+sampler normalTexture;
+
+float4x4 Auto_WorldViewMatrix;
+float4x4 Auto_InvViewProjMatrix;
+
+float3 lightPos;
+float4 lightDiffuseColor;
+float  lightRadius;
+
+
+struct PS_Input
+{	
+	float4 hpos : COLOR0;
+	float2 texcoord : TEXCOORD0;
+};
+
+struct PS_Output
+{
+	float4	lightValue: COLOR0;
+};
+
+float3 depth_to_color( float f)
+{
+	float3 color;
+	f *= 256;
+	color.x = floor(f);
+	f = (f-color.x)*256;
+	color.y = floor(f);
+	color.z = f-color.y;
+	color.xy *= 0.00390625; // *= 1.0/256
+	return color;
+}
+
+float color_to_depth(float3 color)
+{
+	const float3 byte_to_float = float3(1.0,1.0/256,1.0/(256*256));
+	return dot(color,byte_to_float);
+}
+
+PS_Output main(in PS_Input psin)
+{
+	PS_Output psout;
+	
+	float4 depthColor = tex2D(depthTexture, psin.hpos.xy);
+	float hdepth = color_to_depth(depthColor.xyz);
+	float4 vpos = mul(Auto_InvViewProjMatrix, float4(psin.hpos.xyz, hdepth));
+	
+	float3 vnormal = tex2D(normalTexture, psin.hpos.xy).xyz;
+	
+	float3 vLightToPos = lightPos - vpos.xyz;
+	float lightLength = length(vLightToPos);
+	float diffuseModifier = max(dot(vnormal, normalize(vLightToPos.xyz)), 0.0);
+	float lightAttend = step(0.0f, lightRadius - lightLength); // decide whether light affect specified pixel.
+	
+	
+	//Awesome attenuation from : http://imdoingitwrong.wordpress.com/2011/02/10/improved-light-attenuation/
+	float attenuation = 1 / ((((lightLength/(1-((lightLength/lightRadius)*(lightLength/lightRadius))))/lightRadius)+1)*(((lightLength/(1-((lightLength/lightRadius)*(lightLength/lightRadius))))/lightRadius)+1));
+	
+	psout.lightValue = diffuseModifier * lightDiffuseColor * attenuation * lightAttend;
+
+	return psout;
+}
