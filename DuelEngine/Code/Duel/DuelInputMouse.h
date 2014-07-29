@@ -16,12 +16,12 @@ namespace Duel
 	{
 		MBID_Left		= 0,
 		MBID_Right		= 1,
-		MBID_Middle		= 3,
-		MBID_Button3	= 4,
-		MBID_Button4	= 5,
-		MBID_Button5	= 6,
-		MBID_Button6	= 7,
-		MBID_Button7	= 8
+		MBID_Middle		= 2,
+		MBID_Button3	= 3,
+		MBID_Button4	= 4,
+		MBID_Button5	= 5,
+		MBID_Button6	= 6,
+		MBID_Button7	= 7
 	};
 
 	class DUEL_API DMouseState
