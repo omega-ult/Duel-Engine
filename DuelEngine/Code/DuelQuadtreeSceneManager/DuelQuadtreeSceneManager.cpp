@@ -286,14 +286,14 @@ namespace Duel
 			Quadrant::QuadtreeSceneNodeIterator ni = quadrant->getSceneNodeIterator();
 			while (ni.hasMoreElements())
 			{
-				if ((*(ni.current()))->isEnabled())
+				QuadtreeSceneNode* sn = ni.getNext();
+				if (sn->isEnabled())
 				{
-					if(cam->isInside((*(ni.current()))->getInheritedBox()) != DCamera::FTS_Out)
+					if(cam->isInside(sn->getInheritedBox()) != DCamera::FTS_Out)
 					{
-						(*(ni.current()))->applyToRenderQueue(queue, cam);
+						sn->applyToRenderQueue(queue, cam);
 					}
 				}
-				ni.moveNext();
 			}
 
 			// walk tree

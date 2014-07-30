@@ -271,11 +271,14 @@ namespace Duel
 			Octant::OctreeSceneNodeIterator ni = octant->getSceneNodeIterator();
 			while (ni.hasMoreElements())
 			{
-				if(cam->isInside((*(ni.current()))->getBoundingBox()) != DCamera::FTS_Out)
+				OctreeSceneNode* sn = ni.getNext();
+				if (sn->isEnabled())
 				{
-					(*(ni.current()))->applyToRenderQueue(queue, cam);
+					if(cam->isInside(sn->getInheritedBox()) != DCamera::FTS_Out)
+					{
+						sn->applyToRenderQueue(queue, cam);
+					}
 				}
-				ni.moveNext();
 			}
 
 			// walk tree
