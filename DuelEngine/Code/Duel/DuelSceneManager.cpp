@@ -24,7 +24,6 @@ namespace Duel
 
 	DSceneManager::~DSceneManager()
 	{
-		clearScene();
 	}
 	void DSceneManager::initialize( DAxisAlignedBox region, DReal granularity )
 	{
