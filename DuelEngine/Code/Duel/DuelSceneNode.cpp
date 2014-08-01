@@ -74,7 +74,7 @@ namespace Duel
 		if(obj != NULL)
 		{
 			// check duplication.
-			MovableIterator mbi = getMovableMapIterator();
+			MovableIterator mbi = getMovableIterator();
 			while (mbi.hasMoreElements())
 			{
 				DMovable* m = mbi.getNext();
@@ -168,7 +168,7 @@ namespace Duel
 
 	void DSceneNode::applyToRenderQueue( DRenderQueue* destQueue, DCamera* cam)
 	{
-		MovableIterator i = getMovableMapIterator();
+		MovableIterator i = getMovableIterator();
 		while(i.hasMoreElements())
 		{
 			i.getNext()->applyToRenderQueue(destQueue, cam);

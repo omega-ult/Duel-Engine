@@ -48,7 +48,7 @@ namespace Duel {
 		// used to traverse objects
 		typedef	std::list<DMovable*>		MovableList;
 		typedef	ListIterator<MovableList>	MovableIterator;
-		MovableIterator			getMovableMapIterator() { return MovableIterator(mMovableList.begin(), mMovableList.end()); }
+		MovableIterator			getMovableIterator() { return MovableIterator(mMovableList.begin(), mMovableList.end()); }
 		
 		// update the boundary of this node, this method will merge all
 		// the movable objects' bounding box that attached to this node.

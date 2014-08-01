@@ -29,7 +29,7 @@ namespace Duel
 			Quadrant::QuadtreeSceneNodeIterator ni = quadrant->getSceneNodeIterator();
 			while (ni.hasMoreElements())
 			{
-				DSceneNode::MovableIterator mi = (*(ni.current()))->getMovableMapIterator();
+				DSceneNode::MovableIterator mi = (*(ni.current()))->getMovableIterator();
 				while (mi.hasMoreElements())
 				{
 					if (mi.getNext()->getBoundingBox().isIntersected(box))
@@ -60,7 +60,7 @@ namespace Duel
 			Quadrant::QuadtreeSceneNodeIterator ni = quadrant->getSceneNodeIterator();
 			while (ni.hasMoreElements())
 			{
-				DSceneNode::MovableIterator mi = (*(ni.current()))->getMovableMapIterator();
+				DSceneNode::MovableIterator mi = (*(ni.current()))->getMovableIterator();
 				if (DMath::intersect(s, mi.getNext()->getBoundingBox()))
 				{
 					resultList.push_back(*mi.current());
@@ -90,7 +90,7 @@ namespace Duel
 			Quadrant::QuadtreeSceneNodeIterator ni = octant->getSceneNodeIterator();
 			while (ni.hasMoreElements())
 			{
-				DSceneNode::MovableIterator mi = (*(ni.current()))->getMovableMapIterator();
+				DSceneNode::MovableIterator mi = (*(ni.current()))->getMovableIterator();
 				while (mi.hasMoreElements())
 				{
 					if (DMath::intersect(r, octant->getRegion(), &dist))
@@ -195,7 +195,7 @@ namespace Duel
 		DSceneManager::SceneNodeIterator sni = mParent->getSceneNodeIterator();
 		while (sni.hasMoreElements())
 		{
-			DSceneNode::MovableIterator mi = sni.getNext()->getMovableMapIterator();
+			DSceneNode::MovableIterator mi = sni.getNext()->getMovableIterator();
 			while (mi.hasMoreElements())
 			{
 				tmpList.clear();
