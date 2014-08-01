@@ -89,6 +89,7 @@ namespace Duel
 		if (i != mSceneNodeMap.end())
 		{
 			node->detachAllMovables();
+			node->removeAllChildren();
 			destroySceneNodeImpl(node);
 			mSceneNodeMap.erase(i);
 		}
@@ -100,6 +101,7 @@ namespace Duel
 		for (i = mSceneNodeMap.begin(); i != iend ; ++i)
 		{
 			i->second->detachAllMovables();
+			i->second->removeAllChildren();
 			destroySceneNodeImpl(i->second);
 			i->second = NULL;
 		}
