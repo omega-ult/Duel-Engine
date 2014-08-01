@@ -108,7 +108,7 @@ namespace Duel {
 
 		static DReal		unitRandom() { return static_cast<DReal>(rand()) / static_cast<DReal>(RAND_MAX); }
 		static DReal		rangeRandom(DReal low, DReal up) { return low + (up - low)*unitRandom(); }
-		static DReal		symmtricRandom() { return 2.0f * unitRandom() - 1.0f; }
+		static DReal		symmetricRandom() { return 2.0f * unitRandom() - 1.0f; }
 		
 		static DMatrix4		makeViewMatrix(const DVector3& position, const DQuaternion& orientation, 
 			const DMatrix4* reflectMatrix = 0);
@@ -125,6 +125,8 @@ namespace Duel {
 		static bool		intersect(const DRay& ray, const DSphere& s, DReal* dist1, DReal* dist2);
 		// dist is the nearest joint 
 		static bool		intersect(const DRay& ray, const DAxisAlignedBox& b, DReal* dist);
+		// intersection between two oriented box.
+		static bool		intersect(const DOrientedBox& a, const DOrientedBox& b);
 		// intersection between ray and oriented box.
 		static bool		intersect(const DRay& ray, DOrientedBox* b, DReal* dist);
 		// triangle intersection test, point a, b, c is the pointer of the three point.

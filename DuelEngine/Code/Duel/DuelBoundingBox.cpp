@@ -332,6 +332,17 @@ namespace Duel
 			rBox.mMaximum.z <= this->mMaximum.z;
 	}
 
+	bool DAxisAlignedBox::contains( const DVector3& p )
+	{
+		return mMinimum.x <= p.x && mMinimum.y <= p.y && mMinimum.z <= p.z &&
+			mMaximum.x >= p.x && mMaximum.y >= p.y && mMaximum.z >= p.z;
+	}
+
+	bool DAxisAlignedBox::contains( const DSphere& s )
+	{
+		return !DMath::intersect(s, *this);
+	}
+
 	DReal DAxisAlignedBox::getVolume() const
 	{
 		switch(mExtent)

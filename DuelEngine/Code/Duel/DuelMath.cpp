@@ -592,6 +592,25 @@ namespace Duel {
 		return hit;
 	}
 
+	bool DMath::intersect( const DOrientedBox& a, const DOrientedBox& b )
+	{
+		DOrientedBox abox = a;
+		DOrientedBox bbox = b;
+
+		DMatrix4 bLocalT = bbox.getLocalTransform();
+		DAxisAlignedBox bAAB = bbox.getBoundingBox();
+		bAAB.translate(bbox.getOrigin());
+		for (uint32 i = 0; i < 8; ++i)
+		{
+			DVector3 p = abox.getCorner((BoundingBoxCorner)i);
+			if (bAAB.contains(p))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	bool DMath::intersect( const DRay& ray, const DVector3& a, const DVector3& b, const DVector3& c, DReal* dist )
 	{
 		DReal distance = 0;
