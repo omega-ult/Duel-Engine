@@ -26,7 +26,7 @@ namespace Duel
 
 	Quadrant::~Quadrant()
 	{
-		// do nothing, be careful.
+		removeAllSceneNodes();
 	}
 
 	void Quadrant::addSceneNode( QuadtreeSceneNode* node )
@@ -157,6 +157,16 @@ namespace Duel
 				mbTerminal = true;
 			}
 		}
+	}
+
+	void Quadrant::removeAllSceneNodes()
+	{
+		QuadtreeSceneNodeList::iterator i, iend = mNodeList.end();
+		for (i = mNodeList.begin(); i != iend; i++)
+		{
+			(*i)->setQuadrant(NULL);
+		}
+		mNodeList.clear();
 	}
 
 

@@ -23,7 +23,6 @@ namespace Duel
 	OctreeSceneManager::~OctreeSceneManager()
 	{
 		shutdownOctree(mOctree);
-		clearScene();
 	}
 
 	void OctreeSceneManager::removeOctreeSceneNode( OctreeSceneNode* n )

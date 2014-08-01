@@ -25,7 +25,6 @@ namespace Duel
 	QuadtreeSceneManager::~QuadtreeSceneManager()
 	{
 		shutdownQuadtree(mQuadtree);
-		clearScene();
 	}
 
 	void QuadtreeSceneManager::removeQuadtreeSceneNode( QuadtreeSceneNode* n )

@@ -30,10 +30,12 @@ namespace Duel
 
 		// add a DSceneNode, no check for node's region. usually called by OctreeSceneManager.
 		// 加入一个场景节点, 这个函数不会检查节点所处的区域, 通常由DSceneManager调用.
-		INTERNAL void		addSceneNode(OctreeSceneNode* node);
+		void		addSceneNode(OctreeSceneNode* node);
 		// remove a DSceneNode from this octree node.
 		// 移除一个节点.
-		INTERNAL void		removeSceneNode(OctreeSceneNode* node);
+		void		removeSceneNode(OctreeSceneNode* node);
+		// remove all nodes
+		void		removeAllSceneNodes();
 		// get the count of node attached to this octree node, including children's node count.
 		// 得到节点总数, 这个值包括子区间的节点数和.
 		size_t				getNodeCount() const { return mNodeCount; }

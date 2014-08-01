@@ -26,7 +26,7 @@ namespace Duel
 
 	Octant::~Octant()
 	{
-		// do nothing, be careful.
+		removeAllSceneNodes();
 	}
 
 	void Octant::addSceneNode( OctreeSceneNode* node )
@@ -152,6 +152,16 @@ namespace Duel
 				mbTerminal = true;
 			}
 		}
+	}
+
+	void Octant::removeAllSceneNodes()
+	{
+		OctreeSceneNodeList::iterator i, iend = mNodeList.end();
+		for (i = mNodeList.begin(); i != iend; i++)
+		{
+			(*i)->setOctant(NULL);
+		}
+		mNodeList.clear();
 	}
 
 }

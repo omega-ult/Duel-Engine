@@ -34,6 +34,8 @@ namespace Duel
 		// remove a SceneNode from this Quadtree node.
 		// 移除一个节点.
 		void		removeSceneNode(QuadtreeSceneNode* node);
+		// remove all nodes
+		void		removeAllSceneNodes();
 		// get the count of node attached to this Quadtree node, including children's node count.
 		// 得到节点总数, 这个值包括子区间的节点数和.
 		size_t				getNodeCount() const { return mNodeCount; }
