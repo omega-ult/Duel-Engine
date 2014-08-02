@@ -70,7 +70,7 @@ namespace Duel
 		const DVector3&		getInheritedScale();
 		const DQuaternion&	getInheritedOrient();
 		// form a transformation from derived properties.
-		const DMatrix4&		getInheritedTransfrom();
+		const DMatrix4&		getInheritedTransform();
 
 
 		// create a child

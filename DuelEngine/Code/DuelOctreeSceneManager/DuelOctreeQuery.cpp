@@ -28,15 +28,19 @@ namespace Duel
 			Octant::OctreeSceneNodeIterator ni = octant->getSceneNodeIterator();
 			while (ni.hasMoreElements())
 			{
-				DSceneNode::MovableIterator mi = (*(ni.current()))->getMovableIterator();
+				OctreeSceneNode* sn = ni.getNext();
+				DVector3 boxPos = sn->getInheritedPosition();
+				DSceneNode::MovableIterator mi = sn->getMovableIterator();
 				while (mi.hasMoreElements())
 				{
-					if (mi.getNext()->getBoundingBox().isIntersected(box))
+					DMovable* m = mi.getNext();
+					DAxisAlignedBox movBox = m->getBoundingBox();
+					movBox.translate(boxPos);
+					if (box.isIntersected(movBox))
 					{
-						resultList.push_back(*mi.current());
+						resultList.push_back(m);
 					}
 				}
-				ni.moveNext();
 			}
 
 			// walk tree
@@ -63,15 +67,19 @@ namespace Duel
 			Octant::OctreeSceneNodeIterator ni = octant->getSceneNodeIterator();
 			while (ni.hasMoreElements())
 			{
-				DSceneNode::MovableIterator mi = (*(ni.current()))->getMovableIterator();
+				OctreeSceneNode* sn = ni.getNext();
+				DVector3 boxPos = sn->getInheritedPosition();
+				DSceneNode::MovableIterator mi = sn->getMovableIterator();
 				while (mi.hasMoreElements())
 				{
-					if (DMath::intersect(s, mi.getNext()->getBoundingBox()))
+					DMovable* m = mi.getNext();
+					DAxisAlignedBox movBox = m->getBoundingBox();
+					movBox.translate(boxPos);
+					if (DMath::intersect(s, movBox))
 					{
-						resultList.push_back(*mi.current());
+						resultList.push_back(m);
 					}
 				}
-				ni.moveNext();
 			}
 
 			// walk tree
@@ -101,17 +109,21 @@ namespace Duel
 			Octant::OctreeSceneNodeIterator ni = octant->getSceneNodeIterator();
 			while (ni.hasMoreElements())
 			{
-				DSceneNode::MovableIterator mi = (*(ni.current()))->getMovableIterator();
+				OctreeSceneNode* sn = ni.getNext();
+				DVector3 boxPos = sn->getInheritedPosition();
+				DSceneNode::MovableIterator mi = sn->getMovableIterator();
 				while (mi.hasMoreElements())
 				{
-					if (DMath::intersect(r, octant->getRegion(), &dist))
+					DMovable* m = mi.getNext();
+					DAxisAlignedBox movBox = m->getBoundingBox();
+					movBox.translate(boxPos);
+					if (DMath::intersect(r, movBox, &dist))
 					{
 						tmpE.distance = dist;
-						tmpE.movable = mi.getNext();
+						tmpE.movable = m;
 						resultList.push_back(tmpE);
 					}
 				}
-				ni.moveNext();
 			}
 
 			// walk tree
@@ -169,8 +181,8 @@ namespace Duel
 		{
 			while (ri.hasMoreElements())
 			{
-				processor->processResult(*(ri.current()));
-				ri.moveNext();
+				DMovable* m = ri.getNext();
+				processor->processResult(m);
 			}
 		}
 	}
@@ -190,8 +202,8 @@ namespace Duel
 		{
 			while (ri.hasMoreElements())
 			{
-				processor->processResult(*(ri.current()));
-				ri.moveNext();
+				DMovable* m = ri.getNext();
+				processor->processResult(m);
 			}
 		}
 	}
@@ -210,13 +222,17 @@ namespace Duel
 		DSceneManager::SceneNodeIterator sni = mParent->getSceneNodeIterator();
 		while (sni.hasMoreElements())
 		{
-			DSceneNode::MovableIterator mi = sni.getNext()->getMovableIterator();
+			DSceneNode* sn = sni.getNext();
+			DSceneNode::MovableIterator mi = sn->getMovableIterator();
 			while (mi.hasMoreElements())
 			{
 				tmpList.clear();
 				DMovable* obj = mi.getNext();
-				//find the nodes that intersect the AAB
-				walkOctree(static_cast<OctreeSceneManager*>(mParent)->getOctree(), obj->getBoundingBox(), tmpList);
+				DVector3 boxPos = sn->getInheritedPosition();
+				DAxisAlignedBox movBox = obj->getBoundingBox();
+				movBox.translate(boxPos);
+				//find the nodes that isIntersected the AAB
+				walkOctree(static_cast<OctreeSceneManager*>(mParent)->getOctree(), movBox, tmpList);
 				// TODO:增加QueryMask功能
 				RegionQueryResultList::iterator rli = tmpList.begin();
 				RegionQueryResultList::iterator rlend = tmpList.end();

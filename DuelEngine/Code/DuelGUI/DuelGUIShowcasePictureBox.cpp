@@ -27,7 +27,7 @@ namespace Duel
 		DVector3 origin(0.0f, 0.0f, 0.0f);
 		DVector3 normalPnt(0.0f, 0.0f, -1.0f);
 		// calculate transformed origin, and normal point
-		DMatrix4 debugMat = mTargetBox->getTransformNode()->getInheritedTransfrom();
+		DMatrix4 debugMat = mTargetBox->getTransformNode()->getInheritedTransform();
 		origin = debugMat * DVector4(origin, 1.0f);
 		normalPnt = debugMat * DVector4(normalPnt, 1.0f);
 		mWidgetPlane = DPlane(normalPnt - origin, origin);
@@ -124,7 +124,7 @@ namespace Duel
 	{
 		if (mTargetBox)
 		{
-			mPicLayer->setWorldTransform(mTargetBox->getTransformNode()->getInheritedTransfrom());
+			mPicLayer->setWorldTransform(mTargetBox->getTransformNode()->getInheritedTransform());
 			DReal boxW = mTargetBox->getSize().getWidth();
 			DReal boxH = mTargetBox->getSize().getHeight();
 			mPicLayer->setRenderSize(DGSize(boxW, boxH));

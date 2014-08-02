@@ -41,7 +41,7 @@ namespace Duel {
 	public:
 		// use  'new DMath(int)' before using triangleTable
 		DMath(uint32 tableSize = 4096);
-		~DMath();
+		~DMath() {}
 
 		static DReal		RadianToDegree(DReal r);
 		static DReal		DegreeToRadian(DReal r);

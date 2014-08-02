@@ -126,7 +126,7 @@ namespace Duel
 		return mInheritedOrient;
 	}
 
-	const DMatrix4& DNode::getInheritedTransfrom()
+	const DMatrix4& DNode::getInheritedTransform()
 	{
 		if (mbInheritedTransformOutOfDate)
 		{
@@ -288,6 +288,11 @@ namespace Duel
 	void DNode::setParent( DNode* p )
 	{
 		bool diff = (p != mParent);
+		if (mParent != NULL)
+		{
+			mParent->removeChild(this);
+		}
+		
 		mParent = p;
 		mbParentNotified = false;
 		needUpdate();

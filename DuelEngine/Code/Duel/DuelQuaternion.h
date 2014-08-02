@@ -36,11 +36,11 @@ namespace Duel {
 			y = Y;
 			z = Z;
 		}
-		DQuaternion( DMatrix3& rM )
+		DQuaternion( DMatrix3 rM )
 		{
 			this->fromRotationMatrix(rM);
 		}
-		DQuaternion( DRadian& rR, DVector3& rVaxis)
+		DQuaternion( DRadian rR, DVector3 rVaxis)
 		{
 			this->fromAngleAxis(rR,rVaxis);
 		}
