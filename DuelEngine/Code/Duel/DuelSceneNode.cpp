@@ -155,6 +155,7 @@ namespace Duel
 			DSceneNode* sceneChild = static_cast<DSceneNode*>(*ci);
 			mBoundingBox.merge(sceneChild->getBoundingBox());
 		}
+		getInheritedTransform(); // force update.
 		DVector3 trans = getInheritedPosition();
 		DVector3 wMin = mBoundingBox.getMinimum() + trans;
 		DVector3 wMax = mBoundingBox.getMaximum() + trans;
