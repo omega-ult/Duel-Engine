@@ -106,7 +106,7 @@ namespace Duel {
 		void			lookAt(const DVector3& dest);
 		void			lookAt(DReal x, DReal y, DReal z);
 
-		// set mEyePosition
+		// set mEyePosition, relative val if this camera is tracking a node.
 		void			setEyePosition(const DVector3& p);
 		void			setEyePosition(DReal x, DReal y, DReal z);
 		DVector3			getEyePosition() const { return mEyePosition; }
@@ -183,6 +183,7 @@ namespace Duel {
 		// track position with a targetNode, only position affected.
 		virtual void	trackNode(DSceneNode* targetNode) { mTrackNode = targetNode; }
 		virtual	bool	isTrackingNode() const { return mTrackNode != NULL; }
+		DSceneNode*		getTrackiNode() { return mTrackNode; }
 
 		// update matrix and planes, if the camera is attached to a Node,
 		// the position will also be updated.
