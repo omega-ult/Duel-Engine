@@ -163,6 +163,10 @@ namespace Duel
 		DAxisAlignedBox	getIntersection(const DAxisAlignedBox& rBox);
 		// query whether the box completely contains the other one
 		bool			contains(const DAxisAlignedBox& rBox);
+		// query whether the box completely contains the point
+		bool			contains(const DVector3& p);
+		// query whether the box completely contains the sphere
+		bool			contains(const DSphere& s);
 
 		// calculate the volume of the box.
 		DReal			getVolume() const;
